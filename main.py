@@ -282,15 +282,18 @@ async def submit_solution(solution_data: dict = Body(...)):
             timestamp=time()
         )
 
-        # ارزیابی توسط Cognitive Core
-        if app_state.cognitive_core:
-            solution.value_vector = app_state.cognitive_core.analyze_solution(solution, task)
-        else:
-            solution.value_vector = ValueVector(
-                knowledge=float(solution_data.get("knowledge", 10.0)),
-                computation=float(solution_data.get("computation", 5.0)),
-                originality=float(solution_data.get("originality", 5.0))
-            )
+        # ارزیابی راه‌حل توسط هسته شناختی (فراخوانی ناهمزمان به AI Worker)
+        # در این مرحله، ValueVector موقتاً خالی است و بعداً با نتیجه AI به‌روزرسانی می‌شود.
+        
+        from src.intelligence.ai_worker import process_solution_value_vector
+        
+        # اجرای ارزیابی در پس‌زمینه (شبیه‌سازی Serverless/Persistent AI)
+        asyncio.create_task(
+            process_solution_value_vector(solution.model_dump(), task.model_dump())
+        )
+        
+        # مقداردهی اولیه ValueVector برای جلوگیری از خطا
+        solution.value_vector = ValueVector()
 
         # محاسبه Proof of Discovery
         if app_state.hash_modernity:
@@ -484,8 +487,12 @@ async def initialize_node(p2p_port: int, api_port: int, enable_simulation: bool 
     
     for node_addr in bootstrap_nodes:
         await app_state.p2p_manager.connect_to_peer(node_addr)
+        
+    # 6. فعال‌سازی هوش دائمی (AI Worker)
+    from src.intelligence.ai_worker import ai_worker_main_loop
+    asyncio.create_task(ai_worker_main_loop())
     
-    # 6. اعلام authority
+    # 7. اعلام authority
     if app_state.node_info.is_authority:
         app_state.known_authorities.add(node_id)
         await app_state.p2p_manager.broadcast({

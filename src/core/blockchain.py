@@ -144,12 +144,25 @@ class LaniakeaChain:
             print(f"❌ Block author {block.author_id[:8]} is not an authority")
             return False
 
-        # بررسی امضا (در آینده باید با کلید عمومی تأیید شود)
-        if not block.signature:
-            print(f"❌ Block has no signature")
-            return False
-
-        return True
+	        # بررسی امضا
+	        if not block.signature:
+	            print(f"❌ Block has no signature")
+	            return False
+	
+	        # در اینجا باید کلید عمومی نود اعتبارسنج (author_id) را از یک منبع معتبر (مانند سیستم Reputation)
+	        # دریافت کرده و امضا را اعتبارسنجی کنیم.
+	        # فرض می‌کنیم یک تابع کمکی برای دریافت کلید عمومی وجود دارد.
+	        # from src.core.wallet import Wallet
+	        # public_key = get_public_key_for_node(block.author_id)
+	        # if not public_key:
+	        #     print(f"❌ Could not retrieve public key for author {block.author_id[:8]}")
+	        #     return False
+	        
+	        # if not Wallet.verify(public_key, block.signature, self.get_block_hash_payload(block)):
+	        #     print(f"❌ Invalid signature for block {block.index}")
+	        #     return False
+	
+	        return True
 
     def _update_balances(self, block: KnowledgeBlock):
         """به‌روزرسانی موجودی‌های نودها"""

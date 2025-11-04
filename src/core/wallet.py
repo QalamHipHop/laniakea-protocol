@@ -25,11 +25,11 @@ class Wallet:
 
         # بارگذاری یا ایجاد کلید خصوصی
         if os.path.exists(wallet_file):
-            with open(wallet_file, "rb") as f:
-                self.private_key = serialization.load_pem_private_key(
-                    f.read(),
-                    password=None
-                )
+                with open(wallet_file, "rb") as f:
+                    self.private_key = serialization.load_pem_private_key(
+                        f.read(),
+                        password=b"Laniakea_Protocol_Secret_Key"
+                    )
             print(f"🔓 Wallet loaded from {wallet_file}")
         else:
             # ایجاد کلید جدید
@@ -41,7 +41,7 @@ class Wallet:
                     self.private_key.private_bytes(
                         encoding=serialization.Encoding.PEM,
                         format=serialization.PrivateFormat.PKCS8,
-                        encryption_algorithm=serialization.NoEncryption()
+                        encryption_algorithm=serialization.BestAvailableEncryption(b"Laniakea_Protocol_Secret_Key")
                     )
                 )
             print(f"🔐 New wallet created at {wallet_file}")

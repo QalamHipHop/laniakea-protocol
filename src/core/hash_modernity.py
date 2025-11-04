@@ -107,9 +107,10 @@ class HashModernityEngine:
             # فاصله اقلیدسی از میانگین (نشان‌دهنده نوآوری)
             distance = np.linalg.norm(solution_vector_array - mean_vector)
             
-            # استفاده از تابع سیگموئید (یا tanh) برای نرمال‌سازی و محدود کردن فاصله
-            # 1 / (1 + e^(-x))
-            originality_score = 1.0 / (1.0 + np.exp(-distance / 5.0)) # 5.0 یک ضریب مقیاس است
+	        # استفاده از تابع tanh برای نرمال‌سازی و محدود کردن فاصله (بهتر از سیگموئید برای مقادیر بزرگ)
+	            # tanh(x) = (e^x - e^-x) / (e^x + e^-x)
+	            # نرمال‌سازی فاصله: 0.5 * (np.tanh(distance / 5.0) + 1.0)
+	            originality_score = 0.5 * (np.tanh(distance / 5.0) + 1.0) # 5.0 یک ضریب مقیاس است
             
         # 2. امتیاز پیچیدگی (Complexity Score)
         # تمرکز بر ابعاد دانش و محاسبات
@@ -217,12 +218,10 @@ class ProofOfValue:
 
         # 2. ضریب دشواری تسک
         difficulty_multiplier = task.difficulty / MAX_DIFFICULTY
-
-        # 3. ضریب اعتبارسنج‌ها (هر چه بیشتر، معتبرتر)
-        # استفاده از لگاریتم برای کاهش تأثیر تعداد زیاد اعتبارسنج‌ها
-        validator_multiplier = np.log1p(validators_count) / np.log1p(5) # نرمال‌سازی بر اساس 5 اعتبارسنج
-
-        # محاسبه نهایی
+	        # 2. ضریب اعتبارسنج‌ها (هر چه بیشتر، معتبرتر)
+	        # استفاده از لگاریتم برای کاهش تأثیر تعداد زیاد اعتبارسنج‌ها
+	        # ضریب اعتبارسنجی باید از 1.0 شروع شود و با افزایش تعداد اعتبارسنج‌ها به آرامی افزایش یابد.
+	        validator_multiplier = 1.0 + (np.log1p(validators_count) / np.log1p(10)) # نرمال‌سازی بر اساس 10 اعتبارسنج        # محاسبه نهایی
         value_proof = base_value * modernity_rate * difficulty_multiplier * validator_multiplier
 
         return float(value_proof)
@@ -241,5 +240,8 @@ class ProofOfValue:
         
         total_value = solution.value_vector.total_value()
         
-        # بررسی اینکه آیا ارزش کل راه‌حل با توجه به مدرنیته آن، حداقل مورد نیاز را برآورده می‌کند
-        return total_value >= required_value
+	        # بررسی اینکه آیا ارزش کل راه‌حل با توجه به مدرنیته آن، حداقل مورد نیاز را برآورده می‌کند
+	        # در PoV، ما به دنبال حداکثرسازی ارزش هستیم، نه فقط برآورده کردن حداقل.
+	        # این تابع باید در نهایت با مقایسه PoV Score با PoV Score های دیگر جایگزین شود.
+	        # برای این نسخه، اعتبارسنجی ساده را حفظ می‌کنیم.
+	        return total_value >= minimum_value_proof / modernity_rate

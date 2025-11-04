@@ -26,10 +26,10 @@ class ValueVector(BaseModel):
     بردار ارزش چند بُعدی
     هر بُعد نشان‌دهنده نوعی از ارزش در کیهان Laniakea است
     """
-    knowledge: float = Field(default=0.0, ge=0.0, description="ارزش دانشی")
-    computation: float = Field(default=0.0, ge=0.0, description="ارزش محاسباتی")
-    originality: float = Field(default=0.0, ge=0.0, description="ارزش خلاقیت")
-    consciousness: float = Field(default=0.0, ge=0.0, description="ارزش آگاهی")
+    knowledge: float = Field(default=0.0, ge=0.0, le=10.0, description="ارزش دانشی (0-10)")
+    computation: float = Field(default=0.0, ge=0.0, le=10.0, description="ارزش محاسباتی (0-10)")
+    originality: float = Field(default=0.0, ge=0.0, le=10.0, description="ارزش خلاقیت (0-10)")
+    consciousness: float = Field(default=0.0, ge=0.0, le=10.0, description="ارزش آگاهی (0-10)")
     environmental: float = Field(default=0.0, description="تأثیر محیطی (می‌تواند منفی باشد)")
     health: float = Field(default=0.0, description="تأثیر سلامتی")
     scalability: float = Field(default=0.0, ge=0.0, description="قابلیت گسترش")
