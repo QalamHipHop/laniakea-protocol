@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laniakea Protocol - پروتوکل لانیاکیا</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1em;
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-button.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1em;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .task-list, .solution-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .task-item, .solution-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .task-title {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ff0000;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: rgba(0, 255, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #00ff00;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            opacity: 0.7;
+        }
+
+        .api-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .api-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .api-card.active {
+            border: 2px solid #00ff00;
+        }
+
+        .api-card.inactive {
+            border: 2px solid #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌌 پروتوکل لانیاکیا</h1>
+            <p class="subtitle">ارگانیسم محاسباتی کیهانی برای حل مسائل جهانی</p>
+        </header>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-label">ارتفاع بلاک‌چین</div>
+                <div class="stat-value" id="blockHeight">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">تسک‌های باز</div>
+                <div class="stat-value" id="openTasks">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">راه‌حل‌های ارسالی</div>
+                <div class="stat-value" id="solutions">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">ارزش کل شبکه</div>
+                <div class="stat-value" id="totalValue">-</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('dashboard')">داشبورد</button>
+            <button class="tab-button" onclick="showTab('tasks')">وظایف</button>
+            <button class="tab-button" onclick="showTab('solutions')">راه‌حل‌ها</button>
+            <button class="tab-button" onclick="showTab('cognitive')">هسته شناختی</button>
+            <button class="tab-button" onclick="showTab('apis')">API ها</button>
+            <button class="tab-button" onclick="showTab('about')">درباره</button>
+        </div>
+
+        <div id="dashboard" class="tab-content active">
+            <h2>نمای کلی شبکه</h2>
+            <div class="chart-container">
+                <h3>آمار بلاک‌چین</h3>
+                <div id="blockchainStats" class="loading">در حال بارگذاری...</div>
+            </div>
+            <div class="chart-container">
+                <h3>آمار هسته شناختی</h3>
+                <div id="cognitiveStats" class="loading">در حال بارگذاری...</div>
+            </div>
+        </div>
+
+        <div id="tasks" class="tab-content">
+            <h2>مدیریت وظایف</h2>
+            
+            <div class="form-group">
+                <h3>ایجاد تسک جدید</h3>
+                <form id="createTaskForm">
+                    <div class="form-group">
+                        <label>عنوان:</label>
+                        <input type="text" id="taskTitle" placeholder="عنوان تسک" required>
+                    </div>
+                    <div class="form-group">
+                        <label>توضیحات:</label>
+                        <textarea id="taskDescription" rows="4" placeholder="توضیحات کامل تسک" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>دسته‌بندی:</label>
+                        <select id="taskCategory">
+                            <option value="scientific">علمی</option>
+                            <option value="mathematical">ریاضی</option>
+                            <option value="philosophical">فلسفی</option>
+                            <option value="environmental">محیط زیستی</option>
+                            <option value="health">سلامت</option>
+                            <option value="artistic">هنری</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>سختی (1-10):</label>
+                        <input type="number" id="taskDifficulty" min="1" max="10" value="5">
+                    </div>
+                    <button type="submit">ایجاد تسک</button>
+                </form>
+            </div>
+
+            <div class="form-group">
+                <h3>تسک‌های موجود</h3>
+                <div id="taskList" class="task-list loading">در حال بارگذاری...</div>
+            </div>
+        </div>
+
+        <div id="solutions" class="tab-content">
+            <h2>ارسال راه‌حل</h2>
+            
+            <div class="form-group">
+                <form id="submitSolutionForm">
+                    <div class="form-group">
+                        <label>شناسه تسک:</label>
+                        <input type="text" id="solutionTaskId" placeholder="شناسه تسک" required>
+                    </div>
+                    <div class="form-group">
+                        <label>محتوای راه‌حل:</label>
+                        <textarea id="solutionContent" rows="6" placeholder="راه‌حل خود را اینجا بنویسید" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>ارزش دانشی (0-100):</label>
+                        <input type="number" id="solutionKnowledge" min="0" max="100" value="50">
+                    </div>
+                    <div class="form-group">
+                        <label>ارزش محاسباتی (0-100):</label>
+                        <input type="number" id="solutionComputation" min="0" max="100" value="30">
+                    </div>
+                    <div class="form-group">
+                        <label>ارزش خلاقیت (0-100):</label>
+                        <input type="number" id="solutionOriginality" min="0" max="100" value="20">
+                    </div>
+                    <button type="submit">ارسال راه‌حل</button>
+                </form>
+            </div>
+
+            <div class="form-group">
+                <h3>راه‌حل‌های اخیر</h3>
+                <div id="solutionList" class="solution-list loading">در حال بارگذاری...</div>
+            </div>
+        </div>
+
+        <div id="cognitive" class="tab-content">
+            <h2>هسته شناختی (Cognitive Core)</h2>
+            
+            <div class="form-group">
+                <h3>پرسش از هسته شناختی</h3>
+                <form id="askCognitiveForm">
+                    <div class="form-group">
+                        <label>سوال:</label>
+                        <textarea id="cognitiveQuestion" rows="3" placeholder="سوال خود را بپرسید..." required></textarea>
+                    </div>
+                    <button type="submit">پرسش</button>
+                </form>
+                <div id="cognitiveAnswer" style="margin-top: 20px;"></div>
+            </div>
+
+            <div class="form-group">
+                <h3>تولید خودکار تسک</h3>
+                <form id="generateTaskForm">
+                    <div class="form-group">
+                        <label>دسته‌بندی:</label>
+                        <select id="generateCategory">
+                            <option value="scientific">علمی</option>
+                            <option value="mathematical">ریاضی</option>
+                            <option value="philosophical">فلسفی</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>سختی (1-10):</label>
+                        <input type="number" id="generateDifficulty" min="1" max="10" value="5">
+                    </div>
+                    <button type="submit">تولید تسک</button>
+                </form>
+                <div id="generatedTask" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+
+        <div id="apis" class="tab-content">
+            <h2>یکپارچگی API های خارجی</h2>
+            
+            <div class="api-status" id="apiStatus">
+                <div class="api-card">
+                    <h3>NASA</h3>
+                    <p>وضعیت: <span id="nasaStatus">در حال بررسی...</span></p>
+                </div>
+                <div class="api-card">
+                    <h3>Weather</h3>
+                    <p>وضعیت: <span id="weatherStatus">در حال بررسی...</span></p>
+                </div>
+                <div class="api-card">
+                    <h3>Financial</h3>
+                    <p>وضعیت: <span id="financialStatus">در حال بررسی...</span></p>
+                </div>
+                <div class="api-card">
+                    <h3>Wolfram Alpha</h3>
+                    <p>وضعیت: <span id="wolframStatus">در حال بررسی...</span></p>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 30px;">
+                <h3>تست API</h3>
+                <p>از این بخش برای تست API های مختلف استفاده کنید.</p>
+                <button onclick="testNASA()">تست NASA API</button>
+                <button onclick="testWeather()">تست Weather API</button>
+                <div id="apiTestResult" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+
+        <div id="about" class="tab-content">
+            <h2>درباره پروتوکل لانیاکیا</h2>
+            <p style="line-height: 1.8; font-size: 1.1em;">
+                پروتوکل Laniakea یک ارگانیسم محاسباتی کیهانی است که برای حل مسائل واقعی جهانی طراحی شده است.
+                این پروتوکل به جای استخراج بی‌هدف، انرژی محاسباتی را صرف حل چالش‌های علمی، فلسفی و اجتماعی می‌کند.
+            </p>
+            
+            <h3 style="margin-top: 30px;">ویژگی‌های کلیدی:</h3>
+            <ul style="line-height: 2; margin-right: 30px; font-size: 1.05em;">
+                <li><strong>Proof of Value:</strong> اثبات ارزش به جای اثبات کار</li>
+                <li><strong>ارزش‌گذاری چند بُعدی:</strong> دانش، محاسبات، خلاقیت، آگاهی، محیط زیست، سلامت</li>
+                <li><strong>هسته شناختی:</strong> هوش مصنوعی خودتوسعه‌دهنده</li>
+                <li><strong>شبیه‌ساز کیهانی:</strong> جهان دیجیتال با قوانین فیزیکی</li>
+                <li><strong>حکمرانی غیرمتمرکز:</strong> تصمیم‌گیری جمعی</li>
+            </ul>
+
+            <h3 style="margin-top: 30px;">تکنولوژی‌ها:</h3>
+            <div class="api-status">
+                <div class="api-card">
+                    <h4>Backend</h4>
+                    <p>Python 3.11+<br>FastAPI<br>WebSocket</p>
+                </div>
+                <div class="api-card">
+                    <h4>Blockchain</h4>
+                    <p>Custom Protocol<br>PoA + PoV<br>Multi-dimensional</p>
+                </div>
+                <div class="api-card">
+                    <h4>AI</h4>
+                    <p>OpenAI GPT-4<br>Google Gemini<br>Self-Evolution</p>
+                </div>
+                <div class="api-card">
+                    <h4>Frontend</h4>
+                    <p>HTML5<br>CSS3<br>Vanilla JS</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>🌌 پروتوکل لانیاکیا - جایی که دانش، آگاهی و محاسبات همگرا می‌شوند</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">نسخه 4.0 - نوامبر 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let currentTab = 'dashboard';
+
+        // تابع نمایش تب
+        function showTab(tabName) {
+            // پنهان کردن همه تب‌ها
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // نمایش تب انتخاب شده
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            currentTab = tabName;
+
+            // بارگذاری داده‌ها
+            if (tabName === 'tasks') {
+                loadTasks();
+            } else if (tabName === 'dashboard') {
+                loadDashboard();
+            }
+        }
+
+        // بارگذاری آمار
+        async function loadStats() {
+            try {
+                const response = await fetch(`${API_BASE}/stats`);
+                const data = await response.json();
+
+                document.getElementById('blockHeight').textContent = 
+                    data.blockchain?.chain_length || 0;
+                document.getElementById('openTasks').textContent = 
+                    data.task_pool_size || 0;
+                document.getElementById('solutions').textContent = 
+                    data.solution_pool_size || 0;
+                document.getElementById('totalValue').textContent = 
+                    (data.blockchain?.total_value || 0).toFixed(2);
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // بارگذاری داشبورد
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_BASE}/stats`);
+                const data = await response.json();
+
+                const blockchainDiv = document.getElementById('blockchainStats');
+                blockchainDiv.innerHTML = `
+                    <p><strong>طول زنجیره:</strong> ${data.blockchain?.chain_length || 0}</p>
+                    <p><strong>ارزش کل:</strong> ${(data.blockchain?.total_value || 0).toFixed(2)}</p>
+                    <p><strong>تعداد تراکنش‌ها:</strong> ${data.blockchain?.total_transactions || 0}</p>
+                `;
+
+                const cognitiveDiv = document.getElementById('cognitiveStats');
+                cognitiveDiv.innerHTML = `
+                    <p><strong>بلاک‌های مشاهده شده:</strong> ${data.cognitive_core?.blocks_observed || 0}</p>
+                    <p><strong>راه‌حل‌های ارزیابی شده:</strong> ${data.cognitive_core?.solutions_evaluated || 0}</p>
+                    <p><strong>تسک‌های تولید شده:</strong> ${data.cognitive_core?.tasks_generated || 0}</p>
+                `;
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        // بارگذاری تسک‌ها
+        async function loadTasks() {
+            try {
+                const response = await fetch(`${API_BASE}/tasks`);
+                const data = await response.json();
+
+                const taskList = document.getElementById('taskList');
+                
+                if (data.tasks && data.tasks.length > 0) {
+                    taskList.innerHTML = data.tasks.map(task => `
+                        <div class="task-item">
+                            <div class="task-title">${task.title}</div>
+                            <p>${task.description}</p>
+                            <div class="task-meta">
+                                <span class="badge">${task.category}</span>
+                                <span class="badge">سختی: ${task.difficulty}</span>
+                                <span>شناسه: ${task.id.substring(0, 8)}...</span>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    taskList.innerHTML = '<p>هیچ تسکی موجود نیست.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+                document.getElementById('taskList').innerHTML = 
+                    '<div class="error">خطا در بارگذاری تسک‌ها</div>';
+            }
+        }
+
+        // ایجاد تسک
+        document.getElementById('createTaskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const taskData = {
+                title: document.getElementById('taskTitle').value,
+                description: document.getElementById('taskDescription').value,
+                category: document.getElementById('taskCategory').value,
+                difficulty: parseFloat(document.getElementById('taskDifficulty').value)
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/tasks/create`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(taskData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert('تسک با موفقیت ایجاد شد!');
+                    e.target.reset();
+                    loadTasks();
+                } else {
+                    alert('خطا: ' + (result.detail || 'نامشخص'));
+                }
+            } catch (error) {
+                alert('خطا در ارسال درخواست');
+                console.error(error);
+            }
+        });
+
+        // ارسال راه‌حل
+        document.getElementById('submitSolutionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const solutionData = {
+                task_id: document.getElementById('solutionTaskId').value,
+                content: document.getElementById('solutionContent').value,
+                knowledge: parseFloat(document.getElementById('solutionKnowledge').value),
+                computation: parseFloat(document.getElementById('solutionComputation').value),
+                originality: parseFloat(document.getElementById('solutionOriginality').value)
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/solutions/submit`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(solutionData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert('راه‌حل با موفقیت ارسال شد!');
+                    e.target.reset();
+                } else {
+                    alert('خطا: ' + (result.detail || 'نامشخص'));
+                }
+            } catch (error) {
+                alert('خطا در ارسال درخواست');
+                console.error(error);
+            }
+        });
+
+        // پرسش از هسته شناختی
+        document.getElementById('askCognitiveForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const question = document.getElementById('cognitiveQuestion').value;
+            const answerDiv = document.getElementById('cognitiveAnswer');
+            answerDiv.innerHTML = '<div class="loading">در حال پردازش...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/cognitive/ask`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({question})
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    answerDiv.innerHTML = `
+                        <div class="success">
+                            <strong>پاسخ:</strong><br>
+                            ${result.answer}
+                        </div>
+                    `;
+                } else {
+                    answerDiv.innerHTML = `<div class="error">خطا: ${result.detail || 'نامشخص'}</div>`;
+                }
+            } catch (error) {
+                answerDiv.innerHTML = '<div class="error">خطا در ارسال درخواست</div>';
+                console.error(error);
+            }
+        });
+
+        // تولید تسک خودکار
+        document.getElementById('generateTaskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const category = document.getElementById('generateCategory').value;
+            const difficulty = parseFloat(document.getElementById('generateDifficulty').value);
+            const resultDiv = document.getElementById('generatedTask');
+            resultDiv.innerHTML = '<div class="loading">در حال تولید...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/cognitive/generate_task`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({category, difficulty})
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <strong>تسک تولید شده:</strong><br>
+                            <strong>عنوان:</strong> ${result.title}<br>
+                            <strong>توضیحات:</strong> ${result.description}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">خطا: ${result.detail || 'نامشخص'}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<div class="error">خطا در ارسال درخواست</div>';
+                console.error(error);
+            }
+        });
+
+        // بارگذاری اولیه
+        loadStats();
+        loadDashboard();
+        setInterval(loadStats, 5000); // به‌روزرسانی هر 5 ثانیه
+    </script>
+</body>
+</html>

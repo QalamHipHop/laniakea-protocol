@@ -1,0 +1,1268 @@
+{
+  "forge.py": {
+    "status": "implemented",
+    "lines": 179,
+    "classes": [],
+    "functions": [
+      {
+        "name": "forge_universe",
+        "line": 166,
+        "args": 0
+      }
+    ],
+    "imports": 2,
+    "todos": []
+  },
+  "forge_v2.0.py": {
+    "status": "implemented",
+    "lines": 322,
+    "classes": [],
+    "functions": [
+      {
+        "name": "forge_universe",
+        "line": 306,
+        "args": 0
+      }
+    ],
+    "imports": 2,
+    "todos": []
+  },
+  "main.py": {
+    "status": "implemented",
+    "lines": 613,
+    "classes": [
+      {
+        "name": "AppState",
+        "methods": [
+          "__init__"
+        ],
+        "line": 35
+      }
+    ],
+    "functions": [],
+    "imports": 24,
+    "todos": []
+  },
+  "main_v4.py": {
+    "status": "implemented",
+    "lines": 417,
+    "classes": [
+      {
+        "name": "LaniakeaNode",
+        "methods": [
+          "__init__",
+          "_initialize_metaverse",
+          "_initialize_liquidity",
+          "get_full_stats"
+        ],
+        "line": 50
+      }
+    ],
+    "functions": [],
+    "imports": 18,
+    "todos": []
+  },
+  "test_system.py": {
+    "status": "implemented",
+    "lines": 298,
+    "classes": [],
+    "functions": [
+      {
+        "name": "test_blockchain",
+        "line": 23,
+        "args": 0
+      },
+      {
+        "name": "test_hash_modernity",
+        "line": 78,
+        "args": 0
+      },
+      {
+        "name": "test_token_economics",
+        "line": 135,
+        "args": 0
+      },
+      {
+        "name": "test_cosmic_simulator",
+        "line": 182,
+        "args": 0
+      },
+      {
+        "name": "main",
+        "line": 244,
+        "args": 0
+      }
+    ],
+    "imports": 11,
+    "todos": []
+  },
+  "analyze_code.py": {
+    "status": "implemented",
+    "lines": 131,
+    "classes": [],
+    "functions": [
+      {
+        "name": "analyze_python_file",
+        "line": 10,
+        "args": 1
+      },
+      {
+        "name": "analyze_project",
+        "line": 61,
+        "args": 1
+      }
+    ],
+    "imports": 5,
+    "todos": [
+      {
+        "line": 44,
+        "text": "# \u062c\u0633\u062a\u062c\u0648\u06cc TODO/FIXME"
+      },
+      {
+        "line": 46,
+        "text": "if 'TODO' in line or 'FIXME' in line or 'NotImplemented' in line:"
+      },
+      {
+        "line": 98,
+        "text": "print(f\"\u062a\u0639\u062f\u0627\u062f TODO/FIXME: {total_todos}\")"
+      },
+      {
+        "line": 107,
+        "text": "# \u0641\u0627\u06cc\u0644\u200c\u0647\u0627\u06cc \u0628\u0627 TODO"
+      },
+      {
+        "line": 108,
+        "text": "print(\"\\n\ud83d\udcdd \u0641\u0627\u06cc\u0644\u200c\u0647\u0627\u06cc \u0628\u0627 TODO/FIXME:\")"
+      },
+      {
+        "line": 111,
+        "text": "print(f\"  - {path}: {len(data['todos'])} TODO\")"
+      }
+    ]
+  },
+  "core/cell/init.py": {
+    "status": "empty",
+    "lines": 0
+  },
+  "src/__init__.py": {
+    "status": "empty",
+    "lines": 0
+  },
+  "src/config.py": {
+    "status": "implemented",
+    "lines": 67,
+    "classes": [],
+    "functions": [
+      {
+        "name": "get_bootstrap_nodes",
+        "line": 24,
+        "args": 0
+      },
+      {
+        "name": "is_authority",
+        "line": 46,
+        "args": 0
+      }
+    ],
+    "imports": 3,
+    "todos": []
+  },
+  "src/consensus/__init__.py": {
+    "status": "empty",
+    "lines": 0
+  },
+  "src/core/__init__.py": {
+    "status": "empty",
+    "lines": 0
+  },
+  "src/core/blockchain.py": {
+    "status": "implemented",
+    "lines": 263,
+    "classes": [
+      {
+        "name": "LaniakeaChain",
+        "methods": [
+          "__init__",
+          "create_genesis_block",
+          "new_block",
+          "add_block",
+          "_validate_block",
+          "_update_balances",
+          "_update_total_value",
+          "_calculate_solution_rewards",
+          "_calculate_difficulty",
+          "_generate_tx_id",
+          "get_block_hash_payload",
+          "hash",
+          "last_block",
+          "get_balance",
+          "get_total_balance",
+          "get_chain_stats"
+        ],
+        "line": 17
+      }
+    ],
+    "functions": [],
+    "imports": 6,
+    "todos": []
+  },
+  "src/core/hash_modernity.py": {
+    "status": "implemented",
+    "lines": 332,
+    "classes": [
+      {
+        "name": "HashModernityEngine",
+        "methods": [
+          "__init__",
+          "compute_discovery_hash",
+          "compute_proof_of_discovery",
+          "assess_modernity_rate",
+          "_calculate_similarity_penalty",
+          "_calculate_complexity_score",
+          "create_modernity_token",
+          "_generate_token_id",
+          "verify_proof_of_discovery",
+          "compute_hash_rate",
+          "update_modernity_index",
+          "get_modernity_stats"
+        ],
+        "line": 13
+      },
+      {
+        "name": "ProofOfValue",
+        "methods": [
+          "calculate_value_proof",
+          "verify_value_proof"
+        ],
+        "line": 278
+      }
+    ],
+    "functions": [],
+    "imports": 5,
+    "todos": []
+  },
+  "src/core/models.py": {
+    "status": "implemented",
+    "lines": 214,
+    "classes": [
+      {
+        "name": "ValueDimension",
+        "methods": [],
+        "line": 11
+      },
+      {
+        "name": "ValueVector",
+        "methods": [
+          "total_value",
+          "to_dict"
+        ],
+        "line": 21
+      },
+      {
+        "name": "ProblemCategory",
+        "methods": [],
+        "line": 56
+      },
+      {
+        "name": "Task",
+        "methods": [],
+        "line": 66
+      },
+      {
+        "name": "Solution",
+        "methods": [],
+        "line": 85
+      },
+      {
+        "name": "Transaction",
+        "methods": [],
+        "line": 100
+      },
+      {
+        "name": "KnowledgeBlock",
+        "methods": [],
+        "line": 118
+      },
+      {
+        "name": "NodeSpecialty",
+        "methods": [],
+        "line": 135
+      },
+      {
+        "name": "NodeInfo",
+        "methods": [],
+        "line": 145
+      },
+      {
+        "name": "P2PMessage",
+        "methods": [],
+        "line": 162
+      },
+      {
+        "name": "ProposalType",
+        "methods": [],
+        "line": 170
+      },
+      {
+        "name": "Proposal",
+        "methods": [],
+        "line": 178
+      },
+      {
+        "name": "CosmicCell",
+        "methods": [],
+        "line": 193
+      }
+    ],
+    "functions": [],
+    "imports": 3,
+    "todos": []
+  },
+  "src/core/token_system.py": {
+    "status": "implemented",
+    "lines": 405,
+    "classes": [
+      {
+        "name": "Token",
+        "methods": [
+          "__init__",
+          "to_dict"
+        ],
+        "line": 12
+      },
+      {
+        "name": "TokenEconomics",
+        "methods": [
+          "__init__",
+          "mint_tokens",
+          "burn_tokens",
+          "calculate_exchange_rate",
+          "exchange_tokens",
+          "get_total_value",
+          "get_stats",
+          "_generate_token_id"
+        ],
+        "line": 45
+      },
+      {
+        "name": "StakingSystem",
+        "methods": [
+          "__init__",
+          "stake",
+          "unstake",
+          "calculate_rewards",
+          "distribute_rewards",
+          "get_total_staked",
+          "get_staker_info"
+        ],
+        "line": 248
+      }
+    ],
+    "functions": [],
+    "imports": 4,
+    "todos": []
+  },
+  "src/core/wallet.py": {
+    "status": "implemented",
+    "lines": 136,
+    "classes": [
+      {
+        "name": "Wallet",
+        "methods": [
+          "__init__",
+          "_get_node_id",
+          "sign",
+          "verify",
+          "get_public_key_pem",
+          "get_address"
+        ],
+        "line": 13
+      }
+    ],
+    "functions": [],
+    "imports": 5,
+    "todos": []
+  },
+  "src/dashboard/__init__.py": {
+    "status": "implemented",
+    "lines": 6,
+    "classes": [],
+    "functions": [],
+    "imports": 1,
+    "todos": []
+  },
+  "src/dashboard/live_dashboard.py": {
+    "status": "implemented",
+    "lines": 180,
+    "classes": [
+      {
+        "name": "MetricsCollector",
+        "methods": [
+          "__init__",
+          "record",
+          "get_recent",
+          "get_summary"
+        ],
+        "line": 12
+      },
+      {
+        "name": "DashboardGenerator",
+        "methods": [
+          "__init__",
+          "generate_html"
+        ],
+        "line": 58
+      }
+    ],
+    "functions": [
+      {
+        "name": "get_metrics_collector",
+        "line": 171,
+        "args": 0
+      },
+      {
+        "name": "generate_dashboard",
+        "line": 176,
+        "args": 2
+      }
+    ],
+    "imports": 4,
+    "todos": []
+  },
+  "src/governance/__init__.py": {
+    "status": "implemented",
+    "lines": 23,
+    "classes": [],
+    "functions": [],
+    "imports": 1,
+    "todos": []
+  },
+  "src/governance/dao.py": {
+    "status": "implemented",
+    "lines": 484,
+    "classes": [
+      {
+        "name": "ProposalType",
+        "methods": [],
+        "line": 13
+      },
+      {
+        "name": "ProposalStatus",
+        "methods": [],
+        "line": 22
+      },
+      {
+        "name": "Vote",
+        "methods": [],
+        "line": 32
+      },
+      {
+        "name": "Proposal",
+        "methods": [],
+        "line": 42
+      },
+      {
+        "name": "GovernanceSystem",
+        "methods": [
+          "__init__",
+          "create_proposal",
+          "activate_proposal",
+          "cast_vote",
+          "finalize_proposal",
+          "execute_proposal",
+          "_execute_parameter_change",
+          "_execute_treasury_spend",
+          "_execute_protocol_upgrade",
+          "update_stake",
+          "add_to_treasury",
+          "get_active_proposals",
+          "get_proposal_details",
+          "get_stats"
+        ],
+        "line": 73
+      },
+      {
+        "name": "AutoGovernance",
+        "methods": [
+          "__init__",
+          "analyze_proposal",
+          "suggest_improvements"
+        ],
+        "line": 401
+      }
+    ],
+    "functions": [],
+    "imports": 5,
+    "todos": []
+  },
+  "src/identity/__init__.py": {
+    "status": "implemented",
+    "lines": 23,
+    "classes": [],
+    "functions": [],
+    "imports": 1,
+    "todos": []
+  },
+  "src/identity/did_system.py": {
+    "status": "implemented",
+    "lines": 456,
+    "classes": [
+      {
+        "name": "CredentialType",
+        "methods": [],
+        "line": 16
+      },
+      {
+        "name": "VerificationStatus",
+        "methods": [],
+        "line": 25
+      },
+      {
+        "name": "Credential",
+        "methods": [],
+        "line": 33
+      },
+      {
+        "name": "DIDDocument",
+        "methods": [],
+        "line": 58
+      },
+      {
+        "name": "IdentityManager",
+        "methods": [
+          "__init__",
+          "create_identity",
+          "issue_credential",
+          "verify_credential",
+          "revoke_credential",
+          "add_trust",
+          "calculate_trust_score",
+          "get_identity",
+          "get_credentials",
+          "search_identities",
+          "get_stats"
+        ],
+        "line": 83
+      },
+      {
+        "name": "ReputationSystem",
+        "methods": [
+          "__init__",
+          "record_activity",
+          "_update_reputation",
+          "get_leaderboard",
+          "get_reputation_breakdown"
+        ],
+        "line": 340
+      }
+    ],
+    "functions": [],
+    "imports": 8,
+    "todos": []
+  },
+  "src/intelligence/__init__.py": {
+    "status": "implemented",
+    "lines": 21,
+    "classes": [],
+    "functions": [],
+    "imports": 1,
+    "todos": []
+  },
+  "src/intelligence/ml_system.py": {
+    "status": "implemented",
+    "lines": 485,
+    "classes": [
+      {
+        "name": "TrainingData",
+        "methods": [],
+        "line": 14
+      },
+      {
+        "name": "NeuralNetwork",
+        "methods": [
+          "__init__",
+          "sigmoid",
+          "sigmoid_derivative",
+          "forward",
+          "backward",
+          "train",
+          "predict",
+          "save_weights",
+          "load_weights"
+        ],
+        "line": 21
+      },
+      {
+        "name": "ValuePredictor",
+        "methods": [
+          "__init__",
+          "extract_features",
+          "train_on_solution",
+          "predict_value",
+          "get_model_stats"
+        ],
+        "line": 173
+      },
+      {
+        "name": "PatternRecognizer",
+        "methods": [
+          "__init__",
+          "analyze_temporal_patterns",
+          "analyze_value_patterns",
+          "detect_anomalies"
+        ],
+        "line": 283
+      },
+      {
+        "name": "ReinforcementLearner",
+        "methods": [
+          "__init__",
+          "get_q_values",
+          "choose_action",
+          "update",
+          "get_stats"
+        ],
+        "line": 376
+      },
+      {
+        "name": "MLOrchestrator",
+        "methods": [
+          "__init__",
+          "analyze_blockchain",
+          "get_stats"
+        ],
+        "line": 455
+      }
+    ],
+    "functions": [],
+    "imports": 5,
+    "todos": []
+  },
+  "src/intelligence/predictive_analytics.py": {
+    "status": "implemented",
+    "lines": 377,
+    "classes": [
+      {
+        "name": "TrendAnalyzer",
+        "methods": [
+          "__init__",
+          "add_data_point",
+          "calculate_trend",
+          "predict_next_value"
+        ],
+        "line": 15
+      },
+      {
+        "name": "PatternRecognizer",
+        "methods": [
+          "__init__",
+          "detect_patterns",
+          "_detect_spike",
+          "_detect_drop",
+          "_detect_cycle",
+          "_detect_anomaly"
+        ],
+        "line": 89
+      },
+      {
+        "name": "PredictiveEngine",
+        "methods": [
+          "__init__",
+          "_calculate_statistical_predictions",
+          "detect_emerging_patterns",
+          "generate_forecast_report"
+        ],
+        "line": 202
+      }
+    ],
+    "functions": [
+      {
+        "name": "get_predictive_engine",
+        "line": 374,
+        "args": 0
+      }
+    ],
+    "imports": 6,
+    "todos": []
+  },
+  "src/intelligence/self_evolution.py": {
+    "status": "implemented",
+    "lines": 340,
+    "classes": [
+      {
+        "name": "CodeAnalyzer",
+        "methods": [
+          "__init__",
+          "analyze_file",
+          "_calculate_complexity",
+          "_extract_imports",
+          "_check_docstrings"
+        ],
+        "line": 18
+      },
+      {
+        "name": "SelfEvolutionEngine",
+        "methods": [
+          "__init__"
+        ],
+        "line": 84
+      },
+      {
+        "name": "ContinuousEvolution",
+        "methods": [
+          "__init__",
+          "stop"
+        ],
+        "line": 293
+      }
+    ],
+    "functions": [],
+    "imports": 10,
+    "todos": []
+  },
+  "src/marketplace/__init__.py": {
+    "status": "implemented",
+    "lines": 25,
+    "classes": [],
+    "functions": [],
+    "imports": 1,
+    "todos": []
+  },
+  "src/marketplace/exchange.py": {
+    "status": "implemented",
+    "lines": 519,
+    "classes": [
+      {
+        "name": "OrderType",
+        "methods": [],
+        "line": 14
+      },
+      {
+        "name": "OrderStatus",
+        "methods": [],
+        "line": 20
+      },
+      {
+        "name": "Order",
+        "methods": [],
+        "line": 28
+      },
+      {
+        "name": "Trade",
+        "methods": [],
+        "line": 43
+      },
+      {
+        "name": "OrderBook",
+        "methods": [
+          "__init__",
+          "add_order",
+          "remove_order",
+          "get_best_bid",
+          "get_best_ask",
+          "get_spread",
+          "get_depth"
+        ],
+        "line": 56
+      },
+      {
+        "name": "Exchange",
+        "methods": [
+          "__init__",
+          "_get_pair_key",
+          "_get_order_book",
+          "deposit",
+          "withdraw",
+          "place_order",
+          "_match_orders",
+          "_execute_trade",
+          "cancel_order",
+          "get_market_price",
+          "get_order_book_depth",
+          "get_recent_trades",
+          "get_user_orders",
+          "get_stats"
+        ],
+        "line": 110
+      },
+      {
+        "name": "LiquidityPool",
+        "methods": [
+          "__init__",
+          "add_liquidity",
+          "remove_liquidity",
+          "swap",
+          "get_price",
+          "get_stats"
+        ],
+        "line": 374
+      }
+    ],
+    "functions": [],
+    "imports": 6,
+    "todos": []
+  },
+  "src/marketplace/nft_knowledge.py": {
+    "status": "implemented",
+    "lines": 444,
+    "classes": [
+      {
+        "name": "KnowledgeType",
+        "methods": [],
+        "line": 15
+      },
+      {
+        "name": "NFTMetadata",
+        "methods": [],
+        "line": 25
+      },
+      {
+        "name": "KnowledgeNFT",
+        "methods": [
+          "transfer"
+        ],
+        "line": 48
+      },
+      {
+        "name": "NFTMarketplace",
+        "methods": [
+          "__init__",
+          "mint_nft",
+          "_calculate_quality_score",
+          "list_for_sale",
+          "buy_nft",
+          "place_bid",
+          "finalize_auction",
+          "make_offer",
+          "accept_offer",
+          "get_trending",
+          "get_collection",
+          "search",
+          "get_stats"
+        ],
+        "line": 85
+      }
+    ],
+    "functions": [
+      {
+        "name": "get_marketplace",
+        "line": 441,
+        "args": 0
+      }
+    ],
+    "imports": 7,
+    "todos": []
+  },
+  "src/metasystem/__init__.py": {
+    "status": "empty",
+    "lines": 0
+  },
+  "src/metasystem/cognitive_core.py": {
+    "status": "implemented",
+    "lines": 409,
+    "classes": [
+      {
+        "name": "CognitiveCore",
+        "methods": [
+          "__init__",
+          "observe",
+          "analyze_solution",
+          "generate_task",
+          "propose_protocol_improvement",
+          "build_knowledge_graph",
+          "_deep_analysis",
+          "_evolve_consciousness",
+          "_summarize_observations",
+          "get_stats",
+          "ask_question"
+        ],
+        "line": 16
+      }
+    ],
+    "functions": [],
+    "imports": 9,
+    "todos": []
+  },
+  "src/metaverse/__init__.py": {
+    "status": "implemented",
+    "lines": 25,
+    "classes": [],
+    "functions": [],
+    "imports": 1,
+    "todos": []
+  },
+  "src/metaverse/world.py": {
+    "status": "implemented",
+    "lines": 497,
+    "classes": [
+      {
+        "name": "EntityType",
+        "methods": [],
+        "line": 14
+      },
+      {
+        "name": "Vector3",
+        "methods": [
+          "distance_to",
+          "to_dict"
+        ],
+        "line": 24
+      },
+      {
+        "name": "Entity",
+        "methods": [],
+        "line": 42
+      },
+      {
+        "name": "Avatar",
+        "methods": [
+          "__init__",
+          "move_to",
+          "add_experience",
+          "add_item",
+          "to_dict"
+        ],
+        "line": 66
+      },
+      {
+        "name": "Region",
+        "methods": [
+          "__init__",
+          "add_entity",
+          "remove_entity",
+          "add_avatar",
+          "remove_avatar",
+          "get_nearby_entities",
+          "get_nearby_avatars",
+          "update_environment",
+          "get_stats"
+        ],
+        "line": 129
+      },
+      {
+        "name": "MetaverseWorld",
+        "methods": [
+          "__init__",
+          "create_region",
+          "create_avatar",
+          "teleport_avatar",
+          "create_portal",
+          "interact",
+          "update",
+          "get_world_stats",
+          "get_region_stats"
+        ],
+        "line": 232
+      },
+      {
+        "name": "SocialSpace",
+        "methods": [
+          "__init__",
+          "create_chat_room",
+          "join_chat_room",
+          "send_message",
+          "create_event",
+          "get_stats"
+        ],
+        "line": 416
+      }
+    ],
+    "functions": [],
+    "imports": 6,
+    "todos": []
+  },
+  "src/network/__init__.py": {
+    "status": "empty",
+    "lines": 0
+  },
+  "src/network/dht.py": {
+    "status": "implemented",
+    "lines": 415,
+    "classes": [
+      {
+        "name": "DHTNode",
+        "methods": [
+          "distance_to",
+          "to_dict"
+        ],
+        "line": 15
+      },
+      {
+        "name": "KBucket",
+        "methods": [
+          "__init__",
+          "add_node",
+          "get_nodes",
+          "remove_node"
+        ],
+        "line": 35
+      },
+      {
+        "name": "RoutingTable",
+        "methods": [
+          "__init__",
+          "_get_bucket_index",
+          "add_node",
+          "find_closest_nodes",
+          "get_all_nodes",
+          "remove_node"
+        ],
+        "line": 74
+      },
+      {
+        "name": "DHTStorage",
+        "methods": [
+          "__init__",
+          "store",
+          "retrieve",
+          "cleanup_expired"
+        ],
+        "line": 134
+      },
+      {
+        "name": "KademliaDHT",
+        "methods": [
+          "__init__",
+          "bootstrap",
+          "add_peer",
+          "get_stats"
+        ],
+        "line": 172
+      },
+      {
+        "name": "ContentAddressableNetwork",
+        "methods": [
+          "__init__",
+          "get_stats"
+        ],
+        "line": 354
+      }
+    ],
+    "functions": [],
+    "imports": 6,
+    "todos": []
+  },
+  "src/network/p2p.py": {
+    "status": "implemented",
+    "lines": 127,
+    "classes": [
+      {
+        "name": "P2PManager",
+        "methods": [
+          "__init__",
+          "get_peer_count"
+        ],
+        "line": 12
+      }
+    ],
+    "functions": [],
+    "imports": 4,
+    "todos": []
+  },
+  "src/oracles/__init__.py": {
+    "status": "empty",
+    "lines": 0
+  },
+  "src/oracles/oracle_system.py": {
+    "status": "implemented",
+    "lines": 310,
+    "classes": [
+      {
+        "name": "BaseOracle",
+        "methods": [
+          "__init__",
+          "get_stats"
+        ],
+        "line": 12
+      },
+      {
+        "name": "ScientificOracle",
+        "methods": [
+          "__init__"
+        ],
+        "line": 32
+      },
+      {
+        "name": "DataOracle",
+        "methods": [
+          "__init__"
+        ],
+        "line": 111
+      },
+      {
+        "name": "AIOracle",
+        "methods": [
+          "__init__"
+        ],
+        "line": 164
+      },
+      {
+        "name": "OracleManager",
+        "methods": [
+          "__init__",
+          "get_stats"
+        ],
+        "line": 196
+      }
+    ],
+    "functions": [],
+    "imports": 4,
+    "todos": []
+  },
+  "src/problems/__init__.py": {
+    "status": "empty",
+    "lines": 0
+  },
+  "src/quantum/__init__.py": {
+    "status": "implemented",
+    "lines": 25,
+    "classes": [],
+    "functions": [],
+    "imports": 1,
+    "todos": []
+  },
+  "src/quantum/quantum_system.py": {
+    "status": "implemented",
+    "lines": 482,
+    "classes": [
+      {
+        "name": "QuantumState",
+        "methods": [
+          "__post_init__",
+          "measure",
+          "to_dict"
+        ],
+        "line": 13
+      },
+      {
+        "name": "QuantumGate",
+        "methods": [
+          "rotation_x",
+          "rotation_y",
+          "rotation_z",
+          "cnot"
+        ],
+        "line": 36
+      },
+      {
+        "name": "QuantumCircuit",
+        "methods": [
+          "__init__",
+          "apply_gate",
+          "h",
+          "x",
+          "y",
+          "z",
+          "rx",
+          "ry",
+          "rz",
+          "measure",
+          "measure_multiple",
+          "get_statevector",
+          "visualize"
+        ],
+        "line": 89
+      },
+      {
+        "name": "QuantumAlgorithms",
+        "methods": [
+          "grover_search",
+          "quantum_fourier_transform",
+          "quantum_phase_estimation"
+        ],
+        "line": 214
+      },
+      {
+        "name": "QuantumHashFunction",
+        "methods": [
+          "__init__",
+          "hash"
+        ],
+        "line": 306
+      },
+      {
+        "name": "QuantumOptimizer",
+        "methods": [
+          "__init__",
+          "qaoa",
+          "vqe"
+        ],
+        "line": 361
+      },
+      {
+        "name": "QuantumSimulator",
+        "methods": [
+          "__init__",
+          "create_circuit",
+          "run_grover",
+          "quantum_hash",
+          "optimize",
+          "get_stats"
+        ],
+        "line": 436
+      }
+    ],
+    "functions": [],
+    "imports": 4,
+    "todos": []
+  },
+  "src/simulation/__init__.py": {
+    "status": "implemented",
+    "lines": 9,
+    "classes": [],
+    "functions": [],
+    "imports": 1,
+    "todos": []
+  },
+  "src/simulation/cosmic_simulator.py": {
+    "status": "implemented",
+    "lines": 430,
+    "classes": [
+      {
+        "name": "PhysicsEngine",
+        "methods": [
+          "__init__",
+          "calculate_force",
+          "update_position",
+          "apply_force",
+          "decay_energy"
+        ],
+        "line": 12
+      },
+      {
+        "name": "EvolutionEngine",
+        "methods": [
+          "__init__",
+          "can_reproduce",
+          "reproduce",
+          "_mutate_genome",
+          "evolve_cell"
+        ],
+        "line": 120
+      },
+      {
+        "name": "CosmicSimulator",
+        "methods": [
+          "__init__",
+          "create_genesis_cell",
+          "step",
+          "_update_physics",
+          "_update_evolution",
+          "_cleanup_dead_cells",
+          "_update_environment",
+          "run",
+          "get_stats",
+          "visualize_state"
+        ],
+        "line": 234
+      }
+    ],
+    "functions": [],
+    "imports": 8,
+    "todos": []
+  },
+  "tests/__init__.py": {
+    "status": "empty",
+    "lines": 0
+  }
+}
