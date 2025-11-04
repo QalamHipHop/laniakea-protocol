@@ -452,7 +452,7 @@ class ReinforcementLearner:
         }
 
 
-class MLOrchestrator:
+class MLSystem:
     """
     هماهنگ‌کننده سیستم‌های ML
     
@@ -464,7 +464,7 @@ class MLOrchestrator:
         self.pattern_recognizer = PatternRecognizer()
         self.rl_learner = ReinforcementLearner(n_actions=5)
         
-        print("🎯 ML Orchestrator initialized")
+        print("🎯 MLSystem initialized")
     
     def analyze_blockchain(self, blocks: List) -> Dict:
         """تحلیل کامل بلاک‌چین"""

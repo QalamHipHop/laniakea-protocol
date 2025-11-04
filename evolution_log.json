@@ -1,0 +1,398 @@
+{
+  "version": "0.0.1",
+  "timestamp": "2025-11-04T08:49:47.028533",
+  "project_stats": {
+    "total_files": 48,
+    "total_lines": 9624,
+    "avg_complexity": 11.270833333333334,
+    "files": [
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/test_system.py",
+        "lines": 330,
+        "functions": 13,
+        "classes": 1,
+        "complexity_score": 11,
+        "hash": "b842b294e0d0f72d30066e901fe1d213666adc81f9653cb44f892b8cd0711b9c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/self_evolution_loop.py",
+        "lines": 113,
+        "functions": 1,
+        "classes": 0,
+        "complexity_score": 10,
+        "hash": "f3f648e1ebd3f1aacccec292cb23c81472436ffcf8d46c46241f0adcc102debb"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/main.py",
+        "lines": 530,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 31,
+        "hash": "caab9231a226f64de1975f20d20fae7b1374be6ca36fa6ebc950b7bceb31eda9"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/core/cell/init.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/config.py",
+        "lines": 67,
+        "functions": 2,
+        "classes": 0,
+        "complexity_score": 4,
+        "hash": "d7e78ed265652ba851334df53a1c482557faa3f7e2afc3836639be54b44e9214"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/__init__.py",
+        "lines": 10,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "340e78b229828379760e03fe056f89ba43d5832e2bfb44e91caaefd46a7f96c7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/pov.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "hash": "534171a6f2292988b2889a19d4bbf9fbd809f9f9b6e06a93047750e0aba40fd2"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/poa.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "hash": "ce1b23832e66a79faf274e680adb3cca8fa0d34ac44204e140abadb512debeaa"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/blockchain.py",
+        "lines": 263,
+        "functions": 16,
+        "classes": 1,
+        "complexity_score": 25,
+        "hash": "c74da9273f6f25b30d0393fc77162e2a86898ab4196cd4e838c4cc30bfff0256"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/hash_modernity.py",
+        "lines": 332,
+        "functions": 14,
+        "classes": 2,
+        "complexity_score": 8,
+        "hash": "4182b7a8386f43f04262f32387f91a258b5e0ae852d7fd161738917b4820ee0f"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/models.py",
+        "lines": 214,
+        "functions": 2,
+        "classes": 13,
+        "complexity_score": 1,
+        "hash": "04d568698d462c5e520b6a0ba9e293da008ae420a52e9f329a90ff46d67e70ce"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/token_system.py",
+        "lines": 405,
+        "functions": 17,
+        "classes": 3,
+        "complexity_score": 20,
+        "hash": "08aadae9f5861060f9dbff755da4fa3617aefe8c5eeb343e016fc2f4527e95a7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/wallet.py",
+        "lines": 136,
+        "functions": 6,
+        "classes": 1,
+        "complexity_score": 3,
+        "hash": "aa9cf908a718c4d3cfa995fa4a0f2eec65c9cf29ed11d429e3e12c2f7b60fcdc"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/__init__.py",
+        "lines": 6,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "fc48a2305ca4bf90a6bfaa6fae85c0677c7df396cd1c38bfac79e28f11cc96f7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/live_dashboard.py",
+        "lines": 180,
+        "functions": 8,
+        "classes": 2,
+        "complexity_score": 7,
+        "hash": "e34a933b16cb296c2ff38601eb12f866241d38627f60d91ebaaceea95cd40d09"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/governance/__init__.py",
+        "lines": 23,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "afdfc837d7242d32eb52aa665e2ed88f0d65022818e8a40cdd67b3ef5784bf1c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/governance/dao.py",
+        "lines": 484,
+        "functions": 17,
+        "classes": 6,
+        "complexity_score": 30,
+        "hash": "da813d9d5173ea62b6696bd7529492fc1b900a2014bd56e2025656a4d0742e58"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/identity/__init__.py",
+        "lines": 23,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "c12ab437cd94ad7c0f78d0c7302d79d0b0cd5d65359eceaa84c3103b4b5a4424"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/identity/did_system.py",
+        "lines": 456,
+        "functions": 16,
+        "classes": 6,
+        "complexity_score": 34,
+        "hash": "432ecaf37842c23b67f76ae3cc3c6332664a1f97ed68315f394154c50947843a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/__init__.py",
+        "lines": 35,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "b2b73b6f48b962d38c3aa247c03e4c3872e5758b538e84a86a8dc4e8f871d7cf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ml_system.py",
+        "lines": 485,
+        "functions": 26,
+        "classes": 6,
+        "complexity_score": 17,
+        "hash": "b7f6e63810d6b510e643a4fdf65cc4511f314f6c0d68b4cbfba43e673d8555e8"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/predictive_analytics.py",
+        "lines": 377,
+        "functions": 15,
+        "classes": 3,
+        "complexity_score": 26,
+        "hash": "24c8d3b61c9ce8ecb8fe339f45613a245509d016c62fb110c1f732baf4250e06"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/self_evolution.py",
+        "lines": 192,
+        "functions": 3,
+        "classes": 2,
+        "complexity_score": 14,
+        "hash": "510917db2f838b5b6475f20c075ec3f1757db871162bd081d43eb1d80d704382"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_api.py",
+        "lines": 150,
+        "functions": 3,
+        "classes": 1,
+        "complexity_score": 11,
+        "hash": "7c1715329a77bc659d6f48b355902eb39b85520432dcc5e4aa5e7e1905b8276e"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/__init__.py",
+        "lines": 40,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "01ac31e977cda2c5ed05680b882f17b0564072dfeda1abf5b07aadc33ddc4b17"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/exchange.py",
+        "lines": 519,
+        "functions": 27,
+        "classes": 7,
+        "complexity_score": 27,
+        "hash": "8db7d1441b8e36e82942e6423f4f6295e7af2b72b9a34b4f9c276a3cf95acddf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/knowledge_market.py",
+        "lines": 444,
+        "functions": 15,
+        "classes": 4,
+        "complexity_score": 35,
+        "hash": "4419aada0a2ac76b5f7f0cde4e72f872208b599bc629617b768436e2f927d5a7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/cognitive_core.py",
+        "lines": 397,
+        "functions": 11,
+        "classes": 1,
+        "complexity_score": 16,
+        "hash": "93d3f1f536f96bed302f004373e7ceba60c9a040bf1da4ffc8ff5261abd39e69"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/__init__.py",
+        "lines": 25,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "b03359fea7066da01afaa5bc0739b0ffa299c2f0fea541edf9ef254ab4fa5327"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/world.py",
+        "lines": 497,
+        "functions": 31,
+        "classes": 7,
+        "complexity_score": 30,
+        "hash": "67e362ddaed5a42db6a8c7cfdbddfe385235e6479df82153890869f908387c9b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/dht.py",
+        "lines": 415,
+        "functions": 22,
+        "classes": 6,
+        "complexity_score": 20,
+        "hash": "b2592ef5271f2d2c1013826cb575bc9f71d3a522ebb9d447538c622c6badce4b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/p2p.py",
+        "lines": 127,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 7,
+        "hash": "04fece71c6e2a1e2c99eaf004e9b8cfe9896d52286bda92cc8cc1504201fc8a4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/oracles/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/oracles/oracle_system.py",
+        "lines": 310,
+        "functions": 7,
+        "classes": 5,
+        "complexity_score": 10,
+        "hash": "b40f47bca210c04fcdb187d6ebd70f93b3a55dc69b15dd259c46d1abba200869"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/problems/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/quantum/__init__.py",
+        "lines": 25,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "9c9a93ed227466df678051cd7e08ff182daa34e33f16224ffd1dca273ecd536c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/quantum/quantum_system.py",
+        "lines": 482,
+        "functions": 34,
+        "classes": 7,
+        "complexity_score": 32,
+        "hash": "2f03db8922d166ecdc3bc6299a7434545886a5f640b8200659d301c009dd700c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/__init__.py",
+        "lines": 9,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "5a7a2c18c83dc7562a809f76550743a90b1b62f1ec07ebbf0b87ee0abc95cfd0"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/cosmic_simulator.py",
+        "lines": 430,
+        "functions": 20,
+        "classes": 3,
+        "complexity_score": 22,
+        "hash": "2f6115e85144e2ba152d3f443c8f365d0598b2e3bf5c278c96a7e425bce8d793"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/reputation_system.py",
+        "lines": 402,
+        "functions": 18,
+        "classes": 5,
+        "complexity_score": 25,
+        "hash": "72af4e59060f3461f5a1483641b6a6e6d760c78ccf080781b25e3d43f8541646"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/__init__.py",
+        "lines": 21,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "19ce71958811ae5c2f2f9ba41c23b18fe3bcff87f23f1a2e6e7f718dbdc49a4d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/api_integrations.py",
+        "lines": 549,
+        "functions": 8,
+        "classes": 7,
+        "complexity_score": 42,
+        "hash": "59d087848effdfb54e81ad1314888452c45ecf1d9caff65a34e919412e834992"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/__init__.py",
+        "lines": 27,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "601dbff790ab5198a3bbaa9680ab0b6befedc13c31d34e9cad87d2e5e6169a7a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "timestamp": "2025-11-04T08:49:24.511124"
+  },
+  "suggestions": [],
+  "applied_improvements": []
+}
