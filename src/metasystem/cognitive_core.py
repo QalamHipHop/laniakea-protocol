@@ -6,7 +6,7 @@ Laniakea Protocol - Cognitive Core
 import os
 import json
 from typing import List, Dict, Any, Optional
-from openai import OpenAI
+from src.intelligence import get_ai_api
 from src.core.models import (
     KnowledgeBlock, Solution, Task, Proposal,
     ProposalType, ValueVector, ProblemCategory
@@ -24,7 +24,7 @@ class CognitiveCore:
         Args:
             model: مدل LLM (gpt-4.1-mini, gpt-4.1-nano, gemini-2.5-flash)
         """
-        self.client = OpenAI()  # API key از environment variable خوانده می‌شود
+        self.ai_api = get_ai_api()  # API key از environment variable خوانده می‌شود
         self.model = model
         self.observations: List[Dict[str, Any]] = []
         self.insights: List[str] = []
@@ -110,17 +110,13 @@ Response format:
 """
 
         try:
-            response = self.client.chat.completions.create(
+            content = self.ai_api.generate_text_sync(
+                prompt=prompt,
                 model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are the Cognitive Core of Laniakea Protocol."},
-                    {"role": "user", "content": prompt}
-                ],
+                system_prompt="You are the Cognitive Core of Laniakea Protocol.",
                 temperature=0.7,
                 max_tokens=500
             )
-
-            content = response.choices[0].message.content
             result = json.loads(content)
 
             value_vector = ValueVector(
@@ -179,17 +175,13 @@ Provide a JSON response:
 """
 
         try:
-            response = self.client.chat.completions.create(
+            content = self.ai_api.generate_text_sync(
+                prompt=prompt,
                 model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are the Cognitive Core of Laniakea Protocol."},
-                    {"role": "user", "content": prompt}
-                ],
+                system_prompt="You are the Cognitive Core of Laniakea Protocol.",
                 temperature=0.9,
                 max_tokens=400
             )
-
-            content = response.choices[0].message.content
             result = json.loads(content)
 
             import hashlib
@@ -252,17 +244,13 @@ Provide a JSON response:
 """
 
         try:
-            response = self.client.chat.completions.create(
+            content = self.ai_api.generate_text_sync(
+                prompt=prompt,
                 model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are the Cognitive Core with autopoietic capabilities."},
-                    {"role": "user", "content": prompt}
-                ],
+                system_prompt="You are the Cognitive Core with autopoietic capabilities.",
                 temperature=0.8,
                 max_tokens=500
             )
-
-            content = response.choices[0].message.content
             result = json.loads(content)
 
             import hashlib

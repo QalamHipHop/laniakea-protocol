@@ -22,7 +22,7 @@ class KnowledgeType(str, Enum):
     DISCOVERY = "discovery"
 
 
-class NFTMetadata(BaseModel):
+class KnowledgeAsset(BaseModel):
     """متادیتای NFT"""
     name: str
     description: str
@@ -45,10 +45,10 @@ class NFTMetadata(BaseModel):
     citations: int = 0
 
 
-class KnowledgeNFT(BaseModel):
+class KnowledgeAssetToken(BaseModel):
     """NFT دانش"""
     token_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    metadata: NFTMetadata
+    metadata: KnowledgeAsset
     content_hash: str  # هش محتوای دانش
     owner: str
     creator: str
@@ -82,11 +82,11 @@ class KnowledgeNFT(BaseModel):
             self.for_sale = False
 
 
-class NFTMarketplace:
+class KnowledgeMarketplace:
     """بازار NFT های دانش"""
     
     def __init__(self):
-        self.nfts: Dict[str, KnowledgeNFT] = {}
+        self.nfts: Dict[str, KnowledgeAssetToken] = {}
         self.listings: Dict[str, Dict[str, Any]] = {}  # NFT های در حال فروش
         self.collections: Dict[str, List[str]] = {}  # کلکسیون‌های کاربران
         self.offers: Dict[str, List[Dict[str, Any]]] = {}  # پیشنهادات خرید
@@ -94,9 +94,9 @@ class NFTMarketplace:
     def mint_nft(
         self,
         content: str,
-        metadata: NFTMetadata,
+        metadata: KnowledgeAsset,
         creator: str
-    ) -> KnowledgeNFT:
+    ) -> KnowledgeAssetToken:
         """ضرب NFT جدید"""
         
         # محاسبه هش محتوا
@@ -107,7 +107,7 @@ class NFTMarketplace:
         metadata.quality_score = quality_score
         
         # ایجاد NFT
-        nft = KnowledgeNFT(
+        nft = KnowledgeAssetToken(
             metadata=metadata,
             content_hash=content_hash,
             owner=creator,
@@ -124,7 +124,7 @@ class NFTMarketplace:
         
         return nft
     
-    def _calculate_quality_score(self, metadata: NFTMetadata) -> float:
+    def _calculate_quality_score(self, metadata: KnowledgeAsset) -> float:
         """محاسبه امتیاز کیفیت"""
         score = 0.0
         
@@ -351,7 +351,7 @@ class NFTMarketplace:
         
         return False
     
-    def get_trending(self, limit: int = 10) -> List[KnowledgeNFT]:
+    def get_trending(self, limit: int = 10) -> List[KnowledgeAssetToken]:
         """دریافت NFT های ترند"""
         
         # مرتب‌سازی بر اساس ترکیبی از views, likes و quality
@@ -367,7 +367,7 @@ class NFTMarketplace:
         
         return sorted_nfts[:limit]
     
-    def get_collection(self, owner: str) -> List[KnowledgeNFT]:
+    def get_collection(self, owner: str) -> List[KnowledgeAssetToken]:
         """دریافت کلکسیون یک کاربر"""
         
         if owner not in self.collections:
@@ -385,7 +385,7 @@ class NFTMarketplace:
         knowledge_type: Optional[KnowledgeType] = None,
         min_quality: float = 0.0,
         max_price: Optional[float] = None
-    ) -> List[KnowledgeNFT]:
+    ) -> List[KnowledgeAssetToken]:
         """جستجو در NFT ها"""
         
         results = []
@@ -435,9 +435,9 @@ class NFTMarketplace:
 
 
 # Global marketplace instance
-_marketplace = NFTMarketplace()
+_marketplace = KnowledgeMarketplace()
 
 
-def get_marketplace() -> NFTMarketplace:
+def get_marketplace() -> KnowledgeMarketplace:
     """دریافت instance جهانی marketplace"""
     return _marketplace

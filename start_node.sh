@@ -1,43 +1,26 @@
 #!/bin/bash
 
-# Laniakea Protocol - Node Startup Script
+# Laniakea Protocol v5.0 - Node Startup Script
+# اسکریپت راه‌اندازی نود نسخه 5.0
 
-echo "🌌 Starting Laniakea Protocol Node..."
+echo "🌌 Starting Laniakea Protocol v5.0..."
 
-# Check if virtual environment exists
-if [ ! -d "venv" ]; then
-    echo "📦 Creating virtual environment..."
-    python3 -m venv venv
-fi
+# تنظیم متغیرهای محیطی (در صورت نیاز)
+export OPENAI_API_KEY="${OPENAI_API_KEY:-your_key_here}"
+export NASA_API_KEY="${NASA_API_KEY:-DEMO_KEY}"
 
-# Activate virtual environment
-source venv/bin/activate
+# پارامترهای پیش‌فرض
+P2P_PORT="${1:-5000}"
+API_PORT="${2:-8000}"
+ENABLE_SIM="${3:-}"
 
-# Install dependencies
-echo "📥 Installing dependencies..."
-pip install -q -r requirements.txt
+# ساخت دایرکتوری داده
+mkdir -p "data_node_${P2P_PORT}"
 
-# Check if .env exists
-if [ ! -f ".env" ]; then
-    echo "⚙️ Creating .env file..."
-    cp .env.example .env
-    echo "IS_AUTHORITY=true" >> .env
-fi
-
-# Default ports
-P2P_PORT=${1:-5000}
-API_PORT=${2:-8000}
-ENABLE_SIM=${3:-""}
-
-echo ""
-echo "🚀 Launching node..."
-echo "   P2P Port: $P2P_PORT"
-echo "   API Port: $API_PORT"
-echo ""
-
-# Run the node
-if [ "$ENABLE_SIM" = "--sim" ]; then
-    python3 main.py --p2p-port $P2P_PORT --api-port $API_PORT --enable-simulation
+# راه‌اندازی نود
+if [ "$ENABLE_SIM" == "--sim" ]; then
+    echo "🌠 Starting with cosmic simulation..."
+    python3 main_v5.py --p2p-port "$P2P_PORT" --api-port "$API_PORT" --enable-simulation
 else
-    python3 main.py --p2p-port $P2P_PORT --api-port $API_PORT
+    python3 main_v5.py --p2p-port "$P2P_PORT" --api-port "$API_PORT"
 fi

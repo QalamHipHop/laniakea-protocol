@@ -22,3 +22,18 @@ __all__ = [
     'OrderType',
     'OrderStatus'
 ]
+
+
+from .knowledge_market import (
+    KnowledgeMarketplace,
+    KnowledgeAsset,
+    KnowledgeType,
+    get_marketplace
+)
+
+__all__.extend([
+    "KnowledgeMarketplace",
+    "KnowledgeAsset",
+    "KnowledgeType",
+    "get_marketplace"
+])

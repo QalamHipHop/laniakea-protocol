@@ -1,20 +1,34 @@
 """
 Laniakea Protocol - Intelligence Module
-ماژول هوش و یادگیری ماشین
+ماژول هوش و یادگیری
 """
 
 from .ml_system import (
+    TrainingData, 
+    MLSystem,
     NeuralNetwork,
     ValuePredictor,
     PatternRecognizer,
     ReinforcementLearner,
     MLOrchestrator
 )
+from .predictive_analytics import TrendAnalyzer, PredictiveEngine, get_predictive_engine
+from .self_evolution import CodeAnalyzer, SelfEvolutionEngine
+from .ai_api import AI_API, get_ai_api
 
 __all__ = [
-    'NeuralNetwork',
-    'ValuePredictor',
-    'PatternRecognizer',
-    'ReinforcementLearner',
-    'MLOrchestrator'
+    "TrainingData",
+    "MLSystem",
+    "NeuralNetwork",
+    "ValuePredictor",
+    "PatternRecognizer",
+    "ReinforcementLearner",
+    "MLOrchestrator",
+    "TrendAnalyzer",
+    "PredictiveEngine",
+    "get_predictive_engine",
+    "CodeAnalyzer",
+    "SelfEvolutionEngine",
+    "AI_API",
+    "get_ai_api"
 ]
