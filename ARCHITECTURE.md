@@ -50,6 +50,27 @@
 - **LLM Integration**: اتصال به مدل‌های زبانی (GPT-4, Gemini)
 - **Knowledge Graph**: گراف دانشی برای ارتباط مفاهیم
 
+#### 3.2 Self-Evolution Engine (NEW)
+- **Code Analysis**: تحلیل خودکار کد برای پیچیدگی و کیفیت
+- **AI Suggestions**: ارائه پیشنهادهای بهبود توسط AI
+- **Auto-Refactoring**: بازسازی خودکار کد (اختیاری)
+
+#### 3.3 Predictive Analytics (NEW)
+- **Trend Analysis**: تحلیل روندهای آماری شبکه
+- **Future Forecasting**: پیش‌بینی آینده با AI
+- **Anomaly Detection**: شناسایی ناهنجاری‌ها و ریسک‌ها
+
+#### 3.4 Oracle System
+- **Scientific Oracles**: اتصال به پروژه‌های علمی (Folding@home, SETI@home)
+- **Data Oracles**: دریافت داده‌های خارجی
+- **AI Oracles**: پرس‌وجو از AI های خارجی
+
+#### 3.1 Cognitive Core (مغز کیهانی)
+- **Pattern Recognition**: تشخیص الگوهای دانشی در زنجیره
+- **Self-Evolution**: پیشنهاد بهبودهای پروتوکل
+- **LLM Integration**: اتصال به مدل‌های زبانی (GPT-4, Gemini)
+- **Knowledge Graph**: گراف دانشی برای ارتباط مفاهیم
+
 #### 3.2 Oracle System
 - **Scientific Oracles**: اتصال به پروژه‌های علمی (Folding@home, SETI@home)
 - **Data Oracles**: دریافت داده‌های خارجی
@@ -60,7 +81,21 @@
 - **Solution Validation**: اعتبارسنجی راه‌حل‌ها
 - **Value Assessment**: ارزیابی خودکار ارزش راه‌حل‌ها
 
-### 4. لایه شبیه‌سازی (Simulation Layer)
+### 4. لایه رابط کاربری و تجسم (UI & Visualization Layer) (NEW)
+
+#### 4.1 Live Dashboard
+- **Real-time Metrics**: نمایش زنده معیارهای شبکه
+- **Interactive Charts**: نمودارهای تعاملی برای تحلیل
+- **Alert System**: سیستم هشدار برای رویدادهای مهم
+
+### 5. لایه بازار (Marketplace Layer) (NEW)
+
+#### 5.1 NFT Knowledge Marketplace
+- **Knowledge Minting**: تبدیل دانش به NFT
+- **Auctions & Sales**: سیستم حراج و فروش
+- **Quality Scoring**: امتیازدهی به کیفیت دانش
+
+### 6. لایه شبیه‌سازی (Simulation Layer)
 
 #### 4.1 Cosmic Simulator
 - **Universe Engine**: موتور شبیه‌سازی کیهانی
@@ -141,11 +176,55 @@ User/Node → Task Creation → Task Pool → Solver Nodes
 - **NumPy**: محاسبات علمی
 - **NetworkX**: گراف دانشی
 
+### DevOps (NEW)
+- **Docker & Docker Compose**: کانتینرسازی و ارکستراسیون
+- **GitHub Actions**: CI/CD
+- **Prometheus & Grafana**: مانیتورینگ
+
+### زبان‌ها و فریمورک‌ها
+- **Python 3.11+**: زبان اصلی
+- **FastAPI**: API Framework
+- **WebSockets**: ارتباط real-time
+- **Pydantic**: Data Validation
+- **Cryptography**: امنیت
+
+### پایگاه داده
+- **SQLite/AioSQLite**: ذخیره‌سازی محلی
+- **Redis** (اختیاری): کش و صف
+
+### AI/ML
+- **OpenAI API**: GPT-4 برای Cognitive Core
+- **Gemini API**: مدل جایگزین
+- **NumPy**: محاسبات علمی
+- **NetworkX**: گراف دانشی
+
 ### شبیه‌سازی
 - **Mesa**: Agent-based modeling
 - **SimPy**: Discrete event simulation
 
-## مراحل توسعه
+## 🗺️ نقشه راه (Roadmap)
+
+### ✅ v0.0.1 (فعلی)
+- [x] زیرساخت کامل بلاک‌چین چند بُعدی
+- [x] هسته شناختی (Cognitive Core) با LLM
+- [x] داشبورد زنده (Live Dashboard)
+- [x] تحلیل پیش‌بینی‌کننده (Predictive Analytics)
+- [x] بازار NFT دانش (NFT Knowledge Marketplace)
+- [x] موتور خودتکاملی (Self-Evolution Engine)
+- [x] پشتیبانی از Docker و CI/CD
+
+### 🚧 v0.1.0 (آینده نزدیک)
+- [ ] شبکه P2P کامل با Kademlia DHT
+- [ ] سیستم حکمرانی خودکار (DAO)
+- [ ] یکپارچگی با پروژه‌های علمی بیشتر
+- [ ] رابط کاربری وب پیشرفته (React/Vue)
+- [ ] رمزنگاری مقاوم در برابر کوانتوم
+
+### 🔮 v1.0.0 (آینده دور)
+- [ ] Sharding برای مقیاس‌پذیری
+- [ ] Layer 2 برای تراکنش‌های سریع
+- [ ] پل‌های بین بلاک‌چینی (Cross-chain bridges)
+- [ ] شبیه‌ساز کیهانی 3D با VR/AR
 
 ### Phase 1: Core Infrastructure ✓
 - [x] Basic blockchain

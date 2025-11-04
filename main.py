@@ -26,6 +26,10 @@ from src.network.p2p import P2PManager
 from src.metasystem.cognitive_core import CognitiveCore
 from src.oracles.oracle_system import OracleManager
 from src.simulation.cosmic_simulator import CosmicSimulator
+from src.dashboard.live_dashboard import get_metrics_collector, generate_dashboard
+from src.intelligence.self_evolution import SelfEvolutionEngine
+from src.intelligence.predictive_analytics import get_predictive_engine
+from src.marketplace.nft_knowledge import get_marketplace, NFTMetadata, KnowledgeType
 
 
 class AppState:
@@ -45,6 +49,12 @@ class AppState:
         self.token_economics: Optional[TokenEconomics] = None
         self.staking_system: Optional[StakingSystem] = None
         self.cosmic_simulator: Optional[CosmicSimulator] = None
+
+        # سیستم‌های جدید v0.0.1
+        self.metrics_collector = get_metrics_collector()
+        self.predictive_engine = get_predictive_engine()
+        self.nft_marketplace = get_marketplace()
+        self.evolution_engine: Optional[SelfEvolutionEngine] = None
 
         # استخرها
         self.task_pool: Dict[str, Task] = {}
@@ -315,6 +325,125 @@ async def visualize_simulation():
 
     visualization = app_state.cosmic_simulator.visualize_state()
     return {"visualization": visualization}
+
+
+# ============================================================================
+# New Features v0.0.1
+# ============================================================================
+
+@app.get("/dashboard")
+async def get_dashboard():
+    """دریافت داشبورد زنده"""
+    from fastapi.responses import HTMLResponse
+    
+    blockchain_data = {
+        'chain_length': len(app_state.blockchain.chain) if app_state.blockchain else 0,
+        'total_value': sum(
+            block.solution.value_vector.total_value() if block.solution else 0
+            for block in (app_state.blockchain.chain if app_state.blockchain else [])
+        ),
+        'active_tasks': len(app_state.task_pool)
+    }
+    
+    network_data = {
+        'peer_count': len(app_state.p2p_manager.peers) if app_state.p2p_manager else 0,
+        'tps': 0.0  # محاسبه بعداً
+    }
+    
+    # ثبت متریک‌ها
+    app_state.metrics_collector.record('blockchain', blockchain_data)
+    app_state.metrics_collector.record('network', network_data)
+    
+    html = generate_dashboard(blockchain_data, network_data)
+    return HTMLResponse(content=html)
+
+
+@app.get("/analytics/predict")
+async def get_predictions():
+    """دریافت پیش‌بینی‌های آینده"""
+    blockchain_data = {
+        'chain_length': len(app_state.blockchain.chain) if app_state.blockchain else 0,
+        'total_value': sum(
+            block.solution.value_vector.total_value() if block.solution else 0
+            for block in (app_state.blockchain.chain if app_state.blockchain else [])
+        )
+    }
+    
+    network_data = {
+        'peer_count': len(app_state.p2p_manager.peers) if app_state.p2p_manager else 0
+    }
+    
+    predictions = await app_state.predictive_engine.analyze_blockchain_future(
+        blockchain_data,
+        network_data
+    )
+    
+    return predictions
+
+
+@app.post("/nft/mint")
+async def mint_knowledge_nft(nft_data: dict = Body(...)):
+    """ضرب NFT دانش"""
+    try:
+        metadata = NFTMetadata(
+            name=nft_data.get('name'),
+            description=nft_data.get('description'),
+            knowledge_type=KnowledgeType(nft_data.get('knowledge_type', 'scientific')),
+            creator=nft_data.get('creator'),
+            knowledge_value=float(nft_data.get('knowledge_value', 0)),
+            computation_value=float(nft_data.get('computation_value', 0)),
+            originality_score=float(nft_data.get('originality_score', 0))
+        )
+        
+        nft = app_state.nft_marketplace.mint_nft(
+            content=nft_data.get('content', ''),
+            metadata=metadata,
+            creator=nft_data.get('creator')
+        )
+        
+        return {
+            'message': 'NFT minted successfully',
+            'token_id': nft.token_id,
+            'nft': nft.model_dump()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/nft/marketplace")
+async def get_marketplace_listings():
+    """دریافت لیست فروش"""
+    return {
+        'listings': list(app_state.nft_marketplace.listings.values()),
+        'stats': app_state.nft_marketplace.get_stats()
+    }
+
+
+@app.get("/nft/trending")
+async def get_trending_nfts():
+    """دریافت NFT های ترند"""
+    trending = app_state.nft_marketplace.get_trending(limit=10)
+    return {'trending': [nft.model_dump() for nft in trending]}
+
+
+@app.post("/evolution/analyze")
+async def analyze_code_evolution(params: dict = Body(...)):
+    """تحلیل و پیشنهاد بهبودها"""
+    if not app_state.evolution_engine:
+        app_state.evolution_engine = SelfEvolutionEngine('.')
+    
+    auto_apply = params.get('auto_apply', False)
+    result = await app_state.evolution_engine.evolve(auto_apply=auto_apply)
+    
+    return {
+        'message': 'Evolution analysis complete',
+        'summary': {
+            'files_analyzed': result['project_stats']['total_files'],
+            'suggestions_count': len(result['suggestions']),
+            'improvements_applied': len(result['applied_improvements'])
+        },
+        'report_path': 'EVOLUTION_REPORT.json'
+    }
 
 
 # ============================================================================
