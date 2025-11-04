@@ -1,14 +1,19 @@
 """
-Laniakea Protocol - Hash Modernity System
-سیستم تبدیل کشفیات علمی/فلسفی به نرخ‌های هش مدرنیته
+Laniakea Protocol - Hash Modernity System (Enhanced)
+سیستم تبدیل کشفیات علمی/فلسفی به نرخ‌های هش مدرنیته و اثبات ارزش (PoV)
 """
 
 import hashlib
 import json
+import numpy as np
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 from src.core.models import Task, Solution, ValueVector, ProblemCategory
 
+# --- ثابت‌های ریاضی ---
+# برای نرمال‌سازی و وزن‌دهی در محاسبات مدرنیته
+MAX_VALUE_DIMENSION = 10.0
+MAX_DIFFICULTY = 10.0
 
 class HashModernityEngine:
     """
@@ -28,14 +33,6 @@ class HashModernityEngine:
     ) -> str:
         """
         محاسبه هش یک کشف
-        
-        Args:
-            discovery_content: محتوای کشف
-            context: زمینه و متادیتا
-            timestamp: زمان کشف
-        
-        Returns:
-            هش کشف
         """
         if timestamp is None:
             timestamp = datetime.now().timestamp()
@@ -47,10 +44,10 @@ class HashModernityEngine:
             "modernity_index": self.modernity_index
         }
 
+        # استفاده از JSON استاندارد برای اطمینان از ترتیب کلیدها
         discovery_json = json.dumps(discovery_data, sort_keys=True)
         discovery_hash = hashlib.sha256(discovery_json.encode()).hexdigest()
 
-        # ذخیره در کش
         self.discovery_cache[discovery_hash] = discovery_content
 
         return discovery_hash
@@ -62,36 +59,25 @@ class HashModernityEngine:
         difficulty: int = 4
     ) -> str:
         """
-        محاسبه Proof of Discovery
-        اثبات اینکه یک کشف واقعی انجام شده است
-        
-        Args:
-            task: تسک اصلی
-            solution: راه‌حل ارائه شده
-            difficulty: سطح دشواری (تعداد صفرهای ابتدایی)
-        
-        Returns:
-            proof string
+        محاسبه Proof of Discovery (PoD)
+        اثبات اینکه یک کشف واقعی انجام شده است (شبیه به PoW ساده)
         """
         nonce = 0
         prefix = '0' * difficulty
+        
+        # ترکیب هش تسک و راه‌حل برای ایجاد یک فضای جستجوی منحصر به فرد
+        base_hash = hashlib.sha256(f"{task.id}{solution.id}".encode()).hexdigest()
 
         while True:
-            proof_data = {
-                "task_id": task.id,
-                "solution_id": solution.id,
-                "content": solution.content,
-                "nonce": nonce
-            }
-            proof_json = json.dumps(proof_data, sort_keys=True)
-            proof_hash = hashlib.sha256(proof_json.encode()).hexdigest()
+            proof_data = f"{base_hash}{nonce}"
+            proof_hash = hashlib.sha256(proof_data.encode()).hexdigest()
 
             if proof_hash.startswith(prefix):
                 return proof_hash
 
             nonce += 1
 
-            # محدودیت برای جلوگیری از حلقه بی‌نهایت
+            # محدودیت برای جلوگیری از حلقه بی‌نهایت در محیط شبیه‌سازی
             if nonce > 1000000:
                 break
 
@@ -104,78 +90,50 @@ class HashModernityEngine:
         existing_solutions: List[Solution]
     ) -> float:
         """
-        ارزیابی نرخ مدرنیته یک راه‌حل
+        ارزیابی نرخ مدرنیته یک راه‌حل (بر اساس الگوهای ریاضی پیشرفته)
         
-        نرخ مدرنیته نشان می‌دهد که راه‌حل چقدر نو و پیشرفته است
-        
-        Args:
-            solution: راه‌حل جدید
-            task: تسک مرتبط
-            existing_solutions: راه‌حل‌های موجود
-        
-        Returns:
-            نرخ مدرنیته (0.0 تا 1.0)
+        نرخ مدرنیته نشان می‌دهد که راه‌حل چقدر نو، پیچیده و ارزشمند است.
         """
-        # فاکتور 1: تشابه با راه‌حل‌های موجود (کمتر بهتر)
-        similarity_penalty = self._calculate_similarity_penalty(solution, existing_solutions)
-
-        # فاکتور 2: پیچیدگی راه‌حل
-        complexity_score = self._calculate_complexity_score(solution)
-
-        # فاکتور 3: ارزش چند بُعدی
-        value_score = solution.value_vector.total_value() / 100.0  # نرمال‌سازی
-
-        # فاکتور 4: دشواری تسک
-        difficulty_multiplier = task.difficulty / 10.0
-
-        # محاسبه نهایی
-        modernity_rate = (
-            (1.0 - similarity_penalty) * 0.3 +
-            complexity_score * 0.3 +
-            value_score * 0.3 +
-            difficulty_multiplier * 0.1
-        )
-
-        return min(1.0, max(0.0, modernity_rate))
-
-    def _calculate_similarity_penalty(
-        self,
-        solution: Solution,
-        existing_solutions: List[Solution]
-    ) -> float:
-        """محاسبه جریمه تشابه با راه‌حل‌های موجود"""
+        
+        solution_vector_array = np.array(list(solution.value_vector.to_dict().values()))
+        
+        # 1. امتیاز نوآوری (Originality Score)
         if not existing_solutions:
-            return 0.0
-
-        solution_hash = hashlib.sha256(solution.content.encode()).hexdigest()
-        max_similarity = 0.0
-
-        for existing in existing_solutions:
-            existing_hash = hashlib.sha256(existing.content.encode()).hexdigest()
-
-            # محاسبه تشابه ساده بر اساس هش
-            # در واقعیت باید از الگوریتم‌های پیچیده‌تر استفاده شود
-            common_chars = sum(
-                1 for a, b in zip(solution_hash, existing_hash) if a == b
-            )
-            similarity = common_chars / len(solution_hash)
-            max_similarity = max(max_similarity, similarity)
-
-        return max_similarity
-
-    def _calculate_complexity_score(self, solution: Solution) -> float:
-        """محاسبه امتیاز پیچیدگی راه‌حل"""
-        content = solution.content
-
-        # فاکتورهای پیچیدگی
-        length_score = min(1.0, len(content) / 1000.0)
-        unique_words = len(set(content.split()))
-        vocabulary_score = min(1.0, unique_words / 100.0)
-
-        # امتیاز نهایی
-        complexity = (length_score * 0.5 + vocabulary_score * 0.5)
-
-        return complexity
+            originality_score = 1.0
+        else:
+            existing_arrays = [np.array(list(s.value_vector.to_dict().values())) for s in existing_solutions]
+            mean_vector = np.mean(existing_arrays, axis=0)
+            
+            # فاصله اقلیدسی از میانگین (نشان‌دهنده نوآوری)
+            distance = np.linalg.norm(solution_vector_array - mean_vector)
+            
+            # استفاده از تابع سیگموئید (یا tanh) برای نرمال‌سازی و محدود کردن فاصله
+            # 1 / (1 + e^(-x))
+            originality_score = 1.0 / (1.0 + np.exp(-distance / 5.0)) # 5.0 یک ضریب مقیاس است
+            
+        # 2. امتیاز پیچیدگی (Complexity Score)
+        # تمرکز بر ابعاد دانش و محاسبات
+        knowledge_score = solution.value_vector.knowledge / MAX_VALUE_DIMENSION
+        computation_score = solution.value_vector.computation / MAX_VALUE_DIMENSION
+        complexity_score = (knowledge_score + computation_score) / 2.0
+        
+        # 3. امتیاز ارزش (Value Score)
+        # نرمال‌سازی ارزش کل
+        total_value = solution.value_vector.total_value()
+        value_score = total_value / (len(solution.value_vector.to_dict()) * MAX_VALUE_DIMENSION)
+        
+        # 4. ضریب دشواری تسک
+        difficulty_multiplier = task.difficulty / MAX_DIFFICULTY
+        
+        # ترکیب نهایی با وزن‌دهی (می‌تواند توسط سیستم حکمرانی تغییر کند)
+        modernity_rate = (
+            originality_score * 0.40 +
+            complexity_score * 0.30 +
+            value_score * 0.20 +
+            difficulty_multiplier * 0.10
+        )
+        
+        return min(1.0, max(0.0, modernity_rate))
 
     def create_modernity_token(
         self,
@@ -185,16 +143,6 @@ class HashModernityEngine:
     ) -> Dict[str, Any]:
         """
         ایجاد توکن مدرنیته
-        
-        توکن مدرنیته نشان‌دهنده ارزش نوآوری و پیشرفت است
-        
-        Args:
-            solution: راه‌حل
-            task: تسک
-            modernity_rate: نرخ مدرنیته
-        
-        Returns:
-            توکن مدرنیته
         """
         token = {
             "id": self._generate_token_id(solution, task),
@@ -225,45 +173,16 @@ class HashModernityEngine:
     ) -> bool:
         """
         اعتبارسنجی Proof of Discovery
-        
-        Args:
-            proof_hash: هش اثبات
-            difficulty: سطح دشواری
-        
-        Returns:
-            True اگر معتبر باشد
         """
         prefix = '0' * difficulty
         return proof_hash.startswith(prefix)
 
-    def compute_hash_rate(
-        self,
-        solutions_count: int,
-        time_period: float
-    ) -> float:
-        """
-        محاسبه نرخ هش (تعداد کشفیات در واحد زمان)
-        
-        Args:
-            solutions_count: تعداد راه‌حل‌ها
-            time_period: بازه زمانی (ثانیه)
-        
-        Returns:
-            نرخ هش (کشف در ثانیه)
-        """
-        if time_period <= 0:
-            return 0.0
-
-        return solutions_count / time_period
-
-    def update_modernity_index(self, new_discoveries: int):
+    def update_modernity_index(self, new_discoveries: int, avg_modernity: float):
         """
         به‌روزرسانی شاخص مدرنیته کلی سیستم
-        
-        Args:
-            new_discoveries: تعداد کشفیات جدید
         """
-        growth_rate = 0.01
+        # رشد شاخص بر اساس تعداد کشفیات و میانگین مدرنیته آنها
+        growth_rate = 0.01 * avg_modernity
         self.modernity_index += new_discoveries * growth_rate
 
     def get_modernity_stats(self) -> Dict[str, Any]:
@@ -277,7 +196,7 @@ class HashModernityEngine:
 
 class ProofOfValue:
     """
-    Proof of Value - اثبات ارزش
+    Proof of Value - اثبات ارزش (PoV)
     جایگزین Proof of Work که بر اساس ارزش واقعی است
     """
 
@@ -285,47 +204,42 @@ class ProofOfValue:
     def calculate_value_proof(
         solution: Solution,
         task: Task,
-        validators: List[str]
+        modernity_rate: float,
+        validators_count: int
     ) -> float:
         """
-        محاسبه اثبات ارزش
+        محاسبه اثبات ارزش (PoV Score)
         
-        Args:
-            solution: راه‌حل
-            task: تسک
-            validators: لیست اعتبارسنج‌ها
-        
-        Returns:
-            امتیاز اثبات ارزش
+        PoV Score = (Total Value) * (Modernity Rate) * (Task Difficulty Multiplier) * (Validator Multiplier)
         """
-        # ارزش پایه از ValueVector
+        # 1. ارزش پایه از ValueVector
         base_value = solution.value_vector.total_value()
 
-        # ضریب دشواری تسک
-        difficulty_multiplier = task.difficulty / 10.0
+        # 2. ضریب دشواری تسک
+        difficulty_multiplier = task.difficulty / MAX_DIFFICULTY
 
-        # ضریب اعتبارسنج‌ها (هر چه بیشتر، معتبرتر)
-        validator_multiplier = min(2.0, len(validators) / 5.0)
+        # 3. ضریب اعتبارسنج‌ها (هر چه بیشتر، معتبرتر)
+        # استفاده از لگاریتم برای کاهش تأثیر تعداد زیاد اعتبارسنج‌ها
+        validator_multiplier = np.log1p(validators_count) / np.log1p(5) # نرمال‌سازی بر اساس 5 اعتبارسنج
 
         # محاسبه نهایی
-        value_proof = base_value * difficulty_multiplier * validator_multiplier
+        value_proof = base_value * modernity_rate * difficulty_multiplier * validator_multiplier
 
-        return value_proof
+        return float(value_proof)
 
     @staticmethod
     def verify_value_proof(
         solution: Solution,
-        minimum_value: float
+        modernity_rate: float,
+        minimum_value_proof: float
     ) -> bool:
         """
         اعتبارسنجی اثبات ارزش
-        
-        Args:
-            solution: راه‌حل
-            minimum_value: حداقل ارزش مورد نیاز
-        
-        Returns:
-            True اگر ارزش کافی باشد
         """
+        # حداقل ارزش مورد نیاز بر اساس مدرنیته
+        required_value = minimum_value_proof / modernity_rate
+        
         total_value = solution.value_vector.total_value()
-        return total_value >= minimum_value
+        
+        # بررسی اینکه آیا ارزش کل راه‌حل با توجه به مدرنیته آن، حداقل مورد نیاز را برآورده می‌کند
+        return total_value >= required_value

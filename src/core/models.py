@@ -1,5 +1,5 @@
 """
-Laniakea Protocol - Core Models
+Laniakea Protocol - Core Models (Enhanced)
 مدل‌های پایه برای سیستم بلاک‌چین چند بُعدی
 """
 
@@ -16,6 +16,9 @@ class ValueDimension(str, Enum):
     CONSCIOUSNESS = "consciousness"  # ارزش آگاهی
     ENVIRONMENTAL = "environmental"  # تأثیر محیطی
     HEALTH = "health"  # تأثیر سلامتی
+    # ابعاد جدید برای آینده‌نگری
+    SCALABILITY = "scalability" # قابلیت گسترش و مقیاس‌پذیری
+    ETHICAL_ALIGNMENT = "ethical_alignment" # همسویی اخلاقی و پایداری
 
 
 class ValueVector(BaseModel):
@@ -29,29 +32,29 @@ class ValueVector(BaseModel):
     consciousness: float = Field(default=0.0, ge=0.0, description="ارزش آگاهی")
     environmental: float = Field(default=0.0, description="تأثیر محیطی (می‌تواند منفی باشد)")
     health: float = Field(default=0.0, description="تأثیر سلامتی")
+    scalability: float = Field(default=0.0, ge=0.0, description="قابلیت گسترش")
+    ethical_alignment: float = Field(default=0.0, ge=0.0, description="همسویی اخلاقی")
 
     def total_value(self) -> float:
         """محاسبه ارزش کل"""
+        # همه ابعاد به جز محیطی و سلامتی که می‌توانند منفی باشند، باید مثبت باشند
+        # برای محاسبه ارزش کل، فقط مقادیر مثبت را در نظر می‌گیریم
         return (
             self.knowledge +
             self.computation +
             self.originality +
             self.consciousness +
-            max(0, self.environmental) +  # فقط تأثیرات مثبت محیطی
-            max(0, self.health)  # فقط تأثیرات مثبت سلامتی
+            self.scalability +
+            self.ethical_alignment +
+            max(0, self.environmental) +
+            max(0, self.health)
         )
 
     def to_dict(self) -> Dict[str, float]:
         """تبدیل به دیکشنری"""
-        return {
-            "knowledge": self.knowledge,
-            "computation": self.computation,
-            "originality": self.originality,
-            "consciousness": self.consciousness,
-            "environmental": self.environmental,
-            "health": self.health
-        }
+        return self.model_dump() # استفاده از model_dump برای Pydantic v2
 
+# بقیه مدل‌ها بدون تغییر اساسی باقی می‌مانند، اما باید با ValueVector جدید سازگار شوند.
 
 class ProblemCategory(str, Enum):
     """دسته‌بندی مسائل"""
@@ -61,12 +64,12 @@ class ProblemCategory(str, Enum):
     COMPUTATIONAL = "computational"  # مسائل محاسباتی
     ARTISTIC = "artistic"  # مسائل هنری
     COSMIC = "cosmic"  # مسائل کیهانی
-
+    # دسته‌بندی جدید
+    SYSTEMIC_EVOLUTION = "systemic_evolution" # تکامل سیستمی پروتوکل
 
 class Task(BaseModel):
     """
     تسک یا مسئله‌ای که باید حل شود
-    می‌تواند مسئله علمی، فلسفی، ریاضی یا هر چیز دیگری باشد
     """
     id: str = Field(..., description="شناسه یکتا")
     title: str = Field(..., description="عنوان تسک")
@@ -85,7 +88,6 @@ class Task(BaseModel):
 class Solution(BaseModel):
     """
     راه‌حل برای یک تسک
-    شامل محتوا و ارزش‌گذاری چند بُعدی
     """
     id: str = Field(..., description="شناسه یکتا")
     task_id: str = Field(..., description="شناسه تسک مرتبط")
@@ -100,7 +102,6 @@ class Solution(BaseModel):
 class Transaction(BaseModel):
     """
     تراکنش انتقال ارزش
-    می‌تواند ارزش ساده یا چند بُعدی منتقل کند
     """
     id: str = Field(..., description="شناسه یکتا")
     sender: str = Field(..., description="فرستنده")
@@ -118,7 +119,6 @@ class Transaction(BaseModel):
 class KnowledgeBlock(BaseModel):
     """
     بلاک دانشی در زنجیره Laniakea
-    هر بلاک می‌تواند حاوی راه‌حل‌ها، تراکنش‌ها و دانش جدید باشد
     """
     index: int = Field(..., ge=0, description="شماره بلاک")
     timestamp: float = Field(..., description="زمان ایجاد")
@@ -140,6 +140,7 @@ class NodeSpecialty(str, Enum):
     ORACLE = "oracle"  # اوراکل
     SIMULATION = "simulation"  # شبیه‌سازی
     AI_INFERENCE = "ai_inference"  # استنتاج AI
+    GOVERNANCE = "governance" # حکمرانی و رأی‌گیری
 
 
 class NodeInfo(BaseModel):
@@ -173,6 +174,7 @@ class ProposalType(str, Enum):
     PARAMETER_CHANGE = "parameter_change"
     NEW_FEATURE = "new_feature"
     RULE_MODIFICATION = "rule_modification"
+    VALUE_DIMENSION_ADJUSTMENT = "value_dimension_adjustment" # تغییر وزن ابعاد ارزشی
 
 
 class Proposal(BaseModel):

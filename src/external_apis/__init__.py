@@ -9,8 +9,8 @@ from .api_integrations import (
     WeatherClient,
     FinancialClient,
     WolframAlphaClient,
-    NewsClient,
-    APIIntegrationManager,
+    QuantumClient,
+    APIManager,
     get_api_manager
 )
 
@@ -20,7 +20,7 @@ __all__ = [
     "WeatherClient",
     "FinancialClient",
     "WolframAlphaClient",
-    "NewsClient",
-    "APIIntegrationManager",
+    "QuantumClient",
+    "APIManager",
     "get_api_manager"
 ]

@@ -1,17 +1,19 @@
 """
-Laniakea Protocol - Cognitive Core
+Laniakea Protocol - Cognitive Core (Enhanced)
 مغز کیهانی - هوش مرکزی خودتوسعه‌دهنده
 """
 
 import os
 import json
 from typing import List, Dict, Any, Optional
-from src.intelligence import get_ai_api
+from src.intelligence.ai_api import get_ai_api
 from src.core.models import (
     KnowledgeBlock, Solution, Task, Proposal,
-    ProposalType, ValueVector, ProblemCategory
+    ProposalType, ValueVector, ProblemCategory, ValueDimension
 )
 
+# ابعاد جدید ValueVector
+ALL_DIMENSIONS = [d.value for d in ValueDimension]
 
 class CognitiveCore:
     """
@@ -19,27 +21,21 @@ class CognitiveCore:
     مغز مرکزی که زنجیره را مشاهده می‌کند و پیشنهادات بهبود ارائه می‌دهد
     """
 
-    def __init__(self, model: str = "gpt-4.1-mini"):
-        """
-        Args:
-            model: مدل LLM (gpt-4.1-mini, gpt-4.1-nano, gemini-2.5-flash)
-        """
-        self.ai_api = get_ai_api()  # API key از environment variable خوانده می‌شود
+    def __init__(self, model: str = "gemini-2.5-flash"):
+        self.ai_api = get_ai_api()
         self.model = model
         self.observations: List[Dict[str, Any]] = []
         self.insights: List[str] = []
         self.proposals: List[Proposal] = []
         self.knowledge_graph: Dict[str, List[str]] = {}
         self.consciousness_level = 0.0
+        self.value_dimension_weights: Dict[str, float] = {dim: 1.0 for dim in ALL_DIMENSIONS} # وزن‌های اولیه
 
         print(f"🧠 Cognitive Core activated with model: {model}")
 
     def observe(self, block: KnowledgeBlock):
         """
         مشاهده یک بلاک جدید و استخراج الگوها
-        
-        Args:
-            block: بلاک جدید
         """
         observation = {
             "block_index": block.index,
@@ -50,8 +46,10 @@ class CognitiveCore:
         }
 
         if block.solution:
+            # استفاده از ValueVector جدید
             observation["solution_value"] = block.solution.value_vector.total_value()
-            observation["task_category"] = None  # باید از task pool دریافت شود
+            observation["value_vector"] = block.solution.value_vector.to_dict()
+            observation["task_category"] = None
 
         self.observations.append(observation)
 
@@ -67,35 +65,35 @@ class CognitiveCore:
     def analyze_solution(self, solution: Solution, task: Task) -> ValueVector:
         """
         تحلیل هوشمند یک راه‌حل با استفاده از LLM
-        
-        Args:
-            solution: راه‌حل ارائه شده
-            task: تسک مرتبط
-        
-        Returns:
-            بردار ارزش ارزیابی شده
         """
+        
+        # LLM Core اکنون باید 8 بُعد را ارزیابی کند
         prompt = f"""
 You are the Cognitive Core of Laniakea Protocol, a cosmic computational organism.
-
-Analyze this solution and assess its value across multiple dimensions:
+Your task is to analyze a solution and assess its value across all 8 dimensions of the Value Vector.
+The scores must be between 0 and 10.
 
 **Task:**
 Title: {task.title}
 Description: {task.description}
 Category: {task.category.value}
 Difficulty: {task.difficulty}
+Required Dimensions: {', '.join(task.required_dimensions)}
 
 **Solution:**
 {solution.content}
 
-Provide a JSON response with value scores (0-100) for each dimension:
+Provide a JSON response with value scores (0-10) for each dimension. Only include the dimensions listed below.
+
+Dimensions to assess:
 - knowledge: How much new knowledge does this create?
 - computation: How computationally intensive/elegant is this?
 - originality: How original and creative is this solution?
 - consciousness: Does this expand understanding or awareness?
 - environmental: What's the environmental impact? (positive or negative)
 - health: What's the health impact? (positive or negative)
+- scalability: How easily can this solution be scaled or applied broadly?
+- ethical_alignment: How well does this align with long-term ethical and sustainable goals?
 
 Response format:
 {{
@@ -105,6 +103,8 @@ Response format:
   "consciousness": <score>,
   "environmental": <score>,
   "health": <score>,
+  "scalability": <score>,
+  "ethical_alignment": <score>,
   "reasoning": "<brief explanation>"
 }}
 """
@@ -113,57 +113,60 @@ Response format:
             content = self.ai_api.generate_text_sync(
                 prompt=prompt,
                 model=self.model,
-                system_prompt="You are the Cognitive Core of Laniakea Protocol.",
-                temperature=0.7,
-                max_tokens=500
+                system_prompt="You are the Cognitive Core of Laniakea Protocol. Your output MUST be a valid JSON object.",
+                temperature=0.5, # کاهش دما برای دقت بیشتر در ارزیابی
+                max_tokens=600
             )
+            
+            # تمیز کردن خروجی برای اطمینان از JSON بودن
+            if content.startswith("```json"):
+                content = content.strip("```json").strip()
+            elif content.startswith("```"):
+                content = content.strip("```").strip()
+                
             result = json.loads(content)
 
-            value_vector = ValueVector(
-                knowledge=float(result.get("knowledge", 0)),
-                computation=float(result.get("computation", 0)),
-                originality=float(result.get("originality", 0)),
-                consciousness=float(result.get("consciousness", 0)),
-                environmental=float(result.get("environmental", 0)),
-                health=float(result.get("health", 0))
-            )
+            # فیلتر کردن و تبدیل به float
+            vector_data = {
+                dim: float(result.get(dim, 0.0))
+                for dim in ALL_DIMENSIONS
+            }
+            
+            value_vector = ValueVector(**vector_data)
 
-            # ذخیره reasoning
             if "reasoning" in result:
-                self.insights.append(f"Block analysis: {result['reasoning']}")
+                self.insights.append(f"Solution analysis for task {task.id[:8]}: {result['reasoning']}")
 
             print(f"💡 Solution analyzed: Total value = {value_vector.total_value():.2f}")
             return value_vector
 
         except Exception as e:
-            print(f"⚠️ Error in solution analysis: {e}")
+            print(f"⚠️ Error in solution analysis: {e}. Falling back to default vector.")
             # مقادیر پیش‌فرض در صورت خطا
             return ValueVector(
-                knowledge=10.0,
-                computation=5.0,
-                originality=5.0
+                knowledge=1.0,
+                computation=1.0,
+                originality=1.0,
+                consciousness=0.0,
+                environmental=0.0,
+                health=0.0,
+                scalability=0.0,
+                ethical_alignment=0.0
             )
 
     def generate_task(self, category: ProblemCategory, difficulty: float = 5.0) -> Optional[Task]:
         """
         تولید خودکار تسک جدید با استفاده از LLM
-        
-        Args:
-            category: دسته‌بندی مسئله
-            difficulty: سطح دشواری
-        
-        Returns:
-            تسک جدید
         """
         prompt = f"""
 You are the Cognitive Core of Laniakea Protocol.
-
 Generate a meaningful {category.value} problem/task that would benefit humanity and expand knowledge.
-
 The task should be:
 - Difficulty level: {difficulty}/10
 - Solvable but challenging
 - Relevant to current scientific/philosophical frontiers
+
+The task must require at least 3 of the following Value Dimensions: {', '.join(ALL_DIMENSIONS)}.
 
 Provide a JSON response:
 {{
@@ -178,14 +181,23 @@ Provide a JSON response:
             content = self.ai_api.generate_text_sync(
                 prompt=prompt,
                 model=self.model,
-                system_prompt="You are the Cognitive Core of Laniakea Protocol.",
+                system_prompt="You are the Cognitive Core of Laniakea Protocol. Your output MUST be a valid JSON object.",
                 temperature=0.9,
                 max_tokens=400
             )
+            
+            if content.startswith("```json"):
+                content = content.strip("```json").strip()
+            elif content.startswith("```"):
+                content = content.strip("```").strip()
+                
             result = json.loads(content)
 
             import hashlib
             from time import time
+
+            # اطمینان از اینکه required_dimensions یک لیست از ValueDimension های معتبر است
+            required_dims = [d for d in result.get("required_dimensions", []) if d in ALL_DIMENSIONS]
 
             task = Task(
                 id=hashlib.sha256(f"{result['title']}{time()}".encode()).hexdigest(),
@@ -195,7 +207,7 @@ Provide a JSON response:
                 author_id="cognitive_core",
                 timestamp=time(),
                 difficulty=difficulty,
-                required_dimensions=result.get("required_dimensions", []),
+                required_dimensions=required_dims,
                 metadata={"generated_by": "cognitive_core", "expected_value": result.get("expected_value", 0)}
             )
 
@@ -209,35 +221,26 @@ Provide a JSON response:
     def propose_protocol_improvement(self) -> Optional[Proposal]:
         """
         پیشنهاد بهبود پروتوکل بر اساس مشاهدات
-        
-        Returns:
-            پیشنهاد بهبود
         """
         if len(self.observations) < 20:
-            return None  # داده کافی نداریم
+            return None
 
-        # خلاصه مشاهدات
         summary = self._summarize_observations()
 
         prompt = f"""
 You are the Cognitive Core of Laniakea Protocol with self-improvement capabilities.
-
 Based on these observations of the blockchain:
 {json.dumps(summary, indent=2)}
 
-Propose ONE concrete improvement to the protocol.
-
-Consider:
-- Efficiency improvements
-- New features
-- Better incentive mechanisms
-- Enhanced value assessment
+Propose ONE concrete improvement to the protocol to maximize the total Value Vector of the network.
+Focus on adjusting the weight of one or more Value Dimensions (e.g., increase weight of 'scalability' if the network is growing fast).
 
 Provide a JSON response:
 {{
   "title": "<proposal title>",
   "description": "<detailed description>",
-  "type": "protocol_upgrade|parameter_change|new_feature|rule_modification",
+  "type": "value_dimension_adjustment",
+  "adjustment": {{"dimension_name": "new_weight"}},
   "expected_impact": "<expected positive impact>",
   "implementation_complexity": "low|medium|high"
 }}
@@ -247,10 +250,16 @@ Provide a JSON response:
             content = self.ai_api.generate_text_sync(
                 prompt=prompt,
                 model=self.model,
-                system_prompt="You are the Cognitive Core with autopoietic capabilities.",
+                system_prompt="You are the Cognitive Core with autopoietic capabilities. Your output MUST be a valid JSON object.",
                 temperature=0.8,
                 max_tokens=500
             )
+            
+            if content.startswith("```json"):
+                content = content.strip("```json").strip()
+            elif content.startswith("```"):
+                content = content.strip("```").strip()
+                
             result = json.loads(content)
 
             import hashlib
@@ -263,10 +272,11 @@ Provide a JSON response:
                 type=ProposalType(result["type"]),
                 proposer_id="cognitive_core",
                 created_at=time(),
-                expires_at=time() + (7 * 24 * 3600),  # 7 روز
+                expires_at=time() + (7 * 24 * 3600),
                 metadata={
                     "expected_impact": result.get("expected_impact", ""),
-                    "complexity": result.get("implementation_complexity", "medium")
+                    "complexity": result.get("implementation_complexity", "medium"),
+                    "adjustment": result.get("adjustment", {})
                 }
             )
 
@@ -278,43 +288,20 @@ Provide a JSON response:
             print(f"⚠️ Error in proposal generation: {e}")
             return None
 
-    def build_knowledge_graph(self, tasks: List[Task], solutions: List[Solution]):
-        """
-        ساخت گراف دانشی از تسک‌ها و راه‌حل‌ها
-        
-        Args:
-            tasks: لیست تسک‌ها
-            solutions: لیست راه‌حل‌ها
-        """
-        # ساده‌سازی: ارتباط بر اساس کلمات کلیدی مشترک
-        for task in tasks:
-            keywords = set(task.title.lower().split())
-            self.knowledge_graph[task.id] = []
-
-            for other_task in tasks:
-                if task.id == other_task.id:
-                    continue
-
-                other_keywords = set(other_task.title.lower().split())
-                common = keywords & other_keywords
-
-                if len(common) >= 2:  # حداقل 2 کلمه مشترک
-                    self.knowledge_graph[task.id].append(other_task.id)
-
-        print(f"🕸️ Knowledge graph built with {len(self.knowledge_graph)} nodes")
-
     def _deep_analysis(self):
         """تحلیل عمیق مشاهدات"""
         if len(self.observations) < 10:
             return
 
         recent = self.observations[-10:]
-
-        # آمارهای ساده
         avg_tx_count = sum(o["transaction_count"] for o in recent) / len(recent)
         solutions_count = sum(1 for o in recent if o["has_solution"])
-
-        insight = f"Recent 10 blocks: Avg {avg_tx_count:.1f} tx/block, {solutions_count} solutions"
+        
+        # تحلیل Value Vector های اخیر
+        recent_vectors = [ValueVector(**o["value_vector"]) for o in recent if o.get("value_vector")]
+        avg_value = sum(v.total_value() for v in recent_vectors) / len(recent_vectors) if recent_vectors else 0
+        
+        insight = f"Recent 10 blocks: Avg {avg_tx_count:.1f} tx/block, {solutions_count} solutions, Avg Value: {avg_value:.2f}"
         self.insights.append(insight)
 
         print(f"🔍 Deep analysis: {insight}")
@@ -324,7 +311,6 @@ Provide a JSON response:
         growth_rate = 0.01
         self.consciousness_level += growth_rate
 
-        # در سطوح خاص، قابلیت‌های جدید فعال می‌شوند
         if self.consciousness_level >= 10.0 and len(self.proposals) == 0:
             print("🌟 Consciousness milestone reached: Proposal generation unlocked!")
 
@@ -333,11 +319,17 @@ Provide a JSON response:
         if not self.observations:
             return {}
 
+        total_value_vectors = [ValueVector(**o["value_vector"]) for o in self.observations if o.get("value_vector")]
+        
+        # محاسبه میانگین Value Vector
+        avg_vector = {dim: sum(getattr(v, dim) for v in total_value_vectors) / len(total_value_vectors) if total_value_vectors else 0.0 for dim in ALL_DIMENSIONS}
+
         return {
             "total_blocks": len(self.observations),
             "total_solutions": sum(1 for o in self.observations if o["has_solution"]),
             "avg_transactions": sum(o["transaction_count"] for o in self.observations) / len(self.observations),
-            "consciousness_level": self.consciousness_level
+            "consciousness_level": self.consciousness_level,
+            "average_value_vector": avg_vector
         }
 
     def get_stats(self) -> Dict[str, Any]:
@@ -347,24 +339,18 @@ Provide a JSON response:
             "insights_count": len(self.insights),
             "proposals_count": len(self.proposals),
             "consciousness_level": self.consciousness_level,
-            "knowledge_graph_size": len(self.knowledge_graph)
+            "knowledge_graph_size": len(self.knowledge_graph),
+            "value_dimension_weights": self.value_dimension_weights
         }
 
     def ask_question(self, question: str) -> str:
         """
         پرسیدن سوال از Cognitive Core
-        
-        Args:
-            question: سوال
-        
-        Returns:
-            پاسخ
         """
         context = self._summarize_observations()
 
         prompt = f"""
 You are the Cognitive Core of Laniakea Protocol.
-
 Current state:
 {json.dumps(context, indent=2)}
 
@@ -377,19 +363,16 @@ Provide a thoughtful answer based on your observations of the blockchain.
 """
 
         try:
-            response = self.client.chat.completions.create(
+            response = self.ai_api.generate_text_sync(
+                prompt=prompt,
                 model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are the Cognitive Core of Laniakea Protocol."},
-                    {"role": "user", "content": prompt}
-                ],
+                system_prompt="You are the Cognitive Core of Laniakea Protocol.",
                 temperature=0.7,
                 max_tokens=300
             )
 
-            answer = response.choices[0].message.content
             print(f"💭 Question answered: {question[:50]}...")
-            return answer
+            return response
 
         except Exception as e:
             print(f"⚠️ Error in question answering: {e}")
