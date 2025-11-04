@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  # نود اصلی Laniakea
+  laniakea-node:
+    build: .
+    container_name: laniakea-primary
+    ports:
+      - "8000:8000"
+      - "5000:5000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - NODE_TYPE=authority
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - laniakea-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # نود ثانویه (اختیاری)
+  laniakea-node-2:
+    build: .
+    container_name: laniakea-secondary
+    ports:
+      - "8001:8000"
+      - "5001:5000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - NODE_TYPE=regular
+      - BOOTSTRAP_NODES=laniakea-primary:5000
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data2:/app/data
+      - ./logs2:/app/logs
+    restart: unless-stopped
+    networks:
+      - laniakea-network
+    depends_on:
+      - laniakea-node
+    profiles:
+      - multi-node
+
+  # Redis برای caching (اختیاری)
+  redis:
+    image: redis:7-alpine
+    container_name: laniakea-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - laniakea-network
+    profiles:
+      - with-redis
+
+  # Prometheus برای monitoring (اختیاری)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: laniakea-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    restart: unless-stopped
+    networks:
+      - laniakea-network
+    profiles:
+      - monitoring
+
+  # Grafana برای visualization (اختیاری)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: laniakea-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=laniakea
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+    networks:
+      - laniakea-network
+    depends_on:
+      - prometheus
+    profiles:
+      - monitoring
+
+networks:
+  laniakea-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+  prometheus-data:
+  grafana-data:
