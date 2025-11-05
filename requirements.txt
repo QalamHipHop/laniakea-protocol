@@ -1,4 +1,4 @@
-# Laniakea Protocol v0.0.01 Enhanced - Dependencies
+# Laniakea Protocol v0.0.02 Enhanced - Dependencies
 
 # Core data validation
 pydantic>=2.4.0

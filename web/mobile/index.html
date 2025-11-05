@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Laniakea Protocol v0.0.02 - Mobile Dashboard</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-cube"></i>
+            </div>
+            <h2>Laniakea Protocol</h2>
+            <div class="loading-spinner"></div>
+            <p>Initializing quantum network...</p>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app-container" style="display: none;">
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <div class="header-left">
+                <button id="menu-toggle" class="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="app-title">Laniakea</h1>
+            </div>
+            <div class="header-right">
+                <div class="connection-status" id="connection-status">
+                    <span class="status-dot online"></span>
+                    <span class="status-text">Connected</span>
+                </div>
+                <button id="notification-btn" class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notification-count">0</span>
+                </button>
+                <button id="profile-btn" class="profile-btn">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Mobile Navigation -->
+        <nav id="mobile-nav" class="mobile-nav">
+            <div class="nav-header">
+                <h3>Navigation</h3>
+                <button id="close-nav" class="close-nav">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="nav-items">
+                <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#blockchain" class="nav-item" data-page="blockchain">
+                    <i class="fas fa-link"></i>
+                    <span>Blockchain</span>
+                </a>
+                <a href="#tasks" class="nav-item" data-page="tasks">
+                    <i class="fas fa-tasks"></i>
+                    <span>Tasks</span>
+                </a>
+                <a href="#marketplace" class="nav-item" data-page="marketplace">
+                    <i class="fas fa-store"></i>
+                    <span>Marketplace</span>
+                </a>
+                <a href="#governance" class="nav-item" data-page="governance">
+                    <i class="fas fa-balance-scale"></i>
+                    <span>Governance</span>
+                </a>
+                <a href="#quantum" class="nav-item" data-page="quantum">
+                    <i class="fas fa-atom"></i>
+                    <span>Quantum</span>
+                </a>
+                <a href="#messaging" class="nav-item" data-page="messaging">
+                    <i class="fas fa-comments"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="#settings" class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <div class="page-actions">
+                        <button id="refresh-dashboard" class="btn-icon">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="block-height">0</h3>
+                            <p>Block Height</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="node-count">0</h3>
+                            <p>Active Nodes</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="task-count">0</h3>
+                            <p>Active Tasks</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="token-balance">0</h3>
+                            <p>LAN Balance</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real-time Updates -->
+                <div class="updates-section">
+                    <h3>Real-time Updates</h3>
+                    <div id="updates-feed" class="updates-feed">
+                        <div class="update-item">
+                            <span class="update-time">Just now</span>
+                            <p class="update-message">Connected to Laniakea network</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Chart -->
+                <div class="chart-container">
+                    <h3>Network Performance</h3>
+                    <canvas id="performance-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Blockchain Page -->
+            <div id="blockchain-page" class="page">
+                <div class="page-header">
+                    <h2>Blockchain</h2>
+                    <div class="page-actions">
+                        <button class="btn-primary">New Transaction</button>
+                    </div>
+                </div>
+
+                <!-- Recent Blocks -->
+                <div class="section">
+                    <h3>Recent Blocks</h3>
+                    <div id="blocks-list" class="blocks-list">
+                        <!-- Blocks will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks Page -->
+            <div id="tasks-page" class="page">
+                <div class="page-header">
+                    <h2>Tasks</h2>
+                    <div class="page-actions">
+                        <button class="btn-primary">Create Task</button>
+                    </div>
+                </div>
+
+                <!-- Task Filter -->
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">All</button>
+                    <button class="filter-tab" data-filter="my">My Tasks</button>
+                    <button class="filter-tab" data-filter="available">Available</button>
+                </div>
+
+                <!-- Tasks List -->
+                <div id="tasks-list" class="tasks-list">
+                    <!-- Tasks will be populated here -->
+                </div>
+            </div>
+
+            <!-- Marketplace Page -->
+            <div id="marketplace-page" class="page">
+                <div class="page-header">
+                    <h2>Knowledge Marketplace</h2>
+                    <div class="page-actions">
+                        <button class="btn-primary">Sell Knowledge</button>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="marketplace-search" placeholder="Search knowledge NFTs...">
+                </div>
+
+                <!-- Categories -->
+                <div class="category-pills">
+                    <button class="pill active">All</button>
+                    <button class="pill">Science</button>
+                    <button class="pill">Technology</button>
+                    <button class="pill">Mathematics</button>
+                    <button class="pill">AI/ML</button>
+                </div>
+
+                <!-- NFT Grid -->
+                <div id="nft-grid" class="nft-grid">
+                    <!-- NFTs will be populated here -->
+                </div>
+            </div>
+
+            <!-- Governance Page -->
+            <div id="governance-page" class="page">
+                <div class="page-header">
+                    <h2>Governance</h2>
+                </div>
+
+                <!-- Proposals -->
+                <div class="section">
+                    <h3>Active Proposals</h3>
+                    <div id="proposals-list" class="proposals-list">
+                        <!-- Proposals will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quantum Page -->
+            <div id="quantum-page" class="page">
+                <div class="page-header">
+                    <h2>Quantum Computing</h2>
+                </div>
+
+                <!-- Quantum Status -->
+                <div class="quantum-status">
+                    <div class="quantum-indicator">
+                        <div class="quantum-ring"></div>
+                        <div class="quantum-core"></div>
+                    </div>
+                    <h3>Quantum Core Active</h3>
+                    <p>Processing quantum computations...</p>
+                </div>
+
+                <!-- Quantum Tasks -->
+                <div class="section">
+                    <h3>Quantum Tasks</h3>
+                    <div id="quantum-tasks" class="quantum-tasks">
+                        <!-- Quantum tasks will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messaging Page -->
+            <div id="messaging-page" class="page">
+                <div class="page-header">
+                    <h2>Messages</h2>
+                    <div class="page-actions">
+                        <button class="btn-primary">New Message</button>
+                    </div>
+                </div>
+
+                <!-- Conversations -->
+                <div id="conversations-list" class="conversations-list">
+                    <!-- Conversations will be populated here -->
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settings-page" class="page">
+                <div class="page-header">
+                    <h2>Settings</h2>
+                </div>
+
+                <div class="settings-sections">
+                    <!-- Profile Settings -->
+                    <div class="settings-section">
+                        <h3>Profile</h3>
+                        <div class="setting-item">
+                            <label>Node ID</label>
+                            <input type="text" id="node-id" readonly>
+                        </div>
+                        <div class="setting-item">
+                            <label>Display Name</label>
+                            <input type="text" id="display-name" placeholder="Enter display name">
+                        </div>
+                    </div>
+
+                    <!-- Network Settings -->
+                    <div class="settings-section">
+                        <h3>Network</h3>
+                        <div class="setting-item">
+                            <label>WebSocket</label>
+                            <label class="switch">
+                                <input type="checkbox" id="websocket-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Notifications</label>
+                            <label class="switch">
+                                <input type="checkbox" id="notifications-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation (Mobile) -->
+        <nav class="bottom-nav">
+            <a href="#dashboard" class="bottom-nav-item active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#blockchain" class="bottom-nav-item" data-page="blockchain">
+                <i class="fas fa-link"></i>
+                <span>Chain</span>
+            </a>
+            <a href="#tasks" class="bottom-nav-item" data-page="tasks">
+                <i class="fas fa-tasks"></i>
+                <span>Tasks</span>
+            </a>
+            <a href="#marketplace" class="bottom-nav-item" data-page="marketplace">
+                <i class="fas fa-store"></i>
+                <span>Market</span>
+            </a>
+            <a href="#messaging" class="bottom-nav-item" data-page="messaging">
+                <i class="fas fa-comments"></i>
+                <span>Chat</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Notification Panel -->
+    <div id="notification-panel" class="notification-panel">
+        <div class="panel-header">
+            <h3>Notifications</h3>
+            <button id="close-notifications" class="close-panel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="notifications-list" class="notifications-list">
+            <!-- Notifications will be populated here -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/websocket.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -182,39 +182,36 @@ class LaniakeaProtocol:
             """
         
            # WebSocket endpoint for real-time updates
-
-           # WebSocket endpoint for real-time updates
-           @self.app.websocket(/ws/{connection_id})
+           @self.app.websocket("/ws/{connection_id}")
            async def websocket_endpoint(websocket, connection_id: str):
-            """WebSocket endpoint for real-time communication"""
-            await self.websocket_manager.handle_connection(websocket, connection_id)
+               """WebSocket endpoint for real-time communication"""
+               await self.websocket_manager.handle_connection(websocket, connection_id)
 
            # v0.0.02 API endpoints
            @self.app.get("/api/v0.0.02/quantum/status")
            async def quantum_status():
-            """Get quantum system status"""
-            return await self.quantum_system.get_status()
+               """Get quantum system status"""
+               return await self.quantum_system.get_status()
 
            @self.app.post("/api/v0.0.02/quantum/compute")
            async def quantum_compute(request: dict):
-            """Execute quantum computation"""
-            return await self.quantum_system.execute_computation(request)
+               """Execute quantum computation"""
+               return await self.quantum_system.execute_computation(request)
 
            @self.app.get("/api/v0.0.02/crosschain/status")
            async def crosschain_status():
-            """Get cross-chain status"""
-            return await self.crosschain_manager.get_status()
+               """Get cross-chain status"""
+               return await self.crosschain_manager.get_status()
 
            @self.app.post("/api/v0.0.02/crosschain/bridge")
            async def bridge_assets(request: dict):
-            """Bridge assets across chains"""
-            return await self.crosschain_manager.bridge_assets(request)
+               """Bridge assets across chains"""
+               return await self.crosschain_manager.bridge_assets(request)
 
            @self.app.get("/api/v0.0.02/notifications")
            async def get_notifications():
-            """Get user notifications"""
-            return await self.notification_service.get_notifications()
-
+               """Get user notifications"""
+               return await self.notification_service.get_notifications()
 
         @self.app.get("/health")
         async def health_check():
