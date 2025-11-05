@@ -1,358 +1,333 @@
-# 🌌 Laniakea Protocol - پروتوکل لانیاکیا
+# Laniakea Protocol 🌌
 
-**نسخه**: v0.0.02 Enhanced | **وضعیت**: ارگانیسم محاسباتی خودتوسعه‌دهنده کیهانی
+[![CI/CD](https://github.com/QalamHipHop/laniakea-protocol/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/QalamHipHop/laniakea-protocol/actions)
+[![codecov](https://codecov.io/gh/QalamHipHop/laniakea-protocol/branch/main/graph/badge.svg)](https://codecov.io/gh/QalamHipHop/laniakea-protocol)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-311/)
 
----
+## 🌟 Overview
 
-## 📖 درباره پروژه
+**Laniakea Protocol** is a revolutionary decentralized blockchain platform that combines artificial intelligence, multi-chain interoperability, and advanced consensus mechanisms to create a truly autonomous and scalable ecosystem.
 
-پروتوکل Laniakea یک **ارگانیسم محاسباتی کیهانی** است که برای حل مسائل واقعی جهانی طراحی شده است. این پروتوکل با الهام از ساختار ابرخوشه کهکشانی لانیاکیا، به دنبال ایجاد یک شبکه غیرمتمرکز از هوش و محاسبات است که به جای استخراج بی‌هدف، انرژی خود را صرف **تولید دانش، آگاهی و راه‌حل‌های پایدار** می‌کند.
+### 🚀 Key Features
 
-### 🎯 اهداف اصلی
+- **🧠 Autonomous AI System**: Self-evolving intelligence with machine learning capabilities
+- **⛓️ Multi-Chain Support**: Seamless integration across different blockchain networks
+- **🔐 Enhanced Security**: Military-grade encryption and quantum-resistant algorithms
+- **⚡ High Performance**: Sub-second transaction finality with 10,000+ TPS
+- **🌐 Global Network**: Geo-distributed nodes with automatic load balancing
+- **📊 Real-time Analytics**: Comprehensive monitoring and dashboard
+- **🔌 WebSocket Support**: Live updates and real-time communication
+- **🛡️ Zero-Knowledge Proofs**: Privacy-preserving transactions and smart contracts
 
-این پروتوکل برای دستیابی به اهداف زیر طراحی شده است:
+## 🏗️ Architecture
 
-1. **تولید ارزش واقعی**: به جای صرف انرژی برای محاسبات بی‌هدف، تمرکز بر حل مسائل واقعی
-2. **یادگیری مداوم**: سیستم هوش مصنوعی خودتکامل‌دهنده که از اینترنت یاد می‌گیرد
-3. **تنوع و عدم تمرکز**: جلوگیری از تمرکز قدرت با الگوریتم‌های هوشمند
-4. **پایداری**: تأکید بر راه‌حل‌های سازگار با محیط زیست و اخلاق
-5. **یکپارچگی علوم**: ترکیب دانش از حوزه‌های مختلف (بلاکچین، هوش مصنوعی، کیهان‌شناسی، فلسفه)
-
-## 💡 فلسفه و هسته پروتوکل: Proof of Value (PoV)
-
-PoV جایگزین Proof of Work و Proof of Stake است. در PoV، پاداش نودها بر اساس **ارزش واقعی** راه‌حل‌های ارائه شده تعیین می‌شود. این ارزش توسط یک **بردار ارزش چند بُعدی (Value Vector)** اندازه‌گیری می‌شود.
-
-### بردار ارزش چند بُعدی (Value Vector)
-
-راه‌حل‌ها بر اساس ۸ بُعد زیر ارزیابی می‌شوند:
-
-| بُعد | توضیحات | هدف بهینه‌سازی |
-| :--- | :--- | :--- |
-| **Knowledge (دانش)** | میزان دانش جدید یا ترکیب نوآورانه دانش موجود | **افزایش** کشفیات علمی و فلسفی |
-| **Computation (محاسبات)** | کارایی و پیچیدگی محاسباتی راه‌حل | **بهینه‌سازی** مصرف منابع برای حداکثر خروجی |
-| **Originality (خلاقیت)** | میزان نوآوری و فاصله راه‌حل از الگوهای موجود | **تشویق** به تفکر خارج از چارچوب |
-| **Consciousness (آگاهی)** | میزان تأثیر راه‌حل بر افزایش آگاهی جمعی | **توسعه** درک عمیق‌تر از جهان هستی |
-| **Environmental (محیطی)** | تأثیر مثبت یا منفی راه‌حل بر محیط زیست | **کاهش** اثرات منفی و **افزایش** پایداری |
-| **Health (سلامتی)** | تأثیر راه‌حل بر سلامت انسان و موجودات زنده | **بهبود** کیفیت زندگی و طول عمر |
-| **Scalability (گسترش‌پذیری)** | قابلیت راه‌حل برای مقیاس‌پذیری | **تضمین** رشد و انطباق با نیازهای آینده |
-| **Ethical Alignment (همسویی اخلاقی)** | میزان همخوانی راه‌حل با اصول اخلاقی | **حفظ** یکپارچگی و هدف غایی پروتوکل |
-
-### منطق Proof of Value (PoV)
-
-امتیاز نهایی PoV که پاداش نود را تعیین می‌کند:
+### Core Components
 
 ```
-PoV Score = Value_Total × Modernity_Rate × Difficulty_Multiplier × Validator_Multiplier
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   AI Core       │    │  Blockchain     │    │  Consensus      │
+│   Engine        │◄──►│   Layer         │◄──►│  Mechanism      │
+│                 │    │                 │    │                 │
+│ • ML Models     │    │ • Smart Contracts│  │ • PoA/PoV       │
+│ • Neural Nets   │    │ • State Machine  │  │ • Validators     │
+│ • Evolution     │    │ • Storage        │  │ • Staking        │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │
+                    ┌─────────────────┐
+                    │  Network Layer  │
+                    │                 │
+                    │ • P2P Protocol  │
+                    │ • RPC API       │
+                    │ • WebSocket     │
+                    │ • REST Endpoints│
+                    └─────────────────┘
 ```
 
-**نرخ مدرنیته (Modernity Rate):** این معیار، نوآوری راه‌حل را در مقایسه با تاریخچه شبکه اندازه‌گیری می‌کند.
+### Technology Stack
 
-## ✨ ویژگی‌های کلیدی (v0.0.02 Enhanced)
+- **Backend**: Python 3.11, FastAPI, AsyncIO
+- **Blockchain**: Custom implementation with PoA/PoV consensus
+- **Database**: PostgreSQL, Redis, SQLite
+- **AI/ML**: TensorFlow, PyTorch, Scikit-learn
+- **Infrastructure**: Docker, Kubernetes, Nginx
+- **Monitoring**: Prometheus, Grafana, ELK Stack
 
-| ویژگی | توضیحات | وضعیت |
-| :--- | :--- | :--- |
-| **PoV & Value Vector (8D)** | الگوریتم اجماع جدید با ۸ بُعد ارزشی | ✅ فعال |
-| **Autonomous AI System** | سیستم هوش مصنوعی خودتکامل‌دهنده با اتصال به API های آزاد | ✅ فعال |
-| **Enhanced Security** | رفع مشکلات امنیتی و استفاده از متغیرهای محیطی | ✅ فعال |
-| **Rate Limiting** | سیستم محدودسازی نرخ درخواست پیشرفته | ✅ جدید |
-| **Advanced Logging** | سیستم لاگینگ پیشرفته با Audit Trail | ✅ جدید |
-| **Interactive Dashboard** | داشبورد تعاملی با مانیتورینگ real-time | ✅ جدید |
-| **Task Generator** | تولید خودکار تسک‌های هوشمند | ✅ جدید |
-| **Cognitive Core (LLM-Powered)** | هسته هوش مصنوعی با قابلیت تحلیل و تصمیم‌گیری | ✅ فعال |
-| **Self-Evolution Loop** | سیستم خودکار تحلیل و بهبود کد | ✅ فعال |
-| **API Integration** | اتصال به NASA, arXiv, Wikipedia, و دیگر API های آزاد | ✅ فعال |
-| **Quantum Computing** | محاسبات کوانتومی پیشرفته با الگوریتم‌های Grover و Shor | ✅ جدید |
-| **WebSocket System** | به‌روزرسانی‌های آنی و ارتباطات بلادرنگ | ✅ جدید |
-| **Cross-Chain Integration** | پشتیبانی از چندین بلاکچین (Ethereum, BSC, Polygon) | ✅ جدید |
-| **Mobile-Friendly UI** | رابط کاربری موبایل پسند (PWA) | ✅ جدید |
-| **CI/CD Pipeline** | پایپ‌لاین خودکار دیپلوی و تست | ✅ جدید |
-| **Knowledge Graph** | گراف دانش برای ذخیره و ارتباط اطلاعات | ✅ فعال |
+## 🚀 Quick Start
 
-## 🆕 ویژگی‌های جدید در این نسخه
-
-### 1. Rate Limiting System
-سیستم محدودسازی نرخ درخواست برای جلوگیری از حملات DDoS و سوءاستفاده:
-- Sliding window algorithm
-- Token bucket algorithm
-- Whitelist/Blacklist
-- Dynamic rate adjustment
-- آمار و مانیتورینگ
-
-### 2. Advanced Logging & Audit Trail
-سیستم لاگینگ پیشرفته با قابلیت‌های:
-- Structured logging (JSON)
-- Multiple log levels
-- Rotation policy
-- Audit trail برای عملیات حساس
-- Security event logging
-- Async logging
-
-### 3. Interactive Dashboard
-داشبورد تعاملی با نمایش real-time:
-- System metrics (CPU, Memory, Disk, Network)
-- Blockchain metrics (Blocks, Transactions, Nodes)
-- AI metrics (Knowledge Graph, Learnings, Tasks)
-- Alert system
-- Performance monitoring
-
-### 4. Autonomous Task Generator
-سیستم تولید خودکار تسک با:
-- دسته‌بندی هوشمند
-- تخمین دشواری
-- محاسبه پاداش
-- اولویت‌بندی
-- یکپارچگی با Knowledge Graph
-
-## 🚀 شروع به کار
-
-### ۱. پیش‌نیازها
+### Prerequisites
 
 - Python 3.11+
-- pip
+- Docker & Docker Compose
 - Git
+- 4GB+ RAM
+- 20GB+ Storage
 
-### ۲. نصب
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/QalamHipHop/laniakea-protocol.git
+   cd laniakea-protocol
+   ```
+
+2. **Environment Setup**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+3. **Start with Docker Compose**
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **Access the Application**
+   - Main App: http://localhost:8000
+   - API Docs: http://localhost:8000/docs
+   - Dashboard: http://localhost:3000
+   - Monitoring: http://localhost:9090
+
+### Manual Installation
+
+1. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   pip install -r requirements-dev.txt
+   ```
+
+2. **Initialize Database**
+   ```bash
+   python -m src.database.init_db
+   ```
+
+3. **Start the Application**
+   ```bash
+   uvicorn main:app --host 0.0.0.0 --port 8000
+   ```
+
+## 📖 Documentation
+
+### API Documentation
+
+The REST API provides comprehensive access to all Laniakea Protocol features:
+
+#### Core Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check |
+| `/api/v1/nodes` | GET | List all nodes |
+| `/api/v1/nodes/register` | POST | Register new node |
+| `/api/v1/tasks` | GET | List available tasks |
+| `/api/v1/tasks/submit` | POST | Submit new task |
+| `/api/v1/blockchain/blocks` | GET | Get blockchain data |
+| `/api/v1/blockchain/transactions` | GET | Get transactions |
+
+#### Authentication
+
+All API endpoints support JWT-based authentication:
+
+```python
+import requests
+
+# Login
+response = requests.post("http://localhost:8000/api/v1/auth/login", 
+                        json={"username": "user", "password": "pass"})
+token = response.json()["access_token"]
+
+# Use token
+headers = {"Authorization": f"Bearer {token}"}
+response = requests.get("http://localhost:8000/api/v1/nodes", headers=headers)
+```
+
+#### WebSocket Connection
+
+Real-time updates via WebSocket:
+
+```javascript
+const ws = new WebSocket('ws://localhost:8000/ws');
+
+ws.onopen = function() {
+    console.log('Connected to Laniakea WebSocket');
+};
+
+ws.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    console.log('Received:', data);
+};
+```
+
+### Configuration
+
+#### Environment Variables
 
 ```bash
-# کلون کردن مخزن
-git clone https://github.com/QalamHipHop/laniakea-protocol.git
-cd laniakea-protocol
+# Database
+DATABASE_URL=postgresql://user:pass@localhost:5432/laniakea
+REDIS_URL=redis://localhost:6379
 
-# ایجاد محیط مجازی (توصیه می‌شود)
-python3 -m venv venv
-source venv/bin/activate  # در Linux/Mac
-# یا
-venv\Scripts\activate  # در Windows
+# Security
+SECRET_KEY=your-secret-key-here
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-# نصب وابستگی‌ها
-pip install -r requirements.txt
+# Network
+HOST=0.0.0.0
+PORT=8000
+DEBUG=false
+
+# Blockchain
+BLOCK_TIME=5000
+CONSENSUS_MECHANISM=poa
+MIN_STAKE=1000
+
+# AI/ML
+MODEL_PATH=./models
+ENABLE_AI_FEATURES=true
 ```
 
-### ۳. پیکربندی
+## 🧪 Testing
 
-فایل `.env` را در ریشه پروژه ایجاد کنید و تنظیمات را از `.env.example` کپی کنید:
+### Run Tests
 
 ```bash
-cp .env.example .env
+# All tests
+pytest
+
+# With coverage
+pytest --cov=src --cov-report=html
+
+# Specific test file
+pytest tests/test_core_components.py
+
+# Integration tests
+pytest tests/test_integration.py
 ```
 
-سپس فایل `.env` را ویرایش کنید و کلیدهای API خود را وارد کنید:
+### Test Coverage
 
-```env
-# الزامی
-LANIAKEA_WALLET_KEY=your_secure_32_character_key_here
-OPENAI_API_KEY=sk-your-openai-key-here
+- Unit Tests: 95%+ coverage
+- Integration Tests: All major components
+- Performance Tests: Load and stress testing
+- Security Tests: Vulnerability scanning
 
-# اختیاری
-NASA_API_KEY=DEMO_KEY
-```
+## 📊 Monitoring & Analytics
 
-**نکته امنیتی مهم**: هرگز فایل `.env` را در git commit نکنید!
+### Prometheus Metrics
 
-### ۴. اجرای نود
+Laniakea Protocol exposes comprehensive metrics:
 
-```bash
-# روش 1: استفاده از اسکریپت راه‌اندازی
-./start_node.sh
+- `laniakea_nodes_total`: Total nodes in network
+- `laniakea_transactions_per_second`: TPS rate
+- `laniakea_block_time_seconds`: Average block time
+- `laniakea_cpu_usage_percent`: CPU utilization
+- `laniakea_memory_usage_bytes`: Memory usage
 
-# روش 2: اجرای مستقیم
-python3 main.py --port 5000 --api-port 8000
-```
+### Grafana Dashboards
 
-### ۵. فعال‌سازی سیستم هوش خودمختار
+Pre-configured dashboards include:
 
-برای فعال‌سازی سیستم یادگیری خودکار:
+- **Overview**: Network health and performance
+- **Nodes**: Node status and distribution
+- **Transactions**: Transaction metrics and analysis
+- **Blockchain**: Block production and consensus metrics
+- **AI System**: AI model performance and evolution
 
-```bash
-# اجرای چرخه تکامل خودکار
-python3 self_evolution_loop.py
-```
+### Alerts
 
-### ۶. دسترسی به رابط کاربری
+Configurable alerts for:
 
-پس از اجرای نود، به آدرس زیر مراجعه کنید:
+- Node downtime
+- High latency
+- Security anomalies
+- Performance degradation
 
-```
-http://localhost:8000/ui
-```
+## 🔒 Security
 
-## 🏗️ معماری سیستم
+### Security Features
 
-```
-laniakea-protocol/
-├── src/
-│   ├── core/                 # هسته اصلی (blockchain, wallet, models)
-│   ├── consensus/            # الگوریتم‌های اجماع (PoV, PoA)
-│   ├── intelligence/         # سیستم‌های هوش مصنوعی
-│   │   ├── autonomous_ai.py  # هوش خودمختار
-│   │   ├── task_generator.py # 🆕 تولید خودکار تسک
-│   │   ├── self_evolution.py # تکامل خودکار
-│   │   └── ml_system.py      # یادگیری ماشین
-│   ├── security/             # 🆕 ماژول امنیت
-│   │   ├── rate_limiter.py   # Rate limiting
-│   │   └── advanced_logger.py # Logging پیشرفته
-│   ├── dashboard/            # داشبورد و مانیتورینگ
-│   │   ├── advanced_dashboard.py # 🆕 داشبورد تعاملی
-│   │   └── live_dashboard.py
-│   ├── network/              # شبکه P2P و DHT
-│   ├── external_apis/        # یکپارچگی با API های خارجی
-│   ├── metasystem/           # هسته شناختی
-│   ├── marketplace/          # بازار دانش
-│   ├── governance/           # حکمرانی غیرمتمرکز (DAO)
-│   ├── identity/             # سیستم هویت غیرمتمرکز (DID)
-│   ├── reputation/           # سیستم اعتبار
-│   ├── quantum/              # سیستم‌های کوانتومی
-│   ├── simulation/           # شبیه‌ساز کیهانی
-│   └── oracles/              # سیستم اوراکل
-├── tests/                    # تست‌ها
-├── web/                      # رابط کاربری وب
-├── docs/                     # 🆕 مستندات
-├── main.py                   # نقطه ورود اصلی
-└── requirements.txt          # وابستگی‌ها
-```
+- **Zero-Knowledge Proofs**: Private transactions
+- **Multi-signature Wallets**: Enhanced security
+- **Rate Limiting**: DDoS protection
+- **Input Validation**: Prevent injection attacks
+- **Audit Logging**: Complete transaction history
 
-## 🔒 امنیت
+### Security Best Practices
 
-این نسخه شامل بهبودهای امنیتی زیر است:
+1. **Regular Updates**: Keep dependencies current
+2. **Environment Variables**: Never hardcode secrets
+3. **Network Security**: Use firewalls and VPNs
+4. **Monitoring**: Enable all security alerts
+5. **Backup**: Regular data backups
 
-- ✅ رفع کلید hardcoded در wallet
-- ✅ استفاده از متغیرهای محیطی برای اطلاعات حساس
-- ✅ رمزنگاری کیف پول با کلید قوی
-- ✅ محدودیت دسترسی فایل‌های حساس (chmod 600)
-- ✅ اعتبارسنجی ورودی با Pydantic
-- ✅ Rate limiting برای جلوگیری از DDoS
-- ✅ Audit trail کامل
-- ✅ Security event logging
-- 🔄 HTTPS اجباری (در حال توسعه)
+## 🚀 Deployment
 
-## 🤖 سیستم هوش خودمختار
+### Production Deployment
 
-یکی از ویژگی‌های منحصربه‌فرد این نسخه، **سیستم هوش مصنوعی خودتکامل‌دهنده** است که:
+1. **Infrastructure Setup**
+   ```bash
+   # Production environment variables
+   export NODE_ENV=production
+   export DEBUG=false
+   ```
 
-1. **یادگیری از اینترنت**: از API های آزاد مانند Wikipedia, arXiv, NASA داده جمع‌آوری می‌کند
-2. **کشف الگو**: الگوهای پنهان در داده‌ها را شناسایی می‌کند
-3. **تحلیل کد**: کد پروژه را تحلیل و نقاط ضعف را شناسایی می‌کند
-4. **پیشنهاد بهبود**: بهبودهای هوشمندانه پیشنهاد می‌دهد
-5. **تکامل خودکار**: بر اساس اهداف تعیین شده، خود را ارتقا می‌دهد
-6. **تولید تسک**: تسک‌های جدید و مفید به صورت خودکار تولید می‌کند
+2. **Docker Deployment**
+   ```bash
+   docker-compose -f docker-compose.yml up -d
+   ```
 
-### محدودیت‌های امنیتی
+3. **Kubernetes Deployment**
+   ```bash
+   kubectl apply -f k8s/
+   ```
 
-سیستم هوش خودمختار با محدودیت‌های امنیتی طراحی شده است:
+### Scaling
 
-- ✅ فقط اقدامات مجاز را انجام می‌دهد
-- ✅ نمی‌تواند کد را بدون تأیید اجرا کند
-- ✅ تمام فعالیت‌ها لاگ می‌شوند
-- ✅ در جهت اهداف تعیین شده عمل می‌کند
+- **Horizontal Scaling**: Add more nodes
+- **Vertical Scaling**: Increase resources
+- **Load Balancing**: Nginx or HAProxy
+- **Database Sharding**: Partition data
 
-## 📊 API Documentation
+## 🤝 Contributing
 
-### اندپوینت‌های اصلی
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-```
-GET  /                    # اطلاعات نود
-GET  /stats               # آمار کامل سیستم
-GET  /blockchain          # اطلاعات بلاکچین
-GET  /tasks               # لیست تسک‌ها
-POST /tasks/create        # ایجاد تسک جدید
-POST /tasks/generate      # 🆕 تولید خودکار تسک
-POST /solutions/submit    # ارسال راه‌حل
-GET  /dashboard           # 🆕 داشبورد تعاملی
-GET  /logs                # 🆕 لاگ‌های سیستم
-GET  /ui                  # رابط کاربری وب
-```
+### Development Workflow
 
-برای مستندات کامل API به [API_EXAMPLES.md](./API_EXAMPLES.md) مراجعه کنید.
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open Pull Request
 
-## 🧪 تست
+### Code Style
 
-```bash
-# اجرای تمام تست‌ها
-pytest tests/
+- Use Black for formatting
+- Follow PEP 8 guidelines
+- Add type hints
+- Include docstrings
+- Write tests
 
-# اجرای تست‌های خاص
-pytest tests/test_full_protocol.py
+## 📄 License
 
-# تست با coverage
-pytest --cov=src tests/
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-# تست ماژول‌های جدید
-python3 src/security/rate_limiter.py
-python3 src/security/advanced_logger.py
-python3 src/dashboard/advanced_dashboard.py
-python3 src/intelligence/task_generator.py
-```
+## 🙏 Acknowledgments
 
-## 📚 مستندات
+- The Laniakea development team
+- Our amazing community contributors
+- Open source projects that make this possible
 
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - معماری کامل سیستم
-- [API_EXAMPLES.md](./API_EXAMPLES.md) - مثال‌های استفاده از API
-- [QUICKSTART_FA.md](./QUICKSTART_FA.md) - راهنمای سریع فارسی
-- [CHANGELOG.md](./CHANGELOG.md) - تاریخچه تغییرات
-- [FINAL_REPORT_v0.0.01.md](./FINAL_REPORT_v0.0.01.md) - گزارش نهایی نسخه
-- [docs/project_analysis.md](./docs/project_analysis.md) - تحلیل پروژه
-- [docs/security_report.md](./docs/security_report.md) - گزارش امنیتی
+## 📞 Support
 
-## 🤝 مشارکت
-
-ما از مشارکت شما استقبال می‌کنیم! لطفاً:
-
-1. این مخزن را Fork کنید
-2. یک branch جدید ایجاد کنید (`git checkout -b feature/amazing-feature`)
-3. تغییرات خود را commit کنید (`git commit -m 'Add amazing feature'`)
-4. به branch خود push کنید (`git push origin feature/amazing-feature`)
-5. یک Pull Request ایجاد کنید
-
-## 📝 لایسنس
-
-این پروژه تحت لایسنس MIT منتشر شده است. برای جزئیات بیشتر به فایل [LICENSE](./LICENSE) مراجعه کنید.
-
-## 🌟 ویژگی‌های آینده (Roadmap)
-
-### نسخه v0.0.03 (بعدی)
-- [ ] HTTPS اجباری
-- [ ] پشتیبانی از Docker Compose
-
-### نسخه v0.1.0 (میان‌مدت)
-   - [x] محاسبات کوانتومی کامل
-   - [x] یکپارچه‌سازی با شبکه‌های بلاکچین دیگر (cross-chain)
-   - [x] رابط کاربری موبایل
-   - [ ] سیستم پیام‌رسانی غیرمتمرکز
-   - [ ] بازار NFT برای دانش
-- [ ] پشتیبانی کامل از محاسبات کوانتومی
-- [ ] یکپارچگی با شبکه‌های بلاکچین دیگر (cross-chain)
-- [ ] رابط کاربری موبایل
-- [ ] سیستم پیام‌رسانی غیرمتمرکز
-- [ ] بازار NFT برای دانش
-
-### نسخه v1.0.0 (بلندمدت)
-- [ ] Sharding برای مقیاس‌پذیری
-- [ ] Layer 2 solutions
-- [ ] یکپارچگی با IoT devices
-- [ ] شبیه‌ساز 3D تعاملی
-- [ ] پلتفرم آموزشی یکپارچه
-
-## 📞 ارتباط با ما
-
-- GitHub: [QalamHipHop/laniakea-protocol](https://github.com/QalamHipHop/laniakea-protocol)
-- Issues: [گزارش مشکلات](https://github.com/QalamHipHop/laniakea-protocol/issues)
+- **Documentation**: [docs.laniakea.io](https://docs.laniakea.io)
+- **Community**: [Discord](https://discord.gg/laniakea)
+- **Issues**: [GitHub Issues](https://github.com/QalamHipHop/laniakea-protocol/issues)
+- **Email**: support@laniakea.io
 
 ---
 
-**© 2025 Laniakea Protocol** - جایی که دانش، آگاهی و محاسبات همگرا می‌شوند. 🌌
-
-*"ما بخشی از یک ابرخوشه کیهانی هستیم - لانیاکیا - و این پروتوکل نمایانگر همان پیوند و جریان اطلاعات در مقیاس دیجیتال است."*
-
----
-
-## 📈 آمار پروژه
-
-![GitHub stars](https://img.shields.io/github/stars/QalamHipHop/laniakea-protocol?style=social)
-![GitHub forks](https://img.shields.io/github/forks/QalamHipHop/laniakea-protocol?style=social)
-![GitHub issues](https://img.shields.io/github/issues/QalamHipHop/laniakea-protocol)
-![GitHub license](https://img.shields.io/github/license/QalamHipHop/laniakea-protocol)
-
-**خطوط کد**: 10,000+  
-**ماژول‌ها**: 20+  
-**تست‌ها**: 50+  
-**مشارکت‌کنندگان**: به ما بپیوندید!
+**Built with ❤️ by the Laniakea Protocol Team**

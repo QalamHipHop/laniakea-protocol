@@ -24,11 +24,12 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 import json
 
-from fastapi import FastAPI, Body, HTTPException, Depends, Request, Response
+from fastapi import FastAPI, Body, HTTPException, Depends, Request, Response, status
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.gzip import GZipMiddleware
 
 from src.config import HOST, get_bootstrap_nodes, is_authority, AUTHORITY_NODES, BLOCK_TIME
 from src.core.models import (
@@ -40,10 +41,17 @@ from src.core.standards import (
     LaniakeaLogger, secure_exception_handler, validate_input,
     sanitize_string, PerformanceMonitor, GLOBAL_SECURITY_CONFIG
 )
-from src.security.enhanced_security import EnhancedSecurityManager, SecurityLevel
-from src.intelligence.autonomous_ai import AutonomousAISystem
-from src.security.advanced_logger import AdvancedLogger
-from src.dashboard.advanced_dashboard import AdvancedDashboard
+try:
+    from src.security.enhanced_security import EnhancedSecurityManager, SecurityLevel
+    from src.intelligence.autonomous_ai import AutonomousAISystem
+    from src.security.advanced_logger import AdvancedLogger
+    from src.dashboard.advanced_dashboard import AdvancedDashboard
+except ImportError as e:
+    print(f"Warning: Could not import advanced modules: {e}")
+    EnhancedSecurityManager = None
+    AutonomousAISystem = None
+    AdvancedLogger = None
+    AdvancedDashboard = None
 
 # v0.0.02 WebSocket and Cross-chain imports
 from src.websocket.websocket_manager import WebSocketManager
