@@ -54,3 +54,7 @@ mypy>=1.5.0
 # Documentation
 mkdocs>=1.5.0
 mkdocs-material>=9.4.0
+
+# Security & Monitoring (v0.0.01 additions)
+psutil>=5.9.0  # برای مانیتورینگ سیستم
+
