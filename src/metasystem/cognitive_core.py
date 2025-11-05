@@ -8,12 +8,19 @@ import json
 from typing import List, Dict, Any, Optional
 from src.intelligence.ai_api import get_ai_api
 from src.core.models import (
-    KnowledgeBlock, Solution, Task, Proposal,
-    ProposalType, ValueVector, ProblemCategory, ValueDimension
+    KnowledgeBlock,
+    Solution,
+    Task,
+    Proposal,
+    ProposalType,
+    ValueVector,
+    ProblemCategory,
+    ValueDimension,
 )
 
 # ابعاد جدید ValueVector
 ALL_DIMENSIONS = [d.value for d in ValueDimension]
+
 
 class CognitiveCore:
     """
@@ -29,7 +36,9 @@ class CognitiveCore:
         self.proposals: List[Proposal] = []
         self.knowledge_graph: Dict[str, List[str]] = {}
         self.consciousness_level = 0.0
-        self.value_dimension_weights: Dict[str, float] = {dim: 1.0 for dim in ALL_DIMENSIONS} # وزن‌های اولیه
+        self.value_dimension_weights: Dict[str, float] = {
+            dim: 1.0 for dim in ALL_DIMENSIONS
+        }  # وزن‌های اولیه
 
         print(f"🧠 Cognitive Core activated with model: {model}")
 
@@ -42,7 +51,7 @@ class CognitiveCore:
             "timestamp": block.timestamp,
             "has_solution": block.solution is not None,
             "transaction_count": len(block.transactions),
-            "author": block.author_id[:8]
+            "author": block.author_id[:8],
         }
 
         if block.solution:
@@ -66,7 +75,7 @@ class CognitiveCore:
         """
         تحلیل هوشمند یک راه‌حل با استفاده از LLM
         """
-        
+
         # LLM Core اکنون باید 8 بُعد را ارزیابی کند
         prompt = f"""
 You are the Cognitive Core of Laniakea Protocol, a cosmic computational organism.
@@ -114,28 +123,27 @@ Response format:
                 prompt=prompt,
                 model=self.model,
                 system_prompt="You are the Cognitive Core of Laniakea Protocol. Your output MUST be a valid JSON object.",
-                temperature=0.5, # کاهش دما برای دقت بیشتر در ارزیابی
-                max_tokens=600
+                temperature=0.5,  # کاهش دما برای دقت بیشتر در ارزیابی
+                max_tokens=600,
             )
-            
+
             # تمیز کردن خروجی برای اطمینان از JSON بودن
             if content.startswith("```json"):
                 content = content.strip("```json").strip()
             elif content.startswith("```"):
                 content = content.strip("```").strip()
-                
+
             result = json.loads(content)
 
             # فیلتر کردن و تبدیل به float
-            vector_data = {
-                dim: float(result.get(dim, 0.0))
-                for dim in ALL_DIMENSIONS
-            }
-            
+            vector_data = {dim: float(result.get(dim, 0.0)) for dim in ALL_DIMENSIONS}
+
             value_vector = ValueVector(**vector_data)
 
             if "reasoning" in result:
-                self.insights.append(f"Solution analysis for task {task.id[:8]}: {result['reasoning']}")
+                self.insights.append(
+                    f"Solution analysis for task {task.id[:8]}: {result['reasoning']}"
+                )
 
             print(f"💡 Solution analyzed: Total value = {value_vector.total_value():.2f}")
             return value_vector
@@ -151,7 +159,7 @@ Response format:
                 environmental=0.0,
                 health=0.0,
                 scalability=0.0,
-                ethical_alignment=0.0
+                ethical_alignment=0.0,
             )
 
     def generate_task(self, category: ProblemCategory, difficulty: float = 5.0) -> Optional[Task]:
@@ -183,21 +191,23 @@ Provide a JSON response:
                 model=self.model,
                 system_prompt="You are the Cognitive Core of Laniakea Protocol. Your output MUST be a valid JSON object.",
                 temperature=0.9,
-                max_tokens=400
+                max_tokens=400,
             )
-            
+
             if content.startswith("```json"):
                 content = content.strip("```json").strip()
             elif content.startswith("```"):
                 content = content.strip("```").strip()
-                
+
             result = json.loads(content)
 
             import hashlib
             from time import time
 
             # اطمینان از اینکه required_dimensions یک لیست از ValueDimension های معتبر است
-            required_dims = [d for d in result.get("required_dimensions", []) if d in ALL_DIMENSIONS]
+            required_dims = [
+                d for d in result.get("required_dimensions", []) if d in ALL_DIMENSIONS
+            ]
 
             task = Task(
                 id=hashlib.sha256(f"{result['title']}{time()}".encode()).hexdigest(),
@@ -208,7 +218,10 @@ Provide a JSON response:
                 timestamp=time(),
                 difficulty=difficulty,
                 required_dimensions=required_dims,
-                metadata={"generated_by": "cognitive_core", "expected_value": result.get("expected_value", 0)}
+                metadata={
+                    "generated_by": "cognitive_core",
+                    "expected_value": result.get("expected_value", 0),
+                },
             )
 
             print(f"🎯 Generated new task: {task.title}")
@@ -252,14 +265,14 @@ Provide a JSON response:
                 model=self.model,
                 system_prompt="You are the Cognitive Core with autopoietic capabilities. Your output MUST be a valid JSON object.",
                 temperature=0.8,
-                max_tokens=500
+                max_tokens=500,
             )
-            
+
             if content.startswith("```json"):
                 content = content.strip("```json").strip()
             elif content.startswith("```"):
                 content = content.strip("```").strip()
-                
+
             result = json.loads(content)
 
             import hashlib
@@ -276,8 +289,8 @@ Provide a JSON response:
                 metadata={
                     "expected_impact": result.get("expected_impact", ""),
                     "complexity": result.get("implementation_complexity", "medium"),
-                    "adjustment": result.get("adjustment", {})
-                }
+                    "adjustment": result.get("adjustment", {}),
+                },
             )
 
             self.proposals.append(proposal)
@@ -296,11 +309,15 @@ Provide a JSON response:
         recent = self.observations[-10:]
         avg_tx_count = sum(o["transaction_count"] for o in recent) / len(recent)
         solutions_count = sum(1 for o in recent if o["has_solution"])
-        
+
         # تحلیل Value Vector های اخیر
         recent_vectors = [ValueVector(**o["value_vector"]) for o in recent if o.get("value_vector")]
-        avg_value = sum(v.total_value() for v in recent_vectors) / len(recent_vectors) if recent_vectors else 0
-        
+        avg_value = (
+            sum(v.total_value() for v in recent_vectors) / len(recent_vectors)
+            if recent_vectors
+            else 0
+        )
+
         insight = f"Recent 10 blocks: Avg {avg_tx_count:.1f} tx/block, {solutions_count} solutions, Avg Value: {avg_value:.2f}"
         self.insights.append(insight)
 
@@ -319,17 +336,27 @@ Provide a JSON response:
         if not self.observations:
             return {}
 
-        total_value_vectors = [ValueVector(**o["value_vector"]) for o in self.observations if o.get("value_vector")]
-        
+        total_value_vectors = [
+            ValueVector(**o["value_vector"]) for o in self.observations if o.get("value_vector")
+        ]
+
         # محاسبه میانگین Value Vector
-        avg_vector = {dim: sum(getattr(v, dim) for v in total_value_vectors) / len(total_value_vectors) if total_value_vectors else 0.0 for dim in ALL_DIMENSIONS}
+        avg_vector = {
+            dim: (
+                sum(getattr(v, dim) for v in total_value_vectors) / len(total_value_vectors)
+                if total_value_vectors
+                else 0.0
+            )
+            for dim in ALL_DIMENSIONS
+        }
 
         return {
             "total_blocks": len(self.observations),
             "total_solutions": sum(1 for o in self.observations if o["has_solution"]),
-            "avg_transactions": sum(o["transaction_count"] for o in self.observations) / len(self.observations),
+            "avg_transactions": sum(o["transaction_count"] for o in self.observations)
+            / len(self.observations),
             "consciousness_level": self.consciousness_level,
-            "average_value_vector": avg_vector
+            "average_value_vector": avg_vector,
         }
 
     def get_stats(self) -> Dict[str, Any]:
@@ -340,7 +367,7 @@ Provide a JSON response:
             "proposals_count": len(self.proposals),
             "consciousness_level": self.consciousness_level,
             "knowledge_graph_size": len(self.knowledge_graph),
-            "value_dimension_weights": self.value_dimension_weights
+            "value_dimension_weights": self.value_dimension_weights,
         }
 
     def ask_question(self, question: str) -> str:
@@ -368,7 +395,7 @@ Provide a thoughtful answer based on your observations of the blockchain.
                 model=self.model,
                 system_prompt="You are the Cognitive Core of Laniakea Protocol.",
                 temperature=0.7,
-                max_tokens=300
+                max_tokens=300,
             )
 
             print(f"💭 Question answered: {question[:50]}...")

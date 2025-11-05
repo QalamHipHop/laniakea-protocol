@@ -8,8 +8,12 @@ import json
 from time import time
 from typing import List, Optional, Dict, Set, Any
 from src.core.models import (
-    KnowledgeBlock, Transaction, Solution, ValueVector,
-    ValueDimension, NodeInfo
+    KnowledgeBlock,
+    Transaction,
+    Solution,
+    ValueVector,
+    ValueDimension,
+    NodeInfo,
 )
 from src.config import BLOCK_REWARD
 
@@ -24,7 +28,7 @@ class LaniakeaChain:
         self.node_id = node_id
         self.balances: Dict[str, Dict[str, float]] = {}  # {node_id: {dimension: balance}}
         self.total_value_created = ValueVector()
-        
+
         # ایجاد بلاک پیدایش در صورت خالی بودن زنجیره
         if not self.chain:
             self.create_genesis_block()
@@ -37,14 +41,11 @@ class LaniakeaChain:
             transactions=[],
             solution=None,
             author_id="genesis",
-            previous_hash='0' * 64,
+            previous_hash="0" * 64,
             signature="genesis_signature",
             nonce=0,
             difficulty=0.0,
-            metadata={
-                "message": "In the beginning, there was curiosity...",
-                "genesis": True
-            }
+            metadata={"message": "In the beginning, there was curiosity...", "genesis": True},
         )
         self.chain.append(genesis_block)
         print("🌌 Genesis block created: The cosmic journey begins...")
@@ -63,7 +64,7 @@ class LaniakeaChain:
         transactions: List[Transaction],
         solution: Optional[Solution],
         previous_hash: str,
-        is_genesis: bool = False
+        is_genesis: bool = False,
     ) -> KnowledgeBlock:
         """
         ایجاد بلاک جدید
@@ -79,7 +80,7 @@ class LaniakeaChain:
                 amount=BLOCK_REWARD,
                 dimension=ValueDimension.KNOWLEDGE,
                 timestamp=time(),
-                metadata={"type": "block_reward"}
+                metadata={"type": "block_reward"},
             )
             all_txs.insert(0, block_reward_tx)
 
@@ -98,8 +99,8 @@ class LaniakeaChain:
                         metadata={
                             "type": "solution_reward",
                             "solution_id": solution.id,
-                            "task_id": solution.task_id
-                        }
+                            "task_id": solution.task_id,
+                        },
                     )
                     all_txs.append(reward_tx)
 
@@ -113,7 +114,7 @@ class LaniakeaChain:
             signature="",  # خواهد شد پر
             nonce=0,
             difficulty=self._calculate_difficulty(),
-            metadata={}
+            metadata={},
         )
 
         return new_block
@@ -161,20 +162,20 @@ class LaniakeaChain:
         if not block.signature:
             print(f"❌ Block has no signature")
             return False
-	
-	        # در اینجا باید کلید عمومی نود اعتبارسنج (author_id) را از یک منبع معتبر (مانند سیستم Reputation)
-	        # دریافت کرده و امضا را اعتبارسنجی کنیم.
-	        # فرض می‌کنیم یک تابع کمکی برای دریافت کلید عمومی وجود دارد.
-	        # from src.core.wallet import Wallet
-	        # public_key = get_public_key_for_node(block.author_id)
-	        # if not public_key:
-	        #     print(f"❌ Could not retrieve public key for author {block.author_id[:8]}")
-	        #     return False
-	        
-	        # if not Wallet.verify(public_key, block.signature, self.get_block_hash_payload(block)):
-	        #     print(f"❌ Invalid signature for block {block.index}")
-	        #     return False
-	
+
+        # در اینجا باید کلید عمومی نود اعتبارسنج (author_id) را از یک منبع معتبر (مانند سیستم Reputation)
+        # دریافت کرده و امضا را اعتبارسنجی کنیم.
+        # فرض می‌کنیم یک تابع کمکی برای دریافت کلید عمومی وجود دارد.
+        # from src.core.wallet import Wallet
+        # public_key = get_public_key_for_node(block.author_id)
+        # if not public_key:
+        #     print(f"❌ Could not retrieve public key for author {block.author_id[:8]}")
+        #     return False
+
+        # if not Wallet.verify(public_key, block.signature, self.get_block_hash_payload(block)):
+        #     print(f"❌ Invalid signature for block {block.index}")
+        #     return False
+
         return True
 
     def _update_balances(self, block: KnowledgeBlock):
@@ -237,14 +238,14 @@ class LaniakeaChain:
     @staticmethod
     def get_block_hash_payload(block: KnowledgeBlock) -> bytes:
         """دریافت payload برای هش کردن بلاک"""
-        block_dict = block.model_dump(exclude={'signature'})
+        block_dict = block.model_dump(exclude={"signature"})
         return json.dumps(block_dict, sort_keys=True).encode()
 
     @staticmethod
     def hash(block: KnowledgeBlock) -> str:
         """محاسبه هش بلاک"""
         if not block:
-            return '0' * 64
+            return "0" * 64
         return hashlib.sha256(LaniakeaChain.get_block_hash_payload(block)).hexdigest()
 
     @property
@@ -270,7 +271,7 @@ class LaniakeaChain:
             originality=balances.get(ValueDimension.ORIGINALITY.value, 0.0),
             consciousness=balances.get(ValueDimension.CONSCIOUSNESS.value, 0.0),
             environmental=balances.get(ValueDimension.ENVIRONMENTAL.value, 0.0),
-            health=balances.get(ValueDimension.HEALTH.value, 0.0)
+            health=balances.get(ValueDimension.HEALTH.value, 0.0),
         )
 
     def get_chain_stats(self) -> Dict:
@@ -284,5 +285,5 @@ class LaniakeaChain:
             "total_solutions": total_solutions,
             "total_value_created": self.total_value_created.to_dict(),
             "current_difficulty": self._calculate_difficulty(),
-            "unique_participants": len(self.balances)
+            "unique_participants": len(self.balances),
         }

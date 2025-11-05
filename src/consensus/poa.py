@@ -6,6 +6,7 @@ Laniakea Protocol - Proof of Authority (PoA)
 from typing import List, Set
 import random
 
+
 class ProofOfAuthority:
     """
     الگوریتم اجماع اثبات اعتبار
@@ -38,5 +39,5 @@ class ProofOfAuthority:
 
         # انتخاب یک authority به صورت تصادفی
         validator_index = random.randint(0, len(self.authorities) - 1)
-        
+
         return self.authorities[validator_index]

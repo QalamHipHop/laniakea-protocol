@@ -8,7 +8,7 @@ from .reputation_system import (
     ReputationScore,
     ReputationEvent,
     NodeHistory,
-    get_reputation_system
+    get_reputation_system,
 )
 
 __all__ = [
@@ -16,5 +16,5 @@ __all__ = [
     "ReputationScore",
     "ReputationEvent",
     "NodeHistory",
-    "get_reputation_system"
+    "get_reputation_system",
 ]

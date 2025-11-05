@@ -19,22 +19,24 @@ from src.external_apis.api_integrations import get_api_manager
 ai_core = CognitiveCore(model="gemini-2.5-flash")
 
 
-async def process_solution_value_vector(solution_data: Dict[str, Any], task_data: Dict[str, Any]) -> Dict[str, Any]:
+async def process_solution_value_vector(
+    solution_data: Dict[str, Any], task_data: Dict[str, Any]
+) -> Dict[str, Any]:
     """
     وظیفه: ارزیابی Value Vector یک راه‌حل
     """
     try:
         solution = Solution(**solution_data)
         task = Task(**task_data)
-        
+
         # استفاده از CognitiveCore برای تحلیل
         value_vector = ai_core.analyze_solution(solution, task)
-        
+
         return {
             "status": "completed",
             "solution_id": solution.id,
             "value_vector": value_vector.to_dict(),
-            "timestamp": time()
+            "timestamp": time(),
         }
     except Exception as e:
         print(f"❌ AI Worker Error (Value Vector): {e}")
@@ -42,8 +44,9 @@ async def process_solution_value_vector(solution_data: Dict[str, Any], task_data
             "status": "failed",
             "solution_id": solution_data.get("id"),
             "error": str(e),
-            "timestamp": time()
+            "timestamp": time(),
         }
+
 
 async def generate_new_task(category: str, difficulty: float) -> Dict[str, Any]:
     """
@@ -51,19 +54,16 @@ async def generate_new_task(category: str, difficulty: float) -> Dict[str, Any]:
     """
     try:
         task = ai_core.generate_task(ProblemCategory(category), difficulty)
-        
+
         if task:
-            return {
-                "status": "completed",
-                "task": task.model_dump(),
-                "timestamp": time()
-            }
+            return {"status": "completed", "task": task.model_dump(), "timestamp": time()}
         else:
             return {"status": "failed", "error": "Task generation failed", "timestamp": time()}
-            
+
     except Exception as e:
         print(f"❌ AI Worker Error (Task Generation): {e}")
         return {"status": "failed", "error": str(e), "timestamp": time()}
+
 
 async def get_real_time_data(api_provider: str, query: str) -> Dict[str, Any]:
     """
@@ -71,19 +71,15 @@ async def get_real_time_data(api_provider: str, query: str) -> Dict[str, Any]:
     """
     try:
         manager = get_api_manager()
-        
+
         if api_provider == "nasa":
             result = await manager.nasa_client.get_apod(date=query)
         elif api_provider == "wolfram":
             result = await manager.wolfram_client.query(query)
         else:
             return {"status": "failed", "error": f"Unknown API provider: {api_provider}"}
-            
-        return {
-            "status": "completed",
-            "data": result,
-            "timestamp": time()
-        }
+
+        return {"status": "completed", "data": result, "timestamp": time()}
     except Exception as e:
         print(f"❌ AI Worker Error (API): {e}")
         return {"status": "failed", "error": str(e), "timestamp": time()}
@@ -94,7 +90,7 @@ async def ai_worker_main_loop():
     شبیه‌سازی حلقه اصلی AI Worker برای اجرای وظایف در پس‌زمینه
     """
     print("🤖 AI Worker Main Loop Started (Simulating Serverless Persistence)...")
-    
+
     # شبیه‌سازی اجرای وظایف در فواصل زمانی کوتاه
     while True:
         # مثال: تولید یک تسک جدید هر 30 ثانیه
@@ -105,13 +101,14 @@ async def ai_worker_main_loop():
             # در اینجا فقط آن را چاپ می‌کنیم.
             # result = await generate_new_task("SCIENTIFIC", 7.0)
             # print(f"Generated Task Result: {json.dumps(result, indent=2)}")
-            pass # غیرفعال کردن برای جلوگیری از خروجی زیاد
-            
+            pass  # غیرفعال کردن برای جلوگیری از خروجی زیاد
+
         # مثال: بررسی وضعیت آگاهی هر 60 ثانیه
         if int(time()) % 60 == 0:
             print(f"--- AI Worker: Consciousness Level: {ai_core.consciousness_level:.2f} ---")
-            
-        await asyncio.sleep(1) # اجرای "ثانیه به ثانیه"
+
+        await asyncio.sleep(1)  # اجرای "ثانیه به ثانیه"
+
 
 if __name__ == "__main__":
     # این بخش در یک محیط واقعی به صورت یک تابع Serverless اجرا می‌شود

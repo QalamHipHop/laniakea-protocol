@@ -5,4 +5,4 @@ Laniakea Protocol - Simulation Module
 
 from .cosmic_simulator import CosmicSimulator, PhysicsEngine, EvolutionEngine
 
-__all__ = ['CosmicSimulator', 'PhysicsEngine', 'EvolutionEngine']
+__all__ = ["CosmicSimulator", "PhysicsEngine", "EvolutionEngine"]

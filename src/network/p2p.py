@@ -31,11 +31,7 @@ class P2PManager:
 
     async def start(self):
         """شروع سرور P2P"""
-        self.server = await websockets.serve(
-            self.handler,
-            self.host,
-            self.port
-        )
+        self.server = await websockets.serve(self.handler, self.host, self.port)
         print(f"🔗 P2P Node listening at ws://{self.host}:{self.port}")
 
         # نگه داشتن سرور
@@ -44,7 +40,7 @@ class P2PManager:
     async def handler(self, websocket: websockets.WebSocketServerProtocol, path: str):
         """
         مدیریت اتصال یک peer
-        
+
         Args:
             websocket: WebSocket connection
             path: مسیر
@@ -72,7 +68,7 @@ class P2PManager:
     async def broadcast(self, message: Dict[str, Any]):
         """
         ارسال پیام به تمام peers
-        
+
         Args:
             message: پیام (دیکشنری)
         """
@@ -83,14 +79,13 @@ class P2PManager:
 
         # ارسال به تمام peers
         await asyncio.gather(
-            *[peer.send(message_json) for peer in self.peers],
-            return_exceptions=True
+            *[peer.send(message_json) for peer in self.peers], return_exceptions=True
         )
 
     async def send_to_peer(self, peer: websockets.WebSocketServerProtocol, message: Dict[str, Any]):
         """
         ارسال پیام به یک peer خاص
-        
+
         Args:
             peer: peer
             message: پیام
@@ -106,9 +101,9 @@ class P2PManager:
         # در حال حاضر، فقط تعداد peers را برمی‌گردانیم.
         return {
             "connected_peers": len(self.peers),
-            "tps": 0.0, # باید در آینده محاسبه شود
+            "tps": 0.0,  # باید در آینده محاسبه شود
             "host": self.host,
-            "port": self.port
+            "port": self.port,
         }
 
     async def stop(self):
@@ -121,7 +116,7 @@ class P2PManager:
     async def connect_to_peer(self, host: str, port: int):
         """
         اتصال به یک peer خارجی
-        
+
         Args:
             host: آدرس
             port: پورت

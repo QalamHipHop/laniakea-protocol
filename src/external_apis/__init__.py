@@ -11,7 +11,7 @@ from .api_integrations import (
     WolframAlphaClient,
     QuantumClient,
     APIManager,
-    get_api_manager
+    get_api_manager,
 )
 
 __all__ = [
@@ -22,5 +22,5 @@ __all__ = [
     "WolframAlphaClient",
     "QuantumClient",
     "APIManager",
-    "get_api_manager"
+    "get_api_manager",
 ]

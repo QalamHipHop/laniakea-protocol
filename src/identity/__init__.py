@@ -9,14 +9,14 @@ from .did_system import (
     DIDDocument,
     Credential,
     CredentialType,
-    VerificationStatus
+    VerificationStatus,
 )
 
 __all__ = [
-    'IdentityManager',
-    'ReputationSystem',
-    'DIDDocument',
-    'Credential',
-    'CredentialType',
-    'VerificationStatus'
+    "IdentityManager",
+    "ReputationSystem",
+    "DIDDocument",
+    "Credential",
+    "CredentialType",
+    "VerificationStatus",
 ]

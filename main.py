@@ -80,8 +80,8 @@ class AppState:
 # ایجاد instance های global
 app_state = AppState()
 app = FastAPI(
-    title="Laniakea Protocol Node v0.0.1",
-    version="0.0.1",
+    title="Laniakea Protocol Node v0.0.01",
+    version="0.0.01",
     description="A cosmic computational organism with advanced features"
 )
 

@@ -4,13 +4,12 @@ Laniakea Protocol - Intelligence Module
 """
 
 from .ml_system import (
-    TrainingData, 
+    TrainingData,
     MLSystem,
     NeuralNetwork,
     ValuePredictor,
     PatternRecognizer,
     ReinforcementLearner,
-
 )
 from .predictive_analytics import TrendAnalyzer, PredictiveEngine, get_predictive_engine
 from .self_evolution import CodeAnalyzer, SelfEvolutionEngine
@@ -23,12 +22,11 @@ __all__ = [
     "ValuePredictor",
     "PatternRecognizer",
     "ReinforcementLearner",
-
     "TrendAnalyzer",
     "PredictiveEngine",
     "get_predictive_engine",
     "CodeAnalyzer",
     "SelfEvolutionEngine",
     "AI_API",
-    "get_ai_api"
+    "get_ai_api",
 ]

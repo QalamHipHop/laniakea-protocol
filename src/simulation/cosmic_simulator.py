@@ -24,14 +24,10 @@ class PhysicsEngine:
         self.energy_decay_rate = 0.01
         self.knowledge_diffusion_rate = 0.1
 
-    def calculate_force(
-        self,
-        cell1: CosmicCell,
-        cell2: CosmicCell
-    ) -> Tuple[float, float, float]:
+    def calculate_force(self, cell1: CosmicCell, cell2: CosmicCell) -> Tuple[float, float, float]:
         """
         محاسبه نیروی بین دو سلول
-        
+
         Returns:
             (fx, fy, fz) نیرو در سه بُعد
         """
@@ -58,7 +54,7 @@ class PhysicsEngine:
     def update_position(self, cell: CosmicCell, dt: float):
         """
         به‌روزرسانی موقعیت سلول
-        
+
         Args:
             cell: سلول
             dt: گام زمانی
@@ -73,7 +69,7 @@ class PhysicsEngine:
     def apply_force(self, cell: CosmicCell, force: Tuple[float, float, float], dt: float):
         """
         اعمال نیرو به سلول
-        
+
         Args:
             cell: سلول
             force: نیرو (fx, fy, fz)
@@ -105,7 +101,7 @@ class PhysicsEngine:
     def decay_energy(self, cell: CosmicCell, dt: float):
         """
         کاهش انرژی سلول در طول زمان
-        
+
         Args:
             cell: سلول
             dt: گام زمانی
@@ -130,26 +126,26 @@ class EvolutionEngine:
     def can_reproduce(self, cell: CosmicCell) -> bool:
         """
         بررسی امکان تکثیر
-        
+
         Args:
             cell: سلول
-        
+
         Returns:
             True اگر بتواند تکثیر کند
         """
         return (
-            cell.state == "alive" and
-            cell.energy >= self.reproduction_threshold and
-            cell.knowledge >= 10.0
+            cell.state == "alive"
+            and cell.energy >= self.reproduction_threshold
+            and cell.knowledge >= 10.0
         )
 
     def reproduce(self, parent: CosmicCell) -> Optional[CosmicCell]:
         """
         تکثیر سلول
-        
+
         Args:
             parent: سلول والد
-        
+
         Returns:
             سلول فرزند
         """
@@ -173,7 +169,7 @@ class EvolutionEngine:
         child_position = (
             parent.position[0] + offset,
             parent.position[1] + offset,
-            parent.position[2] + offset
+            parent.position[2] + offset,
         )
 
         child = CosmicCell(
@@ -184,7 +180,7 @@ class EvolutionEngine:
             position=child_position,
             velocity=(0.0, 0.0, 0.0),
             genome=child_genome,
-            state="alive"
+            state="alive",
         )
 
         print(f"👶 Cell reproduced: Gen {child.generation}")
@@ -193,10 +189,10 @@ class EvolutionEngine:
     def _mutate_genome(self, genome: Dict[str, Any]) -> Dict[str, Any]:
         """
         جهش ژنوم
-        
+
         Args:
             genome: ژنوم والد
-        
+
         Returns:
             ژنوم جهش یافته
         """
@@ -214,7 +210,7 @@ class EvolutionEngine:
     def evolve_cell(self, cell: CosmicCell, environment: Dict[str, Any]):
         """
         تکامل سلول بر اساس محیط
-        
+
         Args:
             cell: سلول
             environment: محیط
@@ -242,18 +238,14 @@ class CosmicSimulator:
         self.cells: List[CosmicCell] = []
         self.time = 0.0
         self.dt = 0.1  # گام زمانی
-        self.environment = {
-            "temperature": 0.5,
-            "knowledge_density": 0.1,
-            "energy_field": 1.0
-        }
+        self.environment = {"temperature": 0.5, "knowledge_density": 0.1, "energy_field": 1.0}
 
         print("🌌 Cosmic Simulator initialized")
 
     def create_genesis_cell(self) -> CosmicCell:
         """
         ایجاد تک‌سلولی اولیه (پیدایش)
-        
+
         Returns:
             سلول پیدایش
         """
@@ -269,12 +261,8 @@ class CosmicSimulator:
             knowledge=1.0,
             position=(0.0, 0.0, 0.0),
             velocity=(0.0, 0.0, 0.0),
-            genome={
-                "curiosity": 1.0,
-                "adaptability": 0.8,
-                "efficiency": 0.6
-            },
-            state="alive"
+            genome={"curiosity": 1.0, "adaptability": 0.8, "efficiency": 0.6},
+            state="alive",
         )
 
         self.cells.append(genesis_cell)
@@ -305,16 +293,12 @@ class CosmicSimulator:
         forces = {cell.id: (0.0, 0.0, 0.0) for cell in self.cells}
 
         for i, cell1 in enumerate(self.cells):
-            for cell2 in self.cells[i+1:]:
+            for cell2 in self.cells[i + 1 :]:
                 force = self.physics.calculate_force(cell1, cell2)
 
                 # نیروی عکس‌العمل
-                forces[cell1.id] = tuple(
-                    forces[cell1.id][j] + force[j] for j in range(3)
-                )
-                forces[cell2.id] = tuple(
-                    forces[cell2.id][j] - force[j] for j in range(3)
-                )
+                forces[cell1.id] = tuple(forces[cell1.id][j] + force[j] for j in range(3))
+                forces[cell2.id] = tuple(forces[cell2.id][j] - force[j] for j in range(3))
 
         # اعمال نیروها و به‌روزرسانی موقعیت‌ها
         for cell in self.cells:
@@ -360,7 +344,7 @@ class CosmicSimulator:
     def run(self, steps: int):
         """
         اجرای شبیه‌سازی برای تعداد مشخصی گام
-        
+
         Args:
             steps: تعداد گام‌ها
         """
@@ -372,9 +356,11 @@ class CosmicSimulator:
             # گزارش هر 100 گام
             if (i + 1) % 100 == 0:
                 stats = self.get_stats()
-                print(f"Step {i+1}: {stats['alive_cells']} cells, "
-                      f"Total knowledge: {stats['total_knowledge']:.2f}, "
-                      f"Avg energy: {stats['avg_energy']:.2f}")
+                print(
+                    f"Step {i+1}: {stats['alive_cells']} cells, "
+                    f"Total knowledge: {stats['total_knowledge']:.2f}, "
+                    f"Avg energy: {stats['avg_energy']:.2f}"
+                )
 
     def get_stats(self) -> Dict[str, Any]:
         """دریافت آمار شبیه‌سازی"""
@@ -384,7 +370,7 @@ class CosmicSimulator:
                 "alive_cells": 0,
                 "total_knowledge": 0.0,
                 "avg_energy": 0.0,
-                "max_generation": 0
+                "max_generation": 0,
             }
 
         return {
@@ -393,13 +379,13 @@ class CosmicSimulator:
             "total_knowledge": sum(cell.knowledge for cell in self.cells),
             "avg_energy": sum(cell.energy for cell in self.cells) / len(self.cells),
             "max_generation": max(cell.generation for cell in self.cells),
-            "environment": self.environment
+            "environment": self.environment,
         }
 
     def visualize_state(self) -> str:
         """
         نمایش وضعیت فعلی به صورت متنی
-        
+
         Returns:
             نمایش متنی
         """
@@ -411,7 +397,7 @@ class CosmicSimulator:
             f"Environment: {self.environment}",
             "",
             "Top 5 Cells:",
-            "-" * 60
+            "-" * 60,
         ]
 
         # مرتب‌سازی بر اساس دانش

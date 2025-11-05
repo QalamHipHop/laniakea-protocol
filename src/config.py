@@ -24,7 +24,7 @@ AUTHORITY_NODES: Set[str] = set()
 def get_bootstrap_nodes() -> List[Tuple[str, int]]:
     """
     دریافت لیست نودهای bootstrap از متغیر محیطی
-    
+
     Returns:
         لیست (host, port)
     """
@@ -33,9 +33,9 @@ def get_bootstrap_nodes() -> List[Tuple[str, int]]:
         return []
 
     nodes = []
-    for node_str in nodes_str.split(','):
+    for node_str in nodes_str.split(","):
         try:
-            host, port_str = node_str.strip().split(':')
+            host, port_str = node_str.strip().split(":")
             nodes.append((host, int(port_str)))
         except (ValueError, IndexError):
             pass
@@ -46,17 +46,17 @@ def get_bootstrap_nodes() -> List[Tuple[str, int]]:
 def is_authority(node_id: str) -> bool:
     """
     بررسی اینکه آیا این نود authority است
-    
+
     Args:
         node_id: شناسه نود
-        
+
     Returns:
         True اگر authority باشد
     """
     # در این نسخه، فقط بر اساس متغیر محیطی یا لیست AUTHORITY_NODES بررسی می‌کنیم
     if os.getenv("IS_AUTHORITY", "false").lower() == "true":
         return True
-    
+
     return node_id in AUTHORITY_NODES
 
 

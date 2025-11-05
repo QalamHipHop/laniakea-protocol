@@ -23,10 +23,7 @@ class BaseOracle(ABC):
 
     def get_stats(self) -> Dict[str, Any]:
         """دریافت آمار"""
-        return {
-            "name": self.name,
-            "query_count": self.query_count
-        }
+        return {"name": self.name, "query_count": self.query_count}
 
 
 class ScientificOracle(BaseOracle):
@@ -36,24 +33,19 @@ class ScientificOracle(BaseOracle):
 
     def __init__(self):
         super().__init__("ScientificOracle")
-        self.supported_projects = [
-            "folding_at_home",
-            "seti_at_home",
-            "rosetta_at_home",
-            "arxiv"
-        ]
+        self.supported_projects = ["folding_at_home", "seti_at_home", "rosetta_at_home", "arxiv"]
 
     async def query(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """
         پرس‌وجو از منابع علمی
-        
+
         Args:
             params: {
                 "project": "folding_at_home|seti_at_home|...",
                 "query_type": "status|data|contribute",
                 "data": {...}
             }
-        
+
         Returns:
             نتیجه پرس‌وجو
         """
@@ -86,7 +78,7 @@ class ScientificOracle(BaseOracle):
                             "status": "success",
                             "source": "arxiv",
                             "data": content[:500],  # خلاصه
-                            "full_response_length": len(content)
+                            "full_response_length": len(content),
                         }
                     else:
                         return {"error": f"arXiv returned status {response.status}"}
@@ -102,9 +94,9 @@ class ScientificOracle(BaseOracle):
             "data": {
                 "active_projects": 15,
                 "total_contributors": 150000,
-                "current_focus": "protein folding for disease research"
+                "current_focus": "protein folding for disease research",
             },
-            "note": "This is simulated data. Real integration requires API access."
+            "note": "This is simulated data. Real integration requires API access.",
         }
 
 
@@ -119,13 +111,13 @@ class DataOracle(BaseOracle):
     async def query(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """
         پرس‌وجو داده
-        
+
         Args:
             params: {
                 "source": "wikipedia|wikidata|...",
                 "query": "search term"
             }
-        
+
         Returns:
             داده دریافت شده
         """
@@ -152,7 +144,7 @@ class DataOracle(BaseOracle):
                             "source": "wikipedia",
                             "title": data.get("title", ""),
                             "extract": data.get("extract", ""),
-                            "url": data.get("content_urls", {}).get("desktop", {}).get("page", "")
+                            "url": data.get("content_urls", {}).get("desktop", {}).get("page", ""),
                         }
                     else:
                         return {"error": f"Wikipedia returned status {response.status}"}
@@ -172,13 +164,13 @@ class AIOracle(BaseOracle):
     async def query(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """
         پرس‌وجو از AI
-        
+
         Args:
             params: {
                 "model": "gpt-4|claude|...",
                 "prompt": "question or task"
             }
-        
+
         Returns:
             پاسخ AI
         """
@@ -189,7 +181,7 @@ class AIOracle(BaseOracle):
 
         return {
             "status": "delegated_to_cognitive_core",
-            "message": "AI queries are handled by Cognitive Core"
+            "message": "AI queries are handled by Cognitive Core",
         }
 
 
@@ -202,18 +194,18 @@ class OracleManager:
         self.oracles: Dict[str, BaseOracle] = {
             "scientific": ScientificOracle(),
             "data": DataOracle(),
-            "ai": AIOracle()
+            "ai": AIOracle(),
         }
         print("🔮 Oracle Manager initialized")
 
     async def query(self, oracle_type: str, params: Dict[str, Any]) -> Dict[str, Any]:
         """
         پرس‌وجو از یک اوراکل
-        
+
         Args:
             oracle_type: نوع اوراکل (scientific, data, ai)
             params: پارامترهای پرس‌وجو
-        
+
         Returns:
             نتیجه
         """
@@ -227,83 +219,68 @@ class OracleManager:
         return result
 
     async def query_multiple(
-        self,
-        queries: List[tuple[str, Dict[str, Any]]]
+        self, queries: List[tuple[str, Dict[str, Any]]]
     ) -> List[Dict[str, Any]]:
         """
         پرس‌وجوهای موازی از چند اوراکل
-        
+
         Args:
             queries: لیست (oracle_type, params)
-        
+
         Returns:
             لیست نتایج
         """
         tasks = [self.query(oracle_type, params) for oracle_type, params in queries]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
-        return [
-            r if not isinstance(r, Exception) else {"error": str(r)}
-            for r in results
-        ]
+        return [r if not isinstance(r, Exception) else {"error": str(r)} for r in results]
 
     def get_stats(self) -> Dict[str, Any]:
         """دریافت آمار تمام اوراکل‌ها"""
-        return {
-            oracle_type: oracle.get_stats()
-            for oracle_type, oracle in self.oracles.items()
-        }
+        return {oracle_type: oracle.get_stats() for oracle_type, oracle in self.oracles.items()}
 
 
 # توابع کمکی برای استفاده آسان
 
+
 async def fetch_scientific_data(project: str, query_type: str = "status") -> Dict[str, Any]:
     """
     دریافت داده علمی
-    
+
     Args:
         project: نام پروژه
         query_type: نوع پرس‌وجو
-    
+
     Returns:
         داده
     """
     oracle = ScientificOracle()
-    return await oracle.query({
-        "project": project,
-        "query_type": query_type
-    })
+    return await oracle.query({"project": project, "query_type": query_type})
 
 
 async def fetch_wikipedia_summary(topic: str) -> Dict[str, Any]:
     """
     دریافت خلاصه از Wikipedia
-    
+
     Args:
         topic: موضوع
-    
+
     Returns:
         خلاصه
     """
     oracle = DataOracle()
-    return await oracle.query({
-        "source": "wikipedia",
-        "query": topic
-    })
+    return await oracle.query({"source": "wikipedia", "query": topic})
 
 
 async def search_arxiv(query: str) -> Dict[str, Any]:
     """
     جستجو در arXiv
-    
+
     Args:
         query: عبارت جستجو
-    
+
     Returns:
         نتایج
     """
     oracle = ScientificOracle()
-    return await oracle.query({
-        "project": "arxiv",
-        "search": query
-    })
+    return await oracle.query({"project": "arxiv", "search": query})

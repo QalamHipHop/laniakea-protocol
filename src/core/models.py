@@ -10,6 +10,7 @@ from enum import Enum
 
 class ValueDimension(str, Enum):
     """ابعاد ارزشی در پروتوکل Laniakea"""
+
     KNOWLEDGE = "knowledge"  # ارزش دانشی
     COMPUTATION = "computation"  # ارزش محاسباتی
     ORIGINALITY = "originality"  # ارزش خلاقیت
@@ -17,8 +18,8 @@ class ValueDimension(str, Enum):
     ENVIRONMENTAL = "environmental"  # تأثیر محیطی
     HEALTH = "health"  # تأثیر سلامتی
     # ابعاد جدید برای آینده‌نگری
-    SCALABILITY = "scalability" # قابلیت گسترش و مقیاس‌پذیری
-    ETHICAL_ALIGNMENT = "ethical_alignment" # همسویی اخلاقی و پایداری
+    SCALABILITY = "scalability"  # قابلیت گسترش و مقیاس‌پذیری
+    ETHICAL_ALIGNMENT = "ethical_alignment"  # همسویی اخلاقی و پایداری
 
 
 class ValueVector(BaseModel):
@@ -26,6 +27,7 @@ class ValueVector(BaseModel):
     بردار ارزش چند بُعدی
     هر بُعد نشان‌دهنده نوعی از ارزش در کیهان Laniakea است
     """
+
     knowledge: float = Field(default=0.0, ge=0.0, le=10.0, description="ارزش دانشی (0-10)")
     computation: float = Field(default=0.0, ge=0.0, le=10.0, description="ارزش محاسباتی (0-10)")
     originality: float = Field(default=0.0, ge=0.0, le=10.0, description="ارزش خلاقیت (0-10)")
@@ -40,24 +42,27 @@ class ValueVector(BaseModel):
         # همه ابعاد به جز محیطی و سلامتی که می‌توانند منفی باشند، باید مثبت باشند
         # برای محاسبه ارزش کل، فقط مقادیر مثبت را در نظر می‌گیریم
         return (
-            self.knowledge +
-            self.computation +
-            self.originality +
-            self.consciousness +
-            self.scalability +
-            self.ethical_alignment +
-            max(0, self.environmental) +
-            max(0, self.health)
+            self.knowledge
+            + self.computation
+            + self.originality
+            + self.consciousness
+            + self.scalability
+            + self.ethical_alignment
+            + max(0, self.environmental)
+            + max(0, self.health)
         )
 
     def to_dict(self) -> Dict[str, float]:
         """تبدیل به دیکشنری"""
-        return self.model_dump() # استفاده از model_dump برای Pydantic v2
+        return self.model_dump()  # استفاده از model_dump برای Pydantic v2
+
 
 # بقیه مدل‌ها بدون تغییر اساسی باقی می‌مانند، اما باید با ValueVector جدید سازگار شوند.
 
+
 class ProblemCategory(str, Enum):
     """دسته‌بندی مسائل"""
+
     SCIENTIFIC = "scientific"  # مسائل علمی
     PHILOSOPHICAL = "philosophical"  # مسائل فلسفی
     MATHEMATICAL = "mathematical"  # مسائل ریاضی
@@ -65,12 +70,14 @@ class ProblemCategory(str, Enum):
     ARTISTIC = "artistic"  # مسائل هنری
     COSMIC = "cosmic"  # مسائل کیهانی
     # دسته‌بندی جدید
-    SYSTEMIC_EVOLUTION = "systemic_evolution" # تکامل سیستمی پروتوکل
+    SYSTEMIC_EVOLUTION = "systemic_evolution"  # تکامل سیستمی پروتوکل
+
 
 class Task(BaseModel):
     """
     تسک یا مسئله‌ای که باید حل شود
     """
+
     id: str = Field(..., description="شناسه یکتا")
     title: str = Field(..., description="عنوان تسک")
     description: str = Field(..., description="توضیحات کامل")
@@ -79,8 +86,7 @@ class Task(BaseModel):
     timestamp: float = Field(..., description="زمان ایجاد")
     difficulty: float = Field(default=1.0, ge=0.1, le=10.0, description="سطح دشواری (0.1-10)")
     required_dimensions: List[ValueDimension] = Field(
-        default_factory=list,
-        description="ابعاد ارزشی مورد نیاز برای حل"
+        default_factory=list, description="ابعاد ارزشی مورد نیاز برای حل"
     )
     metadata: Dict[str, Any] = Field(default_factory=dict, description="متادیتای اضافی")
 
@@ -89,6 +95,7 @@ class Solution(BaseModel):
     """
     راه‌حل برای یک تسک
     """
+
     id: str = Field(..., description="شناسه یکتا")
     task_id: str = Field(..., description="شناسه تسک مرتبط")
     solver_id: str = Field(..., description="شناسه حل‌کننده")
@@ -103,14 +110,12 @@ class Transaction(BaseModel):
     """
     تراکنش انتقال ارزش
     """
+
     id: str = Field(..., description="شناسه یکتا")
     sender: str = Field(..., description="فرستنده")
     recipient: str = Field(..., description="گیرنده")
     amount: float = Field(..., ge=0.0, description="مقدار ارزش")
-    dimension: ValueDimension = Field(
-        default=ValueDimension.KNOWLEDGE,
-        description="بُعد ارزشی"
-    )
+    dimension: ValueDimension = Field(default=ValueDimension.KNOWLEDGE, description="بُعد ارزشی")
     timestamp: float = Field(..., description="زمان تراکنش")
     signature: Optional[str] = Field(default=None, description="امضای دیجیتال")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="متادیتای اضافی")
@@ -120,6 +125,7 @@ class KnowledgeBlock(BaseModel):
     """
     بلاک دانشی در زنجیره Laniakea
     """
+
     index: int = Field(..., ge=0, description="شماره بلاک")
     timestamp: float = Field(..., description="زمان ایجاد")
     transactions: List[Transaction] = Field(default_factory=list, description="لیست تراکنش‌ها")
@@ -134,36 +140,35 @@ class KnowledgeBlock(BaseModel):
 
 class NodeSpecialty(str, Enum):
     """تخصص‌های نود"""
+
     MINING = "mining"  # استخراج بلاک
     SOLVING = "solving"  # حل مسائل
     VALIDATION = "validation"  # اعتبارسنجی
     ORACLE = "oracle"  # اوراکل
     SIMULATION = "simulation"  # شبیه‌سازی
     AI_INFERENCE = "ai_inference"  # استنتاج AI
-    GOVERNANCE = "governance" # حکمرانی و رأی‌گیری
-    GENERALIST = "generalist" # نود عمومی بدون تخصص خاص
+    GOVERNANCE = "governance"  # حکمرانی و رأی‌گیری
+    GENERALIST = "generalist"  # نود عمومی بدون تخصص خاص
 
 
 class NodeInfo(BaseModel):
     """اطلاعات یک نود در شبکه"""
+
     node_id: str = Field(..., description="شناسه یکتا")
     host: str = Field(..., description="آدرس هاست")
     p2p_port: int = Field(..., description="پورت P2P")
     api_port: int = Field(..., description="پورت API")
     is_authority: bool = Field(default=False, description="آیا نود یک authority است؟")
-    specialties: Set[NodeSpecialty] = Field(
-        default_factory=set,
-        description="تخصص‌های نود"
-    )
+    specialties: Set[NodeSpecialty] = Field(default_factory=set, description="تخصص‌های نود")
     reputation: float = Field(default=0.0, ge=0.0, description="اعتبار نود")
     total_value_created: ValueVector = Field(
-        default_factory=ValueVector,
-        description="مجموع ارزش ایجاد شده"
+        default_factory=ValueVector, description="مجموع ارزش ایجاد شده"
     )
 
 
 class P2PMessage(BaseModel):
     """پیام P2P بین نودها"""
+
     type: str = Field(..., description="نوع پیام")
     payload: Dict[str, Any] = Field(..., description="محتوای پیام")
     sender_id: Optional[str] = Field(default=None, description="شناسه فرستنده")
@@ -172,15 +177,17 @@ class P2PMessage(BaseModel):
 
 class ProposalType(str, Enum):
     """انواع پیشنهادات حکمرانی"""
+
     PROTOCOL_UPGRADE = "protocol_upgrade"
     PARAMETER_CHANGE = "parameter_change"
     NEW_FEATURE = "new_feature"
     RULE_MODIFICATION = "rule_modification"
-    VALUE_DIMENSION_ADJUSTMENT = "value_dimension_adjustment" # تغییر وزن ابعاد ارزشی
+    VALUE_DIMENSION_ADJUSTMENT = "value_dimension_adjustment"  # تغییر وزن ابعاد ارزشی
 
 
 class Proposal(BaseModel):
     """پیشنهاد تغییر در پروتوکل"""
+
     id: str = Field(..., description="شناسه یکتا")
     title: str = Field(..., description="عنوان پیشنهاد")
     description: str = Field(..., description="توضیحات کامل")
@@ -198,20 +205,14 @@ class CosmicCell(BaseModel):
     """
     تک‌سلولی کیهانی - واحد پایه شبیه‌سازی
     """
+
     id: str = Field(..., description="شناسه یکتا")
     generation: int = Field(default=0, ge=0, description="نسل سلول")
     energy: float = Field(default=100.0, ge=0.0, description="انرژی سلول")
     knowledge: float = Field(default=0.0, ge=0.0, description="دانش انباشته")
     position: tuple[float, float, float] = Field(
-        default=(0.0, 0.0, 0.0),
-        description="موقعیت در فضای سه‌بعدی"
+        default=(0.0, 0.0, 0.0), description="موقعیت در فضای سه‌بعدی"
     )
-    velocity: tuple[float, float, float] = Field(
-        default=(0.0, 0.0, 0.0),
-        description="سرعت حرکت"
-    )
-    genome: Dict[str, Any] = Field(
-        default_factory=dict,
-        description="ژنوم سلول (ویژگی‌های ارثی)"
-    )
+    velocity: tuple[float, float, float] = Field(default=(0.0, 0.0, 0.0), description="سرعت حرکت")
+    genome: Dict[str, Any] = Field(default_factory=dict, description="ژنوم سلول (ویژگی‌های ارثی)")
     state: str = Field(default="alive", description="وضعیت سلول")

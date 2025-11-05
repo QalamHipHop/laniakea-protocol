@@ -21,7 +21,7 @@ class Token:
         dimension: ValueDimension,
         amount: float,
         owner: str,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
     ):
         self.token_id = token_id
         self.dimension = dimension
@@ -38,7 +38,7 @@ class Token:
             "amount": self.amount,
             "owner": self.owner,
             "created_at": self.created_at,
-            "metadata": self.metadata
+            "metadata": self.metadata,
         }
 
 
@@ -56,21 +56,17 @@ class TokenEconomics:
         print("💰 Token Economics initialized")
 
     def mint_tokens(
-        self,
-        dimension: ValueDimension,
-        amount: float,
-        recipient: str,
-        reason: str
+        self, dimension: ValueDimension, amount: float, recipient: str, reason: str
     ) -> Token:
         """
         تولید توکن جدید
-        
+
         Args:
             dimension: بُعد ارزشی
             amount: مقدار
             recipient: دریافت‌کننده
             reason: دلیل تولید
-        
+
         Returns:
             توکن جدید
         """
@@ -81,7 +77,7 @@ class TokenEconomics:
             dimension=dimension,
             amount=amount,
             owner=recipient,
-            metadata={"reason": reason, "minted_at": time()}
+            metadata={"reason": reason, "minted_at": time()},
         )
 
         # افزایش عرضه کل
@@ -90,20 +86,15 @@ class TokenEconomics:
         print(f"🪙 Minted {amount} {dimension.value} tokens for {recipient[:8]}")
         return token
 
-    def burn_tokens(
-        self,
-        dimension: ValueDimension,
-        amount: float,
-        reason: str
-    ) -> bool:
+    def burn_tokens(self, dimension: ValueDimension, amount: float, reason: str) -> bool:
         """
         سوزاندن توکن
-        
+
         Args:
             dimension: بُعد ارزشی
             amount: مقدار
             reason: دلیل سوزاندن
-        
+
         Returns:
             True اگر موفق باشد
         """
@@ -118,19 +109,17 @@ class TokenEconomics:
         return True
 
     def calculate_exchange_rate(
-        self,
-        from_dimension: ValueDimension,
-        to_dimension: ValueDimension
+        self, from_dimension: ValueDimension, to_dimension: ValueDimension
     ) -> float:
         """
         محاسبه نرخ تبدیل بین دو بُعد
-        
+
         نرخ بر اساس عرضه و تقاضا محاسبه می‌شود
-        
+
         Args:
             from_dimension: بُعد مبدأ
             to_dimension: بُعد مقصد
-        
+
         Returns:
             نرخ تبدیل
         """
@@ -152,7 +141,7 @@ class TokenEconomics:
             ValueDimension.ORIGINALITY: 1.5,
             ValueDimension.CONSCIOUSNESS: 2.0,
             ValueDimension.ENVIRONMENTAL: 1.2,
-            ValueDimension.HEALTH: 1.2
+            ValueDimension.HEALTH: 1.2,
         }
 
         from_weight = dimension_weights.get(from_dimension, 1.0)
@@ -167,17 +156,17 @@ class TokenEconomics:
         from_dimension: ValueDimension,
         to_dimension: ValueDimension,
         amount: float,
-        owner: str
+        owner: str,
     ) -> Optional[Token]:
         """
         تبدیل توکن از یک بُعد به بُعد دیگر
-        
+
         Args:
             from_dimension: بُعد مبدأ
             to_dimension: بُعد مقصد
             amount: مقدار
             owner: مالک
-        
+
         Returns:
             توکن جدید
         """
@@ -194,16 +183,15 @@ class TokenEconomics:
 
         # تولید توکن مقصد
         new_token = self.mint_tokens(
-            to_dimension,
-            final_amount,
-            owner,
-            f"exchanged from {from_dimension.value}"
+            to_dimension, final_amount, owner, f"exchanged from {from_dimension.value}"
         )
 
         # سوزاندن fee
         self.burn_tokens(to_dimension, fee, "exchange_fee")
 
-        print(f"💱 Exchanged {amount} {from_dimension.value} -> {final_amount:.2f} {to_dimension.value}")
+        print(
+            f"💱 Exchanged {amount} {from_dimension.value} -> {final_amount:.2f} {to_dimension.value}"
+        )
         return new_token
 
     def get_total_value(self) -> float:
@@ -214,12 +202,11 @@ class TokenEconomics:
             ValueDimension.ORIGINALITY.value: 1.5,
             ValueDimension.CONSCIOUSNESS.value: 2.0,
             ValueDimension.ENVIRONMENTAL.value: 1.2,
-            ValueDimension.HEALTH.value: 1.2
+            ValueDimension.HEALTH.value: 1.2,
         }
 
         total = sum(
-            self.total_supply[dim] * dimension_weights.get(dim, 1.0)
-            for dim in self.total_supply
+            self.total_supply[dim] * dimension_weights.get(dim, 1.0) for dim in self.total_supply
         )
 
         return total
@@ -231,15 +218,10 @@ class TokenEconomics:
             "burned_tokens": self.burned_tokens,
             "total_value": self.get_total_value(),
             "inflation_rate": self.inflation_rate,
-            "burn_rate": self.burn_rate
+            "burn_rate": self.burn_rate,
         }
 
-    def _generate_token_id(
-        self,
-        dimension: ValueDimension,
-        amount: float,
-        recipient: str
-    ) -> str:
+    def _generate_token_id(self, dimension: ValueDimension, amount: float, recipient: str) -> str:
         """تولید شناسه یکتا برای توکن"""
         data = f"{dimension.value}{amount}{recipient}{time()}"
         return hashlib.sha256(data.encode()).hexdigest()
@@ -258,20 +240,15 @@ class StakingSystem:
 
         print("🔒 Staking System initialized")
 
-    def stake(
-        self,
-        staker: str,
-        dimension: ValueDimension,
-        amount: float
-    ) -> bool:
+    def stake(self, staker: str, dimension: ValueDimension, amount: float) -> bool:
         """
         سهام‌گذاری توکن
-        
+
         Args:
             staker: سهام‌گذار
             dimension: بُعد
             amount: مقدار
-        
+
         Returns:
             True اگر موفق باشد
         """
@@ -284,20 +261,15 @@ class StakingSystem:
         print(f"🔒 {staker[:8]} staked {amount} {dimension.value}")
         return True
 
-    def unstake(
-        self,
-        staker: str,
-        dimension: ValueDimension,
-        amount: float
-    ) -> bool:
+    def unstake(self, staker: str, dimension: ValueDimension, amount: float) -> bool:
         """
         برداشت سهام
-        
+
         Args:
             staker: سهام‌گذار
             dimension: بُعد
             amount: مقدار
-        
+
         Returns:
             True اگر موفق باشد
         """
@@ -316,11 +288,11 @@ class StakingSystem:
     def calculate_rewards(self, staker: str, time_period: float) -> ValueVector:
         """
         محاسبه پاداش سهام‌گذاری
-        
+
         Args:
             staker: سهام‌گذار
             time_period: مدت زمان (ثانیه)
-        
+
         Returns:
             پاداش‌ها
         """
@@ -356,11 +328,11 @@ class StakingSystem:
     def distribute_rewards(self, staker: str, time_period: float) -> ValueVector:
         """
         توزیع پاداش‌ها
-        
+
         Args:
             staker: سهام‌گذار
             time_period: مدت زمان
-        
+
         Returns:
             پاداش‌های توزیع شده
         """
@@ -370,12 +342,7 @@ class StakingSystem:
         for dim in ValueDimension:
             amount = getattr(rewards, dim.value, 0.0)
             if amount > 0:
-                self.token_economics.mint_tokens(
-                    dim,
-                    amount,
-                    staker,
-                    "staking_reward"
-                )
+                self.token_economics.mint_tokens(dim, amount, staker, "staking_reward")
 
         print(f"🎁 Distributed {rewards.total_value():.2f} total rewards to {staker[:8]}")
         return rewards
@@ -398,7 +365,4 @@ class StakingSystem:
         stakes = self.stakes[staker]
         total = sum(stakes.values())
 
-        return {
-            "staked": stakes,
-            "total": total
-        }
+        return {"staked": stakes, "total": total}
