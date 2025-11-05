@@ -7,6 +7,7 @@ import os
 import json
 import asyncio
 from typing import Dict, Any, Optional, List
+from enum import Enum
 from openai import OpenAI, AsyncOpenAI
 from openai.types.chat import ChatCompletionMessageParam
 from datetime import datetime
@@ -73,7 +74,11 @@ class AI_API:
                 temperature=temperature
             )
             
-            return response.choices[0].message.content.strip()
+            content = response.choices[0].message.content
+            if content is None:
+                print(f"❌ LLM API Error ({model_name}): Content is None")
+                return json.dumps({"error": "LLM generation failed: Content is None"})
+            return content.strip()
             
         except Exception as e:
             print(f"❌ LLM API Error ({model_name}): {e}")
@@ -113,7 +118,11 @@ class AI_API:
                 temperature=temperature
             )
             
-            return response.choices[0].message.content.strip()
+            content = response.choices[0].message.content
+            if content is None:
+                print(f"❌ LLM API Error ({model_name}): Content is None")
+                return json.dumps({"error": "LLM generation failed: Content is None"})
+            return content.strip()
             
         except Exception as e:
             print(f"❌ LLM API Error ({model_name}): {e}")

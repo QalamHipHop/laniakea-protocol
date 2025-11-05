@@ -6,7 +6,7 @@ Laniakea Protocol - Blockchain Engine
 import hashlib
 import json
 from time import time
-from typing import List, Optional, Dict, Set
+from typing import List, Optional, Dict, Set, Any
 from src.core.models import (
     KnowledgeBlock, Transaction, Solution, ValueVector,
     ValueDimension, NodeInfo
@@ -24,6 +24,10 @@ class LaniakeaChain:
         self.node_id = node_id
         self.balances: Dict[str, Dict[str, float]] = {}  # {node_id: {dimension: balance}}
         self.total_value_created = ValueVector()
+        
+        # ایجاد بلاک پیدایش در صورت خالی بودن زنجیره
+        if not self.chain:
+            self.create_genesis_block()
 
     def create_genesis_block(self):
         """ایجاد بلاک پیدایش"""
@@ -44,6 +48,15 @@ class LaniakeaChain:
         )
         self.chain.append(genesis_block)
         print("🌌 Genesis block created: The cosmic journey begins...")
+
+    def get_chain_stats(self) -> Dict[str, Any]:
+        """دریافت آمار کلی زنجیره"""
+        return {
+            "length": len(self.chain),
+            "total_value_created": self.total_value_created.to_dict(),
+            "last_block_hash": self.chain[-1].signature if self.chain else None,
+            "last_block_index": self.chain[-1].index if self.chain else -1,
+        }
 
     def new_block(
         self,
@@ -144,10 +157,10 @@ class LaniakeaChain:
             print(f"❌ Block author {block.author_id[:8]} is not an authority")
             return False
 
-	        # بررسی امضا
-	        if not block.signature:
-	            print(f"❌ Block has no signature")
-	            return False
+        # بررسی امضا
+        if not block.signature:
+            print(f"❌ Block has no signature")
+            return False
 	
 	        # در اینجا باید کلید عمومی نود اعتبارسنج (author_id) را از یک منبع معتبر (مانند سیستم Reputation)
 	        # دریافت کرده و امضا را اعتبارسنجی کنیم.
@@ -162,7 +175,7 @@ class LaniakeaChain:
 	        #     print(f"❌ Invalid signature for block {block.index}")
 	        #     return False
 	
-	        return True
+        return True
 
     def _update_balances(self, block: KnowledgeBlock):
         """به‌روزرسانی موجودی‌های نودها"""

@@ -43,14 +43,21 @@ def get_bootstrap_nodes() -> List[Tuple[str, int]]:
     return nodes
 
 
-def is_authority() -> bool:
+def is_authority(node_id: str) -> bool:
     """
     بررسی اینکه آیا این نود authority است
     
+    Args:
+        node_id: شناسه نود
+        
     Returns:
         True اگر authority باشد
     """
-    return os.getenv("IS_AUTHORITY", "false").lower() == "true"
+    # در این نسخه، فقط بر اساس متغیر محیطی یا لیست AUTHORITY_NODES بررسی می‌کنیم
+    if os.getenv("IS_AUTHORITY", "false").lower() == "true":
+        return True
+    
+    return node_id in AUTHORITY_NODES
 
 
 # تنظیمات Cognitive Core

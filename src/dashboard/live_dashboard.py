@@ -76,83 +76,53 @@ class DashboardGenerator:
         tps = network_data.get('tps', 0.0)
         
         html = """<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Laniakea Protocol - Dashboard</title>
-    <style>
-        body {{
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-        }}
-        .container {{
-            max-width: 1200px;
-            margin: 0 auto;
-        }}
-        .header {{
-            text-align: center;
-            margin-bottom: 40px;
-        }}
-        .stats-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }}
-        .stat-card {{
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-        }}
-        .stat-card .value {{
-            font-size: 2em;
-            font-weight: bold;
-            color: #ffd700;
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🌌 LANIAKEA PROTOCOL</h1>
-            <p>Live Dashboard v0.0.1</p>
-        </div>
-        
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div>Blockchain Height</div>
-                <div class="value">{chain_length}</div>
-            </div>
-            
-            <div class="stat-card">
-                <div>Connected Peers</div>
-                <div class="value">{peer_count}</div>
-            </div>
-            
-            <div class="stat-card">
-                <div>Total Value</div>
-                <div class="value">{total_value:.0f}</div>
-            </div>
-            
-            <div class="stat-card">
-                <div>Active Tasks</div>
-                <div class="value">{active_tasks}</div>
-            </div>
-            
-            <div class="stat-card">
-                <div>Network TPS</div>
-                <div class="value">{tps:.2f}</div>
-            </div>
-        </div>
-        
-        <div style="text-align: center; opacity: 0.7; margin-top: 40px;">
-            Last updated: {timestamp}
-        </div>
-    </div>
-</body>
-</html>""".format(
+	<html lang="fa" dir="rtl">
+	<head>
+	    <meta charset="UTF-8">
+	    <title>Laniakea Protocol - Live Dashboard</title>
+	    <link rel="stylesheet" href="/static/style.css">
+	</head>
+	<body>
+	    <div class="container">
+	        <header>
+	            <h1>🌌 پروتوکل لانیاکیا</h1>
+	            <p class="subtitle">داشبورد زنده نود (v0.0.1)</p>
+	        </header>
+	        
+	        <div class="stats-grid">
+	            <div class="stat-card">
+	                <span class="label">ارتفاع بلاک‌چین</span>
+	                <span class="value">{chain_length}</span>
+	            </div>
+	            
+	            <div class="stat-card">
+	                <span class="label">نودهای متصل</span>
+	                <span class="value">{peer_count}</span>
+	            </div>
+	            
+	            <div class="stat-card">
+	                <span class="label">ارزش دانشی کل</span>
+	                <span class="value">{total_value:.0f}</span>
+	            </div>
+	            
+	            <div class="stat-card">
+	                <span class="label">تسک‌های فعال</span>
+	                <span class="value">{active_tasks}</span>
+	            </div>
+	            
+	            <div class="stat-card">
+	                <span class="label">TPS شبکه</span>
+	                <span class="value">{tps:.2f}</span>
+	            </div>
+	        </div>
+	        
+	        <footer>
+	            <span class="update-time">آخرین به‌روزرسانی: {timestamp}</span>
+	            <p>Laniakea Protocol v0.0.1 - The Cosmic Computational Organism</p>
+	        </footer>
+	    </div>
+	</body>
+	</html>""".format(
             chain_length=chain_length,
             peer_count=peer_count,
             total_value=total_value,

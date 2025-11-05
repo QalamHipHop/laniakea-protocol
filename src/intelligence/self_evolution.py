@@ -12,6 +12,7 @@ from datetime import datetime
 from pathlib import Path
 import hashlib
 import random # برای شبیه‌سازی ValueVector
+import re # برای استخراج JSON از پاسخ LLM
 
 from src.intelligence.ai_api import get_ai_api
 from src.core.models import ValueVector, ValueDimension, Task, ProblemCategory, Solution
@@ -190,8 +191,21 @@ Provide 3 specific, actionable improvements (refactoring, pattern application, n
                     max_tokens=1000
                 )
 
-                parsed_suggestions = json.loads(response_text)
-                suggestions.append({'file': file_info['filepath'], 'suggestions': parsed_suggestions})
+                # تلاش برای استخراج JSON از پاسخ (ممکن است LLM متن اضافی یا markdown اضافه کند)
+                json_match = re.search(r'\[\s*\{.*?\}\s*\]', response_text, re.DOTALL)
+                
+                parsed_suggestions = []
+                if json_match:
+                    json_string = json_match.group(0)
+                    try:
+                        parsed_suggestions = json.loads(json_string)
+                        suggestions.append({'file': file_info['filepath'], 'suggestions': parsed_suggestions})
+                    except json.JSONDecodeError:
+                        print(f"❌ LLM returned malformed JSON for {file_info['filepath']}: {json_string[:100]}...")
+                        suggestions.append({'file': file_info['filepath'], 'suggestions': [], 'error': 'Malformed JSON from LLM'})
+                else:
+                    print(f"❌ LLM response did not contain JSON array for {file_info['filepath']}: {response_text[:100]}...")
+                    suggestions.append({'file': file_info['filepath'], 'suggestions': [], 'error': 'No JSON array found in LLM response'})
                 await asyncio.sleep(1)
             except Exception as e:
                 print(f"⚠️ Error analyzing {file_info['filepath']}: {e}")
@@ -247,10 +261,12 @@ Return ONLY the fully improved, complete Python code. Do not add any explanation
         if auto_apply:
             for item in suggestions:
                 for suggestion in item.get('suggestions', []):
-                    # فقط بهبودهای با اولویت بالا و مرتبط با ابعاد جدید را اعمال می‌کنیم
-                    if suggestion.get('priority') == 'high' and suggestion.get('target_value_dimension') in [d.value for d in ValueDimension]:
-                        if await self.auto_improve_code(item['file'], suggestion):
-                            applied.append(item['file'])
+                    # بررسی می‌کنیم که suggestion یک دیکشنری باشد
+                    if isinstance(suggestion, dict):
+                        # فقط بهبودهای با اولویت بالا و مرتبط با ابعاد جدید را اعمال می‌کنیم
+                        if suggestion.get('priority') == 'high' and suggestion.get('target_value_dimension') in [d.value for d in ValueDimension]:
+                            if await self.auto_improve_code(item['file'], suggestion):
+                                applied.append(item['file'])
 
         report = {
             'version': self.version,
@@ -261,15 +277,29 @@ Return ONLY the fully improved, complete Python code. Do not add any explanation
         }
 
         report_path = self.project_root / 'evolution_log.json'
-        # خواندن محتوای قبلی و اضافه کردن گزارش جدید
+        
+        # خواندن محتوای قبلی
         try:
             with open(report_path, 'r', encoding='utf-8') as f:
-                log_content = f.read()
+                log_content = f.read().strip()
+                if log_content.startswith('['):
+                    # حذف کروشه پایانی
+                    log_content = log_content[:-1].strip()
+                    # حذف کامای اضافی در انتهای محتوای قبلی
+                    if log_content.endswith(','):
+                        log_content = log_content[:-1].strip()
+                else:
+                    log_content = ""
         except FileNotFoundError:
             log_content = ""
             
+        # نوشتن گزارش جدید
         with open(report_path, 'w', encoding='utf-8') as f:
-            f.write(log_content + json.dumps(report, indent=2, ensure_ascii=False) + ',\n') # اضافه کردن کاما برای JSON آرایه
+            f.write('[\n')
+            if log_content:
+                f.write(log_content + ',\n')
+            f.write(json.dumps(report, indent=2, ensure_ascii=False))
+            f.write('\n]')
 
         print(f"✅ Evolution complete! Report updated in {report_path}")
         return report

@@ -27,9 +27,9 @@ python3 main.py --p2p-port "$P2P_PORT" --api-port "$API_PORT" $SIM_FLAG &
 NODE_PID=$!
 
 # اجرای حلقه توسعه درونی دائمی
-echo "🧠 Starting Laniakea Self-Evolution Loop..."
-python3 self_evolution_loop.py &
-EVO_PID=$!
+# echo "🧠 Starting Laniakea Self-Evolution Loop..."
+# python3 self_evolution_loop.py &
+# EVO_PID=$!
 
 # منتظر ماندن برای پایان فرآیندها
-wait $NODE_PID $EVO_PID
+wait $NODE_PID

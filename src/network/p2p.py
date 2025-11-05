@@ -100,9 +100,23 @@ class P2PManager:
         except Exception as e:
             print(f"⚠️ Error sending to peer: {e}")
 
-    def get_peer_count(self) -> int:
-        """دریافت تعداد peers"""
-        return len(self.peers)
+    def get_network_stats(self) -> Dict[str, Any]:
+        """دریافت آمار شبکه"""
+        # آمار شبکه باید شامل اطلاعاتی مانند تعداد peers متصل، ترافیک، و TPS باشد.
+        # در حال حاضر، فقط تعداد peers را برمی‌گردانیم.
+        return {
+            "connected_peers": len(self.peers),
+            "tps": 0.0, # باید در آینده محاسبه شود
+            "host": self.host,
+            "port": self.port
+        }
+
+    async def stop(self):
+        """توقف سرور P2P"""
+        if self.server:
+            self.server.close()
+            await self.server.wait_closed()
+            print("🔗 P2P Node stopped.")
 
     async def connect_to_peer(self, host: str, port: int):
         """

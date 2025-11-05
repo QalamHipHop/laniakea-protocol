@@ -18,7 +18,7 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 
 from fastapi import FastAPI, Body, HTTPException
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -84,6 +84,10 @@ app = FastAPI(
     version="0.0.1",
     description="A cosmic computational organism with advanced features"
 )
+
+# سرویس‌دهی فایل‌های استاتیک (مانند CSS و JS)
+# فرض می‌کنیم فایل‌های استاتیک در پوشه web/static قرار دارند.
+app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "web" / "static")), name="static")
 
 # اضافه کردن CORS middleware
 app.add_middleware(
@@ -414,19 +418,64 @@ async def generate_task(task_params: dict = Body(...)):
 # Web Interface
 # ============================================================================
 
-# Mount static files
-web_dir = Path(__file__).parent / "web"
-if web_dir.exists():
-    app.mount("/web", StaticFiles(directory=str(web_dir)), name="web")
 
-@app.get("/ui")
+
+@app.get("/", response_class=HTMLResponse)
 async def serve_ui():
-    """سرو رابط کاربری وب"""
-    ui_file = web_dir / "index.html"
+    """سرو رابط کاربری وب (index.html)"""
+    ui_file = Path("web/index.html")
     if ui_file.exists():
         return FileResponse(ui_file)
+    
+    # در صورت عدم وجود index.html، یک پیام خطا برگردان
+    return HTMLResponse("<h1>خطا: فایل web/index.html پیدا نشد.</h1>", status_code=500)
+
+
+@app.get("/api/stats")
+async def get_node_stats():
+    """دریافت آمار زنده نود برای به‌روزرسانی UI"""
+    
+    # برای جلوگیری از خطای AttributeError در صورتی که initialize_node هنوز کامل نشده باشد
+    if not hasattr(app_state, 'blockchain') or not app_state.blockchain:
+        blockchain_stats = {"length": 0, "total_value_created": {"knowledge": 0.0}}
     else:
-        return {"message": "UI not available", "note": "Run from project root"}
+        blockchain_stats = app_state.blockchain.get_chain_stats()
+        
+    if not hasattr(app_state, 'p2p_manager') or not app_state.p2p_manager:
+        network_stats = {"connected_peers": 0, "tps": 0.0}
+    else:
+        network_stats = app_state.p2p_manager.get_network_stats()
+        
+    # اطمینان از اینکه app_state.cognitive_core مقداردهی شده است
+    active_tasks = app_state.cognitive_core.get_task_count() if hasattr(app_state, 'cognitive_core') and app_state.cognitive_core else 0
+    
+    blockchain_data = {
+        "chain_length": blockchain_stats.get("length", 0),
+        "total_value": blockchain_stats.get("total_value_created", {}).get("knowledge", 0.0), # فقط دانش را برای نمایش می‌گیریم
+        "active_tasks": active_tasks,
+    }
+    network_data = {
+        "peer_count": network_stats.get("connected_peers", 0),
+        "tps": network_stats.get("tps", 0.0),
+    }
+    
+    node_info = {
+        "node_id": app_state.node_info.node_id if app_state.node_info else "N/A",
+        "is_authority": app_state.node_info.is_authority if app_state.node_info else False,
+        "p2p_port": app_state.p2p_port,
+        "api_port": app_state.api_port,
+    }
+    
+    return {
+        "blockchain": blockchain_data,
+        "network": network_data,
+        "node_info": node_info,
+    }
+
+# حذف تابع serve_ui قدیمی که داشبورد زنده را تولید می‌کرد
+# @app.get("/ui", response_class=HTMLResponse)
+# async def serve_live_dashboard():
+#     ...)
 
 
 # ============================================================================
@@ -456,14 +505,14 @@ async def initialize_node(p2p_port: int, api_port: int, enable_simulation: bool 
         p2p_port=p2p_port,
         api_port=api_port,
         is_authority=is_authority(node_id),
-        specialty=NodeSpecialty.GENERALIST
+        specialties={NodeSpecialty.GENERALIST}
     )
 
     print(f"📍 Node ID: {node_id[:16]}...")
     print(f"🔑 Authority: {app_state.node_info.is_authority}")
 
     # 3. راه‌اندازی بلاک‌چین
-    app_state.blockchain = LaniakeaChain()
+    app_state.blockchain = LaniakeaChain(app_state.node_info.node_id)
     
     # 4. راه‌اندازی سیستم‌های پیشرفته
     app_state.hash_modernity = HashModernityEngine()
@@ -476,7 +525,7 @@ async def initialize_node(p2p_port: int, api_port: int, enable_simulation: bool 
         app_state.cosmic_simulator = CosmicSimulator()
     
     # 5. راه‌اندازی شبکه P2P
-    bootstrap_nodes = get_bootstrap_nodes(p2p_port)
+    bootstrap_nodes = get_bootstrap_nodes()
     app_state.p2p_manager = P2PManager(
         host=HOST,
         port=p2p_port,
@@ -520,17 +569,25 @@ def main():
     
     args = parser.parse_args()
 
-    # راه‌اندازی نود
-    asyncio.run(initialize_node(args.p2p_port, args.api_port, args.enable_simulation))
-
     # راه‌اندازی API server
-    uvicorn.run(
-        app,
-        host=HOST,
-        port=args.api_port,
-        log_level="info"
-    )
+    # uvicorn.run باید در یک thread جداگانه اجرا شود تا asyncio.run بتواند اجرا شود.
+    # اما چون uvicorn خودش یک حلقه رویداد را اجرا می‌کند، باید initialize_node را به صورت async اجرا کنیم.
+    
+    async def start_node_and_server():
+        # 1. راه‌اندازی نود (بخش‌های ناهمزمان)
+        await initialize_node(args.p2p_port, args.api_port, args.enable_simulation)
+        
+        # 2. راه‌اندازی سرور uvicorn
+        config = uvicorn.Config(
+            app,
+            host=HOST,
+            port=args.api_port,
+            log_level="info"
+        )
+        server = uvicorn.Server(config)
+        await server.serve()
 
-
+    # اجرای کل سیستم در حلقه رویداد
+    asyncio.run(start_node_and_server())
 if __name__ == "__main__":
     main()

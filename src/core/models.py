@@ -141,6 +141,7 @@ class NodeSpecialty(str, Enum):
     SIMULATION = "simulation"  # شبیه‌سازی
     AI_INFERENCE = "ai_inference"  # استنتاج AI
     GOVERNANCE = "governance" # حکمرانی و رأی‌گیری
+    GENERALIST = "generalist" # نود عمومی بدون تخصص خاص
 
 
 class NodeInfo(BaseModel):
@@ -149,6 +150,7 @@ class NodeInfo(BaseModel):
     host: str = Field(..., description="آدرس هاست")
     p2p_port: int = Field(..., description="پورت P2P")
     api_port: int = Field(..., description="پورت API")
+    is_authority: bool = Field(default=False, description="آیا نود یک authority است؟")
     specialties: Set[NodeSpecialty] = Field(
         default_factory=set,
         description="تخصص‌های نود"

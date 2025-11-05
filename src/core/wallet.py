@@ -25,12 +25,30 @@ class Wallet:
 
         # بارگذاری یا ایجاد کلید خصوصی
         if os.path.exists(wallet_file):
+            try:
                 with open(wallet_file, "rb") as f:
+                    # تلاش برای بارگذاری با رمز عبور
                     self.private_key = serialization.load_pem_private_key(
                         f.read(),
                         password=b"Laniakea_Protocol_Secret_Key"
                     )
-            print(f"🔓 Wallet loaded from {wallet_file}")
+                print(f"🔓 Wallet loaded from {wallet_file} (Encrypted)")
+            except ValueError:
+                # اگر رمزگذاری نشده باشد، بدون رمز عبور بارگذاری کن
+                with open(wallet_file, "rb") as f:
+                    self.private_key = serialization.load_pem_private_key(
+                        f.read(),
+                        password=None
+                    )
+                print(f"🔓 Wallet loaded from {wallet_file} (Unencrypted)")
+            except TypeError:
+                # اگر رمزگذاری نشده باشد، بدون رمز عبور بارگذاری کن
+                with open(wallet_file, "rb") as f:
+                    self.private_key = serialization.load_pem_private_key(
+                        f.read(),
+                        password=None
+                    )
+                print(f"🔓 Wallet loaded from {wallet_file} (Unencrypted - Recovered)")
         else:
             # ایجاد کلید جدید
             self.private_key = ec.generate_private_key(ec.SECP256R1())

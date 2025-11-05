@@ -1,18 +1,34 @@
+[
+[
+[
+[
+[
 {
-  "version": "0.0.1",
-  "timestamp": "2025-11-04T08:49:47.028533",
+  "version": "0.0.2",
+  "timestamp": "2025-11-04T19:46:01.468053",
   "project_stats": {
-    "total_files": 48,
-    "total_lines": 9624,
-    "avg_complexity": 11.270833333333334,
+    "total_files": 52,
+    "total_lines": 10170,
+    "avg_complexity": 10.942307692307692,
+    "total_value_created": 749.9434331829426,
     "files": [
       {
-        "filepath": "/home/ubuntu/laniakea-protocol/test_system.py",
-        "lines": 330,
-        "functions": 13,
+        "filepath": "/home/ubuntu/laniakea-protocol/main.py",
+        "lines": 545,
+        "functions": 2,
         "classes": 1,
-        "complexity_score": 11,
-        "hash": "b842b294e0d0f72d30066e901fe1d213666adc81f9653cb44f892b8cd0711b9c"
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 3.0405241107281262,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.95,
+          "ethical_alignment": 4.532116035625758
+        },
+        "hash": "b1b1192b71dc706271ae3e24be3aa60f0208322af33185ec2ec82d49544efecf"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/self_evolution_loop.py",
@@ -20,15 +36,53 @@
         "functions": 1,
         "classes": 0,
         "complexity_score": 10,
+        "value_vector": {
+          "knowledge": 3.26,
+          "computation": 2.0,
+          "originality": 4.584376709773286,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.63,
+          "ethical_alignment": 4.7166804941970355
+        },
         "hash": "f3f648e1ebd3f1aacccec292cb23c81472436ffcf8d46c46241f0adcc102debb"
       },
       {
-        "filepath": "/home/ubuntu/laniakea-protocol/main.py",
-        "lines": 530,
-        "functions": 2,
+        "filepath": "/home/ubuntu/laniakea-protocol/test_system.py",
+        "lines": 330,
+        "functions": 13,
         "classes": 1,
-        "complexity_score": 31,
-        "hash": "caab9231a226f64de1975f20d20fae7b1374be6ca36fa6ebc950b7bceb31eda9"
+        "complexity_score": 11,
+        "value_vector": {
+          "knowledge": 7.699999999999999,
+          "computation": 2.2,
+          "originality": 2.7729501210476784,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 3.8499999999999996,
+          "ethical_alignment": 2.452484381106068
+        },
+        "hash": "b842b294e0d0f72d30066e901fe1d213666adc81f9653cb44f892b8cd0711b9c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/analysis/value_vector_analysis.py",
+        "lines": 152,
+        "functions": 8,
+        "classes": 1,
+        "complexity_score": 4,
+        "value_vector": {
+          "knowledge": 3.44,
+          "computation": 0.8,
+          "originality": 0.18050376624574593,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.72,
+          "ethical_alignment": 4.685695346125916
+        },
+        "hash": "452df4d7633516aff692f0b818291aecdfe75e0577b673e31eb9a0da13e2dd79"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/core/cell/init.py",
@@ -36,6 +90,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.6644161381776112,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 0.11647618219462696
+        },
         "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       {
@@ -44,15 +108,35 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.5631144825093184,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 3.2163228991266686
+        },
         "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/config.py",
-        "lines": 67,
+        "lines": 74,
         "functions": 2,
         "classes": 0,
-        "complexity_score": 4,
-        "hash": "d7e78ed265652ba851334df53a1c482557faa3f7e2afc3836639be54b44e9214"
+        "complexity_score": 5,
+        "value_vector": {
+          "knowledge": 1.98,
+          "computation": 1.0,
+          "originality": 3.8825119585800034,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.99,
+          "ethical_alignment": 3.5111045618385135
+        },
+        "hash": "10b51881f76a4eb097093f2125d37ef9c879ff5a1b2d9cdda89f6c6ce021f71a"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/__init__.py",
@@ -60,15 +144,17 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.30000000000000004,
+          "computation": 0.2,
+          "originality": 1.9354800787561417,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.15000000000000002,
+          "ethical_alignment": 2.5363281843782906
+        },
         "hash": "340e78b229828379760e03fe056f89ba43d5832e2bfb44e91caaefd46a7f96c7"
-      },
-      {
-        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/pov.py",
-        "lines": 43,
-        "functions": 2,
-        "classes": 1,
-        "complexity_score": 2,
-        "hash": "534171a6f2292988b2889a19d4bbf9fbd809f9f9b6e06a93047750e0aba40fd2"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/poa.py",
@@ -76,7 +162,35 @@
         "functions": 2,
         "classes": 1,
         "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 1.06,
+          "computation": 0.4,
+          "originality": 1.0792466151824702,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.53,
+          "ethical_alignment": 3.338860969742657
+        },
         "hash": "ce1b23832e66a79faf274e680adb3cca8fa0d34ac44204e140abadb512debeaa"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/pov.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 1.06,
+          "computation": 0.4,
+          "originality": 2.866352893401526,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.53,
+          "ethical_alignment": 0.1662221907310768
+        },
+        "hash": "534171a6f2292988b2889a19d4bbf9fbd809f9f9b6e06a93047750e0aba40fd2"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/core/__init__.py",
@@ -84,31 +198,71 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.2688726573556224,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.696610526099143
+        },
         "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/core/blockchain.py",
-        "lines": 263,
+        "lines": 280,
         "functions": 16,
         "classes": 1,
-        "complexity_score": 25,
-        "hash": "c74da9273f6f25b30d0393fc77162e2a86898ab4196cd4e838c4cc30bfff0256"
+        "complexity_score": 26,
+        "value_vector": {
+          "knowledge": 8.2,
+          "computation": 5.2,
+          "originality": 4.287866234003305,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.1,
+          "ethical_alignment": 0.717670124973257
+        },
+        "hash": "26563b8a56a358721fa53c9a03ab4fdbe4733f31458cf308433242162d7a6a62"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/core/hash_modernity.py",
-        "lines": 332,
-        "functions": 14,
+        "lines": 249,
+        "functions": 11,
         "classes": 2,
-        "complexity_score": 8,
-        "hash": "4182b7a8386f43f04262f32387f91a258b5e0ae852d7fd161738917b4820ee0f"
+        "complexity_score": 6,
+        "value_vector": {
+          "knowledge": 5.58,
+          "computation": 1.2,
+          "originality": 1.1892253204280645,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.79,
+          "ethical_alignment": 0.13610151981499397
+        },
+        "hash": "302a10339be31ed490d3f7a76a3906e4b69296b2058e70e98fd6a359dd0dbdb4"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/core/models.py",
-        "lines": 214,
+        "lines": 218,
         "functions": 2,
         "classes": 13,
         "complexity_score": 1,
-        "hash": "04d568698d462c5e520b6a0ba9e293da008ae420a52e9f329a90ff46d67e70ce"
+        "value_vector": {
+          "knowledge": 4.46,
+          "computation": 0.2,
+          "originality": 2.0278100772158303,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.23,
+          "ethical_alignment": 2.549423830686068
+        },
+        "hash": "c45bad32bab43c8b0e75776d75e88cd4edc7afa787fe4091864dca5cc3598be6"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/core/token_system.py",
@@ -116,15 +270,35 @@
         "functions": 17,
         "classes": 3,
         "complexity_score": 20,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.0,
+          "originality": 1.9516251176383026,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.05,
+          "ethical_alignment": 1.6940491850669748
+        },
         "hash": "08aadae9f5861060f9dbff755da4fa3617aefe8c5eeb343e016fc2f4527e95a7"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/core/wallet.py",
-        "lines": 136,
+        "lines": 154,
         "functions": 6,
         "classes": 1,
-        "complexity_score": 3,
-        "hash": "aa9cf908a718c4d3cfa995fa4a0f2eec65c9cf29ed11d429e3e12c2f7b60fcdc"
+        "complexity_score": 9,
+        "value_vector": {
+          "knowledge": 3.98,
+          "computation": 1.8,
+          "originality": 2.224238333321329,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.99,
+          "ethical_alignment": 1.7076901042421007
+        },
+        "hash": "1ce2a7c102e785ea814ef74fd8f5553e0b97455ef23ddbb25c94a53497c446f1"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/__init__.py",
@@ -132,6 +306,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.22,
+          "computation": 0.2,
+          "originality": 1.107507809656973,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.11,
+          "ethical_alignment": 2.9302732663216386
+        },
         "hash": "fc48a2305ca4bf90a6bfaa6fae85c0677c7df396cd1c38bfac79e28f11cc96f7"
       },
       {
@@ -140,7 +324,53 @@
         "functions": 8,
         "classes": 2,
         "complexity_score": 7,
+        "value_vector": {
+          "knowledge": 4.3,
+          "computation": 1.4,
+          "originality": 4.1527347674594415,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.15,
+          "ethical_alignment": 1.2134181689394374
+        },
         "hash": "e34a933b16cb296c2ff38601eb12f866241d38627f60d91ebaaceea95cd40d09"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/__init__.py",
+        "lines": 27,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.64,
+          "computation": 0.2,
+          "originality": 4.176437260987903,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.32,
+          "ethical_alignment": 0.8255145633229388
+        },
+        "hash": "6e0f53b303274a6d93e16754d83cc513654dd9c8d00468ff3a05b630792d5d9a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/api_integrations.py",
+        "lines": 399,
+        "functions": 11,
+        "classes": 7,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 1.5688372001815059,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.49,
+          "ethical_alignment": 2.869650210470549
+        },
+        "hash": "45ce36e168818da299b5ebdcb75d13bf72b86a6927a74c2f1c6e55a44e1089d5"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/governance/__init__.py",
@@ -148,6 +378,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.56,
+          "computation": 0.2,
+          "originality": 0.6504854881296485,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.28,
+          "ethical_alignment": 1.6682666875039671
+        },
         "hash": "afdfc837d7242d32eb52aa665e2ed88f0d65022818e8a40cdd67b3ef5784bf1c"
       },
       {
@@ -156,6 +396,16 @@
         "functions": 17,
         "classes": 6,
         "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 1.670574511229509,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.34,
+          "ethical_alignment": 1.9041707408391584
+        },
         "hash": "da813d9d5173ea62b6696bd7529492fc1b900a2014bd56e2025656a4d0742e58"
       },
       {
@@ -164,6 +414,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.56,
+          "computation": 0.2,
+          "originality": 0.003694753119516392,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.28,
+          "ethical_alignment": 4.96325627285788
+        },
         "hash": "c12ab437cd94ad7c0f78d0c7302d79d0b0cd5d65359eceaa84c3103b4b5a4424"
       },
       {
@@ -172,6 +432,16 @@
         "functions": 16,
         "classes": 6,
         "complexity_score": 34,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.8,
+          "originality": 4.6951009205037515,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.26,
+          "ethical_alignment": 4.330097175560686
+        },
         "hash": "432ecaf37842c23b67f76ae3cc3c6332664a1f97ed68315f394154c50947843a"
       },
       {
@@ -180,7 +450,53 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.7999999999999999,
+          "computation": 0.2,
+          "originality": 2.3021775961205653,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.39999999999999997,
+          "ethical_alignment": 4.179478323896088
+        },
         "hash": "b2b73b6f48b962d38c3aa247c03e4c3872e5758b538e84a86a8dc4e8f871d7cf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_api.py",
+        "lines": 154,
+        "functions": 4,
+        "classes": 2,
+        "complexity_score": 12,
+        "value_vector": {
+          "knowledge": 4.28,
+          "computation": 2.4,
+          "originality": 1.9071964089562004,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.14,
+          "ethical_alignment": 1.7585852025842978
+        },
+        "hash": "06861677ccde502fb5b72d3062ade851451f1c8864823828898851d3b9f92c9d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_worker.py",
+        "lines": 122,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 11,
+        "value_vector": {
+          "knowledge": 3.54,
+          "computation": 2.2,
+          "originality": 0.7671591491985785,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.77,
+          "ethical_alignment": 3.375293107171444
+        },
+        "hash": "ef719eb22dd34887e8826217204beb4391af679e7970317a644f68e21e9df342"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ml_system.py",
@@ -188,6 +504,16 @@
         "functions": 26,
         "classes": 6,
         "complexity_score": 17,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 3.4,
+          "originality": 3.9194945254104585,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.699999999999999,
+          "ethical_alignment": 0.5435163074900085
+        },
         "hash": "b7f6e63810d6b510e643a4fdf65cc4511f314f6c0d68b4cbfba43e673d8555e8"
       },
       {
@@ -196,23 +522,35 @@
         "functions": 15,
         "classes": 3,
         "complexity_score": 26,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.2,
+          "originality": 2.514228628941748,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.07,
+          "ethical_alignment": 4.977951681145055
+        },
         "hash": "24c8d3b61c9ce8ecb8fe339f45613a245509d016c62fb110c1f732baf4250e06"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/self_evolution.py",
-        "lines": 192,
-        "functions": 3,
+        "lines": 322,
+        "functions": 5,
         "classes": 2,
-        "complexity_score": 14,
-        "hash": "510917db2f838b5b6475f20c075ec3f1757db871162bd081d43eb1d80d704382"
-      },
-      {
-        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_api.py",
-        "lines": 150,
-        "functions": 3,
-        "classes": 1,
-        "complexity_score": 11,
-        "hash": "7c1715329a77bc659d6f48b355902eb39b85520432dcc5e4aa5e7e1905b8276e"
+        "complexity_score": 27,
+        "value_vector": {
+          "knowledge": 9.14,
+          "computation": 5.4,
+          "originality": 4.903105951218381,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.57,
+          "ethical_alignment": 1.5982589054821361
+        },
+        "hash": "e1edbe3947854847bebb4be9b0d0c27b1edf8a635753fcdfe5ca94844c7ee7e7"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/__init__.py",
@@ -220,6 +558,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.9,
+          "computation": 0.2,
+          "originality": 3.3440209446506435,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.45,
+          "ethical_alignment": 3.0651320951055663
+        },
         "hash": "01ac31e977cda2c5ed05680b882f17b0564072dfeda1abf5b07aadc33ddc4b17"
       },
       {
@@ -228,6 +576,16 @@
         "functions": 27,
         "classes": 7,
         "complexity_score": 27,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.4,
+          "originality": 2.989355498736562,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.540000000000001,
+          "ethical_alignment": 3.015012526025673
+        },
         "hash": "8db7d1441b8e36e82942e6423f4f6295e7af2b72b9a34b4f9c276a3cf95acddf"
       },
       {
@@ -236,6 +594,16 @@
         "functions": 15,
         "classes": 4,
         "complexity_score": 35,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 7.0,
+          "originality": 1.1075270095747962,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.19,
+          "ethical_alignment": 2.197005750578207
+        },
         "hash": "4419aada0a2ac76b5f7f0cde4e72f872208b599bc629617b768436e2f927d5a7"
       },
       {
@@ -244,15 +612,35 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.962845003771518,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 1.3095348155880622
+        },
         "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/cognitive_core.py",
-        "lines": 397,
-        "functions": 11,
+        "lines": 380,
+        "functions": 10,
         "classes": 1,
-        "complexity_score": 16,
-        "hash": "93d3f1f536f96bed302f004373e7ceba60c9a040bf1da4ffc8ff5261abd39e69"
+        "complexity_score": 18,
+        "value_vector": {
+          "knowledge": 9.4,
+          "computation": 3.6,
+          "originality": 1.793753681739176,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.7,
+          "ethical_alignment": 1.9372707693380105
+        },
+        "hash": "bafcaf0453bba3d95e32fb854789e750261ebd1d5b7a7d410df49c048a300637"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/__init__.py",
@@ -260,6 +648,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.6,
+          "computation": 0.2,
+          "originality": 3.0193819368368837,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.3,
+          "ethical_alignment": 0.14866225010054857
+        },
         "hash": "b03359fea7066da01afaa5bc0739b0ffa299c2f0fea541edf9ef254ab4fa5327"
       },
       {
@@ -268,6 +666,16 @@
         "functions": 31,
         "classes": 7,
         "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 3.3324929427511623,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.47,
+          "ethical_alignment": 1.2390249004493348
+        },
         "hash": "67e362ddaed5a42db6a8c7cfdbddfe385235e6479df82153890869f908387c9b"
       },
       {
@@ -276,6 +684,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 0.5547716613361109,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 3.5377934930008115
+        },
         "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       {
@@ -284,6 +702,16 @@
         "functions": 22,
         "classes": 6,
         "complexity_score": 20,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.0,
+          "originality": 1.3343701225543236,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.15,
+          "ethical_alignment": 1.0107195206863566
+        },
         "hash": "b2592ef5271f2d2c1013826cb575bc9f71d3a522ebb9d447538c622c6badce4b"
       },
       {
@@ -292,6 +720,16 @@
         "functions": 2,
         "classes": 1,
         "complexity_score": 7,
+        "value_vector": {
+          "knowledge": 3.24,
+          "computation": 1.4,
+          "originality": 1.9690586267868166,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.62,
+          "ethical_alignment": 1.5884364964263904
+        },
         "hash": "04fece71c6e2a1e2c99eaf004e9b8cfe9896d52286bda92cc8cc1504201fc8a4"
       },
       {
@@ -300,6 +738,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.7391474650457854,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 1.742715134695093
+        },
         "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       {
@@ -308,6 +756,16 @@
         "functions": 7,
         "classes": 5,
         "complexity_score": 10,
+        "value_vector": {
+          "knowledge": 7.2,
+          "computation": 2.0,
+          "originality": 3.92616480340147,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 3.6,
+          "ethical_alignment": 4.886951378438776
+        },
         "hash": "b40f47bca210c04fcdb187d6ebd70f93b3a55dc69b15dd259c46d1abba200869"
       },
       {
@@ -316,6 +774,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.691537695125859,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 2.556728874792764
+        },
         "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       {
@@ -324,6 +792,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.6,
+          "computation": 0.2,
+          "originality": 3.189349826007988,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.3,
+          "ethical_alignment": 0.7853927804560273
+        },
         "hash": "9c9a93ed227466df678051cd7e08ff182daa34e33f16224ffd1dca273ecd536c"
       },
       {
@@ -332,7 +810,53 @@
         "functions": 34,
         "classes": 7,
         "complexity_score": 32,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.4,
+          "originality": 4.2482560541030425,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.42,
+          "ethical_alignment": 0.4598390708167299
+        },
         "hash": "2f03db8922d166ecdc3bc6299a7434545886a5f640b8200659d301c009dd700c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/__init__.py",
+        "lines": 21,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.52,
+          "computation": 0.2,
+          "originality": 1.651280686320196,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.26,
+          "ethical_alignment": 4.57199134721278
+        },
+        "hash": "19ce71958811ae5c2f2f9ba41c23b18fe3bcff87f23f1a2e6e7f718dbdc49a4d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/reputation_system.py",
+        "lines": 402,
+        "functions": 18,
+        "classes": 5,
+        "complexity_score": 25,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.0,
+          "originality": 4.094697274346838,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.27,
+          "ethical_alignment": 4.519919804332996
+        },
+        "hash": "72af4e59060f3461f5a1483641b6a6e6d760c78ccf080781b25e3d43f8541646"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/__init__.py",
@@ -340,6 +864,16 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.28,
+          "computation": 0.2,
+          "originality": 4.684706573933248,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.14,
+          "ethical_alignment": 3.2836483308854896
+        },
         "hash": "5a7a2c18c83dc7562a809f76550743a90b1b62f1ec07ebbf0b87ee0abc95cfd0"
       },
       {
@@ -348,39 +882,17 @@
         "functions": 20,
         "classes": 3,
         "complexity_score": 22,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.4,
+          "originality": 3.2300978410125487,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.4,
+          "ethical_alignment": 3.7006517458994064
+        },
         "hash": "2f6115e85144e2ba152d3f443c8f365d0598b2e3bf5c278c96a7e425bce8d793"
-      },
-      {
-        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/reputation_system.py",
-        "lines": 402,
-        "functions": 18,
-        "classes": 5,
-        "complexity_score": 25,
-        "hash": "72af4e59060f3461f5a1483641b6a6e6d760c78ccf080781b25e3d43f8541646"
-      },
-      {
-        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/__init__.py",
-        "lines": 21,
-        "functions": 0,
-        "classes": 0,
-        "complexity_score": 1,
-        "hash": "19ce71958811ae5c2f2f9ba41c23b18fe3bcff87f23f1a2e6e7f718dbdc49a4d"
-      },
-      {
-        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/api_integrations.py",
-        "lines": 549,
-        "functions": 8,
-        "classes": 7,
-        "complexity_score": 42,
-        "hash": "59d087848effdfb54e81ad1314888452c45ecf1d9caff65a34e919412e834992"
-      },
-      {
-        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/__init__.py",
-        "lines": 27,
-        "functions": 0,
-        "classes": 0,
-        "complexity_score": 1,
-        "hash": "601dbff790ab5198a3bbaa9680ab0b6befedc13c31d34e9cad87d2e5e6169a7a"
       },
       {
         "filepath": "/home/ubuntu/laniakea-protocol/tests/__init__.py",
@@ -388,11 +900,3924 @@
         "functions": 0,
         "classes": 0,
         "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 4.426266827002058,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 0.12460445972492962
+        },
         "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/test_api_and_pov.py",
+        "lines": 152,
+        "functions": 3,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 3.24,
+          "computation": 0.4,
+          "originality": 4.004628776448032,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.62,
+          "ethical_alignment": 3.476290385256178
+        },
+        "hash": "c19b954d8efbfdc60de3cf319e4159b4a95fd7878c5874e47f7ba70926422cd4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/test_full_protocol.py",
+        "lines": 175,
+        "functions": 1,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 3.7,
+          "computation": 0.4,
+          "originality": 4.564606494819624,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.85,
+          "ethical_alignment": 2.508372771814462
+        },
+        "hash": "4345c953a6548f0f79514ff73393c14462c8d3dd3bafec1e3e4d9cb53f5014b3"
       }
     ],
-    "timestamp": "2025-11-04T08:49:24.511124"
+    "timestamp": "2025-11-04T19:45:38.048797"
   },
-  "suggestions": [],
+  "suggestions": [
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/marketplace/knowledge_market.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    },
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/quantum/quantum_system.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    },
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/governance/dao.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    }
+  ],
+  "applied_improvements": []
+},
+{
+  "version": "0.0.2",
+  "timestamp": "2025-11-04T19:47:37.931127",
+  "project_stats": {
+    "total_files": 52,
+    "total_lines": 10189,
+    "avg_complexity": 10.942307692307692,
+    "total_value_created": 751.6994788772022,
+    "files": [
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/main.py",
+        "lines": 564,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 4.195346823715504,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 7.14,
+          "ethical_alignment": 0.5406631319401711
+        },
+        "hash": "badd8ad175a9f183acf96a9b80bb81fd9b228d00d55ad183a8eca2682b846fc1"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/self_evolution_loop.py",
+        "lines": 113,
+        "functions": 1,
+        "classes": 0,
+        "complexity_score": 10,
+        "value_vector": {
+          "knowledge": 3.26,
+          "computation": 2.0,
+          "originality": 0.38684999369630213,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.63,
+          "ethical_alignment": 2.420288676910988
+        },
+        "hash": "f3f648e1ebd3f1aacccec292cb23c81472436ffcf8d46c46241f0adcc102debb"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/test_system.py",
+        "lines": 330,
+        "functions": 13,
+        "classes": 1,
+        "complexity_score": 11,
+        "value_vector": {
+          "knowledge": 7.699999999999999,
+          "computation": 2.2,
+          "originality": 1.3817774207182514,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 3.8499999999999996,
+          "ethical_alignment": 3.069832695461887
+        },
+        "hash": "b842b294e0d0f72d30066e901fe1d213666adc81f9653cb44f892b8cd0711b9c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/analysis/value_vector_analysis.py",
+        "lines": 152,
+        "functions": 8,
+        "classes": 1,
+        "complexity_score": 4,
+        "value_vector": {
+          "knowledge": 3.44,
+          "computation": 0.8,
+          "originality": 1.1054656401381935,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.72,
+          "ethical_alignment": 1.8451332680381205
+        },
+        "hash": "452df4d7633516aff692f0b818291aecdfe75e0577b673e31eb9a0da13e2dd79"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/core/cell/init.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.866223680281196,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 1.8846376451585245
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.7089344246482465,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 2.4307841098602347
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/config.py",
+        "lines": 74,
+        "functions": 2,
+        "classes": 0,
+        "complexity_score": 5,
+        "value_vector": {
+          "knowledge": 1.98,
+          "computation": 1.0,
+          "originality": 1.9508568496265688,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.99,
+          "ethical_alignment": 0.9840795406855996
+        },
+        "hash": "10b51881f76a4eb097093f2125d37ef9c879ff5a1b2d9cdda89f6c6ce021f71a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/__init__.py",
+        "lines": 10,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.30000000000000004,
+          "computation": 0.2,
+          "originality": 4.206786298849879,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.15000000000000002,
+          "ethical_alignment": 4.918398739462235
+        },
+        "hash": "340e78b229828379760e03fe056f89ba43d5832e2bfb44e91caaefd46a7f96c7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/poa.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 1.06,
+          "computation": 0.4,
+          "originality": 4.556382661279347,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.53,
+          "ethical_alignment": 1.6375787615300803
+        },
+        "hash": "ce1b23832e66a79faf274e680adb3cca8fa0d34ac44204e140abadb512debeaa"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/pov.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 1.06,
+          "computation": 0.4,
+          "originality": 2.9386819731108615,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.53,
+          "ethical_alignment": 1.2933329993389946
+        },
+        "hash": "534171a6f2292988b2889a19d4bbf9fbd809f9f9b6e06a93047750e0aba40fd2"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.4081232379355675,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 2.261339254095132
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/blockchain.py",
+        "lines": 280,
+        "functions": 16,
+        "classes": 1,
+        "complexity_score": 26,
+        "value_vector": {
+          "knowledge": 8.2,
+          "computation": 5.2,
+          "originality": 4.789787558354599,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.1,
+          "ethical_alignment": 1.8560725086649121
+        },
+        "hash": "26563b8a56a358721fa53c9a03ab4fdbe4733f31458cf308433242162d7a6a62"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/hash_modernity.py",
+        "lines": 249,
+        "functions": 11,
+        "classes": 2,
+        "complexity_score": 6,
+        "value_vector": {
+          "knowledge": 5.58,
+          "computation": 1.2,
+          "originality": 0.3502647056809699,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.79,
+          "ethical_alignment": 3.738391392416658
+        },
+        "hash": "302a10339be31ed490d3f7a76a3906e4b69296b2058e70e98fd6a359dd0dbdb4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/models.py",
+        "lines": 218,
+        "functions": 2,
+        "classes": 13,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 4.46,
+          "computation": 0.2,
+          "originality": 0.6446581875622504,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.23,
+          "ethical_alignment": 4.895492812213339
+        },
+        "hash": "c45bad32bab43c8b0e75776d75e88cd4edc7afa787fe4091864dca5cc3598be6"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/token_system.py",
+        "lines": 405,
+        "functions": 17,
+        "classes": 3,
+        "complexity_score": 20,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.0,
+          "originality": 3.2610355938782956,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.05,
+          "ethical_alignment": 2.568052854208223
+        },
+        "hash": "08aadae9f5861060f9dbff755da4fa3617aefe8c5eeb343e016fc2f4527e95a7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/wallet.py",
+        "lines": 154,
+        "functions": 6,
+        "classes": 1,
+        "complexity_score": 9,
+        "value_vector": {
+          "knowledge": 3.98,
+          "computation": 1.8,
+          "originality": 2.4868146517896856,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.99,
+          "ethical_alignment": 1.5531584993882737
+        },
+        "hash": "1ce2a7c102e785ea814ef74fd8f5553e0b97455ef23ddbb25c94a53497c446f1"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/__init__.py",
+        "lines": 6,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.22,
+          "computation": 0.2,
+          "originality": 1.583737041125079,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.11,
+          "ethical_alignment": 4.282360209986896
+        },
+        "hash": "fc48a2305ca4bf90a6bfaa6fae85c0677c7df396cd1c38bfac79e28f11cc96f7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/live_dashboard.py",
+        "lines": 180,
+        "functions": 8,
+        "classes": 2,
+        "complexity_score": 7,
+        "value_vector": {
+          "knowledge": 4.3,
+          "computation": 1.4,
+          "originality": 0.14552201940035425,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.15,
+          "ethical_alignment": 1.7292011684652886
+        },
+        "hash": "e34a933b16cb296c2ff38601eb12f866241d38627f60d91ebaaceea95cd40d09"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/__init__.py",
+        "lines": 27,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.64,
+          "computation": 0.2,
+          "originality": 4.13342652225978,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.32,
+          "ethical_alignment": 0.19212017792794356
+        },
+        "hash": "6e0f53b303274a6d93e16754d83cc513654dd9c8d00468ff3a05b630792d5d9a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/api_integrations.py",
+        "lines": 399,
+        "functions": 11,
+        "classes": 7,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 3.863408922194968,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.49,
+          "ethical_alignment": 3.514440708969651
+        },
+        "hash": "45ce36e168818da299b5ebdcb75d13bf72b86a6927a74c2f1c6e55a44e1089d5"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/governance/__init__.py",
+        "lines": 23,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.56,
+          "computation": 0.2,
+          "originality": 3.471498789630438,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.28,
+          "ethical_alignment": 4.332971485492125
+        },
+        "hash": "afdfc837d7242d32eb52aa665e2ed88f0d65022818e8a40cdd67b3ef5784bf1c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/governance/dao.py",
+        "lines": 484,
+        "functions": 17,
+        "classes": 6,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 2.0000169875810982,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.34,
+          "ethical_alignment": 3.1927208872621327
+        },
+        "hash": "da813d9d5173ea62b6696bd7529492fc1b900a2014bd56e2025656a4d0742e58"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/identity/__init__.py",
+        "lines": 23,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.56,
+          "computation": 0.2,
+          "originality": 1.0105509915251947,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.28,
+          "ethical_alignment": 2.4109268145142444
+        },
+        "hash": "c12ab437cd94ad7c0f78d0c7302d79d0b0cd5d65359eceaa84c3103b4b5a4424"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/identity/did_system.py",
+        "lines": 456,
+        "functions": 16,
+        "classes": 6,
+        "complexity_score": 34,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.8,
+          "originality": 2.7086766144329495,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.26,
+          "ethical_alignment": 0.25963648572968234
+        },
+        "hash": "432ecaf37842c23b67f76ae3cc3c6332664a1f97ed68315f394154c50947843a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/__init__.py",
+        "lines": 35,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.7999999999999999,
+          "computation": 0.2,
+          "originality": 0.3287210144801467,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.39999999999999997,
+          "ethical_alignment": 3.739076425414083
+        },
+        "hash": "b2b73b6f48b962d38c3aa247c03e4c3872e5758b538e84a86a8dc4e8f871d7cf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_api.py",
+        "lines": 154,
+        "functions": 4,
+        "classes": 2,
+        "complexity_score": 12,
+        "value_vector": {
+          "knowledge": 4.28,
+          "computation": 2.4,
+          "originality": 1.2940536563277782,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.14,
+          "ethical_alignment": 2.189614782367246
+        },
+        "hash": "06861677ccde502fb5b72d3062ade851451f1c8864823828898851d3b9f92c9d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_worker.py",
+        "lines": 122,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 11,
+        "value_vector": {
+          "knowledge": 3.54,
+          "computation": 2.2,
+          "originality": 2.206909064571519,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.77,
+          "ethical_alignment": 1.9654122834718357
+        },
+        "hash": "ef719eb22dd34887e8826217204beb4391af679e7970317a644f68e21e9df342"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ml_system.py",
+        "lines": 485,
+        "functions": 26,
+        "classes": 6,
+        "complexity_score": 17,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 3.4,
+          "originality": 3.769588656787804,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.699999999999999,
+          "ethical_alignment": 4.706693042069204
+        },
+        "hash": "b7f6e63810d6b510e643a4fdf65cc4511f314f6c0d68b4cbfba43e673d8555e8"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/predictive_analytics.py",
+        "lines": 377,
+        "functions": 15,
+        "classes": 3,
+        "complexity_score": 26,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.2,
+          "originality": 1.7422301216991358,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.07,
+          "ethical_alignment": 3.764896096762753
+        },
+        "hash": "24c8d3b61c9ce8ecb8fe339f45613a245509d016c62fb110c1f732baf4250e06"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/self_evolution.py",
+        "lines": 322,
+        "functions": 5,
+        "classes": 2,
+        "complexity_score": 27,
+        "value_vector": {
+          "knowledge": 9.14,
+          "computation": 5.4,
+          "originality": 1.4507905500533247,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.57,
+          "ethical_alignment": 0.12532194104419636
+        },
+        "hash": "e1edbe3947854847bebb4be9b0d0c27b1edf8a635753fcdfe5ca94844c7ee7e7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/__init__.py",
+        "lines": 40,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.9,
+          "computation": 0.2,
+          "originality": 0.3355981542791414,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.45,
+          "ethical_alignment": 3.0361169413182547
+        },
+        "hash": "01ac31e977cda2c5ed05680b882f17b0564072dfeda1abf5b07aadc33ddc4b17"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/exchange.py",
+        "lines": 519,
+        "functions": 27,
+        "classes": 7,
+        "complexity_score": 27,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.4,
+          "originality": 4.724909703671468,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.540000000000001,
+          "ethical_alignment": 0.19837995684257037
+        },
+        "hash": "8db7d1441b8e36e82942e6423f4f6295e7af2b72b9a34b4f9c276a3cf95acddf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/knowledge_market.py",
+        "lines": 444,
+        "functions": 15,
+        "classes": 4,
+        "complexity_score": 35,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 7.0,
+          "originality": 0.6071345973987635,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.19,
+          "ethical_alignment": 3.2229734231040115
+        },
+        "hash": "4419aada0a2ac76b5f7f0cde4e72f872208b599bc629617b768436e2f927d5a7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.7265234719585503,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.674550628857202
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/cognitive_core.py",
+        "lines": 380,
+        "functions": 10,
+        "classes": 1,
+        "complexity_score": 18,
+        "value_vector": {
+          "knowledge": 9.4,
+          "computation": 3.6,
+          "originality": 0.37030179864402046,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.7,
+          "ethical_alignment": 2.2565310399622494
+        },
+        "hash": "bafcaf0453bba3d95e32fb854789e750261ebd1d5b7a7d410df49c048a300637"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/__init__.py",
+        "lines": 25,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.6,
+          "computation": 0.2,
+          "originality": 3.7989430802951967,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.3,
+          "ethical_alignment": 3.4055005602758315
+        },
+        "hash": "b03359fea7066da01afaa5bc0739b0ffa299c2f0fea541edf9ef254ab4fa5327"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/world.py",
+        "lines": 497,
+        "functions": 31,
+        "classes": 7,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 2.3355103234802463,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.47,
+          "ethical_alignment": 4.776295520711815
+        },
+        "hash": "67e362ddaed5a42db6a8c7cfdbddfe385235e6479df82153890869f908387c9b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.1634534589555923,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.889829203818295
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/dht.py",
+        "lines": 415,
+        "functions": 22,
+        "classes": 6,
+        "complexity_score": 20,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.0,
+          "originality": 3.591255033128765,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.15,
+          "ethical_alignment": 4.513193935980874
+        },
+        "hash": "b2592ef5271f2d2c1013826cb575bc9f71d3a522ebb9d447538c622c6badce4b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/p2p.py",
+        "lines": 127,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 7,
+        "value_vector": {
+          "knowledge": 3.24,
+          "computation": 1.4,
+          "originality": 3.2198118756555183,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.62,
+          "ethical_alignment": 3.395371794775114
+        },
+        "hash": "04fece71c6e2a1e2c99eaf004e9b8cfe9896d52286bda92cc8cc1504201fc8a4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/oracles/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 0.6201873469789249,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.26699763069497
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/oracles/oracle_system.py",
+        "lines": 310,
+        "functions": 7,
+        "classes": 5,
+        "complexity_score": 10,
+        "value_vector": {
+          "knowledge": 7.2,
+          "computation": 2.0,
+          "originality": 1.4582660768773081,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 3.6,
+          "ethical_alignment": 4.048066860599003
+        },
+        "hash": "b40f47bca210c04fcdb187d6ebd70f93b3a55dc69b15dd259c46d1abba200869"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/problems/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.729751847655023,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.040203689568274
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/quantum/__init__.py",
+        "lines": 25,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.6,
+          "computation": 0.2,
+          "originality": 4.893479366096998,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.3,
+          "ethical_alignment": 3.2566901885693893
+        },
+        "hash": "9c9a93ed227466df678051cd7e08ff182daa34e33f16224ffd1dca273ecd536c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/quantum/quantum_system.py",
+        "lines": 482,
+        "functions": 34,
+        "classes": 7,
+        "complexity_score": 32,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.4,
+          "originality": 3.8190433214211423,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.42,
+          "ethical_alignment": 1.6821401806865033
+        },
+        "hash": "2f03db8922d166ecdc3bc6299a7434545886a5f640b8200659d301c009dd700c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/__init__.py",
+        "lines": 21,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.52,
+          "computation": 0.2,
+          "originality": 1.125533526430193,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.26,
+          "ethical_alignment": 4.804222742969816
+        },
+        "hash": "19ce71958811ae5c2f2f9ba41c23b18fe3bcff87f23f1a2e6e7f718dbdc49a4d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/reputation_system.py",
+        "lines": 402,
+        "functions": 18,
+        "classes": 5,
+        "complexity_score": 25,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.0,
+          "originality": 4.466789489216019,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.27,
+          "ethical_alignment": 4.2300551268250866
+        },
+        "hash": "72af4e59060f3461f5a1483641b6a6e6d760c78ccf080781b25e3d43f8541646"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/__init__.py",
+        "lines": 9,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.28,
+          "computation": 0.2,
+          "originality": 0.001502584919566008,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.14,
+          "ethical_alignment": 1.6312863464781424
+        },
+        "hash": "5a7a2c18c83dc7562a809f76550743a90b1b62f1ec07ebbf0b87ee0abc95cfd0"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/cosmic_simulator.py",
+        "lines": 430,
+        "functions": 20,
+        "classes": 3,
+        "complexity_score": 22,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.4,
+          "originality": 0.37076913844171,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.4,
+          "ethical_alignment": 2.4593132991330573
+        },
+        "hash": "2f6115e85144e2ba152d3f443c8f365d0598b2e3bf5c278c96a7e425bce8d793"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.8896979013562807,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.825399207108213
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/test_api_and_pov.py",
+        "lines": 152,
+        "functions": 3,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 3.24,
+          "computation": 0.4,
+          "originality": 0.9827211890345322,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.62,
+          "ethical_alignment": 2.7075191313382136
+        },
+        "hash": "c19b954d8efbfdc60de3cf319e4159b4a95fd7878c5874e47f7ba70926422cd4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/test_full_protocol.py",
+        "lines": 175,
+        "functions": 1,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 3.7,
+          "computation": 0.4,
+          "originality": 2.718830003635764,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.85,
+          "ethical_alignment": 4.339078125868805
+        },
+        "hash": "4345c953a6548f0f79514ff73393c14462c8d3dd3bafec1e3e4d9cb53f5014b3"
+      }
+    ],
+    "timestamp": "2025-11-04T19:47:14.487980"
+  },
+  "suggestions": [
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/identity/did_system.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    },
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/marketplace/knowledge_market.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    },
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/intelligence/self_evolution.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    }
+  ],
+  "applied_improvements": []
+},
+{
+  "version": "0.0.2",
+  "timestamp": "2025-11-04T19:48:22.148916",
+  "project_stats": {
+    "total_files": 52,
+    "total_lines": 10189,
+    "avg_complexity": 10.942307692307692,
+    "total_value_created": 723.1466378369395,
+    "files": [
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/main.py",
+        "lines": 564,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 0.4013282430362891,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 7.14,
+          "ethical_alignment": 2.5954237300009764
+        },
+        "hash": "86bb96f6f84c3bcf2be9b18944481075057c6531f60e1b40a63cdd38bd578bec"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/self_evolution_loop.py",
+        "lines": 113,
+        "functions": 1,
+        "classes": 0,
+        "complexity_score": 10,
+        "value_vector": {
+          "knowledge": 3.26,
+          "computation": 2.0,
+          "originality": 2.5125662447477355,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.63,
+          "ethical_alignment": 2.469689797290754
+        },
+        "hash": "f3f648e1ebd3f1aacccec292cb23c81472436ffcf8d46c46241f0adcc102debb"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/test_system.py",
+        "lines": 330,
+        "functions": 13,
+        "classes": 1,
+        "complexity_score": 11,
+        "value_vector": {
+          "knowledge": 7.699999999999999,
+          "computation": 2.2,
+          "originality": 0.5756182638207813,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 3.8499999999999996,
+          "ethical_alignment": 4.877320099706654
+        },
+        "hash": "b842b294e0d0f72d30066e901fe1d213666adc81f9653cb44f892b8cd0711b9c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/analysis/value_vector_analysis.py",
+        "lines": 152,
+        "functions": 8,
+        "classes": 1,
+        "complexity_score": 4,
+        "value_vector": {
+          "knowledge": 3.44,
+          "computation": 0.8,
+          "originality": 2.693852759883058,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.72,
+          "ethical_alignment": 1.5173941422189041
+        },
+        "hash": "452df4d7633516aff692f0b818291aecdfe75e0577b673e31eb9a0da13e2dd79"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/core/cell/init.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.3649365085705956,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 1.7890749808754192
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.5710392574976066,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.1544753951010485
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/config.py",
+        "lines": 74,
+        "functions": 2,
+        "classes": 0,
+        "complexity_score": 5,
+        "value_vector": {
+          "knowledge": 1.98,
+          "computation": 1.0,
+          "originality": 0.37772881875458797,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.99,
+          "ethical_alignment": 2.2702861849049807
+        },
+        "hash": "10b51881f76a4eb097093f2125d37ef9c879ff5a1b2d9cdda89f6c6ce021f71a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/__init__.py",
+        "lines": 10,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.30000000000000004,
+          "computation": 0.2,
+          "originality": 3.0181334763169456,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.15000000000000002,
+          "ethical_alignment": 3.9908495597007927
+        },
+        "hash": "340e78b229828379760e03fe056f89ba43d5832e2bfb44e91caaefd46a7f96c7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/poa.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 1.06,
+          "computation": 0.4,
+          "originality": 1.2579489847564234,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.53,
+          "ethical_alignment": 1.9729561460093725
+        },
+        "hash": "ce1b23832e66a79faf274e680adb3cca8fa0d34ac44204e140abadb512debeaa"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/pov.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 1.06,
+          "computation": 0.4,
+          "originality": 3.6211319254694962,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.53,
+          "ethical_alignment": 2.1659757564095896
+        },
+        "hash": "534171a6f2292988b2889a19d4bbf9fbd809f9f9b6e06a93047750e0aba40fd2"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 0.4839363375483363,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 2.7425616000198145
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/blockchain.py",
+        "lines": 280,
+        "functions": 16,
+        "classes": 1,
+        "complexity_score": 26,
+        "value_vector": {
+          "knowledge": 8.2,
+          "computation": 5.2,
+          "originality": 4.718063496711704,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.1,
+          "ethical_alignment": 3.021240712968469
+        },
+        "hash": "26563b8a56a358721fa53c9a03ab4fdbe4733f31458cf308433242162d7a6a62"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/hash_modernity.py",
+        "lines": 249,
+        "functions": 11,
+        "classes": 2,
+        "complexity_score": 6,
+        "value_vector": {
+          "knowledge": 5.58,
+          "computation": 1.2,
+          "originality": 0.23477205932646406,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.79,
+          "ethical_alignment": 4.396506851734396
+        },
+        "hash": "302a10339be31ed490d3f7a76a3906e4b69296b2058e70e98fd6a359dd0dbdb4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/models.py",
+        "lines": 218,
+        "functions": 2,
+        "classes": 13,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 4.46,
+          "computation": 0.2,
+          "originality": 2.1232646614311497,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.23,
+          "ethical_alignment": 1.0761396027574854
+        },
+        "hash": "c45bad32bab43c8b0e75776d75e88cd4edc7afa787fe4091864dca5cc3598be6"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/token_system.py",
+        "lines": 405,
+        "functions": 17,
+        "classes": 3,
+        "complexity_score": 20,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.0,
+          "originality": 1.346459448165442,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.05,
+          "ethical_alignment": 1.9946572489164882
+        },
+        "hash": "08aadae9f5861060f9dbff755da4fa3617aefe8c5eeb343e016fc2f4527e95a7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/wallet.py",
+        "lines": 154,
+        "functions": 6,
+        "classes": 1,
+        "complexity_score": 9,
+        "value_vector": {
+          "knowledge": 3.98,
+          "computation": 1.8,
+          "originality": 0.13415097145063004,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.99,
+          "ethical_alignment": 2.9913523819336247
+        },
+        "hash": "1ce2a7c102e785ea814ef74fd8f5553e0b97455ef23ddbb25c94a53497c446f1"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/__init__.py",
+        "lines": 6,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.22,
+          "computation": 0.2,
+          "originality": 0.13057940597238193,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.11,
+          "ethical_alignment": 4.19084259172609
+        },
+        "hash": "fc48a2305ca4bf90a6bfaa6fae85c0677c7df396cd1c38bfac79e28f11cc96f7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/live_dashboard.py",
+        "lines": 180,
+        "functions": 8,
+        "classes": 2,
+        "complexity_score": 7,
+        "value_vector": {
+          "knowledge": 4.3,
+          "computation": 1.4,
+          "originality": 1.2399950017714505,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.15,
+          "ethical_alignment": 0.8374843686903499
+        },
+        "hash": "e34a933b16cb296c2ff38601eb12f866241d38627f60d91ebaaceea95cd40d09"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/__init__.py",
+        "lines": 27,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.64,
+          "computation": 0.2,
+          "originality": 4.649829363633079,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.32,
+          "ethical_alignment": 1.433611546341083
+        },
+        "hash": "6e0f53b303274a6d93e16754d83cc513654dd9c8d00468ff3a05b630792d5d9a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/api_integrations.py",
+        "lines": 399,
+        "functions": 11,
+        "classes": 7,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 2.301342809682831,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.49,
+          "ethical_alignment": 4.655556336319455
+        },
+        "hash": "45ce36e168818da299b5ebdcb75d13bf72b86a6927a74c2f1c6e55a44e1089d5"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/governance/__init__.py",
+        "lines": 23,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.56,
+          "computation": 0.2,
+          "originality": 3.659342635584765,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.28,
+          "ethical_alignment": 2.217380640143868
+        },
+        "hash": "afdfc837d7242d32eb52aa665e2ed88f0d65022818e8a40cdd67b3ef5784bf1c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/governance/dao.py",
+        "lines": 484,
+        "functions": 17,
+        "classes": 6,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 1.9836523415277045,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.34,
+          "ethical_alignment": 1.985502817447589
+        },
+        "hash": "da813d9d5173ea62b6696bd7529492fc1b900a2014bd56e2025656a4d0742e58"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/identity/__init__.py",
+        "lines": 23,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.56,
+          "computation": 0.2,
+          "originality": 0.33166909953520785,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.28,
+          "ethical_alignment": 2.854263100135403
+        },
+        "hash": "c12ab437cd94ad7c0f78d0c7302d79d0b0cd5d65359eceaa84c3103b4b5a4424"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/identity/did_system.py",
+        "lines": 456,
+        "functions": 16,
+        "classes": 6,
+        "complexity_score": 34,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.8,
+          "originality": 2.483870211889549,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.26,
+          "ethical_alignment": 0.04514604163328162
+        },
+        "hash": "432ecaf37842c23b67f76ae3cc3c6332664a1f97ed68315f394154c50947843a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/__init__.py",
+        "lines": 35,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.7999999999999999,
+          "computation": 0.2,
+          "originality": 4.426542542282114,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.39999999999999997,
+          "ethical_alignment": 4.601311233122204
+        },
+        "hash": "b2b73b6f48b962d38c3aa247c03e4c3872e5758b538e84a86a8dc4e8f871d7cf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_api.py",
+        "lines": 154,
+        "functions": 4,
+        "classes": 2,
+        "complexity_score": 12,
+        "value_vector": {
+          "knowledge": 4.28,
+          "computation": 2.4,
+          "originality": 2.480028557723734,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.14,
+          "ethical_alignment": 4.8945526740905
+        },
+        "hash": "06861677ccde502fb5b72d3062ade851451f1c8864823828898851d3b9f92c9d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_worker.py",
+        "lines": 122,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 11,
+        "value_vector": {
+          "knowledge": 3.54,
+          "computation": 2.2,
+          "originality": 0.8357840734148769,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.77,
+          "ethical_alignment": 2.8326546043225402
+        },
+        "hash": "ef719eb22dd34887e8826217204beb4391af679e7970317a644f68e21e9df342"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ml_system.py",
+        "lines": 485,
+        "functions": 26,
+        "classes": 6,
+        "complexity_score": 17,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 3.4,
+          "originality": 1.4855359117965339,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.699999999999999,
+          "ethical_alignment": 2.916950154810051
+        },
+        "hash": "b7f6e63810d6b510e643a4fdf65cc4511f314f6c0d68b4cbfba43e673d8555e8"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/predictive_analytics.py",
+        "lines": 377,
+        "functions": 15,
+        "classes": 3,
+        "complexity_score": 26,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.2,
+          "originality": 3.941296674704483,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.07,
+          "ethical_alignment": 4.232651110781593
+        },
+        "hash": "24c8d3b61c9ce8ecb8fe339f45613a245509d016c62fb110c1f732baf4250e06"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/self_evolution.py",
+        "lines": 322,
+        "functions": 5,
+        "classes": 2,
+        "complexity_score": 27,
+        "value_vector": {
+          "knowledge": 9.14,
+          "computation": 5.4,
+          "originality": 1.4203203268407778,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.57,
+          "ethical_alignment": 2.7345205918776228
+        },
+        "hash": "e1edbe3947854847bebb4be9b0d0c27b1edf8a635753fcdfe5ca94844c7ee7e7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/__init__.py",
+        "lines": 40,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.9,
+          "computation": 0.2,
+          "originality": 1.2091291745543171,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.45,
+          "ethical_alignment": 4.723934484628289
+        },
+        "hash": "01ac31e977cda2c5ed05680b882f17b0564072dfeda1abf5b07aadc33ddc4b17"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/exchange.py",
+        "lines": 519,
+        "functions": 27,
+        "classes": 7,
+        "complexity_score": 27,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.4,
+          "originality": 2.5231470777136455,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.540000000000001,
+          "ethical_alignment": 1.1547927123157482
+        },
+        "hash": "8db7d1441b8e36e82942e6423f4f6295e7af2b72b9a34b4f9c276a3cf95acddf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/knowledge_market.py",
+        "lines": 444,
+        "functions": 15,
+        "classes": 4,
+        "complexity_score": 35,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 7.0,
+          "originality": 1.4592432203452281,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.19,
+          "ethical_alignment": 4.944792109601778
+        },
+        "hash": "4419aada0a2ac76b5f7f0cde4e72f872208b599bc629617b768436e2f927d5a7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 3.588347791532111,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.36870968162658
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/cognitive_core.py",
+        "lines": 380,
+        "functions": 10,
+        "classes": 1,
+        "complexity_score": 18,
+        "value_vector": {
+          "knowledge": 9.4,
+          "computation": 3.6,
+          "originality": 0.3711155967968677,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.7,
+          "ethical_alignment": 3.291129712340898
+        },
+        "hash": "bafcaf0453bba3d95e32fb854789e750261ebd1d5b7a7d410df49c048a300637"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/__init__.py",
+        "lines": 25,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.6,
+          "computation": 0.2,
+          "originality": 1.4888458994407223,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.3,
+          "ethical_alignment": 0.8795520412030533
+        },
+        "hash": "b03359fea7066da01afaa5bc0739b0ffa299c2f0fea541edf9ef254ab4fa5327"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/world.py",
+        "lines": 497,
+        "functions": 31,
+        "classes": 7,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 2.148428414004587,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.47,
+          "ethical_alignment": 2.9435162881899046
+        },
+        "hash": "67e362ddaed5a42db6a8c7cfdbddfe385235e6479df82153890869f908387c9b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.631923609919225,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 3.4831502894254567
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/dht.py",
+        "lines": 415,
+        "functions": 22,
+        "classes": 6,
+        "complexity_score": 20,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.0,
+          "originality": 1.3401592412621888,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.15,
+          "ethical_alignment": 4.086710166909829
+        },
+        "hash": "b2592ef5271f2d2c1013826cb575bc9f71d3a522ebb9d447538c622c6badce4b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/p2p.py",
+        "lines": 127,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 7,
+        "value_vector": {
+          "knowledge": 3.24,
+          "computation": 1.4,
+          "originality": 1.2370428697197404,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.62,
+          "ethical_alignment": 1.6321411285483955
+        },
+        "hash": "04fece71c6e2a1e2c99eaf004e9b8cfe9896d52286bda92cc8cc1504201fc8a4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/oracles/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.989654518602784,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 3.054432351928721
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/oracles/oracle_system.py",
+        "lines": 310,
+        "functions": 7,
+        "classes": 5,
+        "complexity_score": 10,
+        "value_vector": {
+          "knowledge": 7.2,
+          "computation": 2.0,
+          "originality": 0.4004468459189997,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 3.6,
+          "ethical_alignment": 0.6975344139385437
+        },
+        "hash": "b40f47bca210c04fcdb187d6ebd70f93b3a55dc69b15dd259c46d1abba200869"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/problems/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 0.3129124069456468,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 1.4033785448078455
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/quantum/__init__.py",
+        "lines": 25,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.6,
+          "computation": 0.2,
+          "originality": 0.6223419974404026,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.3,
+          "ethical_alignment": 1.4408401077612476
+        },
+        "hash": "9c9a93ed227466df678051cd7e08ff182daa34e33f16224ffd1dca273ecd536c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/quantum/quantum_system.py",
+        "lines": 482,
+        "functions": 34,
+        "classes": 7,
+        "complexity_score": 32,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.4,
+          "originality": 3.3412153402325813,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.42,
+          "ethical_alignment": 2.3199517404614167
+        },
+        "hash": "2f03db8922d166ecdc3bc6299a7434545886a5f640b8200659d301c009dd700c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/__init__.py",
+        "lines": 21,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.52,
+          "computation": 0.2,
+          "originality": 1.1998249647898236,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.26,
+          "ethical_alignment": 4.377027937080243
+        },
+        "hash": "19ce71958811ae5c2f2f9ba41c23b18fe3bcff87f23f1a2e6e7f718dbdc49a4d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/reputation_system.py",
+        "lines": 402,
+        "functions": 18,
+        "classes": 5,
+        "complexity_score": 25,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.0,
+          "originality": 1.535114261529971,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.27,
+          "ethical_alignment": 2.8355223341030684
+        },
+        "hash": "72af4e59060f3461f5a1483641b6a6e6d760c78ccf080781b25e3d43f8541646"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/__init__.py",
+        "lines": 9,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.28,
+          "computation": 0.2,
+          "originality": 0.5788478870709712,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.14,
+          "ethical_alignment": 4.106173189761387
+        },
+        "hash": "5a7a2c18c83dc7562a809f76550743a90b1b62f1ec07ebbf0b87ee0abc95cfd0"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/cosmic_simulator.py",
+        "lines": 430,
+        "functions": 20,
+        "classes": 3,
+        "complexity_score": 22,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.4,
+          "originality": 3.576035089503504,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.4,
+          "ethical_alignment": 0.2605994699027264
+        },
+        "hash": "2f6115e85144e2ba152d3f443c8f365d0598b2e3bf5c278c96a7e425bce8d793"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 3.587607785303884,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 0.05867052837470521
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/test_api_and_pov.py",
+        "lines": 152,
+        "functions": 3,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 3.24,
+          "computation": 0.4,
+          "originality": 1.6302713508197864,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.62,
+          "ethical_alignment": 3.6624080622118713
+        },
+        "hash": "c19b954d8efbfdc60de3cf319e4159b4a95fd7878c5874e47f7ba70926422cd4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/test_full_protocol.py",
+        "lines": 175,
+        "functions": 1,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 3.7,
+          "computation": 0.4,
+          "originality": 3.114000885380244,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.85,
+          "ethical_alignment": 1.4329618971533735
+        },
+        "hash": "4345c953a6548f0f79514ff73393c14462c8d3dd3bafec1e3e4d9cb53f5014b3"
+      }
+    ],
+    "timestamp": "2025-11-04T19:47:58.254261"
+  },
+  "suggestions": [
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/identity/did_system.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    },
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/marketplace/knowledge_market.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    },
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/governance/dao.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    }
+  ],
+  "applied_improvements": []
+},
+{
+  "version": "0.0.2",
+  "timestamp": "2025-11-04T19:50:00.594172",
+  "project_stats": {
+    "total_files": 52,
+    "total_lines": 10202,
+    "avg_complexity": 10.98076923076923,
+    "total_value_created": 736.4590052038005,
+    "files": [
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/main.py",
+        "lines": 577,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 32,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.4,
+          "originality": 1.2625896397683711,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 7.369999999999999,
+          "ethical_alignment": 0.716328040859952
+        },
+        "hash": "0eb7162a057bda2fecfcc85e7164016503ac90d08ef045c92b6bcc305ec95ec7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/self_evolution_loop.py",
+        "lines": 113,
+        "functions": 1,
+        "classes": 0,
+        "complexity_score": 10,
+        "value_vector": {
+          "knowledge": 3.26,
+          "computation": 2.0,
+          "originality": 3.652419295430478,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.63,
+          "ethical_alignment": 3.4317462489282597
+        },
+        "hash": "f3f648e1ebd3f1aacccec292cb23c81472436ffcf8d46c46241f0adcc102debb"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/test_system.py",
+        "lines": 330,
+        "functions": 13,
+        "classes": 1,
+        "complexity_score": 11,
+        "value_vector": {
+          "knowledge": 7.699999999999999,
+          "computation": 2.2,
+          "originality": 2.0039559009377466,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 3.8499999999999996,
+          "ethical_alignment": 3.218624286526536
+        },
+        "hash": "b842b294e0d0f72d30066e901fe1d213666adc81f9653cb44f892b8cd0711b9c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/analysis/value_vector_analysis.py",
+        "lines": 152,
+        "functions": 8,
+        "classes": 1,
+        "complexity_score": 4,
+        "value_vector": {
+          "knowledge": 3.44,
+          "computation": 0.8,
+          "originality": 4.184495501190386,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.72,
+          "ethical_alignment": 3.015322880382583
+        },
+        "hash": "452df4d7633516aff692f0b818291aecdfe75e0577b673e31eb9a0da13e2dd79"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/core/cell/init.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 4.556158923263908,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 3.9040736872549187
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.570600361100646,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 0.5814177626090522
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/config.py",
+        "lines": 74,
+        "functions": 2,
+        "classes": 0,
+        "complexity_score": 5,
+        "value_vector": {
+          "knowledge": 1.98,
+          "computation": 1.0,
+          "originality": 3.0529379129824266,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.99,
+          "ethical_alignment": 4.085046374133911
+        },
+        "hash": "10b51881f76a4eb097093f2125d37ef9c879ff5a1b2d9cdda89f6c6ce021f71a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/__init__.py",
+        "lines": 10,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.30000000000000004,
+          "computation": 0.2,
+          "originality": 2.337041457864934,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.15000000000000002,
+          "ethical_alignment": 0.2026024972830892
+        },
+        "hash": "340e78b229828379760e03fe056f89ba43d5832e2bfb44e91caaefd46a7f96c7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/poa.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 1.06,
+          "computation": 0.4,
+          "originality": 2.6571415562606764,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.53,
+          "ethical_alignment": 2.012985036454003
+        },
+        "hash": "ce1b23832e66a79faf274e680adb3cca8fa0d34ac44204e140abadb512debeaa"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/pov.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 1.06,
+          "computation": 0.4,
+          "originality": 4.328992347416319,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.53,
+          "ethical_alignment": 1.588400574707491
+        },
+        "hash": "534171a6f2292988b2889a19d4bbf9fbd809f9f9b6e06a93047750e0aba40fd2"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.3839610973800776,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 1.3533953516642954
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/blockchain.py",
+        "lines": 280,
+        "functions": 16,
+        "classes": 1,
+        "complexity_score": 26,
+        "value_vector": {
+          "knowledge": 8.2,
+          "computation": 5.2,
+          "originality": 3.209417616958567,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.1,
+          "ethical_alignment": 2.4357138663153655
+        },
+        "hash": "26563b8a56a358721fa53c9a03ab4fdbe4733f31458cf308433242162d7a6a62"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/hash_modernity.py",
+        "lines": 249,
+        "functions": 11,
+        "classes": 2,
+        "complexity_score": 6,
+        "value_vector": {
+          "knowledge": 5.58,
+          "computation": 1.2,
+          "originality": 4.752553092599532,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.79,
+          "ethical_alignment": 4.412140394268464
+        },
+        "hash": "302a10339be31ed490d3f7a76a3906e4b69296b2058e70e98fd6a359dd0dbdb4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/models.py",
+        "lines": 218,
+        "functions": 2,
+        "classes": 13,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 4.46,
+          "computation": 0.2,
+          "originality": 1.2292938786849357,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.23,
+          "ethical_alignment": 4.383680650479246
+        },
+        "hash": "c45bad32bab43c8b0e75776d75e88cd4edc7afa787fe4091864dca5cc3598be6"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/token_system.py",
+        "lines": 405,
+        "functions": 17,
+        "classes": 3,
+        "complexity_score": 20,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.0,
+          "originality": 3.6371093224430844,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.05,
+          "ethical_alignment": 0.9374411066798299
+        },
+        "hash": "08aadae9f5861060f9dbff755da4fa3617aefe8c5eeb343e016fc2f4527e95a7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/wallet.py",
+        "lines": 154,
+        "functions": 6,
+        "classes": 1,
+        "complexity_score": 9,
+        "value_vector": {
+          "knowledge": 3.98,
+          "computation": 1.8,
+          "originality": 3.055916685009371,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.99,
+          "ethical_alignment": 0.21291126122988002
+        },
+        "hash": "1ce2a7c102e785ea814ef74fd8f5553e0b97455ef23ddbb25c94a53497c446f1"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/__init__.py",
+        "lines": 6,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.22,
+          "computation": 0.2,
+          "originality": 4.657560241919549,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.11,
+          "ethical_alignment": 1.970401289558998
+        },
+        "hash": "fc48a2305ca4bf90a6bfaa6fae85c0677c7df396cd1c38bfac79e28f11cc96f7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/live_dashboard.py",
+        "lines": 180,
+        "functions": 8,
+        "classes": 2,
+        "complexity_score": 7,
+        "value_vector": {
+          "knowledge": 4.3,
+          "computation": 1.4,
+          "originality": 0.9888093301833106,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.15,
+          "ethical_alignment": 1.5956760151232734
+        },
+        "hash": "e34a933b16cb296c2ff38601eb12f866241d38627f60d91ebaaceea95cd40d09"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/__init__.py",
+        "lines": 27,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.64,
+          "computation": 0.2,
+          "originality": 2.321787980180793,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.32,
+          "ethical_alignment": 3.603318474866998
+        },
+        "hash": "6e0f53b303274a6d93e16754d83cc513654dd9c8d00468ff3a05b630792d5d9a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/api_integrations.py",
+        "lines": 399,
+        "functions": 11,
+        "classes": 7,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 3.565442313464367,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.49,
+          "ethical_alignment": 3.4035298824793476
+        },
+        "hash": "45ce36e168818da299b5ebdcb75d13bf72b86a6927a74c2f1c6e55a44e1089d5"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/governance/__init__.py",
+        "lines": 23,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.56,
+          "computation": 0.2,
+          "originality": 3.356240725513646,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.28,
+          "ethical_alignment": 0.105245880268241
+        },
+        "hash": "afdfc837d7242d32eb52aa665e2ed88f0d65022818e8a40cdd67b3ef5784bf1c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/governance/dao.py",
+        "lines": 484,
+        "functions": 17,
+        "classes": 6,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 0.7132590710626324,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.34,
+          "ethical_alignment": 3.1661669394286234
+        },
+        "hash": "da813d9d5173ea62b6696bd7529492fc1b900a2014bd56e2025656a4d0742e58"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/identity/__init__.py",
+        "lines": 23,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.56,
+          "computation": 0.2,
+          "originality": 1.4470822016889118,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.28,
+          "ethical_alignment": 4.313310238114061
+        },
+        "hash": "c12ab437cd94ad7c0f78d0c7302d79d0b0cd5d65359eceaa84c3103b4b5a4424"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/identity/did_system.py",
+        "lines": 456,
+        "functions": 16,
+        "classes": 6,
+        "complexity_score": 34,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.8,
+          "originality": 1.051044748682377,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.26,
+          "ethical_alignment": 4.3248032080930985
+        },
+        "hash": "432ecaf37842c23b67f76ae3cc3c6332664a1f97ed68315f394154c50947843a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/__init__.py",
+        "lines": 35,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.7999999999999999,
+          "computation": 0.2,
+          "originality": 1.403216939455939,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.39999999999999997,
+          "ethical_alignment": 4.563137804420733
+        },
+        "hash": "b2b73b6f48b962d38c3aa247c03e4c3872e5758b538e84a86a8dc4e8f871d7cf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_api.py",
+        "lines": 154,
+        "functions": 4,
+        "classes": 2,
+        "complexity_score": 12,
+        "value_vector": {
+          "knowledge": 4.28,
+          "computation": 2.4,
+          "originality": 3.061893684079414,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.14,
+          "ethical_alignment": 1.2373363576293772
+        },
+        "hash": "06861677ccde502fb5b72d3062ade851451f1c8864823828898851d3b9f92c9d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_worker.py",
+        "lines": 122,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 11,
+        "value_vector": {
+          "knowledge": 3.54,
+          "computation": 2.2,
+          "originality": 3.903695772727907,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.77,
+          "ethical_alignment": 2.074992362969149
+        },
+        "hash": "ef719eb22dd34887e8826217204beb4391af679e7970317a644f68e21e9df342"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ml_system.py",
+        "lines": 485,
+        "functions": 26,
+        "classes": 6,
+        "complexity_score": 17,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 3.4,
+          "originality": 0.4403475296355214,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.699999999999999,
+          "ethical_alignment": 2.7598938937900623
+        },
+        "hash": "b7f6e63810d6b510e643a4fdf65cc4511f314f6c0d68b4cbfba43e673d8555e8"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/predictive_analytics.py",
+        "lines": 377,
+        "functions": 15,
+        "classes": 3,
+        "complexity_score": 26,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.2,
+          "originality": 1.7694695564664538,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.07,
+          "ethical_alignment": 4.185668552414897
+        },
+        "hash": "24c8d3b61c9ce8ecb8fe339f45613a245509d016c62fb110c1f732baf4250e06"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/self_evolution.py",
+        "lines": 322,
+        "functions": 5,
+        "classes": 2,
+        "complexity_score": 27,
+        "value_vector": {
+          "knowledge": 9.14,
+          "computation": 5.4,
+          "originality": 4.923409493651617,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.57,
+          "ethical_alignment": 2.6849170590625033
+        },
+        "hash": "e1edbe3947854847bebb4be9b0d0c27b1edf8a635753fcdfe5ca94844c7ee7e7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/__init__.py",
+        "lines": 40,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.9,
+          "computation": 0.2,
+          "originality": 4.6015599429836405,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.45,
+          "ethical_alignment": 3.8999440833340064
+        },
+        "hash": "01ac31e977cda2c5ed05680b882f17b0564072dfeda1abf5b07aadc33ddc4b17"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/exchange.py",
+        "lines": 519,
+        "functions": 27,
+        "classes": 7,
+        "complexity_score": 27,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.4,
+          "originality": 0.1076218037544785,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.540000000000001,
+          "ethical_alignment": 2.245264037801542
+        },
+        "hash": "8db7d1441b8e36e82942e6423f4f6295e7af2b72b9a34b4f9c276a3cf95acddf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/knowledge_market.py",
+        "lines": 444,
+        "functions": 15,
+        "classes": 4,
+        "complexity_score": 35,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 7.0,
+          "originality": 3.832938479158068,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.19,
+          "ethical_alignment": 3.3232243829725254
+        },
+        "hash": "4419aada0a2ac76b5f7f0cde4e72f872208b599bc629617b768436e2f927d5a7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.4535722498665122,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 1.424654290759419
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/cognitive_core.py",
+        "lines": 380,
+        "functions": 10,
+        "classes": 1,
+        "complexity_score": 18,
+        "value_vector": {
+          "knowledge": 9.4,
+          "computation": 3.6,
+          "originality": 2.343798655430901,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.7,
+          "ethical_alignment": 0.5007714799314761
+        },
+        "hash": "bafcaf0453bba3d95e32fb854789e750261ebd1d5b7a7d410df49c048a300637"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/__init__.py",
+        "lines": 25,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.6,
+          "computation": 0.2,
+          "originality": 0.6322528313948866,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.3,
+          "ethical_alignment": 1.2297405965113701
+        },
+        "hash": "b03359fea7066da01afaa5bc0739b0ffa299c2f0fea541edf9ef254ab4fa5327"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/world.py",
+        "lines": 497,
+        "functions": 31,
+        "classes": 7,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 0.23367137423948414,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.47,
+          "ethical_alignment": 0.2854333151584476
+        },
+        "hash": "67e362ddaed5a42db6a8c7cfdbddfe385235e6479df82153890869f908387c9b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.3726051574405373,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.4751885837693255
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/dht.py",
+        "lines": 415,
+        "functions": 22,
+        "classes": 6,
+        "complexity_score": 20,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.0,
+          "originality": 4.929911733521528,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.15,
+          "ethical_alignment": 2.224475339722333
+        },
+        "hash": "b2592ef5271f2d2c1013826cb575bc9f71d3a522ebb9d447538c622c6badce4b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/p2p.py",
+        "lines": 127,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 7,
+        "value_vector": {
+          "knowledge": 3.24,
+          "computation": 1.4,
+          "originality": 0.31737237733206913,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.62,
+          "ethical_alignment": 0.53701179238971
+        },
+        "hash": "04fece71c6e2a1e2c99eaf004e9b8cfe9896d52286bda92cc8cc1504201fc8a4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/oracles/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 0.22208721104996776,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.18495657711052
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/oracles/oracle_system.py",
+        "lines": 310,
+        "functions": 7,
+        "classes": 5,
+        "complexity_score": 10,
+        "value_vector": {
+          "knowledge": 7.2,
+          "computation": 2.0,
+          "originality": 2.106011662368748,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 3.6,
+          "ethical_alignment": 4.102934877086105
+        },
+        "hash": "b40f47bca210c04fcdb187d6ebd70f93b3a55dc69b15dd259c46d1abba200869"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/problems/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 0.41786241611868113,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.080379202040533
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/quantum/__init__.py",
+        "lines": 25,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.6,
+          "computation": 0.2,
+          "originality": 3.0193415718006342,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.3,
+          "ethical_alignment": 4.766289383938177
+        },
+        "hash": "9c9a93ed227466df678051cd7e08ff182daa34e33f16224ffd1dca273ecd536c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/quantum/quantum_system.py",
+        "lines": 482,
+        "functions": 34,
+        "classes": 7,
+        "complexity_score": 32,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.4,
+          "originality": 0.17792214747155422,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.42,
+          "ethical_alignment": 1.8422588275316372
+        },
+        "hash": "2f03db8922d166ecdc3bc6299a7434545886a5f640b8200659d301c009dd700c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/__init__.py",
+        "lines": 21,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.52,
+          "computation": 0.2,
+          "originality": 0.0869864650775315,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.26,
+          "ethical_alignment": 2.2734463384581933
+        },
+        "hash": "19ce71958811ae5c2f2f9ba41c23b18fe3bcff87f23f1a2e6e7f718dbdc49a4d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/reputation_system.py",
+        "lines": 402,
+        "functions": 18,
+        "classes": 5,
+        "complexity_score": 25,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.0,
+          "originality": 4.511198168776537,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.27,
+          "ethical_alignment": 0.5269559650963629
+        },
+        "hash": "72af4e59060f3461f5a1483641b6a6e6d760c78ccf080781b25e3d43f8541646"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/__init__.py",
+        "lines": 9,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.28,
+          "computation": 0.2,
+          "originality": 4.464905997990542,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.14,
+          "ethical_alignment": 0.4533723751308466
+        },
+        "hash": "5a7a2c18c83dc7562a809f76550743a90b1b62f1ec07ebbf0b87ee0abc95cfd0"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/cosmic_simulator.py",
+        "lines": 430,
+        "functions": 20,
+        "classes": 3,
+        "complexity_score": 22,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.4,
+          "originality": 0.7761655096528419,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.4,
+          "ethical_alignment": 3.0706751208895717
+        },
+        "hash": "2f6115e85144e2ba152d3f443c8f365d0598b2e3bf5c278c96a7e425bce8d793"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 3.105672051980531,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.220255049151305
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/test_api_and_pov.py",
+        "lines": 152,
+        "functions": 3,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 3.24,
+          "computation": 0.4,
+          "originality": 1.893557952525557,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.62,
+          "ethical_alignment": 0.29458550973132047
+        },
+        "hash": "c19b954d8efbfdc60de3cf319e4159b4a95fd7878c5874e47f7ba70926422cd4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/test_full_protocol.py",
+        "lines": 175,
+        "functions": 1,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 3.7,
+          "computation": 0.4,
+          "originality": 0.4322746401144717,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.85,
+          "ethical_alignment": 4.029825519235766
+        },
+        "hash": "4345c953a6548f0f79514ff73393c14462c8d3dd3bafec1e3e4d9cb53f5014b3"
+      }
+    ],
+    "timestamp": "2025-11-04T19:49:07.505253"
+  },
+  "suggestions": [
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/metaverse/world.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    },
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/quantum/quantum_system.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    },
+    {
+      "file": "/home/ubuntu/laniakea-protocol/main.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    }
+  ],
+  "applied_improvements": []
+},
+{
+  "version": "0.0.2",
+  "timestamp": "2025-11-04T19:50:40.899799",
+  "project_stats": {
+    "total_files": 51,
+    "total_lines": 10084,
+    "avg_complexity": 11.058823529411764,
+    "total_value_created": 710.5221556333111,
+    "files": [
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/main.py",
+        "lines": 577,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 32,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.4,
+          "originality": 2.6714442757632657,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 7.369999999999999,
+          "ethical_alignment": 1.7588201205844274
+        },
+        "hash": "0eb7162a057bda2fecfcc85e7164016503ac90d08ef045c92b6bcc305ec95ec7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/self_evolution_loop.py",
+        "lines": 113,
+        "functions": 1,
+        "classes": 0,
+        "complexity_score": 10,
+        "value_vector": {
+          "knowledge": 3.26,
+          "computation": 2.0,
+          "originality": 4.008995765912838,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.63,
+          "ethical_alignment": 4.734983233515507
+        },
+        "hash": "f3f648e1ebd3f1aacccec292cb23c81472436ffcf8d46c46241f0adcc102debb"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/test_system.py",
+        "lines": 330,
+        "functions": 13,
+        "classes": 1,
+        "complexity_score": 11,
+        "value_vector": {
+          "knowledge": 7.699999999999999,
+          "computation": 2.2,
+          "originality": 1.76773328160494,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 3.8499999999999996,
+          "ethical_alignment": 2.724426778988982
+        },
+        "hash": "b842b294e0d0f72d30066e901fe1d213666adc81f9653cb44f892b8cd0711b9c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/analysis/value_vector_analysis.py",
+        "lines": 152,
+        "functions": 8,
+        "classes": 1,
+        "complexity_score": 4,
+        "value_vector": {
+          "knowledge": 3.44,
+          "computation": 0.8,
+          "originality": 1.3116035460812892,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.72,
+          "ethical_alignment": 2.8608742776173606
+        },
+        "hash": "452df4d7633516aff692f0b818291aecdfe75e0577b673e31eb9a0da13e2dd79"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/core/cell/init.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 0.42520581764736,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 0.26138883750090325
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.4216641733068873,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 3.8760970070182226
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/config.py",
+        "lines": 74,
+        "functions": 2,
+        "classes": 0,
+        "complexity_score": 5,
+        "value_vector": {
+          "knowledge": 1.98,
+          "computation": 1.0,
+          "originality": 0.27284637032064074,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.99,
+          "ethical_alignment": 1.7674059362989731
+        },
+        "hash": "10b51881f76a4eb097093f2125d37ef9c879ff5a1b2d9cdda89f6c6ce021f71a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/__init__.py",
+        "lines": 10,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.30000000000000004,
+          "computation": 0.2,
+          "originality": 3.078058392314383,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.15000000000000002,
+          "ethical_alignment": 0.5081234237811522
+        },
+        "hash": "340e78b229828379760e03fe056f89ba43d5832e2bfb44e91caaefd46a7f96c7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/poa.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 1.06,
+          "computation": 0.4,
+          "originality": 3.1071010040452625,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.53,
+          "ethical_alignment": 0.46202247322911283
+        },
+        "hash": "ce1b23832e66a79faf274e680adb3cca8fa0d34ac44204e140abadb512debeaa"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/consensus/pov.py",
+        "lines": 43,
+        "functions": 2,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 1.06,
+          "computation": 0.4,
+          "originality": 0.8953663725355654,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.53,
+          "ethical_alignment": 1.5738211247995393
+        },
+        "hash": "534171a6f2292988b2889a19d4bbf9fbd809f9f9b6e06a93047750e0aba40fd2"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 2.0500985657015196,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.014039706229295
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/blockchain.py",
+        "lines": 289,
+        "functions": 17,
+        "classes": 1,
+        "complexity_score": 26,
+        "value_vector": {
+          "knowledge": 8.38,
+          "computation": 5.2,
+          "originality": 1.4785779143966993,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.19,
+          "ethical_alignment": 4.687994444455895
+        },
+        "hash": "c931036e7a60ee2d9cdc9c16034c2d66264b6bb20a2aafa967bfe3d3639b299b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/hash_modernity.py",
+        "lines": 249,
+        "functions": 11,
+        "classes": 2,
+        "complexity_score": 6,
+        "value_vector": {
+          "knowledge": 5.58,
+          "computation": 1.2,
+          "originality": 1.3407671393793952,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.79,
+          "ethical_alignment": 1.7729612275152706
+        },
+        "hash": "302a10339be31ed490d3f7a76a3906e4b69296b2058e70e98fd6a359dd0dbdb4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/models.py",
+        "lines": 218,
+        "functions": 2,
+        "classes": 13,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 4.46,
+          "computation": 0.2,
+          "originality": 2.108702966550995,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.23,
+          "ethical_alignment": 1.591820558163823
+        },
+        "hash": "c45bad32bab43c8b0e75776d75e88cd4edc7afa787fe4091864dca5cc3598be6"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/token_system.py",
+        "lines": 405,
+        "functions": 17,
+        "classes": 3,
+        "complexity_score": 20,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.0,
+          "originality": 3.212061593774545,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.05,
+          "ethical_alignment": 1.1540076675489996
+        },
+        "hash": "08aadae9f5861060f9dbff755da4fa3617aefe8c5eeb343e016fc2f4527e95a7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/core/wallet.py",
+        "lines": 154,
+        "functions": 6,
+        "classes": 1,
+        "complexity_score": 9,
+        "value_vector": {
+          "knowledge": 3.98,
+          "computation": 1.8,
+          "originality": 2.9079703241822696,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.99,
+          "ethical_alignment": 1.4615644733878652
+        },
+        "hash": "1ce2a7c102e785ea814ef74fd8f5553e0b97455ef23ddbb25c94a53497c446f1"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/__init__.py",
+        "lines": 6,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.22,
+          "computation": 0.2,
+          "originality": 4.9378147631556795,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.11,
+          "ethical_alignment": 1.5264587028161998
+        },
+        "hash": "fc48a2305ca4bf90a6bfaa6fae85c0677c7df396cd1c38bfac79e28f11cc96f7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/dashboard/live_dashboard.py",
+        "lines": 180,
+        "functions": 8,
+        "classes": 2,
+        "complexity_score": 7,
+        "value_vector": {
+          "knowledge": 4.3,
+          "computation": 1.4,
+          "originality": 1.3684914823149734,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.15,
+          "ethical_alignment": 2.7314688475525672
+        },
+        "hash": "e34a933b16cb296c2ff38601eb12f866241d38627f60d91ebaaceea95cd40d09"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/__init__.py",
+        "lines": 27,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.64,
+          "computation": 0.2,
+          "originality": 4.5332044585636835,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.32,
+          "ethical_alignment": 4.493218214816191
+        },
+        "hash": "6e0f53b303274a6d93e16754d83cc513654dd9c8d00468ff3a05b630792d5d9a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/external_apis/api_integrations.py",
+        "lines": 399,
+        "functions": 11,
+        "classes": 7,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 1.5256591693961914,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.49,
+          "ethical_alignment": 0.8985822168363838
+        },
+        "hash": "45ce36e168818da299b5ebdcb75d13bf72b86a6927a74c2f1c6e55a44e1089d5"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/governance/__init__.py",
+        "lines": 23,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.56,
+          "computation": 0.2,
+          "originality": 0.008955295841486244,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.28,
+          "ethical_alignment": 1.324424631192963
+        },
+        "hash": "afdfc837d7242d32eb52aa665e2ed88f0d65022818e8a40cdd67b3ef5784bf1c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/governance/dao.py",
+        "lines": 484,
+        "functions": 17,
+        "classes": 6,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 4.891980039862698,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.34,
+          "ethical_alignment": 3.905926232553052
+        },
+        "hash": "da813d9d5173ea62b6696bd7529492fc1b900a2014bd56e2025656a4d0742e58"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/identity/__init__.py",
+        "lines": 23,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.56,
+          "computation": 0.2,
+          "originality": 2.9382805540935877,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.28,
+          "ethical_alignment": 0.07270312836982096
+        },
+        "hash": "c12ab437cd94ad7c0f78d0c7302d79d0b0cd5d65359eceaa84c3103b4b5a4424"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/identity/did_system.py",
+        "lines": 456,
+        "functions": 16,
+        "classes": 6,
+        "complexity_score": 34,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.8,
+          "originality": 1.5051294813341354,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.26,
+          "ethical_alignment": 0.018894131821334814
+        },
+        "hash": "432ecaf37842c23b67f76ae3cc3c6332664a1f97ed68315f394154c50947843a"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/__init__.py",
+        "lines": 35,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.7999999999999999,
+          "computation": 0.2,
+          "originality": 2.3160019400396257,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.39999999999999997,
+          "ethical_alignment": 1.3326685608521849
+        },
+        "hash": "b2b73b6f48b962d38c3aa247c03e4c3872e5758b538e84a86a8dc4e8f871d7cf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_api.py",
+        "lines": 154,
+        "functions": 4,
+        "classes": 2,
+        "complexity_score": 12,
+        "value_vector": {
+          "knowledge": 4.28,
+          "computation": 2.4,
+          "originality": 3.763316379430852,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 2.14,
+          "ethical_alignment": 4.824912230380732
+        },
+        "hash": "06861677ccde502fb5b72d3062ade851451f1c8864823828898851d3b9f92c9d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ai_worker.py",
+        "lines": 122,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 11,
+        "value_vector": {
+          "knowledge": 3.54,
+          "computation": 2.2,
+          "originality": 0.9236734038573868,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.77,
+          "ethical_alignment": 2.1246434086315276
+        },
+        "hash": "ef719eb22dd34887e8826217204beb4391af679e7970317a644f68e21e9df342"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/ml_system.py",
+        "lines": 485,
+        "functions": 26,
+        "classes": 6,
+        "complexity_score": 17,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 3.4,
+          "originality": 2.4593252328518753,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.699999999999999,
+          "ethical_alignment": 0.274001406271146
+        },
+        "hash": "b7f6e63810d6b510e643a4fdf65cc4511f314f6c0d68b4cbfba43e673d8555e8"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/predictive_analytics.py",
+        "lines": 377,
+        "functions": 15,
+        "classes": 3,
+        "complexity_score": 26,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.2,
+          "originality": 0.9054506963222037,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.07,
+          "ethical_alignment": 2.803058199042523
+        },
+        "hash": "24c8d3b61c9ce8ecb8fe339f45613a245509d016c62fb110c1f732baf4250e06"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/intelligence/self_evolution.py",
+        "lines": 322,
+        "functions": 5,
+        "classes": 2,
+        "complexity_score": 27,
+        "value_vector": {
+          "knowledge": 9.14,
+          "computation": 5.4,
+          "originality": 0.2900985286303831,
+          "consciousness": 1.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.57,
+          "ethical_alignment": 3.5480307125906685
+        },
+        "hash": "e1edbe3947854847bebb4be9b0d0c27b1edf8a635753fcdfe5ca94844c7ee7e7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/__init__.py",
+        "lines": 40,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.9,
+          "computation": 0.2,
+          "originality": 1.1584354046487162,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.45,
+          "ethical_alignment": 1.5629439958490825
+        },
+        "hash": "01ac31e977cda2c5ed05680b882f17b0564072dfeda1abf5b07aadc33ddc4b17"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/exchange.py",
+        "lines": 519,
+        "functions": 27,
+        "classes": 7,
+        "complexity_score": 27,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.4,
+          "originality": 1.9319004189553324,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.540000000000001,
+          "ethical_alignment": 4.721434810458108
+        },
+        "hash": "8db7d1441b8e36e82942e6423f4f6295e7af2b72b9a34b4f9c276a3cf95acddf"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/marketplace/knowledge_market.py",
+        "lines": 444,
+        "functions": 15,
+        "classes": 4,
+        "complexity_score": 35,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 7.0,
+          "originality": 4.6470366133944445,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.19,
+          "ethical_alignment": 2.5278516725491267
+        },
+        "hash": "4419aada0a2ac76b5f7f0cde4e72f872208b599bc629617b768436e2f927d5a7"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.7121791170350664,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 2.00318074863576
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metasystem/cognitive_core.py",
+        "lines": 380,
+        "functions": 10,
+        "classes": 1,
+        "complexity_score": 18,
+        "value_vector": {
+          "knowledge": 9.4,
+          "computation": 3.6,
+          "originality": 4.814575264504174,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 4.7,
+          "ethical_alignment": 0.5149191873843295
+        },
+        "hash": "bafcaf0453bba3d95e32fb854789e750261ebd1d5b7a7d410df49c048a300637"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/__init__.py",
+        "lines": 25,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.6,
+          "computation": 0.2,
+          "originality": 0.4483570416630639,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.3,
+          "ethical_alignment": 1.3203569593562676
+        },
+        "hash": "b03359fea7066da01afaa5bc0739b0ffa299c2f0fea541edf9ef254ab4fa5327"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/metaverse/world.py",
+        "lines": 497,
+        "functions": 31,
+        "classes": 7,
+        "complexity_score": 30,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.0,
+          "originality": 4.0917045196986415,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.47,
+          "ethical_alignment": 2.788066574740218
+        },
+        "hash": "67e362ddaed5a42db6a8c7cfdbddfe385235e6479df82153890869f908387c9b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 3.2551324225904787,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.321319465726271
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/network/dht.py",
+        "lines": 415,
+        "functions": 22,
+        "classes": 6,
+        "complexity_score": 20,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.0,
+          "originality": 1.1223616450784613,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.15,
+          "ethical_alignment": 0.49365893478938105
+        },
+        "hash": "b2592ef5271f2d2c1013826cb575bc9f71d3a522ebb9d447538c622c6badce4b"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/oracles/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 3.3443540552070763,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 4.386802356164963
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/oracles/oracle_system.py",
+        "lines": 310,
+        "functions": 7,
+        "classes": 5,
+        "complexity_score": 10,
+        "value_vector": {
+          "knowledge": 7.2,
+          "computation": 2.0,
+          "originality": 4.06566988817134,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 3.6,
+          "ethical_alignment": 3.67307920925061
+        },
+        "hash": "b40f47bca210c04fcdb187d6ebd70f93b3a55dc69b15dd259c46d1abba200869"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/problems/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 4.359786854082374,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 2.542749708022007
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/quantum/__init__.py",
+        "lines": 25,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.6,
+          "computation": 0.2,
+          "originality": 3.4493375863516236,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.3,
+          "ethical_alignment": 3.102613182264346
+        },
+        "hash": "9c9a93ed227466df678051cd7e08ff182daa34e33f16224ffd1dca273ecd536c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/quantum/quantum_system.py",
+        "lines": 482,
+        "functions": 34,
+        "classes": 7,
+        "complexity_score": 32,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 6.4,
+          "originality": 4.295393981219469,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 6.42,
+          "ethical_alignment": 1.853170288600291
+        },
+        "hash": "2f03db8922d166ecdc3bc6299a7434545886a5f640b8200659d301c009dd700c"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/__init__.py",
+        "lines": 21,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.52,
+          "computation": 0.2,
+          "originality": 1.2959763429200093,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.26,
+          "ethical_alignment": 0.3406352683010133
+        },
+        "hash": "19ce71958811ae5c2f2f9ba41c23b18fe3bcff87f23f1a2e6e7f718dbdc49a4d"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/reputation/reputation_system.py",
+        "lines": 402,
+        "functions": 18,
+        "classes": 5,
+        "complexity_score": 25,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 5.0,
+          "originality": 4.424121016205991,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.27,
+          "ethical_alignment": 1.109756828574694
+        },
+        "hash": "72af4e59060f3461f5a1483641b6a6e6d760c78ccf080781b25e3d43f8541646"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/__init__.py",
+        "lines": 9,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.28,
+          "computation": 0.2,
+          "originality": 4.944793909600519,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.14,
+          "ethical_alignment": 0.26014486917683377
+        },
+        "hash": "5a7a2c18c83dc7562a809f76550743a90b1b62f1ec07ebbf0b87ee0abc95cfd0"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/src/simulation/cosmic_simulator.py",
+        "lines": 430,
+        "functions": 20,
+        "classes": 3,
+        "complexity_score": 22,
+        "value_vector": {
+          "knowledge": 10.0,
+          "computation": 4.4,
+          "originality": 0.7084232512566102,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 5.4,
+          "ethical_alignment": 1.800038659284056
+        },
+        "hash": "2f6115e85144e2ba152d3f443c8f365d0598b2e3bf5c278c96a7e425bce8d793"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/__init__.py",
+        "lines": 1,
+        "functions": 0,
+        "classes": 0,
+        "complexity_score": 1,
+        "value_vector": {
+          "knowledge": 0.12000000000000001,
+          "computation": 0.2,
+          "originality": 1.8311294503822588,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 0.060000000000000005,
+          "ethical_alignment": 2.4415238514875397
+        },
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/test_api_and_pov.py",
+        "lines": 152,
+        "functions": 3,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 3.24,
+          "computation": 0.4,
+          "originality": 1.6901737485206314,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.62,
+          "ethical_alignment": 0.15413772380629465
+        },
+        "hash": "c19b954d8efbfdc60de3cf319e4159b4a95fd7878c5874e47f7ba70926422cd4"
+      },
+      {
+        "filepath": "/home/ubuntu/laniakea-protocol/tests/test_full_protocol.py",
+        "lines": 175,
+        "functions": 1,
+        "classes": 1,
+        "complexity_score": 2,
+        "value_vector": {
+          "knowledge": 3.7,
+          "computation": 0.4,
+          "originality": 2.517824143327887,
+          "consciousness": 0.0,
+          "environmental": 0.0,
+          "health": 0.0,
+          "scalability": 1.85,
+          "ethical_alignment": 1.5001838205004163
+        },
+        "hash": "4345c953a6548f0f79514ff73393c14462c8d3dd3bafec1e3e4d9cb53f5014b3"
+      }
+    ],
+    "timestamp": "2025-11-04T19:50:37.528158"
+  },
+  "suggestions": [
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/identity/did_system.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    },
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/external_apis/api_integrations.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    },
+    {
+      "file": "/home/ubuntu/laniakea-protocol/src/marketplace/knowledge_market.py",
+      "suggestions": [],
+      "error": "No JSON array found in LLM response"
+    }
+  ],
   "applied_improvements": []
 }
+]
