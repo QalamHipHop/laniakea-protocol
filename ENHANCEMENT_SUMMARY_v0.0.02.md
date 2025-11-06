@@ -346,7 +346,7 @@ GET /api/v0.0.02/system/comprehensive-status
 ## 🙏 Acknowledgments
 
 ### Development Team
-- **Lead Developer**: SuperNinja AI (Architecture & Core Systems)
+- **Lead Developer**: Development Team (Architecture & Core Systems)
 - **Security Specialist**: Neural Security Implementation
 - **AI Researcher**: Cosmic Brain Development
 - **Performance Engineer**: Optimization Systems

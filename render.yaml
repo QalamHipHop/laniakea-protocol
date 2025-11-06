@@ -1,0 +1,30 @@
+services:
+  # Web Service
+  - type: web
+    name: laniakea-protocol
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python main.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: NODE_ID
+        value: laniakea-node-001
+      - key: PORT
+        value: 8000
+
+  # Background Worker
+  - type: worker
+    name: laniakea-protocol-worker
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python main.py --worker-mode"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: WORKER_MODE
+        value: true
+
+# All future updates to render.yaml will be synced automatically, which may change your costs.
