@@ -24,11 +24,12 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 import json
 
-from fastapi import FastAPI, Body, HTTPException, Depends, Request, Response
+from fastapi import FastAPI, Body, HTTPException, Depends, Request, Response, status
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.gzip import GZipMiddleware
 
 from src.config import HOST, get_bootstrap_nodes, is_authority, AUTHORITY_NODES, BLOCK_TIME
 from src.core.models import (
@@ -40,10 +41,24 @@ from src.core.standards import (
     LaniakeaLogger, secure_exception_handler, validate_input,
     sanitize_string, PerformanceMonitor, GLOBAL_SECURITY_CONFIG
 )
-from src.security.enhanced_security import EnhancedSecurityManager, SecurityLevel
-from src.intelligence.autonomous_ai import AutonomousAISystem
-from src.security.advanced_logger import AdvancedLogger
-from src.dashboard.advanced_dashboard import AdvancedDashboard
+try:
+    from src.security.enhanced_security import EnhancedSecurityManager, SecurityLevel
+    from src.intelligence.autonomous_ai import AutonomousAISystem
+    from src.security.advanced_logger import AdvancedLogger
+    from src.dashboard.advanced_dashboard import AdvancedDashboard
+    # v0.0.02 Enhanced Systems
+    from src.security.neural_security_system import NeuralSecuritySystem
+    from src.intelligence.cosmic_brain_ai import CosmicBrainAI
+    from src.optimization.performance_optimizer import PerformanceOptimizer, OptimizationStrategy
+except ImportError as e:
+    print(f"Warning: Could not import advanced modules: {e}")
+    EnhancedSecurityManager = None
+    AutonomousAISystem = None
+    AdvancedLogger = None
+    AdvancedDashboard = None
+    NeuralSecuritySystem = None
+    CosmicBrainAI = None
+    PerformanceOptimizer = None
 
 # v0.0.02 WebSocket and Cross-chain imports
 from src.websocket.websocket_manager import WebSocketManager
@@ -80,8 +95,11 @@ class LaniakeaProtocol:
         
         # سیستم‌های اصلی
         self.security_manager = EnhancedSecurityManager(SecurityLevel.HIGH)
+        self.neural_security = NeuralSecuritySystem(self.node_id)
         self.blockchain = LaniakeaChain(self.node_id)
         self.ai_system = None  # بعداً مقداردهی می‌شود
+        self.cosmic_brain = None  # بعداً مقداردهی می‌شود
+        self.optimizer = PerformanceOptimizer(self.node_id, OptimizationStrategy.BALANCED)
         
         # v0.0.02 Enhanced Systems
         self.websocket_manager = WebSocketManager()
@@ -182,36 +200,118 @@ class LaniakeaProtocol:
             """
         
            # WebSocket endpoint for real-time updates
+
+           # WebSocket endpoint for real-time updates
            @self.app.websocket("/ws/{connection_id}")
            async def websocket_endpoint(websocket, connection_id: str):
-               """WebSocket endpoint for real-time communication"""
-               await self.websocket_manager.handle_connection(websocket, connection_id)
+            """WebSocket endpoint for real-time communication"""
+            await self.websocket_manager.handle_connection(websocket, connection_id)
 
            # v0.0.02 API endpoints
            @self.app.get("/api/v0.0.02/quantum/status")
            async def quantum_status():
-               """Get quantum system status"""
-               return await self.quantum_system.get_status()
+            """Get quantum system status"""
+            return await self.quantum_system.get_status()
 
            @self.app.post("/api/v0.0.02/quantum/compute")
            async def quantum_compute(request: dict):
-               """Execute quantum computation"""
-               return await self.quantum_system.execute_computation(request)
+            """Execute quantum computation"""
+            return await self.quantum_system.execute_computation(request)
 
            @self.app.get("/api/v0.0.02/crosschain/status")
            async def crosschain_status():
-               """Get cross-chain status"""
-               return await self.crosschain_manager.get_status()
+            """Get cross-chain status"""
+            return await self.crosschain_manager.get_status()
 
            @self.app.post("/api/v0.0.02/crosschain/bridge")
            async def bridge_assets(request: dict):
-               """Bridge assets across chains"""
-               return await self.crosschain_manager.bridge_assets(request)
+            """Bridge assets across chains"""
+            return await self.crosschain_manager.bridge_assets(request)
 
            @self.app.get("/api/v0.0.02/notifications")
            async def get_notifications():
-               """Get user notifications"""
-               return await self.notification_service.get_notifications()
+            """Get user notifications"""
+            return await self.notification_service.get_notifications()
+
+              # Enhanced Security and AI endpoints
+              @self.app.post("/api/v0.0.02/neural-security/analyze")
+              async def neural_security_analyze(request: dict):
+               """Analyze request with neural security system"""
+               try:
+                   is_safe, reason, confidence = await self.neural_security.analyze_request(request)
+                   return {
+                       "safe": is_safe,
+                       "reason": reason,
+                       "confidence": confidence,
+                       "node_id": self.node_id
+                   }
+               except Exception as e:
+                   self.logger.error("Neural security analysis failed", exception=e)
+                   raise HTTPException(status_code=500, detail=str(e))
+
+              @self.app.get("/api/v0.0.02/neural-security/status")
+              async def neural_security_status():
+               """Get neural security system status"""
+               return self.neural_security.get_security_status()
+
+              @self.app.post("/api/v0.0.02/cosmic-brain/think")
+              async def cosmic_brain_think(request: dict):
+               """Deep thinking with cosmic brain AI"""
+               try:
+                   if not self.cosmic_brain:
+                       self.cosmic_brain = CosmicBrainAI(self.node_id)
+                   
+                   problem = request.get("problem", "")
+                   context = request.get("context", {})
+                   
+                   thought = await self.cosmic_brain.think(problem, context)
+                   return {
+                       "thought_id": thought.thought_id,
+                       "content": thought.content,
+                       "logical_strength": thought.logical_strength,
+                       "creativity_score": thought.creativity_score,
+                       "emotional_weight": thought.emotional_weight,
+                       "origin_regions": [region.value for region in thought.origin_regions]
+                   }
+               except Exception as e:
+                   self.logger.error("Cosmic brain thinking failed", exception=e)
+                   raise HTTPException(status_code=500, detail=str(e))
+
+              @self.app.get("/api/v0.0.02/cosmic-brain/status")
+              async def cosmic_brain_status():
+               """Get cosmic brain AI status"""
+               if not self.cosmic_brain:
+                   return {"status": "not_initialized"}
+               return self.cosmic_brain.get_brain_status()
+
+              @self.app.get("/api/v0.0.02/optimizer/status")
+              async def optimizer_status():
+               """Get performance optimizer status"""
+               return self.optimizer.get_optimization_report()
+
+              @self.app.get("/api/v0.0.02/system/comprehensive-status")
+              async def comprehensive_system_status():
+               """Get comprehensive system status"""
+               try:
+                   status = {
+                       "node_id": self.node_id,
+                       "version": "0.0.02",
+                       "timestamp": time(),
+                       "systems": {
+                           "blockchain": self.blockchain.get_chain_stats(),
+                           "security": self.security_manager.get_security_stats(),
+                           "neural_security": self.neural_security.get_security_status() if self.neural_security else None,
+                           "cosmic_brain": self.cosmic_brain.get_brain_status() if self.cosmic_brain else None,
+                           "optimizer": self.optimizer.get_optimization_report(),
+                           "quantum": await self.quantum_system.get_status(),
+                           "crosschain": await self.crosschain_manager.get_status()
+                       }
+                   }
+                   return status
+               except Exception as e:
+                   self.logger.error("Comprehensive status failed", exception=e)
+                   raise HTTPException(status_code=500, detail=str(e))
+
 
         @self.app.get("/health")
         async def health_check():
@@ -220,7 +320,7 @@ class LaniakeaProtocol:
                 return {
                     "status": "healthy",
                     "node_id": self.node_id,
-                    "version": "0.0.01",
+                    "version": "0.0.02",
                     "timestamp": time(),
                     "blockchain_stats": self.blockchain.get_chain_stats(),
                     "security_stats": self.security_manager.get_security_stats()
@@ -285,9 +385,23 @@ class LaniakeaProtocol:
         try:
             self.ai_system = AutonomousAISystem(self.node_id)
             await self.ai_system.initialize()
-            self.logger.info("AI system started successfully")
+            
+            # راه‌اندازی سیستم‌های پیشرفته
+            if NeuralSecuritySystem:
+                self.logger.info("Neural Security System active")
+            if CosmicBrainAI:
+                self.cosmic_brain = CosmicBrainAI(self.node_id)
+                self.logger.info("Cosmic Brain AI initialized")
+            
+            # راه‌اندازی بهینه‌ساز عملکرد
+            if PerformanceOptimizer:
+                # شروع بهینه‌سازی خودکار در background
+                asyncio.create_task(self.optimizer.start_optimization_loop())
+                self.logger.info("Performance Optimizer started")
+            
+            self.logger.info("All AI systems started successfully")
         except Exception as e:
-            self.logger.error("Failed to start AI system", exception=e)
+            self.logger.error("Failed to start AI systems", exception=e)
     
     async def run(self):
         """اجرای پروتکل"""

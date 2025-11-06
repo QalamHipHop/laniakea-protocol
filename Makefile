@@ -1,271 +1,193 @@
-# Laniakea Protocol Makefile
-# Provides convenient commands for development, testing, and deployment
+# 🌌 Laniakea Protocol v0.0.02 - Unified Makefile
+# Makefile یکپارچه برای مدیریت و deployment پروژه
 
-.PHONY: help install dev test lint format clean build deploy docker
+.PHONY: help install dev test build deploy clean logs monitor health
+.DEFAULT_GOAL := help
 
-# Default target
-help:
-	@echo "Laniakea Protocol - Available Commands:"
+# Configuration
+PYTHON := python3
+PIP := pip3
+DOCKER := docker
+DOCKER_COMPOSE := docker-compose
+NODE_ID := laniakea-node-001
+PORT := 8000
+HOST := 0.0.0.0
+
+# Colors for output
+RED := \033[0;31m
+GREEN := \033[0;32m
+YELLOW := \033[0;33m
+BLUE := \033[0;34m
+PURPLE := \033[0;35m
+CYAN := \033[0;36m
+WHITE := \033[0;37m
+RESET := \033[0m
+
+help: ## Show this help message
+	@echo "$(PURPLE)🌌 Laniakea Protocol v0.0.02 - Unified Makefile$(RESET)"
+	@echo "$(CYAN)Usage: make [target]$(RESET)"
 	@echo ""
-	@echo "Development:"
-	@echo "  install     Install dependencies"
-	@echo "  dev         Start development server"
-	@echo "  test        Run tests"
-	@echo "  lint        Run code quality checks"
-	@echo "  format      Format code with black and isort"
-	@echo "  clean       Clean temporary files"
+	@echo "$(GREEN)📦 Setup & Installation$(RESET)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / && /setup|install/ {printf "  $(YELLOW)%-20s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
-	@echo "Docker:"
-	@echo "  docker-build    Build Docker image"
-	@echo "  docker-run      Run Docker container"
-	@echo "  docker-stop     Stop Docker containers"
-	@echo "  docker-clean    Clean Docker resources"
+	@echo "$(GREEN)🚀 Development$(RESET)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / && /dev|test|lint/ {printf "  $(YELLOW)%-20s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
-	@echo "Deployment:"
-	@echo "  build       Build for production"
-	@echo "  deploy      Deploy to production"
+	@echo "$(GREEN)🐳 Docker$(RESET)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / && /docker|build/ {printf "  $(YELLOW)%-20s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
-	@echo "Database:"
-	@echo "  db-init     Initialize database"
-	@echo "  db-migrate  Run database migrations"
-	@echo "  db-reset    Reset database"
+	@echo "$(GREEN)🚀 Deployment$(RESET)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / && /deploy|prod/ {printf "  $(YELLOW)%-20s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@echo ""
+	@echo "$(GREEN)🔧 Operations$(RESET)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / && /logs|monitor|health|clean/ {printf "  $(YELLOW)%-20s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-# Installation
-install:
-	@echo "Installing dependencies..."
-	pip install -r requirements.txt
-	pip install -r requirements-dev.txt
-	pre-commit install
+# ==========================================
+# SETUP & INSTALLATION
+# ==========================================
 
-# Development
-dev:
-	@echo "Starting development server..."
-	uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+setup: ## Setup the project for first time
+	@echo "$(BLUE)🔧 Setting up Laniakea Protocol...$(RESET)"
+	@$(PYTHON) start.py --interactive
+	@echo "$(GREEN)✅ Setup completed!$(RESET)"
 
-dev-docker:
-	@echo "Starting development with Docker..."
-	docker-compose -f docker-compose.yml up --build
+install: ## Install dependencies
+	@echo "$(BLUE)📦 Installing dependencies...$(RESET)"
+	@$(PIP) install --upgrade pip
+	@$(PIP) install -r requirements_unified.txt
+	@echo "$(GREEN)✅ Dependencies installed$(RESET)"
 
-# Testing
-test:
-	@echo "Running tests..."
-	pytest tests/ -v --cov=src --cov-report=html --cov-report=term
+install-dev: ## Install development dependencies
+	@echo "$(BLUE)📦 Installing development dependencies...$(RESET)"
+	@$(PIP) install --upgrade pip
+	@$(PIP) install -r requirements_unified.txt
+	@$(PIP) install pytest pytest-asyncio pytest-cov black flake8 mypy pre-commit
+	@echo "$(GREEN)✅ Development dependencies installed$(RESET)"
 
-test-fast:
-	@echo "Running fast tests..."
-	pytest tests/ -x --tb=short
+install-minimal: ## Install minimal dependencies
+	@echo "$(BLUE)📦 Installing minimal dependencies...$(RESET)"
+	@$(PIP) install --upgrade pip
+	@$(PIP) install -r requirements_minimal.txt
+	@echo "$(GREEN)✅ Minimal dependencies installed$(RESET)"
 
-test-unit:
-	@echo "Running unit tests..."
-	pytest tests/unit/ -v
+init: ## Initialize project structure
+	@echo "$(BLUE)🏗️ Creating project structure...$(RESET)"
+	@mkdir -p data logs backups models cache profiles uploads temp
+	@mkdir -p docs/api docs/architecture docs/deployment docs/guides
+	@mkdir -p scripts tests monitoring nginx
+	@echo "$(GREEN)✅ Project structure created$(RESET)"
 
-test-integration:
-	@echo "Running integration tests..."
-	pytest tests/integration/ -v
+# ==========================================
+# DEVELOPMENT
+# ==========================================
 
-test-performance:
-	@echo "Running performance tests..."
-	pytest tests/performance/ -v
+dev: ## Run in development mode
+	@echo "$(BLUE)🚀 Starting development server...$(RESET)"
+	@$(PYTHON) main_unified.py --node-id $(NODE_ID) --port $(PORT) --dev
 
-# Code Quality
-lint:
-	@echo "Running linting checks..."
-	flake8 src/ tests/
-	mypy src/
-	bandit -r src/
-	safety check
+dev-enhanced: ## Run in development mode with enhanced features
+	@echo "$(BLUE)🚀 Starting enhanced development server...$(RESET)"
+	@$(PYTHON) main_unified.py --node-id $(NODE_ID) --port $(PORT) --dev
 
-format:
-	@echo "Formatting code..."
-	black src/ tests/
-	isort src/ tests/
+dev-minimal: ## Run in minimal mode
+	@echo "$(BLUE)🚀 Starting minimal server...$(RESET)"
+	@$(PYTHON) main_unified.py --node-id $(NODE_ID) --port $(PORT) --disable-enhanced
 
-format-check:
-	@echo "Checking code formatting..."
-	black --check src/ tests/
-	isort --check-only src/ tests/
+test: ## Run tests
+	@echo "$(BLUE)🧪 Running tests...$(RESET)"
+	@$(PYTHON) -m pytest tests/ -v --cov=src --cov-report=html --cov-report=term
 
-# Security
-security-scan:
-	@echo "Running security scan..."
-	bandit -r src/ -f json -o bandit-report.json
-	safety check --json --output safety-report.json
-	semgrep --config=auto src/
+test-fast: ## Run fast tests
+	@echo "$(BLUE)🧪 Running fast tests...$(RESET)"
+	@$(PYTHON) -m pytest tests/ -v --tb=short
 
-# Database
-db-init:
-	@echo "Initializing database..."
-	python -m src.database.init_db
+lint: ## Run code linting
+	@echo "$(BLUE)🔍 Running linting...$(RESET)"
+	@flake8 src/ tests/ --max-line-length=100 --ignore=E203,W503
+	@echo "$(GREEN)✅ Linting completed$(RESET)"
 
-db-migrate:
-	@echo "Running database migrations..."
-	python -m src.database.migrate
+format: ## Format code with black
+	@echo "$(BLUE)🎨 Formatting code...$(RESET)"
+	@black src/ tests/ *.py
+	@echo "$(GREEN)✅ Code formatted$(RESET)"
 
-db-reset:
-	@echo "Resetting database..."
-	python -m src.database.reset
+# ==========================================
+# DOCKER
+# ==========================================
 
-# Docker
-docker-build:
-	@echo "Building Docker image..."
-	docker build -t laniakea-protocol .
+docker-build: ## Build Docker image
+	@echo "$(BLUE)🐳 Building Docker image...$(RESET)"
+	@$(DOCKER) build -f Dockerfile.unified -t laniakea-protocol:latest .
+	@echo "$(GREEN)✅ Docker image built$(RESET)"
 
-docker-run:
-	@echo "Running Docker container..."
-	docker run -p 8000:8000 --name laniakea laniakea-protocol
+docker-run: ## Run Docker container
+	@echo "$(BLUE)🐳 Running Docker container...$(RESET)"
+	@$(DOCKER) run --rm -p $(PORT):8000 \
+		-e NODE_ID=docker-$(NODE_ID) \
+		-e PORT=8000 \
+		-v $(PWD)/data:/app/data \
+		-v $(PWD)/logs:/app/logs \
+		laniakea-protocol:latest
 
-docker-stop:
-	@echo "Stopping Docker containers..."
-	docker-compose down || true
-	docker stop laniakea || true
+docker-compose-up: ## Start services with docker-compose
+	@echo "$(BLUE)🐳 Starting services with docker-compose...$(RESET)"
+	@$(DOCKER_COMPOSE) -f docker-compose.unified.yml up -d
+	@echo "$(GREEN)✅ Services started$(RESET)"
 
-docker-clean:
-	@echo "Cleaning Docker resources..."
-	docker-compose down -v || true
-	docker system prune -f
+docker-compose-down: ## Stop services with docker-compose
+	@echo "$(BLUE)🐳 Stopping services with docker-compose...$(RESET)"
+	@$(DOCKER_COMPOSE) -f docker-compose.unified.yml down
+	@echo "$(GREEN)✅ Services stopped$(RESET)"
 
-# Production
-build:
-	@echo "Building for production..."
-	docker build --target production -t laniakea-protocol:latest .
+# ==========================================
+# DEPLOYMENT
+# ==========================================
 
-deploy-staging:
-	@echo "Deploying to staging..."
-	docker-compose -f docker-compose.staging.yml up -d
+deploy-dev: ## Deploy to development environment
+	@echo "$(BLUE)🚀 Deploying to development...$(RESET)"
+	@$(DOCKER_COMPOSE) -f docker-compose.unified.yml --profile dev up -d
+	@echo "$(GREEN)✅ Development deployment completed$(RESET)"
 
-deploy-production:
-	@echo "Deploying to production..."
-	docker-compose -f docker-compose.yml up -d
+deploy-prod: ## Deploy to production environment
+	@echo "$(RED)⚠️ Deploying to production...$(RESET)"
+	@read -p "Are you sure you want to deploy to production? [y/N] " confirm && [ "$$confirm" = "y" ] || exit 1
+	@$(DOCKER_COMPOSE) -f docker-compose.unified.yml up -d
+	@echo "$(GREEN)✅ Production deployment completed$(RESET)"
 
-# Utilities
-clean:
-	@echo "Cleaning temporary files..."
-	find . -type f -name "*.pyc" -delete
-	find . -type d -name "__pycache__" -delete
-	find . -type d -name "*.egg-info" -exec rm -rf {} +
-	rm -rf build/
-	rm -rf dist/
-	rm -rf .coverage
-	rm -rf htmlcov/
-	rm -rf .pytest_cache/
-	rm -rf .mypy_cache/
+# ==========================================
+# OPERATIONS
+# ==========================================
 
-logs:
-	@echo "Showing logs..."
-	docker-compose logs -f
+logs: ## Show application logs
+	@echo "$(BLUE)📋 Showing application logs...$(RESET)"
+	@tail -f logs/laniakea.log
 
-backup:
-	@echo "Creating backup..."
-	./scripts/backup.sh
+health: ## Check application health
+	@echo "$(BLUE)🏥 Checking application health...$(RESET)"
+	@curl -f http://$(HOST):$(PORT)/health || echo "$(RED)❌ Health check failed$(RESET)"
 
-health:
-	@echo "Checking health..."
-	curl -f http://localhost:8000/health || echo "Service not healthy"
+status: ## Show detailed status
+	@echo "$(BLUE)📊 Application Status:$(RESET)"
+	@curl -s http://$(HOST):$(PORT)/status | python -m json.tool
 
-# Monitoring
-metrics:
-	@echo "Opening metrics dashboard..."
-	@echo "Prometheus: http://localhost:9090"
-	@echo "Grafana: http://localhost:3000"
+clean: ## Clean up temporary files
+	@echo "$(BLUE)🧹 Cleaning up...$(RESET)"
+	@find . -type f -name "*.pyc" -delete
+	@find . -type d -name "__pycache__" -delete
+	@echo "$(GREEN)✅ Cleanup completed$(RESET)"
 
-# Documentation
-docs:
-	@echo "Building documentation..."
-	mkdocs build
+info: ## Show project information
+	@echo "$(PURPLE)🌌 Laniakea Protocol v0.0.02$(RESET)"
+	@echo "$(CYAN)Node ID: $(NODE_ID)$(RESET)"
+	@echo "$(CYAN)Port: $(PORT)$(RESET)"
+	@echo "$(CYAN)Host: $(HOST)$(RESET)"
+	@echo ""
+	@echo "$(GREEN)📚 Documentation: http://localhost:$(PORT)/docs$(RESET)"
+	@echo "$(GREEN)📊 Dashboard: http://localhost:$(PORT)$(RESET)"
+	@echo "$(GREEN)🏥 Health: http://localhost:$(PORT)/health$(RESET)"
 
-docs-serve:
-	@echo "Serving documentation..."
-	mkdocs serve
-
-# Release
-version:
-	@echo "Current version: $(shell python -c 'import main; print(main.VERSION)')"
-
-bump-patch:
-	@echo "Bumping patch version..."
-	bump2version patch
-
-bump-minor:
-	@echo "Bumping minor version..."
-	bump2version minor
-
-bump-major:
-	@echo "Bumping major version..."
-	bump2version major
-
-# Development helpers
-install-hooks:
-	@echo "Installing git hooks..."
-	pre-commit install
-
-check-all:
-	@echo "Running all checks..."
-	make format-check
-	make lint
-	make test
-	make security-scan
-
-ci:
-	@echo "Running CI pipeline..."
-	make format-check
-	make lint
-	make test
-	make security-scan
-	make docker-build
-
-# Quick development commands
-quick-test:
-	@echo "Quick test run..."
-	pytest tests/ --tb=short -q
-
-quick-lint:
-	@echo "Quick lint check..."
-	flake8 src/ --max-line-length=100
-
-quick-format:
-	@echo "Quick format..."
-	black src/ -q
-	isort src/ -q
-
-# Environment setup
-env-dev:
-	@echo "Setting up development environment..."
-	cp .env.example .env.dev
-	@echo "Please edit .env.dev with your configuration"
-
-env-prod:
-	@echo "Setting up production environment..."
-	cp .env.example .env.prod
-	@echo "Please edit .env.prod with your production configuration"
-
-# Database shortcuts
-db-shell:
-	@echo "Opening database shell..."
-	docker-compose exec postgres psql -U laniakea -d laniakea
-
-redis-shell:
-	@echo "Opening Redis shell..."
-	docker-compose exec redis redis-cli
-
-# Utility commands
-tree-dirs:
-	@echo "Showing directory structure..."
-	tree -I '__pycache__|*.pyc|.git|node_modules'
-
-find-large-files:
-	@echo "Finding large files..."
-	find . -type f -size +10M -exec ls -lh {} \;
-
-count-lines:
-	@echo "Counting lines of code..."
-	find src/ -name "*.py" | xargs wc -l
-
-# Git utilities
-git-clean:
-	@echo "Cleaning git..."
-	git clean -fd
-	git gc --aggressive --prune=now
-
-git-stats:
-	@echo "Git statistics..."
-	git shortlog -sn
+version: ## Show version information
+	@echo "$(PURPLE)🌌 Laniakea Protocol v0.0.02 Enhanced$(RESET)"
+	@echo "$(BLUE)Build: $(shell git rev-parse --short HEAD 2>/dev/null || echo 'unknown')$(RESET)"
+	@echo "$(BLUE)Date: $(shell date)$(RESET)"
+	@echo "$(BLUE)Python: $(shell $(PYTHON) --version)$(RESET)"
