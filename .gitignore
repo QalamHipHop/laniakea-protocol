@@ -1,10 +1,96 @@
+# Python
 __pycache__/
 *.py[cod]
-.venv/
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
 venv/
-.idea/
+ENV/
+env/
+.venv
+
+# IDE
 .vscode/
-*.db
-*.sqlite3
-*.log
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
+
+# Logs
+*.log
+logs/
+laniakea.log*
+
+# Data
+data/
+*.db
+*.sqlite
+*.pem
+wallet.pem
+data_node_*/
+
+# Configuration
+.env
+.env.local
+*.local.yaml
+*.local.yml
+test_config.yaml
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Temporary files
+*.tmp
+*.temp
+shutdown_report_*.json
+evolution_log.json
+
+# Build artifacts
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Old/Legacy files (cleanup)
+main_legacy.py
+main_intelligent.py
+main_original_backup.py
+laniakea_intelligent_core.py
+start.py
+config.py
+requirements_legacy.txt
+requirements_intelligent.txt
+requirements_minimal.txt
+config_intelligent.yaml
+deploy_intelligent.sh
+Dockerfile.legacy
+Dockerfile.intelligent
+docker-compose.legacy.yml
+docker-compose.intelligent.yml
+README_INTELLIGENT.md
+local_models/
+laniakea-protocol/
