@@ -214,7 +214,7 @@ class EnhancedSecurityManager:
             self.logger.error("Password verification failed", exception=e)
             return False
     
-    @secure_exception_handler(Laniakaa.Logger("EnhancedSecurity"))
+    @secure_exception_handler(LaniakeaLogger("EnhancedSecurity"))
     def generate_jwt_token(self, user_id: str, expires_in: int = 3600) -> str:
         """تولید توکن JWT"""
         try:

@@ -61,12 +61,12 @@ class CosmicPhenomenon(Enum):
     """پدیده‌های کیهانی برای الگوریتم‌ها"""
     QUANTUM_ENTANGLEMENT = "quantum_entanglement"    # ارتباط فوری
     BLACK_HOLE = "black_hole"                        # فشرده‌سازی اطلاعات
-    NEBULA = "nebula"                                // خلاقیت و تشکیل جدید
+    NEBULA = "nebula"                                #
     SUPERNOVA = "supernova"                          # ایده‌های انفجاری
-    DARK_MATTER = "dark_matter"                      // پردازش پنهان
-    COSMIC_BACKGROUND = "cosmic_background"          // اطلاعات بنیادی
-    GRAVITATIONAL_WAVES = "gravitational_waves"      // انتقال اطلاعات
-    WORMHOLE = "wormhole"                            // میان‌بُعدی
+    DARK_MATTER = "dark_matter"                      
+    COSMIC_BACKGROUND = "cosmic_background"          
+    GRAVITATIONAL_WAVES = "gravitational_waves"      
+    WORMHOLE = "wormhole"                            
 
 
 @dataclass

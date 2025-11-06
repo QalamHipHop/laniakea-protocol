@@ -37,27 +37,27 @@ from src.core.models import (
     NodeInfo, Task, Solution, ValueVector, ProblemCategory,
     NodeSpecialty, Proposal
 )
+from src.optimization.performance_optimizer import OptimizationStrategy
 from src.core.blockchain import LaniakeaChain
 from src.core.standards import (
-    LaniakeaLogger, secure_exception_handler, validate_input,
-    sanitize_string, PerformanceMonitor, GLOBAL_SECURITY_CONFIG
+    LaniakeaLogger, secure_exception_handler, validate_input, sanitize_string, sanitize_string, PerformanceMonitor, PerformanceMonitor,
 )
 
 # Enhanced systems imports
 try:
     from src.security.enhanced_security import EnhancedSecurityManager, SecurityLevel
-    from src.intelligence.autonomous_ai import AutonomousAISystem
+    from src.intelligence.autonomous_ai import AutonomousAI as AutonomousAISystem
     from src.security.advanced_logger import AdvancedLogger
     from src.dashboard.advanced_dashboard import AdvancedDashboard
     from src.security.neural_security_system import NeuralSecuritySystem
-    from src.intelligence.cosmic_brain_ai import CosmicBrainAI, OptimizationStrategy
+    from src.intelligence.cosmic_brain_ai import CosmicBrainAI 
     from src.optimization.performance_optimizer import PerformanceOptimizer
     from src.websocket.websocket_manager import WebSocketManager
-    from src.websocket.realtime_updates import RealtimeUpdates
+    from src.websocket.realtime_updates import RealtimeUpdateSystem
     from src.websocket.notification_service import NotificationService
-    from src.quantum.enhanced_quantum_system import EnhancedQuantumSystem
-    from src.crosschain.cross_chain_manager import CrossChainManager
-    
+##    from src.quantum.enhanced_quantum_system import EnhancedQuantumSystem
+##    from src.crosschain.cross_chain_manager import CrossChainManager
+##    
     ENHANCED_SYSTEMS_AVAILABLE = True
 except ImportError as e:
     print(f"Warning: Enhanced systems not available: {e}")
@@ -127,15 +127,15 @@ class LaniakeaProtocol:
             self.security_manager = EnhancedSecurityManager(SecurityLevel.HIGH)
             self.neural_security = NeuralSecuritySystem(self.node_id)
             self.cosmic_brain = CosmicBrainAI(self.node_id)
-            self.optimizer = PerformanceOptimizer(self.node_id, OptimizationStrategy.BALANCED)
+            self.optimizer = PerformanceOptimizer(self.node_id, "BALANCED")
             
             # Advanced systems
-            self.ai_system = AutonomousAISystem(self.node_id)
+            self.ai_system = AutonomousAISystem("/workspace", ["system_optimization", "security_enhancement", "performance_improvement"])
             self.websocket_manager = WebSocketManager()
-            self.realtime_updates = RealtimeUpdates()
-            self.notification_service = NotificationService()
-            self.quantum_system = EnhancedQuantumSystem()
-            self.crosschain_manager = CrossChainManager()
+            self.realtime_updates = RealtimeUpdateSystem(self.websocket_manager)
+            self.notification_service = NotificationService(self.websocket_manager)
+####            self.quantum_system = None  # EnhancedQuantumSystem not available without quantum libraries
+##            # self.crosschain_manager = CrossChainManager() # Commented out - requires Web3
             
             self.logger.info("Enhanced systems initialized")
         else:

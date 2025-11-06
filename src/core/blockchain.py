@@ -156,7 +156,7 @@ class LaniakeaChain:
             return False
 
     @secure_exception_handler(LaniakeaLogger("LaniakeaChain"))
-    def add_block(self, block: KnowledgeBlock) -> bool:
+    async def add_block(self, block: KnowledgeBlock) -> bool:
         """اضافه کردن بلک جدید به زنجیره با امنیت پیشرفته"""
         async with self._lock:
             self.monitor.start_timer("block_addition")

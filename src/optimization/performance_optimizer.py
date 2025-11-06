@@ -1,3 +1,4 @@
+import os
 """
 Laniakea Protocol - Advanced Performance Optimizer v1.0
 سیستم بهینه‌سازی عملکرد الهام گرفته از قوانین فیزیک و طبیعت
@@ -272,7 +273,7 @@ class PerformanceOptimizer:
         self.process = psutil.Process()
         self.initial_cpu_count = os.cpu_count()
         
-        self.logger.info(f"Performance Optimizer initialized with strategy: {strategy.value}")
+        self.logger.info(f"Performance Optimizer initialized with strategy: {strategy}")
     
     async def start_optimization_loop(self):
         """شروع حلقه بهینه‌سازی خودکار"""
