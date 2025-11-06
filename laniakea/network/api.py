@@ -21,11 +21,12 @@ from pydantic import BaseModel, Field
 
 # Request/Response Models
 class TransactionRequest(BaseModel):
-    """Transaction request model"""
+    """Transaction request model for Hypercube"""
     sender: str = Field(..., description="Sender address")
     recipient: str = Field(..., description="Recipient address")
     amount: float = Field(..., gt=0, description="Transaction amount")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
+    position_8d: Optional[List[float]] = Field(None, description="Optional 8D position")
 
 
 class ThinkRequest(BaseModel):
@@ -194,13 +195,14 @@ def create_app(
     async def create_transaction(transaction: TransactionRequest):
         """Create a new transaction"""
         try:
-            from laniakea.core.blockchain import Transaction
+            from laniakea.core.blockchain import Transaction # Now HyperTransaction
             
             tx = Transaction(
                 sender=transaction.sender,
                 recipient=transaction.recipient,
                 amount=transaction.amount,
-                metadata=transaction.metadata
+                metadata=transaction.metadata,
+                position_8d=transaction.position_8d if transaction.position_8d else [0.0] * 8
             )
             
             success = app.state.blockchain.add_transaction(tx)

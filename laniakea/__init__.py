@@ -10,7 +10,7 @@ __version__ = '3.0.0'
 __author__ = 'LaniakeA Team'
 __license__ = 'MIT'
 
-from laniakea.core.blockchain import LaniakeABlockchain, Block, Transaction
+from laniakea.core.blockchain import LaniakeABlockchain, Block, Transaction # Now Hypercube implementations
 from laniakea.intelligence.brain import CosmicBrainAI, Thought, EvolutionResult
 from laniakea.utils.logger import setup_logger, get_logger
 from laniakea.utils.config import load_config, save_config, get_config
