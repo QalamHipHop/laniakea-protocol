@@ -310,6 +310,7 @@ class HypercubeBlockchain:
         return {
             "chain": [block.to_dict() for block in self.chain],
             "pending_transactions": [tx.to_dict() for tx in self.pending_transactions],
+            "contracts": [self.scvm.get_contract_state(addr) for addr in self.scvm.contracts],
             "difficulty": self.difficulty,
             "node_id": self.node_id
         }

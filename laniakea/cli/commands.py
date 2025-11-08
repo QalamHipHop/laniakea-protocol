@@ -99,8 +99,9 @@ def cli(ctx: LaniakeAContext, debug: bool, dev: bool, config: Optional[str]):
 @click.option('--port', default=8000, type=int, help='Port number to listen on')
 @click.option('--workers', default=4, type=int, help='Number of worker processes')
 @click.option('--reload', is_flag=True, help='Enable auto-reload on code changes')
+@click.option('--p2p-url', default=None, help='URL for P2P network (e.g., ws://0.0.0.0:8001)')
 @pass_context
-def start(ctx: LaniakeAContext, node_id: str, host: str, port: int, workers: int, reload: bool):
+def start(ctx: LaniakeAContext, node_id: str, host: str, port: int, workers: int, reload: bool, p2p_url: Optional[str]):
     """
     🚀 Start the LaniakeA Protocol node
     
@@ -117,6 +118,7 @@ def start(ctx: LaniakeAContext, node_id: str, host: str, port: int, workers: int
     ctx.logger.info(f"📡 Node ID: {node_id}")
     ctx.logger.info(f"🌐 Host: {host}")
     ctx.logger.info(f"🔌 Port: {port}")
+    ctx.logger.info(f"🌐 P2P URL: {p2p_url or f'ws://{host}:{port+1}'}")
     ctx.logger.info(f"👷 Workers: {workers}")
     ctx.logger.info(f"🔄 Auto-reload: {'Enabled' if reload or ctx.dev_mode else 'Disabled'}")
     ctx.logger.info("=" * 70)
@@ -126,6 +128,16 @@ def start(ctx: LaniakeAContext, node_id: str, host: str, port: int, workers: int
         ctx.logger.info("⛓️  Initializing blockchain...")
         ctx.blockchain = HypercubeBlockchain(node_id=node_id, logger=ctx.logger)
         ctx.logger.info("✅ Blockchain initialized successfully")
+        
+        # Initialize P2P Network
+        ctx.logger.info("📡 Initializing P2P Network...")
+        from laniakea.network.p2p_network import P2PNetwork
+        p2p_url = p2p_url or f"ws://{host}:{port+1}"
+        ctx.p2p_network = P2PNetwork(node_url=p2p_url, blockchain=ctx.blockchain)
+        ctx.logger.info(f"✅ P2P Network initialized on {p2p_url}")
+        
+        # Start P2P Network (in background)
+        asyncio.create_task(ctx.p2p_network.start())
         
         # Initialize AI brain
         if ctx.config.get('intelligence', {}).get('enabled', True):
@@ -154,6 +166,9 @@ def start(ctx: LaniakeAContext, node_id: str, host: str, port: int, workers: int
             reload=reload or ctx.dev_mode,
             logger=ctx.logger
         )
+        
+        # Stop P2P Network on shutdown
+        asyncio.run(ctx.p2p_network.stop())
         
     except KeyboardInterrupt:
         ctx.logger.info("\n🛑 Shutting down gracefully...")

@@ -8,6 +8,7 @@ Version: 3.0.0
 import sys
 import os
 from pathlib import Path
+from laniakea.network.p2p_network import P2PNetwork, p2p_network
 
 # Add project root to Python path
 PROJECT_ROOT = Path(__file__).parent
@@ -25,12 +26,17 @@ def main():
         # If PORT is set (e.g., by Render), start server automatically
         if "PORT" in os.environ:
             print(f"🚀 Starting LaniakeA Protocol on port {PORT}")
+            
+            # Set P2P URL for CLI
+            p2p_url = f"ws://0.0.0.0:{PORT+1}"
+            
             sys.argv = [
                 'laniakea',
                 'start',
                 '--host', '0.0.0.0',
                 '--port', str(PORT),
-                '--node-id', os.getenv('NODE_ID', 'laniakea-render-node')
+                '--node-id', os.getenv('NODE_ID', 'laniakea-render-node'),
+                '--p2p-url', p2p_url
             ]
         
         # Run CLI

@@ -99,10 +99,10 @@ class CrossChainTransaction:
     id: str
     bridge_request_id: str
     from_tx_hash: str
-    to_tx_hash: Optional[str] = None
     from_chain: ChainType
     to_chain: ChainType
     amount: Union[int, float]
+    to_tx_hash: Optional[str] = None
     token_address: Optional[str] = None
     timestamp: datetime = field(default_factory=datetime.utcnow)
     status: BridgeStatus = BridgeStatus.PENDING

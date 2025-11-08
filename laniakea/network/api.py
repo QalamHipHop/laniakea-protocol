@@ -14,6 +14,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
+# Import cross-chain bridge router
+from src.crosschain.cross_chain_bridge import router as cross_chain_router
+# Import smart contract router
+from laniakea.network.smart_contract_api import router as contract_router
+
 # Request/Response Models
 class TransactionRequest(BaseModel):
     sender: str
@@ -170,6 +175,10 @@ def create_app(
         except Exception as e:
             app.state.logger.error(f"Error getting balance: {e}")
             raise HTTPException(status_code=500, detail=str(e))
+    
+    # --- Routers ---
+    app.include_router(cross_chain_router, prefix="/api/v1/bridge", tags=["Cross-Chain Bridge"])
+    app.include_router(contract_router, prefix="/api/v1/contract", tags=["Smart Contracts"])
     
     return app
 
