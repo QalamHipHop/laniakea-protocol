@@ -101,8 +101,7 @@ class CrossChainTransaction:
     from_tx_hash: str
     to_tx_hash: Optional[str] = None
     from_chain: ChainType
-to_chain: ChainType
-    amount: Union[int, float]
+    to_chain: ChainType
     amount: Union[int, float]
     token_address: Optional[str] = None
     timestamp: datetime = field(default_factory=datetime.utcnow)

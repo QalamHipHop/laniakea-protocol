@@ -81,7 +81,6 @@ main_intelligent.py
 main_original_backup.py
 laniakea_intelligent_core.py
 start.py
-config.py
 requirements_legacy.txt
 requirements_intelligent.txt
 requirements_minimal.txt

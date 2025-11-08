@@ -18,8 +18,8 @@ from datetime import datetime
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from laniakea.utils.logger import setup_logger, get_logger
-from laniakea.utils.config import load_config, save_config
-from laniakea.core.blockchain import LaniakeABlockchain
+from laniakea.utils.config import get_config
+from laniakea.core.hypercube_blockchain import HypercubeBlockchain
 from laniakea.intelligence.brain import CosmicBrainAI
 from laniakea.network.api import create_app, run_server
 
@@ -83,12 +83,8 @@ def cli(ctx: LaniakeAContext, debug: bool, dev: bool, config: Optional[str]):
     ctx.logger = setup_logger('laniakea', log_level=log_level, dev_mode=dev)
     
     # Load configuration
-    if config:
-        ctx.config = load_config(config)
-        ctx.logger.info(f"📁 Configuration loaded from: {config}")
-    else:
-        ctx.config = load_config()
-        ctx.logger.debug("📁 Using default configuration")
+    ctx.config = get_config()
+    ctx.logger.debug("📁 Configuration loaded")
     
     if dev:
         ctx.logger.info("🔧 Developer mode enabled - Hot reload and extra features active")
@@ -128,7 +124,7 @@ def start(ctx: LaniakeAContext, node_id: str, host: str, port: int, workers: int
     try:
         # Initialize blockchain
         ctx.logger.info("⛓️  Initializing blockchain...")
-        ctx.blockchain = LaniakeABlockchain(node_id=node_id, logger=ctx.logger)
+        ctx.blockchain = HypercubeBlockchain(node_id=node_id, logger=ctx.logger)
         ctx.logger.info("✅ Blockchain initialized successfully")
         
         # Initialize AI brain
@@ -181,7 +177,7 @@ def status(ctx: LaniakeAContext, node_id: str, output: Optional[str]):
     
     try:
         # Initialize blockchain
-        blockchain = LaniakeABlockchain(node_id=node_id, logger=ctx.logger)
+        blockchain = HypercubeBlockchain(node_id=node_id, logger=ctx.logger)
         
         # Get status
         status_data = blockchain.get_status()

@@ -1,5 +1,5 @@
 # LaniakeA Protocol - Production Dependencies
-# Optimized for Render free tier deployment
+# Optimized for Render deployment
 # Version: 3.0.0
 
 # Core Web Framework
