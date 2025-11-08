@@ -1,7 +1,7 @@
 from ..intelligence.scda_model import SingleCellDigitalAccount
 from ..network.p2p_network import P2PNetwork # Assuming P2PNetwork is the core network class
 from .hypercube_blockchain import HypercubeBlockchain # Assuming this is the core blockchain class
-from ..storage.database import Database # Assuming this is the core database class
+from ..storage.database import DatabaseConnection, BlockchainDatabase
 from typing import Dict, Any
 
 class SCDAIntegrator:
@@ -10,7 +10,7 @@ class SCDAIntegrator:
     evolutionary logic with the core LaniakeA Protocol components (Blockchain, Network, Storage).
     """
     
-    def __init__(self, database: Database, network: P2PNetwork, blockchain: HypercubeBlockchain):
+    def __init__(self, database: BlockchainDatabase, network: P2PNetwork, blockchain: HypercubeBlockchain):
         self.database = database
         self.network = network
         self.blockchain = blockchain
@@ -92,33 +92,14 @@ class SCDAIntegrator:
             
         return success
 
-# --- Placeholder classes for demonstration (based on analysis of existing structure) ---
-
-class HypercubeBlockchain:
-    def get_current_time(self):
-        return time.time()
-    def add_transaction(self, tx):
-        pass
-    def distribute_reward(self, user_id, difficulty):
-        pass
-
-class P2PNetwork:
-    def broadcast_transaction(self, tx):
-        pass
-
-class Database:
-    def __init__(self):
-        self.data = {}
-    def get_user_data(self, user_id):
-        return self.data.get(user_id)
-    def save_user_data(self, user_id, data):
-        self.data[user_id] = data
+# Placeholder classes removed - using actual implementations from imports
 
 if __name__ == '__main__':
     import time
     
-    # Initialize core components (Placeholders)
-    db = Database()
+    # Initialize core components
+    db_conn = DatabaseConnection()
+    db = BlockchainDatabase(db_conn)
     net = P2PNetwork()
     chain = HypercubeBlockchain()
     

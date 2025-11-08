@@ -343,6 +343,71 @@ class BlockchainDatabase:
         except Exception as e:
             logger.error(f"❌ Analytics insertion failed: {e}")
             return False
+    
+    def get_user_data(self, user_id: str) -> Optional[Dict[str, Any]]:
+        """Get SCDA user data"""
+        try:
+            query = "SELECT * FROM users WHERE username = %s"
+            results = self.db.execute(query, (user_id,))
+            
+            if results and len(results) > 0:
+                user_data = dict(results[0])
+                
+                # Get SCDA state from analytics
+                scda_query = """
+                    SELECT data FROM analytics 
+                    WHERE metric_name = 'scda_state' 
+                    AND data->>'user_id' = %s 
+                    ORDER BY timestamp DESC 
+                    LIMIT 1
+                """
+                scda_results = self.db.execute(scda_query, (user_id,))
+                
+                if scda_results and len(scda_results) > 0:
+                    scda_data = scda_results[0].get('data', {})
+                    if isinstance(scda_data, str):
+                        scda_data = json.loads(scda_data)
+                    user_data.update(scda_data)
+                
+                return user_data
+            
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error retrieving user data for {user_id}: {e}")
+            return None
+    
+    def save_user_data(self, user_id: str, data: Dict[str, Any]) -> bool:
+        """Save SCDA user data"""
+        try:
+            import time
+            
+            query = """
+                INSERT INTO analytics 
+                (metric_name, metric_value, timestamp, data)
+                VALUES (%s, %s, %s, %s)
+            """
+            
+            params = (
+                'scda_state',
+                data.get('complexity_index', 0.0),
+                int(time.time() * 1000),
+                json.dumps({
+                    'user_id': user_id,
+                    'complexity_index': data.get('complexity_index', 0.0),
+                    'energy': data.get('energy', 0.0),
+                    'knowledge_vector': data.get('knowledge_vector', {}),
+                    'solved_problems': data.get('solved_problems', [])
+                })
+            )
+            
+            self.db.execute(query, params)
+            logger.info(f"✅ SCDA state saved for user {user_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"❌ Error saving user data for {user_id}: {e}")
+            return False
 
 
 class UserDatabase:
