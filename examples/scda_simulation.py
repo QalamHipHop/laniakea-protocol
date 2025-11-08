@@ -7,7 +7,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.scda import SingleCellDigitalAccount, generate_hard_problem, validate_solution
+from laniakea.intelligence.scda_model import SingleCellDigitalAccount, generate_hard_problem, validate_solution
 
 def simulate_evolution(scda: SingleCellDigitalAccount, steps: int):
     """
