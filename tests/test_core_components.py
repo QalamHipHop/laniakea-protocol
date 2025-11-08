@@ -6,18 +6,18 @@ import pytest
 import asyncio
 from unittest.mock import Mock, patch
 
-from src.core.blockchain import LaniakeaChain
+from laniakea.core.hypercube_blockchain import HypercubeBlockchain
 from src.core.models import NodeInfo, Task, ValueVector
 from src.consensus.poa import ProofOfAuthority
 from src.consensus.pov import ProofOfValue
 
 
-class TestLaniakeaChain:
+class TestHypercubeBlockchain:
     """Test the Laniakea blockchain implementation."""
     
     def test_blockchain_initialization(self, temp_dir):
         """Test blockchain initialization."""
-        chain = LaniakeaChain(data_dir=str(temp_dir))
+        chain = HypercubeBlockchain(node_id="test_node")
         assert chain is not None
         assert len(chain.get_blocks()) == 0
     
