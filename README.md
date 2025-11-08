@@ -2,7 +2,7 @@
 
 **8-Dimensional Blockchain with AI Intelligence and Computational Evolution**
 
-[![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/QalamHipHop/laniakea-protocol)
+[![Version](https://img.shields.io/badge/version-0.0.03-blue.svg)](https://github.com/QalamHipHop/laniakea-protocol)
 [![Python](https://img.shields.io/badge/python-3.11+-green.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-active-success.svg)](https://laniakea-protocol.onrender.com)
