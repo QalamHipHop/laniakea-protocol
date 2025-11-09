@@ -262,6 +262,8 @@ print(response.json())
 
 ### مستندات رسمی v0.0.01
 
+- **[مستندات جامع و تلفیقی (COMPREHENSIVE_DOCUMENTATION_V0.0.01.md)](CONSOLIDATED_DOCUMENTATION_V0.0.01.md)** - تمام مستندات پروژه در یک فایل واحد و کامل تلفیق شده است.
+
 - **[COMPREHENSIVE_FEATURES_GUIDE_V0.0.01.md](COMPREHENSIVE_FEATURES_GUIDE_V0.0.01.md)** - راهنمای جامع تمام ویژگی‌ها
 - **[ARCHITECTURE_OVERVIEW_V0.0.01.md](ARCHITECTURE_OVERVIEW_V0.0.01.md)** - نمای کلی معماری سیستم
 - **[USER_GUIDE_V0.0.01.md](USER_GUIDE_V0.0.01.md)** - راهنمای کاربری مرحله به مرحله
