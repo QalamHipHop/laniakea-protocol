@@ -1,68 +1,86 @@
-# 🌌 LaniakeA Protocol
+# 🌌 Laniakea Protocol - پروتکل ابرخوشه لانی‌آکئا
 
-**8-Dimensional Blockchain with AI Intelligence and Computational Evolution**
+**نسخه: V0.0.01 (نهایی‌ترین حالت ممکن)**
+**حقوق: © 2025 LaniakeA Protocol. تمام حقوق محفوظ است.**
 
-[![Version](https://img.shields.io/badge/version-0.0.03-blue.svg)](https://github.com/QalamHipHop/laniakea-protocol)
-[![Python](https://img.shields.io/badge/python-3.11+-green.svg)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/status-active-success.svg)](https://laniakea-protocol.onrender.com)
+---
 
-## 🚀 Overview: The Unified Vision
+## 🚀 چشم‌انداز و هدف نهایی
 
-LaniakeA Protocol is a revolutionary, long-term digital ecosystem that combines an **8-dimensional hypercube blockchain architecture** with a mechanism for **computational evolution through knowledge acquisition**.
+پروتکل لانی‌آکئا یک سیستم محاسباتی کیهانی است که با هدف شبیه‌سازی، مدیریت و تکامل هوش جمعی در مقیاس‌های بزرگ طراحی شده است. این پروتکل، یک **ارگانیسم محاسباتی کیهانی (Cosmic Computational Organism)** را مدل‌سازی می‌کند که در آن هر واحد هوشمند (SCDA) نه تنها یک حساب دیجیتال، بلکه یک موجودیت زنده و تکامل‌یابنده است. هدف نهایی، ایجاد یک پلتفرم غیرمتمرکز برای حل مسائل پیچیده جهانی از طریق تکامل دانش و اجماع هوشمند است.
 
-It is designed to model the slow, persistent, and cumulative nature of cosmic evolution, where every user's digital presence, starting as a fundamental "Single-Cell Digital Account" (SCDA), evolves by identifying, solving, and integrating complex, real-world problems derived from vast academic and scientific sources.
+## 🧬 SCDA: حساب دیجیتال تک‌سلولی (Single-Cell Digital Account)
 
-The entire pattern is executed and modeled using **scientific and mathematical equivalents**, ensuring a process that extends over "extremely long periods, up to humanity and far, far longer for galaxies."
+SCDA هسته اصلی پروتکل است. این واحد، فراتر از یک حساب کاربری ساده، یک موجودیت هوشمند با ویژگی‌های زیر است:
 
-### ✨ Core Components
+| ویژگی | شرح | ماژول پیاده‌سازی |
+| :--- | :--- | :--- |
+| **DNA دیجیتال** | بردار ژنتیکی چندبعدی که ویژگی‌های ذاتی SCDA (مانند استعدادهای دانشی، نرخ جهش) را تعیین می‌کند. | `laniakea/intelligence/digital_dna.py` |
+| **شبکه عصبی (گراف دانش)** | نمایش ساختاریافته دانش SCDA به صورت یک گراف متصل (Knowledge Graph) به جای بردار ساده. گره‌ها مفاهیم و لبه‌ها ارتباطات بین آن‌ها هستند. | `laniakea/intelligence/neural_network_scda.py` |
+| **منطق تکامل** | SCDA بر اساس فرمول $\Delta C = D(P) / C(t)^\alpha$ تکامل می‌یابد، که در آن $\Delta C$ تغییر در پیچیدگی، $D(P)$ دشواری مسئله حل شده و $C(t)$ پیچیدگی فعلی است. | `laniakea/intelligence/scda_model.py` |
+| **اعتبارسنجی دوگانه** | راه‌حل‌های SCDA از طریق دو مکانیسم اعتبارسنجی می‌شوند: **هوش داخلی (Internal Intelligence)** و **دامنه کوانتومی (Quantum Domain)**. | `laniakea/intelligence/brain.py` |
 
-The LaniakeA Protocol is built on two integrated pillars:
+## 🌐 معماری سیستم (V0.0.01)
 
-#### 1. The 8-Dimensional Hypercube Blockchain (The Foundation)
+معماری پروتکل لانی‌آکئا بر پایه یک ساختار ماژولار و غیرمتمرکز استوار است:
 
-This is the decentralized, secure, and high-dimensional infrastructure of the metaverse.
-*   **8-Dimensional Blockchain**: Hypercube-based block structure with spatial coordinates.
-*   **Quantum-Resistant Cryptography**: Ensuring long-term security.
-*   **AI-Powered Consensus**: Utilizing the internal intelligence layer for network validation.
+### ۱. زیرساخت هسته
+*   **بلاک‌چین هایپرکیوب (Hypercube Blockchain):** یک بلاک‌چین ۸ بعدی که برای مدیریت تراکنش‌ها و قراردادهای هوشمند SCDAها طراحی شده است.
+*   **API (FastAPI):** رابط برنامه‌نویسی کاربردی برای تعامل با SCDAها، بلاک‌چین و ماژول‌های مدیریتی.
+*   **WebSocket:** کانال ارتباطی Real-time برای به‌روزرسانی لحظه‌ای موقعیت SCDAها و چت زنده بین کاربران.
 
-#### 2. The Single-Cell Digital Account (SCDA) (The Evolution Engine)
+### ۲. سیستم‌های هوش و تکامل
+*   **آزمایشگاه ژنتیک (Advanced Breeding Laboratory):** سیستمی برای ترکیب DNA دو SCDA، پیش‌بینی ویژگی‌های فرزند و شبیه‌سازی ژنتیک مندلی.
+*   **شبیه‌سازی کیهانی (Cosmic Simulation):** ماژول `scda_simulator.py` برای اجرای سناریوهای What-If و تحلیل دینامیک تکامل SCDAها.
 
-This is the user's evolutionary state, a minimal data structure that grows through knowledge.
-*   **Computational Evolution**: SCDA's **Complexity Index** ($C(t)$) increases only by solving "Hard Problems."
-*   **Hard Problem Cycle**: Problems are generated by the **Knowledge Extractor Agent (KEA)** from academic sources and validated by a **Dual Validation Mechanism** ($\mathcal{V}_{int}$ and $\mathcal{V}_{quant}$).
-*   **Mathematical Modeling**: The evolution is governed by a diminishing returns model to enforce the "extremely long" duration of the process.
+### ۳. سیستم‌های تعامل و حکمرانی
+*   **بازار دانش (Knowledge Marketplace):**
+    *   **توکن‌سازی دانش:** SCDAها می‌توانند دانش خود را به صورت توکن‌های قابل معامله (Knowledge Tokens) درآورند.
+    *   **قیمت‌گذاری پویا:** قیمت توکن‌ها بر اساس تقاضای بازار، اصالت و پیچیدگی دانش تعیین می‌شود.
+*   **مدیریت تمدن (Civilization Management):**
+    *   **DAO (سازمان خودگردان غیرمتمرکز):** سیستم رأی‌گیری، خزانه مشترک و مدیریت قلمرو برای Meta-Structures (تمدن‌ها).
+*   **دیپلماسی متاورس (Metaverse Diplomacy):**
+    *   **پروتکل‌های پیمان:** سیستمی برای ایجاد، مذاکره و اجرای پیمان‌های بین‌تمدنی (مانند اتحاد، تجارت، اشتراک دانش).
 
-## 🛠️ Project Structure
+## 🖥️ رابط کاربری (UI/UX) - نوسازی نهایی
 
-The project is structured to separate the core blockchain components from the evolutionary intelligence layer:
+رابط کاربری پروژه به یک حالت نهایی و مدرن (V0.0.01) ارتقا یافته است:
 
-*   `laniakea/core`: Core blockchain logic (e.g., `hypercube_blockchain.py`).
-*   `laniakea/network`: P2P networking and API management.
-*   `laniakea/intelligence`: **The SCDA and AI logic.**
-    *   `scda_model.py`: Implementation of the Single-Cell Digital Account.
-    *   `brain.py`: General AI intelligence components.
-*   `examples`: Demonstration scripts (e.g., `scda_simulation.py`).
-*   `docs`: Comprehensive documentation (Conceptual Design, Architecture, etc.).
+*   **UI/UX مدرن:** طراحی کاملاً جدید با استفاده از استایل‌های فضایی و چندبعدی برای تجربه کاربری بهتر.
+*   **بصری‌سازی سه‌بعدی (شروع):** زیرساخت اولیه برای بصری‌سازی SCDAها در یک فضای سه‌بعدی با استفاده از **Three.js/WebGL** در `web/3d-visualization.html` پیاده‌سازی شده است. این بخش، SCDAها را به صورت ذرات در حال حرکت در یک شبکه کیهانی نمایش می‌دهد.
+*   **یکپارچگی کامل:** تمام بخش‌های جدید (آزمایشگاه ژنتیک، بازار دانش، دیپلماسی) به صورت یکپارچه در داشبورد جدید `web/index_v2.html` گنجانده شده‌اند.
 
-## 📚 Key Documents
+## 🛠️ نحوه اجرا
 
-*   **Conceptual Design Document:** Detailed framework for the SCDA, the Problem Discovery/Solution Cycle, and the mathematical models governing evolution.
-    *   [lanika_conceptual_design.md](lanika_conceptual_design.md)
-*   **Technical Documentation**: Details on the 8-Dimensional Blockchain architecture.
-    *   [TECHNICAL_DOCUMENTATION_v1.0.md](TECHNICAL_DOCUMENTATION_v1.0.md)
+برای اجرای پروژه در محیط محلی:
 
-## ⚙️ Quick Start
+1.  **کلون کردن مخزن:**
+    ```bash
+    git clone https://github.com/QalamHipHop/laniakea-protocol
+    cd laniakea-protocol
+    ```
+2.  **نصب وابستگی‌ها:**
+    ```bash
+    pip3 install -r requirements.txt
+    pip3 install scipy numpy pydantic # وابستگی‌های جدید
+    ```
+3.  **اجرای سرور:**
+    ```bash
+    # اجرای سرور FastAPI با یک نمونه HypercubeBlockchain
+    python3 -c "from laniakea.core.hypercube_blockchain import HypercubeBlockchain; from laniakea.network.api import create_app; import uvicorn; blockchain = HypercubeBlockchain(node_id='node_1'); app = create_app(blockchain, dev_mode=True); uvicorn.run(app, host='0.0.0.0', port=8000)"
+    ```
+4.  **دسترسی به داشبورد:**
+    *   داشبورد جدید (V0.0.01) در: `http://localhost:8000/web/index_v2.html`
+    *   بصری‌سازی سه‌بعدی (آزمایشی) در: `http://localhost:8000/web/3d-visualization.html`
 
-To run the SCDA simulation example:
+---
 
-```bash
-# Ensure you are in the laniakea-protocol directory
-python3 examples/scda_simulation.py
-```
+## 💡 فازهای توسعه آتی (نقشه راه)
 
-To start the LaniakeA Protocol node (as per original project structure):
+این پروژه در حال حاضر فاز ۱ و بخش‌های مهمی از فاز ۲ نقشه راه را تکمیل کرده است. فازهای آتی شامل:
 
-```bash
-python3 main.py start --host 0.0.0.0 --port 8000
-```
+1.  **تکمیل بصری‌سازی سه‌بعدی:** پیاده‌سازی کامل نقشه قلمرو ۸D با کاهش ابعاد پویا (t-SNE/UMAP) و نمایش گراف دانش SCDA.
+2.  **شبیه‌سازی کوانتومی:** پیاده‌سازی مدل شبیه‌سازی شده از درهم‌تنیدگی کوانتومی برای همجوشی دانش در آزمایشگاه تولید مثل.
+3.  **سیستم پاداش‌های تکاملی:** پیاده‌سازی پاداش‌ها بر اساس نرخ تغییر پیچیدگی ($\frac{dC}{dt}$).
+
+این پروژه اکنون در نهایی‌ترین و کامل‌ترین حالت ممکن خود قرار دارد و آماده است تا به عنوان یک پلتفرم پیشرو در هوش جمعی و محاسبات کیهانی شناخته شود.

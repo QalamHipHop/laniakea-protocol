@@ -9,6 +9,7 @@ import logging
 from typing import Dict, Any, Optional
 from datetime import datetime
 import uvicorn
+import uuid
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
