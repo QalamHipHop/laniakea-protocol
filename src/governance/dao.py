@@ -5,7 +5,7 @@ Laniakea Protocol - Decentralized Autonomous Organization (DAO)
 
 import hashlib
 from time import time
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Set, Any
 from enum import Enum
 from pydantic import BaseModel, Field
 
@@ -17,6 +17,7 @@ class ProposalType(str, Enum):
     PARAMETER_CHANGE = "parameter_change"
     TREASURY_SPEND = "treasury_spend"
     NODE_REMOVAL = "node_removal"
+    CIVILIZATION_POLICY = "civilization_policy" # New type for Civilization Management
     EMERGENCY_ACTION = "emergency_action"
 
 
@@ -89,6 +90,10 @@ class GovernanceSystem:
         self.proposals: Dict[str, Proposal] = {}
         self.votes: Dict[str, List[Vote]] = {}  # proposal_id -> votes
         self.voter_stakes: Dict[str, float] = {}  # voter_id -> stake amount
+        
+        # --- Civilization Management Extensions ---
+        self.civilizations: Dict[str, Dict] = {} # civilization_id -> {members: Set[str], treasury: float, territory: List[Any]}
+        self.scda_to_civilization: Dict[str, str] = {} # scda_id -> civilization_id
 
         # تنظیمات حکمرانی
         self.quorum_percentage = 0.30  # حداقل 30% مشارکت
@@ -202,8 +207,12 @@ class GovernanceSystem:
             if v.voter_id == voter_id:
                 return False  # قبلاً رأی داده
 
-        # محاسبه وزن رأی
-        stake = self.voter_stakes.get(voter_id, 1.0)
+        # محاسبه وزن رأی (بر اساس Complexity Index SCDA)
+        # در یک سیستم واقعی، این باید از SCDA Store یا بلاکچین خوانده شود.
+        # برای این پیاده‌سازی، از SCDA Store در API استفاده می‌کنیم.
+        # فرض می‌کنیم SCDA Store در دسترس است و وزن رأی = Complexity Index است.
+        # اگر SCDA در تمدن باشد، وزن رأی می‌تواند متفاوت باشد.
+        stake = self.voter_stakes.get(voter_id, 1.0) # Placeholder for Complexity Index
 
         # ثبت رأی
         vote_obj = Vote(
@@ -351,6 +360,71 @@ class GovernanceSystem:
         """اجرای ارتقای پروتوکل"""
         # این باید با Cognitive Core هماهنگ شود
         return f"Protocol upgrade scheduled: {proposal.description}"
+        
+    def _execute_civilization_policy(self, proposal: Proposal) -> str:
+        """اجرای سیاست‌های تمدن (مانند تغییر قلمرو یا قوانین داخلی)"""
+        civilization_id = proposal.parameters.get("civilization_id")
+        policy_type = proposal.parameters.get("policy_type")
+        
+        if civilization_id not in self.civilizations:
+            raise ValueError(f"Civilization {civilization_id} not found")
+            
+        # Placeholder for actual policy execution
+        return f"Civilization {civilization_id} policy '{policy_type}' executed."
+        
+    # --- Civilization Management Methods ---
+    
+    def create_civilization(self, leader_id: str, name: str) -> str:
+        """ایجاد یک تمدن جدید"""
+        if leader_id in self.scda_to_civilization:
+            raise ValueError("SCDA is already a member of a civilization.")
+            
+        civ_id = hashlib.sha256(f"{name}{time()}".encode()).hexdigest()[:10]
+        
+        self.civilizations[civ_id] = {
+            "id": civ_id,
+            "name": name,
+            "leader": leader_id,
+            "members": {leader_id},
+            "treasury": 0.0,
+            "territory": [], # 8D coordinates
+            "policies": {}
+        }
+        self.scda_to_civilization[leader_id] = civ_id
+        
+        return civ_id
+        
+    def join_civilization(self, scda_id: str, civ_id: str) -> bool:
+        """پیوستن SCDA به یک تمدن"""
+        if civ_id not in self.civilizations:
+            return False
+        if scda_id in self.scda_to_civilization:
+            raise ValueError("SCDA is already a member of a civilization.")
+            
+        self.civilizations[civ_id]["members"].add(scda_id)
+        self.scda_to_civilization[scda_id] = civ_id
+        return True
+        
+    def get_civilization_data(self, civ_id: str) -> Optional[Dict]:
+        """دریافت داده‌های تمدن"""
+        return self.civilizations.get(civ_id)
+        
+    def deposit_to_treasury(self, scda_id: str, amount: float) -> bool:
+        """واریز به خزانه مشترک تمدن"""
+        civ_id = self.scda_to_civilization.get(scda_id)
+        if not civ_id:
+            return False
+            
+        self.civilizations[civ_id]["treasury"] += amount
+        return True
+        
+    def update_territory(self, civ_id: str, new_territory: List[Any]) -> bool:
+        """به‌روزرسانی قلمرو ۸D تمدن"""
+        if civ_id not in self.civilizations:
+            return False
+            
+        self.civilizations[civ_id]["territory"] = new_territory
+        return True
 
     def update_stake(self, voter_id: str, stake_amount: float):
         """به‌روزرسانی مقدار stake یک رأی‌دهنده"""

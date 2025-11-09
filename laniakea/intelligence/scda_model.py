@@ -1,6 +1,7 @@
 import numpy as np
 import uuid
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
+from .digital_dna import DigitalDNA, DNAManager
 
 class SingleCellDigitalAccount:
     """
@@ -16,11 +17,17 @@ class SingleCellDigitalAccount:
     ENERGY_REPLENISHMENT_FACTOR = 50.0  # k2
     PASSIVE_ENERGY_REPLENISHMENT = 1.0
     
-    def __init__(self, identity: str = None):
+    def __init__(self, identity: str = None, dna: Optional[DigitalDNA] = None):
         """
         Initializes the SCDA state vector S(t).
         """
         self.identity = identity if identity else str(uuid.uuid4())
+        
+        # 1. Digital DNA Integration (The SCDA's "Genetic Code")
+        if dna is None:
+            self.dna = DNAManager.create_initial_dna(self.identity)
+        else:
+            self.dna = dna
         self.complexity_index = self.INITIAL_COMPLEXITY  # C(t)
         self.energy = self.INITIAL_ENERGY  # E(t)
         
@@ -38,6 +45,7 @@ class SingleCellDigitalAccount:
         return {
             "identity": self.identity,
             "complexity_index": self.complexity_index,
+            "genetic_diversity": self.dna.calculate_genetic_diversity(),
             "energy": self.energy,
             "knowledge_count": len(self.knowledge_vector),
             "problem_queue_size": len(self.problem_queue)
@@ -80,6 +88,11 @@ class SingleCellDigitalAccount:
         self.energy -= energy_consumed
         
         if self.energy < 0:
+            # Check if SCDA has enough genetic strength to survive low energy
+            if self.dna.get_gene_by_domain("biology").strength < 0.2:
+                print("Critical Warning: Energy depleted and low biological strength. SCDA entering hibernation.")
+            
+            # SCDA enters a low-energy state or hibernation
             # SCDA enters a low-energy state or hibernation
             print("Warning: Energy depleted. Cannot proceed with problem solving.")
             self.energy = 0.0
@@ -100,6 +113,16 @@ class SingleCellDigitalAccount:
             problem_id = f"P_{np.random.randint(1000, 9999)}" # Placeholder ID
             self._update_knowledge_vector(problem_id, solution_quality)
             
+            # D. Genetic Strengthening (Learning)
+            # Find the most relevant knowledge domain for the problem (Placeholder: use a random domain for now)
+            relevant_domain = np.random.choice(DNAManager.KNOWLEDGE_DOMAINS)
+            DNAManager.strengthen_gene(self.dna, relevant_domain, delta_c * 0.1)
+            
+            # E. Potential Mutation (Evolutionary Pressure)
+            if np.random.rand() < 0.05: # 5% chance of mutation on success
+                DNAManager.mutate_dna(self.dna, force=True)
+                print(f"Evolutionary Mutation occurred in {relevant_domain} gene.")
+            
             print(f"Success! C(t) increased by {delta_c:.4f}. New C(t): {self.complexity_index:.4f}")
             return True
         else:
@@ -108,9 +131,19 @@ class SingleCellDigitalAccount:
             return False
 
     def passive_update(self):
-        """Simulates passive energy replenishment over time."""
+        """Simulates passive energy replenishment and potential decay over time."""
+        # 1. Passive Energy Replenishment
         self.energy += self.PASSIVE_ENERGY_REPLENISHMENT
-        # Optional: Add passive decay for Complexity Index or Knowledge Vector
+        
+        # 2. Complexity Decay (If not actively solving problems, complexity can decay slowly)
+        # Decay rate is inversely proportional to the SCDA's genetic strength
+        decay_rate = 0.001 / (self.dna.get_gene_by_domain("mathematics").strength + 0.1)
+        self.complexity_index = max(self.INITIAL_COMPLEXITY, self.complexity_index - decay_rate)
+        
+        # 3. Passive Gene Expression Update
+        for gene in self.dna.genes:
+            # Genes with higher strength are more likely to be expressed
+            gene.expression_level = np.clip(gene.expression_level + (gene.strength * 0.01) - 0.005, 0.0, 1.0)
         
 # --- Placeholder for future KEA and Validation logic ---
 
@@ -153,3 +186,133 @@ def validate_solution(scda: SingleCellDigitalAccount, problem: Dict[str, Any], u
 if __name__ == '__main__':
     # Example usage is moved to main.py
     pass
+
+# --- New SCDA Genetic Operations ---
+
+def breed_scdas(parent1: SingleCellDigitalAccount, parent2: SingleCellDigitalAccount) -> SingleCellDigitalAccount:
+    """
+    Creates a new SCDA (child) by recombining the Digital DNA of two parent SCDAs.
+    This is the core logic for the Advanced Breeding Laboratory.
+    """
+    # 1. Recombine DNA
+    child_id = str(uuid.uuid4())
+    child_dna = DNAManager.recombine_dna(parent1.dna, parent2.dna, child_id)
+    
+    # 2. Apply Post-Recombination Mutation (Higher chance for new life)
+    DNAManager.mutate_dna(child_dna, force=True)
+    
+    # 3. Create new SCDA with inherited DNA
+    child_scda = SingleCellDigitalAccount(identity=child_id, dna=child_dna)
+    
+    # 4. Predict Child's Initial Complexity (Based on genetic strength)
+    # Initial complexity is an average of parents' complexity, weighted by child's genetic diversity
+    avg_parent_complexity = (parent1.complexity_index + parent2.complexity_index) / 2.0
+    genetic_bonus = child_dna.calculate_genetic_diversity() * 0.5 # Max 50% bonus
+    
+    child_scda.complexity_index = child_scda.INITIAL_COMPLEXITY + (avg_parent_complexity * genetic_bonus)
+    
+    print(f"New SCDA (Child) created: {child_scda.identity}. Initial C(t): {child_scda.complexity_index:.4f}")
+    return child_scda
+
+def predict_child_traits(parent1: SingleCellDigitalAccount, parent2: SingleCellDigitalAccount) -> Dict[str, Any]:
+    """
+    Predicts the key traits of the offspring based on Mendelian genetics simulation.
+    """
+    # This is a high-level prediction based on the DNAManager's logic
+    
+    # 1. Predicted Complexity Index (C(t))
+    avg_parent_complexity = (parent1.complexity_index + parent2.complexity_index) / 2.0
+    
+    # Simulate a recombination and mutation to get a predicted diversity
+    temp_dna = DNAManager.recombine_dna(parent1.dna, parent2.dna, "temp")
+    DNAManager.mutate_dna(temp_dna, force=True)
+    predicted_diversity = temp_dna.calculate_genetic_diversity()
+    
+    genetic_bonus = predicted_diversity * 0.5
+    predicted_complexity = SingleCellDigitalAccount.INITIAL_COMPLEXITY + (avg_parent_complexity * genetic_bonus)
+    
+    # 2. Dominant Knowledge Domains
+    # Find the domains where the child is likely to be strongest (highest gene strength)
+    
+    # Simple prediction: take the average strength of the two parents for each domain
+    predicted_strengths = {}
+    for domain in DNAManager.KNOWLEDGE_DOMAINS:
+        gene1 = parent1.dna.get_gene_by_domain(domain)
+        gene2 = parent2.dna.get_gene_by_domain(domain)
+        
+        if gene1 and gene2:
+            predicted_strengths[domain] = (gene1.strength + gene2.strength) / 2.0
+            
+    dominant_traits = sorted(predicted_strengths.items(), key=lambda item: item[1], reverse=True)[:3]
+    
+    return {
+        "predicted_initial_complexity": f"{predicted_complexity:.4f}",
+        "predicted_genetic_diversity": f"{predicted_diversity:.4f}",
+        "dominant_knowledge_traits": [f"{domain} ({strength:.2f})" for domain, strength in dominant_traits],
+        "evolutionary_resistance_coefficient": SingleCellDigitalAccount.EVOLUTIONARY_RESISTANCE_COEFFICIENT # Inherited constant
+    }
+
+# --- New SCDA Genetic Operations ---
+
+def breed_scdas(parent1: SingleCellDigitalAccount, parent2: SingleCellDigitalAccount) -> SingleCellDigitalAccount:
+    """
+    Creates a new SCDA (child) by recombining the Digital DNA of two parent SCDAs.
+    This is the core logic for the Advanced Breeding Laboratory.
+    """
+    # 1. Recombine DNA
+    child_id = str(uuid.uuid4())
+    child_dna = DNAManager.recombine_dna(parent1.dna, parent2.dna, child_id)
+    
+    # 2. Apply Post-Recombination Mutation (Higher chance for new life)
+    DNAManager.mutate_dna(child_dna, force=True)
+    
+    # 3. Create new SCDA with inherited DNA
+    child_scda = SingleCellDigitalAccount(identity=child_id, dna=child_dna)
+    
+    # 4. Predict Child's Initial Complexity (Based on genetic strength)
+    # Initial complexity is an average of parents' complexity, weighted by child's genetic diversity
+    avg_parent_complexity = (parent1.complexity_index + parent2.complexity_index) / 2.0
+    genetic_bonus = child_dna.calculate_genetic_diversity() * 0.5 # Max 50% bonus
+    
+    child_scda.complexity_index = child_scda.INITIAL_COMPLEXITY + (avg_parent_complexity * genetic_bonus)
+    
+    print(f"New SCDA (Child) created: {child_scda.identity}. Initial C(t): {child_scda.complexity_index:.4f}")
+    return child_scda
+
+def predict_child_traits(parent1: SingleCellDigitalAccount, parent2: SingleCellDigitalAccount) -> Dict[str, Any]:
+    """
+    Predicts the key traits of the offspring based on Mendelian genetics simulation.
+    """
+    # This is a high-level prediction based on the DNAManager's logic
+    
+    # 1. Predicted Complexity Index (C(t))
+    avg_parent_complexity = (parent1.complexity_index + parent2.complexity_index) / 2.0
+    
+    # Simulate a recombination and mutation to get a predicted diversity
+    temp_dna = DNAManager.recombine_dna(parent1.dna, parent2.dna, "temp")
+    DNAManager.mutate_dna(temp_dna, force=True)
+    predicted_diversity = temp_dna.calculate_genetic_diversity()
+    
+    genetic_bonus = predicted_diversity * 0.5
+    predicted_complexity = SingleCellDigitalAccount.INITIAL_COMPLEXITY + (avg_parent_complexity * genetic_bonus)
+    
+    # 2. Dominant Knowledge Domains
+    # Find the domains where the child is likely to be strongest (highest gene strength)
+    
+    # Simple prediction: take the average strength of the two parents for each domain
+    predicted_strengths = {}
+    for domain in DNAManager.KNOWLEDGE_DOMAINS:
+        gene1 = parent1.dna.get_gene_by_domain(domain)
+        gene2 = parent2.dna.get_gene_by_domain(domain)
+        
+        if gene1 and gene2:
+            predicted_strengths[domain] = (gene1.strength + gene2.strength) / 2.0
+            
+    dominant_traits = sorted(predicted_strengths.items(), key=lambda item: item[1], reverse=True)[:3]
+    
+    return {
+        "predicted_initial_complexity": f"{predicted_complexity:.4f}",
+        "predicted_genetic_diversity": f"{predicted_diversity:.4f}",
+        "dominant_knowledge_traits": [f"{domain} ({strength:.2f})" for domain, strength in dominant_traits],
+        "evolutionary_resistance_coefficient": SingleCellDigitalAccount.EVOLUTIONARY_RESISTANCE_COEFFICIENT # Inherited constant
+    }

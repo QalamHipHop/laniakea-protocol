@@ -73,6 +73,9 @@
             <button class="tab-button" onclick="openTab(event, 'Blockchain')">بلاک‌چین</button>
             <button class="tab-button" onclick="openTab(event, 'Tasks')">تسک‌ها و راه‌حل‌ها</button>
             <button class="tab-button" onclick="openTab(event, 'Evolution')">تکامل درونی</button>
+            <button class="tab-button" onclick="openTab(event, 'Collaboration')">همکاری و چت</button>
+            <button class="tab-button" onclick="openTab(event, 'Breeding')">آزمایشگاه ژنتیک</button>
+            <button class="tab-button" onclick="openTab(event, 'Civilization')">مدیریت تمدن</button>
         </div>
 
         <div id="Dashboard" class="tab-content active">
@@ -94,18 +97,704 @@
             <!-- محتوای تسک‌ها -->
         </div>
 
-        <div id="Evolution" class="tab-content">
-            <h2>تکامل درونی و بهبود کد</h2>
-            <p>گزارش‌های تکامل خودکار و بهبودهای اعمال شده بر کد نود.</p>
-            <!-- محتوای تکامل -->
-        </div>
+	        <div id="Evolution" class="tab-content">
+	            <h2>تکامل درونی و بهبود کد</h2>
+	            <p>گزارش‌های تکامل خودکار و بهبودهای اعمال شده بر کد نود.</p>
+	            <!-- محتوای تکامل -->
+	        </div>
+	        
+	        <!-- Real-time Collaboration System -->
+	        <div id="Collaboration" class="tab-content">
+	            <h2>سیستم همکاری لحظه‌ای و چت</h2>
+	            <div class="chat-container">
+	                <div id="chatMessages" class="chat-messages"></div>
+	                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." onkeydown="if(event.key === 'Enter') sendChatMessage()">
+	                <button onclick="sendChatMessage()">ارسال</button>
+	            </div>
+	            <div id="spaceExplorerStatus">
+	                <h3>وضعیت SCDAهای آنلاین</h3>
+	                <ul id="onlineSCDAs"></ul>
+	            </div>
+	        </div>
+	        
+	        <!-- Advanced Breeding Laboratory -->
+	        <div id="Breeding" class="tab-content">
+	            <h2>آزمایشگاه پیشرفته تولید مثل SCDA</h2>
+	            <p>ترکیب DNA SCDAها و پیش‌بینی ویژگی‌های فرزند.</p>
+	        <!-- محتوای آزمایشگاه ژنتیک -->
+	            <div class="breeding-lab">
+	                <div class="parent-selection">
+	                    <h3>انتخاب SCDAهای والد</h3>
+	                    <div class="parent-input">
+	                        <label for="parent1Id">شناسه SCDA والد ۱:</label>
+	                        <input type="text" id="parent1Id" value="user_123">
+	                        <button onclick="fetchSCDAData('parent1')">دریافت اطلاعات</button>
+	                    </div>
+	                    <div class="parent-input">
+	                        <label for="parent2Id">شناسه SCDA والد ۲:</label>
+	                        <input type="text" id="parent2Id" value="user_123">
+	                        <button onclick="fetchSCDAData('parent2')">دریافت اطلاعات</button>
+	                    </div>
+	                </div>
+	                
+	                <div class="parent-details-container">
+	                    <div id="parent1Details" class="parent-details">
+	                        <h4>والد ۱</h4>
+	                        <p><strong>C(t):</strong> <span id="p1_complexity">N/A</span></p>
+	                        <p><strong>تنوع ژنتیکی:</strong> <span id="p1_diversity">N/A</span></p>
+	                        <p><strong>ژن‌های غالب:</strong> <span id="p1_genes">N/A</span></p>
+	                    </div>
+	                    <div id="parent2Details" class="parent-details">
+	                        <h4>والد ۲</h4>
+	                        <p><strong>C(t):</strong> <span id="p2_complexity">N/A</span></p>
+	                        <p><strong>تنوع ژنتیکی:</strong> <span id="p2_diversity">N/A</span></p>
+	                        <p><strong>ژن‌های غالب:</strong> <span id="p2_genes">N/A</span></p>
+	                    </div>
+	                </div>
+	                
+	                <button onclick="predictChildTraits()" class="action-button">پیش‌بینی ویژگی‌های فرزند</button>
+	                <button onclick="breedSCDAs()" class="action-button primary-button">تولید مثل (Breed)</button>
+	                
+	                <div id="predictionResults" class="prediction-results">
+	                    <h3>نتایج پیش‌بینی فرزند</h3>
+	                    <p><strong>C(t) اولیه پیش‌بینی شده:</strong> <span id="pred_complexity">N/A</span></p>
+	                    <p><strong>تنوع ژنتیکی پیش‌بینی شده:</strong> <span id="pred_diversity">N/A</span></p>
+	                    <p><strong>ژن‌های غالب پیش‌بینی شده:</strong> <span id="pred_genes">N/A</span></p>
+	                </div>
+	                
+	                <div id="breedingResult" class="breeding-result">
+	                    <!-- نتیجه نهایی تولید مثل در اینجا نمایش داده می‌شود -->
+	                </div>
+	            </div>
+	        </div>
+	        
+	        <!-- Civilization Management Dashboard -->
+	        <div id="Civilization" class="tab-content">
+	            <h2>داشبورد مدیریت تمدن</h2>
+	            <p>سیستم رأی‌گیری، خزانه مشترک، و نقشه قلمرو ۸D.</p>
+	        <!-- محتوای مدیریت تمدن -->
+	            <div class="civilization-dashboard">
+	                <div class="civ-actions">
+	                    <h3>عملیات تمدن</h3>
+	                    <input type="text" id="civName" placeholder="نام تمدن جدید">
+	                    <button onclick="createCivilization()" class="action-button primary-button">ایجاد تمدن</button>
+	                    <input type="text" id="joinCivId" placeholder="شناسه تمدن برای پیوستن">
+	                    <button onclick="joinCivilization()" class="action-button">پیوستن به تمدن</button>
+	                    <input type="number" id="depositAmount" placeholder="مقدار واریز به خزانه">
+	                    <button onclick="depositToTreasury()" class="action-button">واریز به خزانه</button>
+	                </div>
+	                
+	                <div id="currentCivilization" class="civ-details">
+	                    <h3>تمدن فعلی SCDA (<span id="myCivId">N/A</span>)</h3>
+	                    <p><strong>نام:</strong> <span id="civNameDisplay">N/A</span></p>
+	                    <p><strong>رهبر:</strong> <span id="civLeader">N/A</span></p>
+	                    <p><strong>خزانه مشترک:</strong> <span id="civTreasury">N/A</span></p>
+	                    <p><strong>تعداد اعضا:</strong> <span id="civMembersCount">N/A</span></p>
+	                    <button onclick="fetchCivilizationData(document.getElementById('myCivId').textContent)" class="action-button">به‌روزرسانی اطلاعات</button>
+	                </div>
+	                
+	                <div class="governance-section">
+	                    <h3>حکمرانی و رأی‌گیری</h3>
+	                    <div id="proposalsList">
+	                        <!-- لیست پیشنهادات در اینجا قرار می‌گیرد -->
+	                        <p>لیست پیشنهادات در حال حاضر خالی است.</p>
+	                    </div>
+	                    <button onclick="showCreateProposalForm()" class="action-button">ایجاد پیشنهاد جدید</button>
+	                </div>
+	                
+	                <div id="proposalForm" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #667eea; border-radius: 8px;">
+	                    <h4>ایجاد پیشنهاد</h4>
+	                    <input type="text" id="propTitle" placeholder="عنوان" style="width: 100%; margin-bottom: 10px;">
+	                    <textarea id="propDesc" placeholder="توضیحات" style="width: 100%; margin-bottom: 10px;"></textarea>
+	                    <select id="propType" style="width: 100%; margin-bottom: 10px;">
+	                        <option value="protocol_upgrade">ارتقای پروتکل</option>
+	                        <option value="parameter_change">تغییر پارامتر</option>
+	                        <option value="treasury_spend">هزینه از خزانه</option>
+	                        <option value="civilization_policy">سیاست تمدن</option>
+	                    </select>
+	                    <input type="text" id="propTarget" placeholder="هدف (مثلاً نام پارامتر)" style="width: 100%; margin-bottom: 10px;">
+	                    <input type="text" id="propAction" placeholder="عمل (مثلاً مقدار جدید)" style="width: 100%; margin-bottom: 10px;">
+	                    <button onclick="createProposal()" class="action-button primary-button">ثبت پیشنهاد</button>
+	                </div>
+	            </div>
+	        </div>
 
         <footer>
             <p>Laniakea Protocol v0.0.1 - The Cosmic Computational Organism</p>
         </footer>
     </div>
 
-    <script>
+	    <script>
+	        // SCDA ID (Placeholder - should be fetched from auth)
+	        const SCDA_ID = "user_123"; 
+	        const WS_URL = `ws://${window.location.host}/ws/${SCDA_ID}/chat`;
+	        let ws = null;
+	        
+	        function connectWebSocket() {
+	            if (ws) {
+	                ws.close();
+	            }
+	            ws = new WebSocket(WS_URL);
+	
+	            ws.onopen = () => {
+	                console.log("WebSocket connected for Chat.");
+	                // Subscribe to evolution updates for this SCDA
+	                ws.send(JSON.stringify({ type: "subscribe_evolution", data: { scda_id: SCDA_ID } }));
+	            };
+	
+	            ws.onmessage = (event) => {
+	                const message = JSON.parse(event.data);
+	                console.log("WS Message:", message);
+	                
+	                switch (message.type) {
+	                    case 'connection_established':
+	                        // Initial connection message
+	                        break;
+	                    case 'update':
+	                    case 'low_priority_update':
+	                    case 'high_priority_update':
+	                        handleRealtimeUpdate(message.data);
+	                        break;
+	                    case 'chat_message':
+	                        displayChatMessage(message.data);
+	                        break;
+	                    case 'scda_position_update':
+	                        updateOnlineSCDAs(message.data);
+	                        break;
+	                    case 'scda_evolution_update':
+	                        handleEvolutionUpdate(message.data);
+	                        break;
+	                    default:
+	                        console.log(`Unhandled message type: ${message.type}`);
+	                }
+	            };
+	
+	            ws.onclose = (event) => {
+	                console.log("WebSocket disconnected:", event);
+	                setTimeout(connectWebSocket, 5000); // Reconnect after 5 seconds
+	            };
+	
+	            ws.onerror = (error) => {
+	                console.error("WebSocket error:", error);
+	            };
+	        }
+	        
+	        function handleRealtimeUpdate(data) {
+	            // General update handler
+	            if (data.event_type === 'SCDA_EVOLUTION_UPDATE') {
+	                handleEvolutionUpdate(data);
+	            }
+	            // Other general updates can be displayed in a notification area
+	        }
+	        
+	        function handleEvolutionUpdate(data) {
+	            if (data.scda_id === SCDA_ID) {
+	                const evolutionDiv = document.getElementById('Evolution');
+	                evolutionDiv.innerHTML = `
+	                    <h2>تکامل درونی SCDA شما</h2>
+	                    <p><strong>شاخص پیچیدگی (C(t)):</strong> ${parseFloat(data.complexity_index).toFixed(4)}</p>
+	                    <p><strong>انرژی (E(t)):</strong> ${parseFloat(data.energy).toFixed(2)}</p>
+	                    <p><strong>تنوع ژنتیکی:</strong> ${parseFloat(data.genetic_diversity).toFixed(4)}</p>
+	                    <p><strong>آخرین تغییر:</strong> ${new Date(data.timestamp).toLocaleTimeString('fa-IR')}</p>
+	                    <p style="color: #ffd700;">${data.message || ''}</p>
+	                `;
+	            }
+	        }
+	        
+	        function displayChatMessage(data) {
+	            const messagesDiv = document.getElementById('chatMessages');
+	            const messageElement = document.createElement('div');
+	            const sender = data.sender_id === SCDA_ID ? 'شما' : data.sender_id;
+	            const senderClass = data.sender_id === SCDA_ID ? 'self' : 'other';
+	            
+	            messageElement.className = `chat-message ${senderClass}`;
+	            messageElement.innerHTML = `
+	                <strong>${sender}:</strong> ${data.message}
+	                <span class="timestamp">${new Date(data.timestamp).toLocaleTimeString('fa-IR')}</span>
+	            `;
+	            messagesDiv.appendChild(messageElement);
+	            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to bottom
+	        }
+	        
+	        function sendChatMessage() {
+	            const input = document.getElementById('chatInput');
+	            const message = input.value.trim();
+	            
+	            if (message && ws && ws.readyState === WebSocket.OPEN) {
+	                const chatMessage = {
+	                    type: "chat_message",
+	                    data: {
+	                        message: message,
+	                        chat_type: "global" // For now, only global chat
+	                    }
+	                };
+	                ws.send(JSON.stringify(chatMessage));
+	                input.value = '';
+	            }
+	        }
+	        
+	        const onlineSCDAs = {};
+	        function updateOnlineSCDAs(data) {
+	            onlineSCDAs[data.scda_id] = data.position;
+	            
+	            const ul = document.getElementById('onlineSCDAs');
+	            ul.innerHTML = ''; // Clear list
+	            
+	            for (const id in onlineSCDAs) {
+	                const li = document.createElement('li');
+	                const pos = onlineSCDAs[id];
+	                li.textContent = `${id}: [${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)}, ...]`;
+	                ul.appendChild(li);
+	            }
+	        }
+	        
+	        // شبیه‌سازی به‌روزرسانی موقعیت SCDA (برای تست)
+	        function simulateSCDAPosition() {
+	            if (ws && ws.readyState === WebSocket.OPEN) {
+	                const positionUpdate = {
+	                    type: "scda_position",
+	                    data: {
+	                        position: {
+	                            x: Math.random() * 100,
+	                            y: Math.random() * 100,
+	                            z: Math.random() * 100,
+	                            d4: Math.random() * 100,
+	                            d5: Math.random() * 100,
+	                            d6: Math.random() * 100,
+	                            d7: Math.random() * 100,
+	                            d8: Math.random() * 100,
+	                        }
+	                    }
+	                };
+	                ws.send(JSON.stringify(positionUpdate));
+	            }
+	        }
+	        
+	        // تابع openTab و updateLiveDashboard در اینجا باقی می‌مانند
+	        
+	        // --- Advanced Breeding Laboratory Functions ---
+	        
+	        // --- Civilization Management Functions ---
+	        
+	        async function fetchCivilizationData(civId) {
+	            if (!civId || civId === 'N/A') return;
+	            try {
+	                const response = await fetch(`/api/v1/civilization/${civId}`);
+	                if (!response.ok) throw new Error("Civilization not found.");
+	                const data = await response.json();
+	                
+	                document.getElementById('civNameDisplay').textContent = data.name;
+	                document.getElementById('civLeader').textContent = data.leader;
+	                document.getElementById('civTreasury').textContent = `${data.treasury.toFixed(2)} KEA`;
+	                document.getElementById('civMembersCount').textContent = data.members.length;
+	                
+	                // Update SCDA's current civilization ID
+	                document.getElementById('myCivId').textContent = data.id;
+	                
+	            } catch (error) {
+	                console.error("Error fetching civilization data:", error);
+	                document.getElementById('currentCivilization').innerHTML = `<p style="color: red;">خطا: ${error.message}</p>`;
+	            }
+	        }
+	        
+	        async function createCivilization() {
+	            const name = document.getElementById('civName').value.trim();
+	            if (!name) {
+	                alert("لطفاً نام تمدن را وارد کنید.");
+	                return;
+	            }
+	            try {
+	                const response = await fetch('/api/v1/civilization/create', {
+	                    method: 'POST',
+	                    headers: { 'Content-Type': 'application/json' },
+	                    body: JSON.stringify({ leader_id: SCDA_ID, name: name })
+	                });
+	                const result = await response.json();
+	                if (response.ok) {
+	                    alert(`تمدن ${name} با موفقیت ایجاد شد. شناسه: ${result.civilization_id}`);
+	                    document.getElementById('myCivId').textContent = result.civilization_id;
+	                    fetchCivilizationData(result.civilization_id);
+	                } else {
+	                    throw new Error(result.detail || "خطا در ایجاد تمدن.");
+	                }
+	            } catch (error) {
+	                alert(`خطا: ${error.message}`);
+	            }
+	        }
+	        
+	        async function joinCivilization() {
+	            const civId = document.getElementById('joinCivId').value.trim();
+	            if (!civId) {
+	                alert("لطفاً شناسه تمدن را وارد کنید.");
+	                return;
+	            }
+	            try {
+	                const response = await fetch('/api/v1/civilization/join', {
+	                    method: 'POST',
+	                    headers: { 'Content-Type': 'application/json' },
+	                    body: JSON.stringify({ scda_id: SCDA_ID, civ_id: civId })
+	                });
+	                const result = await response.json();
+	                if (response.ok) {
+	                    alert(`با موفقیت به تمدن ${civId} پیوستید.`);
+	                    document.getElementById('myCivId').textContent = civId;
+	                    fetchCivilizationData(civId);
+	                } else {
+	                    throw new Error(result.detail || "خطا در پیوستن به تمدن.");
+	                }
+	            } catch (error) {
+	                alert(`خطا: ${error.message}`);
+	            }
+	        }
+	        
+	        async function depositToTreasury() {
+	            const amount = parseFloat(document.getElementById('depositAmount').value);
+	            const civId = document.getElementById('myCivId').textContent;
+	            if (isNaN(amount) || amount <= 0) {
+	                alert("مقدار واریز نامعتبر است.");
+	                return;
+	            }
+	            if (civId === 'N/A') {
+	                alert("شما عضو هیچ تمدنی نیستید.");
+	                return;
+	            }
+	            try {
+	                const response = await fetch('/api/v1/civilization/deposit', {
+	                    method: 'POST',
+	                    headers: { 'Content-Type': 'application/json' },
+	                    body: JSON.stringify({ scda_id: SCDA_ID, amount: amount })
+	                });
+	                const result = await response.json();
+	                if (response.ok) {
+	                    alert(`مبلغ ${amount} با موفقیت به خزانه واریز شد.`);
+	                    fetchCivilizationData(civId);
+	                } else {
+	                    throw new Error(result.detail || "خطا در واریز به خزانه.");
+	                }
+	            } catch (error) {
+	                alert(`خطا: ${error.message}`);
+	            }
+	        }
+	        
+	        function showCreateProposalForm() {
+	            const form = document.getElementById('proposalForm');
+	            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+	        }
+	        
+	        async function createProposal() {
+	            const civId = document.getElementById('myCivId').textContent;
+	            if (civId === 'N/A') {
+	                alert("برای ایجاد پیشنهاد باید عضو یک تمدن باشید.");
+	                return;
+	            }
+	            
+	            const proposalData = {
+	                proposer_id: SCDA_ID,
+	                title: document.getElementById('propTitle').value,
+	                description: document.getElementById('propDesc').value,
+	                proposal_type: document.getElementById('propType').value,
+	                target: document.getElementById('propTarget').value,
+	                action: document.getElementById('propAction').value,
+	                parameters: {
+	                    civilization_id: civId,
+	                    new_value: document.getElementById('propAction').value // For parameter_change
+	                }
+	            };
+	            
+	            try {
+	                const response = await fetch('/api/v1/civilization/proposal', {
+	                    method: 'POST',
+	                    headers: { 'Content-Type': 'application/json' },
+	                    body: JSON.stringify(proposalData)
+	                });
+	                const result = await response.json();
+	                if (response.ok) {
+	                    alert(`پیشنهاد با موفقیت ثبت شد. شناسه: ${result.proposal_id}`);
+	                    document.getElementById('proposalForm').style.display = 'none';
+	                    // In a real system, we would fetch and display the new proposal list
+	                } else {
+	                    throw new Error(result.detail || "خطا در ثبت پیشنهاد.");
+	                }
+	            } catch (error) {
+	                alert(`خطا: ${error.message}`);
+	            }
+	        }
+	        
+	        // Placeholder for fetching and displaying proposals
+	        function fetchProposals() {
+	            // This would call a new API endpoint to get active proposals
+	            // For now, it's a placeholder
+	        }
+	        
+	        // Placeholder for voting
+	        async function castVote(proposalId, vote) {
+	            try {
+	                const response = await fetch('/api/v1/civilization/vote', {
+	                    method: 'POST',
+	                    headers: { 'Content-Type': 'application/json' },
+	                    body: JSON.stringify({
+	                        voter_id: SCDA_ID,
+	                        proposal_id: proposalId,
+	                        vote: vote,
+	                        reason: "Voting via dashboard"
+	                    })
+	                });
+	                const result = await response.json();
+	                if (response.ok) {
+	                    alert(`رأی شما با موفقیت ثبت شد.`);
+	                    // Update proposal list
+	                } else {
+	                    throw new Error(result.detail || "خطا در ثبت رأی.");
+	                }
+	            } catch (error) {
+	                alert(`خطا: ${error.message}`);
+	            }
+	        }
+	        
+	        // --- Advanced Breeding Laboratory Functions ---
+	        
+	        const scdaData = {
+	            parent1: null,
+	            parent2: null
+	        };
+	        
+	        async function fetchSCDAData(parentKey) {
+	            const id = document.getElementById(`${parentKey}Id`).value;
+	            if (!id) return;
+	            
+	            try {
+	                // Fetch SCDA data from a new API endpoint
+	                const response = await fetch(`/api/v1/scda/${id}`);
+	                if (!response.ok) {
+	                    throw new Error(`SCDA ${id} not found or API error.`);
+	                }
+	                const data = await response.json();
+	                scdaData[parentKey] = data;
+	                
+	                // Update UI
+	                const prefix = parentKey === 'parent1' ? 'p1' : 'p2';
+	                document.getElementById(`${prefix}_complexity`).textContent = parseFloat(data.complexity_index).toFixed(4);
+	                document.getElementById(`${prefix}_diversity`).textContent = parseFloat(data.genetic_diversity).toFixed(4);
+	                document.getElementById(`${prefix}_genes`).textContent = data.dominant_knowledge_traits.join(', ');
+	                
+	                console.log(`${parentKey} data fetched:`, data);
+	                
+	            } catch (error) {
+	                console.error(`Error fetching ${parentKey} data:`, error);
+	                alert(`خطا در دریافت اطلاعات SCDA: ${error.message}`);
+	            }
+	        }
+	        
+	        async function predictChildTraits() {
+	            if (!scdaData.parent1 || !scdaData.parent2) {
+	                alert("لطفاً اطلاعات هر دو SCDA والد را دریافت کنید.");
+	                return;
+	            }
+	            
+	            try {
+	                const response = await fetch('/api/v1/scda/predict_child', {
+	                    method: 'POST',
+	                    headers: {
+	                        'Content-Type': 'application/json'
+	                    },
+	                    body: JSON.stringify({
+	                        parent1_id: scdaData.parent1.identity,
+	                        parent2_id: scdaData.parent2.identity
+	                    })
+	                });
+	                
+	                if (!response.ok) {
+	                    throw new Error("خطا در پیش‌بینی ویژگی‌های فرزند.");
+	                }
+	                
+	                const prediction = await response.json();
+	                
+	                document.getElementById('pred_complexity').textContent = prediction.predicted_initial_complexity;
+	                document.getElementById('pred_diversity').textContent = prediction.predicted_genetic_diversity;
+	                document.getElementById('pred_genes').textContent = prediction.dominant_knowledge_traits.join(', ');
+	                
+	                document.getElementById('breedingResult').innerHTML = `<p style="color: #667eea;">پیش‌بینی با موفقیت انجام شد.</p>`;
+	                
+	            } catch (error) {
+	                console.error("Prediction error:", error);
+	                document.getElementById('breedingResult').innerHTML = `<p style="color: red;">خطا: ${error.message}</p>`;
+	            }
+	        }
+	        
+	        async function breedSCDAs() {
+	            if (!scdaData.parent1 || !scdaData.parent2) {
+	                alert("لطفاً اطلاعات هر دو SCDA والد را دریافت کنید.");
+	                return;
+	            }
+	            
+	            try {
+	                const response = await fetch('/api/v1/scda/breed', {
+	                    method: 'POST',
+	                    headers: {
+	                        'Content-Type': 'application/json'
+	                    },
+	                    body: JSON.stringify({
+	                        parent1_id: scdaData.parent1.identity,
+	                        parent2_id: scdaData.parent2.identity
+	                    })
+	                });
+	                
+	                if (!response.ok) {
+	                    throw new Error("خطا در فرآیند تولید مثل.");
+	                }
+	                
+	                const result = await response.json();
+	                
+	                document.getElementById('breedingResult').innerHTML = `
+	                    <h4 style="color: #ffd700;">تولید مثل موفقیت‌آمیز!</h4>
+	                    <p><strong>شناسه SCDA فرزند:</strong> ${result.child_id}</p>
+	                    <p><strong>C(t) اولیه:</strong> ${result.initial_complexity}</p>
+	                    <p><strong>تنوع ژنتیکی:</strong> ${result.genetic_diversity}</p>
+	                    <p><strong>ژن‌های غالب:</strong> ${result.dominant_knowledge_traits.join(', ')}</p>
+	                `;
+	                
+	            } catch (error) {
+	                console.error("Breeding error:", error);
+	                document.getElementById('breedingResult').innerHTML = `<p style="color: red;">خطا: ${error.message}</p>`;
+	            }
+	        }
+	        
+	        // CSS برای چت (به صورت موقت در اینجا)
+	        
+	        // اجرای اولیه و تنظیم به‌روزرسانی دوره‌ای
+	        document.addEventListener('DOMContentLoaded', () => {
+	            // نمایش تب داشبورد به صورت پیش‌فرض
+	            document.getElementById('Dashboard').style.display = "block";
+	            
+	            // به‌روزرسانی اولیه
+	            updateLiveDashboard();
+	
+	            // به‌روزرسانی هر ۵ ثانیه
+	            setInterval(updateLiveDashboard, 5000);
+	            
+	            // اتصال WebSocket
+	            connectWebSocket();
+	            
+	            // شبیه‌سازی به‌روزرسانی موقعیت هر ۳ ثانیه
+	            setInterval(simulateSCDAPosition, 3000);
+	        });
+	        
+	        // CSS برای چت (به صورت موقت در اینجا)
+	        const style = document.createElement('style');
+	        style.innerHTML = `
+	            .chat-container {
+	                display: flex;
+	                flex-direction: column;
+	                height: 400px;
+	                background: rgba(0, 0, 0, 0.2);
+	                border-radius: 8px;
+	                padding: 10px;
+	                margin-bottom: 20px;
+	            }
+	            .chat-messages {
+	                flex-grow: 1;
+	                overflow-y: auto;
+	                margin-bottom: 10px;
+	                padding-left: 10px;
+	            }
+	            .chat-message {
+	                margin-bottom: 5px;
+	                padding: 5px;
+	                border-radius: 5px;
+	            }
+	            .chat-message.self {
+	                text-align: right;
+	                background: #667eea;
+	                margin-left: 20%;
+	            }
+	            .chat-message.other {
+	                text-align: left;
+	                background: #4a5568;
+	                margin-right: 20%;
+	            }
+	            .chat-message strong {
+	                color: #ffd700;
+	            }
+	            .chat-message .timestamp {
+	                font-size: 0.7em;
+	                color: #a0aec0;
+	                margin-right: 10px;
+	            }
+	            .breeding-lab {
+	                display: flex;
+	                flex-direction: column;
+	                gap: 20px;
+	            }
+	            .parent-selection, .parent-details-container {
+	                display: flex;
+	                justify-content: space-around;
+	                gap: 20px;
+	            }
+	            .parent-input, .parent-details {
+	                flex: 1;
+	                padding: 15px;
+	                border: 1px solid rgba(255, 255, 255, 0.1);
+	                border-radius: 8px;
+	            }
+	            .parent-input input {
+	                width: 70%;
+	                padding: 8px;
+	                margin-left: 10px;
+	                background: rgba(255, 255, 255, 0.1);
+	                border: none;
+	                color: white;
+	                border-radius: 4px;
+	            }
+	            .action-button {
+	                padding: 10px 20px;
+	                border: none;
+	                border-radius: 8px;
+	                cursor: pointer;
+	                background: #4a5568;
+	                color: white;
+	                transition: background 0.3s;
+	            }
+	            .action-button:hover {
+	                background: #667eea;
+	            }
+	            .primary-button {
+	                background: #ffd700;
+	                color: #1a202c;
+	            }
+	            .primary-button:hover {
+	                background: #e0b300;
+	            }
+	            .prediction-results, .breeding-result {
+	                padding: 15px;
+	                border: 1px solid #667eea;
+	                border-radius: 8px;
+	                background: rgba(102, 126, 234, 0.1);
+	            }
+	            #chatInput {
+	                padding: 10px;
+	                border: none;
+	                border-radius: 5px;
+	                margin-bottom: 5px;
+	                background: rgba(255, 255, 255, 0.1);
+	                color: white;
+	            }
+	            #spaceExplorerStatus {
+	                padding: 10px;
+	                background: rgba(0, 0, 0, 0.2);
+	                border-radius: 8px;
+	            }
+	            #onlineSCDAs {
+	                list-style: none;
+	                padding: 0;
+	            }
+	            #onlineSCDAs li {
+	                margin-bottom: 5px;
+	                color: #a0aec0;
+	            }
+	        `;
+	        document.head.appendChild(style);
+	        
+	        function openTab(evt, tabName) {
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");

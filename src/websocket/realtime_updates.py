@@ -25,6 +25,10 @@ class UpdateType(Enum):
     SYSTEM_ALERT = "system_alert"
     PERFORMANCE_METRIC = "performance_metric"
     SECURITY_EVENT = "security_event"
+    SCDA_POSITION_UPDATE = "scda_position_update"
+    CHAT_MESSAGE = "chat_message"
+    SCDA_EVOLUTION_UPDATE = "scda_evolution_update"
+    CIVILIZATION_UPDATE = "civilization_update"
     NETWORK_STATUS = "network_status"
 
 @dataclass
@@ -103,6 +107,12 @@ class RealtimeUpdateSystem:
         self._register_websocket_handlers()
         
         self.logger.info("Real-time Update System started")
+        
+        # Register handlers for Real-time Collaboration System
+        self.websocket_manager.register_handler("scda_position", self._handle_scda_position_update)
+        self.websocket_manager.register_handler("chat_message", self._handle_chat_message)
+        self.websocket_manager.register_handler("subscribe_evolution", self._handle_subscribe_evolution)
+        self.websocket_manager.register_handler("unsubscribe_evolution", self._handle_unsubscribe_evolution)
 
     async def stop(self):
         """Stop the real-time update system"""
@@ -115,6 +125,72 @@ class RealtimeUpdateSystem:
             self.cleanup_task.cancel()
         
         self.logger.info("Real-time Update System stopped")
+
+    async def _handle_scda_position_update(self, connection_id: str, payload: Dict):
+        """Handles incoming SCDA position updates from a client and broadcasts to Space Explorer connections."""
+        scda_id = self.websocket_manager.connection_metadata.get(connection_id, {}).get('scda_id')
+        if not scda_id:
+            return
+            
+        # 1. Update SCDA position in the in-memory store (Placeholder for DB update)
+        # For now, we'll just broadcast the received position
+        
+        # 2. Broadcast the update to all Space Explorer connections
+        update_event = UpdateEvent(
+            event_type=UpdateType.SCDA_POSITION_UPDATE,
+            data={
+                "scda_id": scda_id,
+                "position": payload.get("position"), # Expecting {x, y, z, d4, d5, d6, d7, d8}
+                "timestamp": datetime.utcnow().isoformat()
+            },
+            priority="normal",
+            target_audience=[ConnectionType.SPACE_EXPLORER]
+        )
+        self.publish_event(update_event)
+        
+        self.logger.debug(f"SCDA {scda_id} position updated and broadcasted.")
+
+    async def _handle_chat_message(self, connection_id: str, payload: Dict):
+        """Handles incoming chat messages and broadcasts to all chat connections."""
+        scda_id = self.websocket_manager.connection_metadata.get(connection_id, {}).get('scda_id')
+        if not scda_id:
+            return
+            
+        message_text = payload.get("message", "").strip()
+        chat_type = payload.get("chat_type", "global") # global, civilization, private
+        
+        if not message_text:
+            return
+            
+        # 1. Create chat message event
+        chat_event = UpdateEvent(
+            event_type=UpdateType.CHAT_MESSAGE,
+            data={
+                "sender_id": scda_id,
+                "message": message_text,
+                "chat_type": chat_type,
+                "timestamp": datetime.utcnow().isoformat()
+            },
+            priority="normal",
+            target_audience=[ConnectionType.CHAT] # Broadcast to all chat connections
+        )
+        
+        # 2. Publish event
+        self.publish_event(chat_event)
+        
+        self.logger.info(f"Chat message from {scda_id} ({chat_type}) broadcasted.")
+
+    async def _handle_subscribe_evolution(self, connection_id: str, payload: Dict):
+        """Handles subscription to SCDA evolution updates."""
+        scda_id = payload.get("scda_id")
+        if scda_id:
+            self.subscribe_to_updates(connection_id, [UpdateType.SCDA_EVOLUTION_UPDATE])
+            self.logger.info(f"Connection {connection_id} subscribed to SCDA_EVOLUTION_UPDATE for {scda_id}.")
+
+    async def _handle_unsubscribe_evolution(self, connection_id: str, payload: Dict):
+        """Handles unsubscription from SCDA evolution updates."""
+        self.unsubscribe_from_updates(connection_id)
+        self.logger.info(f"Connection {connection_id} unsubscribed from evolution updates.")
 
     def publish_event(self, event: UpdateEvent):
         """Publish an event to be processed"""
@@ -252,6 +328,11 @@ class RealtimeUpdateSystem:
         for connection_id, subscribed_types in self.active_subscriptions.items():
             if event.event_type in subscribed_types:
                 await self.websocket_manager.send_personal_message(message, connection_id)
+        
+        # Also broadcast to specific connection types if specified
+        if event.target_audience:
+            for conn_type in event.target_audience:
+                await self.websocket_manager.broadcast_to_type(message, conn_type)
 
     async def _handle_low_priority_event(self, event: UpdateEvent):
         """Handle low priority events (batch processing)"""

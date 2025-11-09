@@ -19,6 +19,9 @@ class ConnectionType(Enum):
     NOTIFICATIONS = "notifications"
     MARKETPLACE = "marketplace"
     DASHBOARD = "dashboard"
+    COLLABORATION = "collaboration"
+    CHAT = "chat"
+    SPACE_EXPLORER = "space_explorer"
     GOVERNANCE = "governance"
 
 class WebSocketMessage:
