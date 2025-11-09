@@ -11,7 +11,7 @@ from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
 import logging
 import numpy as np
-from scipy.spatial import distance
+# from scipy.spatial import distance  # Removed dependency
 
 # Use the existing logger setup
 from laniakea.utils.logger import get_logger
@@ -128,7 +128,8 @@ class HyperBlock:
         block_point = np.array(coords)
         
         # Calculate Euclidean distance
-        dist = distance.euclidean(block_point, target_point)
+        # dist = distance.euclidean(block_point, target_point)
+        dist = np.linalg.norm(block_point - target_point)
         
         # The required distance (target_distance) decreases with difficulty
         # Max distance in 8D hypercube is sqrt(8 * 0.5^2) = sqrt(2) approx 1.414
