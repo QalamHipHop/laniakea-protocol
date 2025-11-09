@@ -3,13 +3,9 @@ Laniakea Protocol - Governance Module
 ماژول حکمرانی
 """
 
-from .dao import GovernanceSystem, AutoGovernance, Proposal, Vote, ProposalType, ProposalStatus
+from .dao import DAO, Proposal
 
 __all__ = [
-    "GovernanceSystem",
-    "AutoGovernance",
+    "DAO",
     "Proposal",
-    "Vote",
-    "ProposalType",
-    "ProposalStatus",
 ]
