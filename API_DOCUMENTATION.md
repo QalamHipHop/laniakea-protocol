@@ -323,3 +323,109 @@ ws.onmessage = function(event) {
 *API Documentation v1.0*  
 *Enhanced with Cosmic Brain AI Integration*  
 *Last Updated: 2025-11-06*
+---
+
+## 💎 **Knowledge Market Endpoints**
+
+### **Operational Knowledge Market (NFT-Inspired)**
+
+#### `GET /market/token`
+**Purpose:** Get information about the Knowledge Market's fungible token (KNOW).
+**Response:** Token details (ID, symbol, name, total supply).
+
+#### `POST /market/assets`
+**Purpose:** Mint a new Knowledge Asset (NFT).
+**Request Body:**
+```json
+{
+  "owner_id": "string",
+  "title": "string",
+  "description": "string",
+  "content_hash": "string",
+  "metadata_uri": "string"
+}
+```
+**Response:** Details of the newly minted asset.
+
+#### `GET /market/assets`
+**Purpose:** Get a list of all minted Knowledge Assets.
+
+#### `PUT /market/assets/{asset_id}/list`
+**Purpose:** List a Knowledge Asset for sale.
+**Parameters:**
+- `asset_id` (path): ID of the asset.
+- `price` (query): Price in KNOW or LANA.
+
+#### `POST /market/assets/{asset_id}/purchase`
+**Purpose:** Purchase a Knowledge Asset.
+**Parameters:**
+- `asset_id` (path): ID of the asset.
+- `buyer_id` (query): ID of the purchasing entity.
+
+---
+
+## 🏛️ **Diplomacy Endpoints**
+
+### **Inter-SCDA Diplomacy System**
+
+#### `PUT /diplomacy/relation/{id1}/{id2}`
+**Purpose:** Update the diplomatic status between two entities.
+**Parameters:**
+- `id1` (path): First entity ID.
+- `id2` (path): Second entity ID.
+**Request Body:**
+```json
+{
+  "status": "Alliance" | "Hostile" | "Neutral" | "War" | "Peace"
+}
+```
+**Response:** Updated relation details.
+
+#### `GET /diplomacy/relation/{id1}/{id2}`
+**Purpose:** Get the diplomatic relation between two entities.
+
+#### `POST /diplomacy/treaties`
+**Purpose:** Create a new treaty.
+**Request Body:**
+```json
+{
+  "parties": ["string", "string"],
+  "treaty_type": "Trade" | "Defense" | "Research" | "Non-Aggression",
+  "start_date": "datetime",
+  "end_date": "datetime" | null,
+  "terms": "string"
+}
+```
+**Response:** Details of the newly created treaty.
+
+#### `PUT /diplomacy/treaties/{treaty_id}/end`
+**Purpose:** End an existing treaty.
+**Parameters:**
+- `treaty_id` (path): ID of the treaty.
+
+---
+
+## 🧠 **LLM Integration Endpoints**
+
+### **Hard Problem Generation and Validation**
+
+#### `POST /llm/generate-hard-problem`
+**Purpose:** Generate a new 'Hard Problem' for PoHD using the LLM.
+**Request Body:**
+```json
+{
+  "context": "Current state of SCDA evolution or blockchain data."
+}
+```
+**Response:** The generated Hard Problem equation/statement.
+
+#### `POST /llm/validate-hard-problem`
+**Purpose:** Validate a proposed solution to a 'Hard Problem' using the LLM.
+**Request Body:**
+```json
+{
+  "problem": "The Hard Problem statement",
+  "proposed_solution": "The proposed solution"
+}
+```
+**Response:** Validation status (`is_valid`: boolean) and explanation.
