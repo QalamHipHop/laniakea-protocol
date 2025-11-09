@@ -296,7 +296,7 @@
             4: 0x9c27b0   // Purple
         };
 
-        // Initialize Three.js scene (placeholder - requires Three.js library)
+        // Initialize Three.js scene (Enhanced with OrbitControls and better lighting)
         function initScene() {
             const container = document.getElementById('canvas-container');
 
@@ -316,22 +316,38 @@
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
             camera.position.set(0, 0, 150);
 
+            // OrbitControls for better navigation
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; // an inertia effect
+            controls.dampingFactor = 0.05;
+            controls.screenSpacePanning = false;
+            controls.minDistance = 50;
+            controls.maxDistance = 500;
+            controls.maxPolarAngle = Math.PI / 2;
+
             // Renderer setup
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
-
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+// Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
             scene.add(ambientLight);
 
-            const pointLight = new THREE.PointLight(0xffffff, 1);
-            pointLight.position.set(100, 100, 100);
-            pointLight.castShadow = true;
-            scene.add(pointLight);
+            // Directional Light for shadows
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(100, 100, 100);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            directionalLight.shadow.camera.near = 0.5;
+            directionalLight.shadow.camera.far = 500;
+            scene.add(directionalLight);
 
-            // Add grid background
+            // Point Light for a cosmic glow
+            const pointLight = new THREE.PointLight(0x667eea, 1, 500);
+            pointLight.position.set(-100, -100, -100);
+            scene.add(pointLight);ackground
             const gridHelper = new THREE.GridHelper(500, 50, 0x444444, 0x222222);
             scene.add(gridHelper);
 
@@ -470,8 +486,9 @@
             if (scene && renderer && camera) {
                 // Auto-rotate
                 if (autoRotate) {
-                    camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), 0.001);
+                    scene.rotation.y += 0.001;
                 }
+                controls.update(); // required if controls.enableDamping is set to true
 
                 renderer.render(scene, camera);
             }
@@ -556,16 +573,25 @@
 
         // Initialize on page load
         window.addEventListener('load', () => {
-            // Try to load Three.js from CDN if not already loaded
-            if (typeof THREE === 'undefined') {
-                const script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-                script.onload = initScene;
-                script.onerror = () => {
+            // Try to load Three.js and OrbitControls from CDN if not already loaded
+            if (typeof THREE === 'undefined' || typeof THREE.OrbitControls === 'undefined') {
+                const threeScript = document.createElement('script');
+                threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+                threeScript.onload = () => {
+                    const controlsScript = document.createElement('script');
+                    controlsScript.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
+                    controlsScript.onload = initScene;
+                    controlsScript.onerror = () => {
+                        console.warn('OrbitControls failed to load from CDN');
+                        initScene(); // Init even if controls fail, but without controls
+                    };
+                    document.head.appendChild(controlsScript);
+                };
+                threeScript.onerror = () => {
                     console.warn('Three.js failed to load from CDN');
                     initScene();
                 };
-                document.head.appendChild(script);
+                document.head.appendChild(threeScript);
             } else {
                 initScene();
             }

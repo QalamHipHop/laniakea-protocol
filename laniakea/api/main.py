@@ -19,6 +19,8 @@ from laniakea.simulation.cosmic import CosmicSimulator, CosmicEntity
 from laniakea.dashboard.metrics import ProtocolMetrics
 from laniakea.achievements.system import AchievementSystem
 from laniakea.ai.model import AIModel
+from laniakea.diplomacy.core import DiplomacySystem
+from laniakea.knowledge_market.core import KnowledgeMarket
 from laniakea.defi.swap import DecentralizedExchange, LiquidityPool
 
 # --- Initialization ---
@@ -42,6 +44,8 @@ laniakea_metrics = ProtocolMetrics()
 laniakea_achievements = AchievementSystem()
 laniakea_ai = AIModel("LANA_KE_001")
 laniakea_dex = DecentralizedExchange()
+laniakea_diplomacy = DiplomacySystem()
+laniakea_knowledge_market = KnowledgeMarket()
 
 # Initialize simulator with some entities
 import numpy as np
@@ -49,7 +53,7 @@ laniakea_simulator.add_entity(CosmicEntity("Laniakea_Core", "Galaxy", [0.0, 0.0,
 laniakea_simulator.add_entity(CosmicEntity("Milky_Way", "Galaxy", [1.0e22, 0.0, 0.0], 1.5e42))
 
 # Add AI and DeFi endpoints to the logger info
-logger.info("Laniakea Protocol components initialized, including AI and DeFi.")
+logger.info("Laniakea Protocol components initialized, including AI, DeFi, Diplomacy, and Knowledge Market.")
 
 
 
@@ -88,6 +92,15 @@ class QuantumJob(BaseModel):
     gates: List[Dict[str, Any]] # e.g., [{"type": "H", "target": 0}, {"type": "X", "target": 1}]
 
 # --- API Endpoints ---
+
+# Import and include new routers
+from .knowledge_market_api import router as knowledge_market_router
+from .diplomacy_api import router as diplomacy_router
+from .llm_api import router as llm_router
+
+app.include_router(knowledge_market_router, tags=["Knowledge Market"])
+app.include_router(diplomacy_router, tags=["Diplomacy"])
+app.include_router(llm_router, tags=["LLM Integration"])
 
 @app.get("/", tags=["System"])
 def read_root():

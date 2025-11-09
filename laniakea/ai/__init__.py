@@ -10,3 +10,5 @@ __all__ = [
     "SolutionEvaluator",
     "SolutionEvaluation"
 ]
+
+from .llm_integration import generate_hard_problem, validate_hard_problem
