@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laniakea Protocol - 3D Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 100%);
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+        
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100vh;
+        }
+        
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .header {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #667eea;
+            max-width: 400px;
+            pointer-events: auto;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        
+        .header p {
+            font-size: 0.9em;
+            margin: 5px 0;
+            color: #b0b0b0;
+        }
+        
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #667eea;
+            pointer-events: auto;
+        }
+        
+        .controls h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .control-group input,
+        .control-group select {
+            width: 100%;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #667eea;
+            color: #e0e0e0;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px #667eea;
+        }
+        
+        .button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            width: 100%;
+            transition: background 0.3s;
+            pointer-events: auto;
+        }
+        
+        .button:hover {
+            background: #5568d3;
+            box-shadow: 0 0 10px #667eea;
+        }
+        
+        .stats-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #667eea;
+            max-width: 300px;
+            pointer-events: auto;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        
+        .stat-label {
+            color: #b0b0b0;
+        }
+        
+        .stat-value {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #667eea;
+            max-width: 350px;
+            max-height: 300px;
+            overflow-y: auto;
+            pointer-events: auto;
+        }
+        
+        .info-panel h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .info-item {
+            font-size: 0.85em;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 2px solid #667eea;
+            border-radius: 3px;
+        }
+        
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #667eea;
+            font-size: 1.5em;
+            pointer-events: auto;
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(102, 126, 234, 0.3);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <div class="ui-overlay">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌌 Laniakea 3D</h1>
+            <p><strong>Protocol Version:</strong> 2.0.0</p>
+            <p><strong>Visualization Mode:</strong> <span id="vizMode">Loading...</span></p>
+            <p><strong>Active SCDAs:</strong> <span id="activeSCDAs">0</span></p>
+        </div>
+        
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <h3>System Stats</h3>
+            <div class="stat-item">
+                <span class="stat-label">FPS:</span>
+                <span class="stat-value" id="fps">60</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Entities:</span>
+                <span class="stat-value" id="entityCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Avg Complexity:</span>
+                <span class="stat-value" id="avgComplexity">0.00</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Total Energy:</span>
+                <span class="stat-value" id="totalEnergy">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Simulation Time:</span>
+                <span class="stat-value" id="simTime">0s</span>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <h3>Controls</h3>
+            
+            <div class="control-group">
+                <label for="viewMode">View Mode:</label>
+                <select id="viewMode" onchange="changeViewMode(this.value)">
+                    <option value="orbital">Orbital Camera</option>
+                    <option value="fps">First Person</option>
+                    <option value="top">Top Down</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="renderMode">Render Mode:</label>
+                <select id="renderMode" onchange="changeRenderMode(this.value)">
+                    <option value="particles">Particles</option>
+                    <option value="spheres">Spheres</option>
+                    <option value="wireframe">Wireframe</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="speed">Simulation Speed:</label>
+                <input type="range" id="speed" min="0.1" max="5" step="0.1" value="1" onchange="setSimSpeed(this.value)">
+                <span id="speedValue">1x</span>
+            </div>
+            
+            <button class="button" onclick="toggleSimulation()">
+                <span id="simToggleBtn">Pause</span>
+            </button>
+            
+            <button class="button" onclick="resetSimulation()">Reset</button>
+            
+            <button class="button" onclick="takeScreenshot()">Screenshot</button>
+        </div>
+        
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <h3>Selected Entity Info</h3>
+            <div id="entityInfo">
+                <p style="color: #b0b0b0;">Click on an entity to view details</p>
+            </div>
+        </div>
+        
+        <!-- Loading Indicator -->
+        <div class="loading" id="loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Initializing 3D Visualization...</p>
+        </div>
+    </div>
+    
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- 3D Visualization Script -->
+    <script>
+        // ===== 3D Scene Setup =====
+        let scene, camera, renderer;
+        let particles = [];
+        let selectedEntity = null;
+        let isSimulating = true;
+        let simSpeed = 1.0;
+        let frameCount = 0;
+        let lastTime = Date.now();
+        let fps = 60;
+        
+        // Initialize Three.js Scene
+        function initScene() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0e27);
+            scene.fog = new THREE.Fog(0x0a0e27, 100, 1000);
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                10000
+            );
+            camera.position.set(0, 50, 50);
+            camera.lookAt(0, 0, 0);
+            
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('canvas'),
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+            
+            const pointLight = new THREE.PointLight(0xffffff, 1);
+            pointLight.position.set(50, 50, 50);
+            pointLight.castShadow = true;
+            scene.add(pointLight);
+            
+            // Add grid
+            const gridHelper = new THREE.GridHelper(100, 10, 0x444444, 0x222222);
+            scene.add(gridHelper);
+            
+            // Add axes
+            const axesHelper = new THREE.AxesHelper(50);
+            scene.add(axesHelper);
+            
+            // Create sample particles
+            createSampleParticles();
+            
+            // Event listeners
+            window.addEventListener('resize', onWindowResize);
+            document.addEventListener('click', onCanvasClick);
+            
+            // Start animation loop
+            animate();
+            
+            // Hide loading indicator
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        // Create Sample Particles (SCDAs)
+        function createSampleParticles() {
+            const particleGeometry = new THREE.BufferGeometry();
+            const particleCount = 50;
+            
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 100;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+                
+                colors[i * 3] = Math.random();
+                colors[i * 3 + 1] = Math.random();
+                colors[i * 3 + 2] = Math.random();
+            }
+            
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 2,
+                vertexColors: true,
+                sizeAttenuation: true
+            });
+            
+            const particles = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particles);
+        }
+        
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Update FPS
+            frameCount++;
+            const currentTime = Date.now();
+            if (currentTime - lastTime >= 1000) {
+                fps = frameCount;
+                document.getElementById('fps').textContent = fps;
+                frameCount = 0;
+                lastTime = currentTime;
+            }
+            
+            // Update simulation
+            if (isSimulating) {
+                updateSimulation();
+            }
+            
+            // Rotate camera
+            const time = Date.now() * 0.0001;
+            camera.position.x = Math.sin(time) * 80;
+            camera.position.z = Math.cos(time) * 80;
+            camera.lookAt(0, 0, 0);
+            
+            // Render
+            renderer.render(scene, camera);
+        }
+        
+        // Update Simulation
+        function updateSimulation() {
+            // Placeholder for simulation updates
+            // In a real implementation, this would update particle positions based on physics
+        }
+        
+        // Handle Window Resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        // Handle Canvas Click
+        function onCanvasClick(event) {
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+            
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            
+            const intersects = raycaster.intersectObjects(scene.children);
+            
+            if (intersects.length > 0) {
+                selectedEntity = intersects[0].object;
+                updateEntityInfo(selectedEntity);
+            }
+        }
+        
+        // Update Entity Info Panel
+        function updateEntityInfo(entity) {
+            const infoPanel = document.getElementById('entityInfo');
+            infoPanel.innerHTML = `
+                <div class="info-item">
+                    <strong>Type:</strong> ${entity.type}
+                </div>
+                <div class="info-item">
+                    <strong>Position:</strong> (${entity.position.x.toFixed(2)}, ${entity.position.y.toFixed(2)}, ${entity.position.z.toFixed(2)})
+                </div>
+                <div class="info-item">
+                    <strong>Rotation:</strong> (${entity.rotation.x.toFixed(2)}, ${entity.rotation.y.toFixed(2)}, ${entity.rotation.z.toFixed(2)})
+                </div>
+            `;
+        }
+        
+        // Control Functions
+        function changeViewMode(mode) {
+            // Placeholder for view mode changes
+            console.log('View mode changed to:', mode);
+        }
+        
+        function changeRenderMode(mode) {
+            // Placeholder for render mode changes
+            console.log('Render mode changed to:', mode);
+        }
+        
+        function setSimSpeed(speed) {
+            simSpeed = parseFloat(speed);
+            document.getElementById('speedValue').textContent = speed + 'x';
+        }
+        
+        function toggleSimulation() {
+            isSimulating = !isSimulating;
+            document.getElementById('simToggleBtn').textContent = isSimulating ? 'Pause' : 'Resume';
+        }
+        
+        function resetSimulation() {
+            // Placeholder for reset functionality
+            console.log('Simulation reset');
+        }
+        
+        function takeScreenshot() {
+            renderer.render(scene, camera);
+            const link = document.createElement('a');
+            link.href = renderer.domElement.toDataURL('image/png');
+            link.download = 'laniakea-3d-' + Date.now() + '.png';
+            link.click();
+        }
+        
+        // Initialize on page load
+        window.addEventListener('load', initScene);
+    </script>
+</body>
+</html>
