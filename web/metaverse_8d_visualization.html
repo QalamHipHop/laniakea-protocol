@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8D Metaverse Visualization - Laniakea Protocol v0.0.01</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        #info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 350px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        #info-panel h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .info-item {
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-label {
+            color: #b0b0b0;
+            font-size: 0.9em;
+        }
+
+        .info-value {
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+
+        #controls-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            z-index: 100;
+        }
+
+        .control-button {
+            padding: 8px 15px;
+            margin: 5px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        #stats-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            max-width: 300px;
+            z-index: 100;
+        }
+
+        #stats-panel h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .stat-label {
+            color: #b0b0b0;
+        }
+
+        .stat-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        #legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            max-width: 250px;
+            z-index: 100;
+        }
+
+        #legend h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .tier-1-color { background: #4caf50; }
+        .tier-2-color { background: #2196f3; }
+        .tier-3-color { background: #ff9800; }
+        .tier-4-color { background: #9c27b0; }
+
+        .loading-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            z-index: 200;
+        }
+
+        .loading-message h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .loading-message p {
+            color: #b0b0b0;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            #info-panel, #controls-panel, #stats-panel, #legend {
+                max-width: 90vw;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div id="info-panel">
+        <h2>🌌 8D Metaverse</h2>
+        <div class="info-item">
+            <div class="info-label">Visualization Type:</div>
+            <div class="info-value">3D Projection of 8D Space</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Total SCDAs:</div>
+            <div class="info-value" id="total-scda">0</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Selected SCDA:</div>
+            <div class="info-value" id="selected-scda">None</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Complexity:</div>
+            <div class="info-value" id="selected-complexity">-</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Tier:</div>
+            <div class="info-value" id="selected-tier">-</div>
+        </div>
+    </div>
+
+    <div id="controls-panel">
+        <button class="control-button" onclick="rotateView()">Rotate View</button>
+        <button class="control-button" onclick="zoomIn()">Zoom In</button>
+        <button class="control-button" onclick="zoomOut()">Zoom Out</button>
+        <button class="control-button" onclick="resetView()">Reset View</button>
+        <button class="control-button" onclick="toggleAutoRotate()">Toggle Auto-Rotate</button>
+        <button class="control-button" onclick="refreshMetaverse()">Refresh Data</button>
+    </div>
+
+    <div id="stats-panel">
+        <h3>📊 Statistics</h3>
+        <div class="stat-row">
+            <span class="stat-label">Tier 1 SCDAs:</span>
+            <span class="stat-value" id="tier1-count">0</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Tier 2 SCDAs:</span>
+            <span class="stat-value" id="tier2-count">0</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Tier 3 SCDAs:</span>
+            <span class="stat-value" id="tier3-count">0</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Tier 4 SCDAs:</span>
+            <span class="stat-value" id="tier4-count">0</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Avg Complexity:</span>
+            <span class="stat-value" id="avg-complexity">-</span>
+        </div>
+    </div>
+
+    <div id="legend">
+        <h3>Legend</h3>
+        <div class="legend-item">
+            <div class="legend-color tier-1-color"></div>
+            <span>Tier 1: Single-Cell</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color tier-2-color"></div>
+            <span>Tier 2: Multi-Cellular</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color tier-3-color"></div>
+            <span>Tier 3: Humanity</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color tier-4-color"></div>
+            <span>Tier 4: Galactic</span>
+        </div>
+    </div>
+
+    <div id="loading-message" class="loading-message">
+        <h2>🌌 Loading 8D Metaverse...</h2>
+        <p>Initializing visualization engine</p>
+        <p style="font-size: 0.9em; margin-top: 20px; color: #808080;">
+            Note: This is a 3D projection of an 8-dimensional space.<br>
+            Each sphere represents an SCDA's position in the metaverse.
+        </p>
+    </div>
+
+    <script>
+        // Global state
+        let scene, camera, renderer;
+        let scda_positions = [];
+        let scda_meshes = [];
+        let autoRotate = true;
+        let selectedSCDA = null;
+
+        // Tier colors
+        const tierColors = {
+            1: 0x4caf50,  // Green
+            2: 0x2196f3,  // Blue
+            3: 0xff9800,  // Orange
+            4: 0x9c27b0   // Purple
+        };
+
+        // Initialize Three.js scene (placeholder - requires Three.js library)
+        function initScene() {
+            const container = document.getElementById('canvas-container');
+
+            // Check if Three.js is available
+            if (typeof THREE === 'undefined') {
+                showLoadingMessage('Three.js library not loaded. Using fallback visualization.');
+                initFallbackVisualization();
+                return;
+            }
+
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0e27);
+            scene.fog = new THREE.Fog(0x0a0e27, 1000, 2000);
+
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+            camera.position.set(0, 0, 150);
+
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0xffffff, 1);
+            pointLight.position.set(100, 100, 100);
+            pointLight.castShadow = true;
+            scene.add(pointLight);
+
+            // Add grid background
+            const gridHelper = new THREE.GridHelper(500, 50, 0x444444, 0x222222);
+            scene.add(gridHelper);
+
+            // Add axes helper
+            const axesHelper = new THREE.AxesHelper(100);
+            scene.add(axesHelper);
+
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+
+            // Mouse interaction
+            document.addEventListener('click', onMouseClick);
+
+            // Start animation loop
+            animate();
+
+            // Hide loading message
+            document.getElementById('loading-message').style.display = 'none';
+
+            // Load metaverse data
+            loadMetaverseData();
+        }
+
+        // Fallback visualization (if Three.js is not available)
+        function initFallbackVisualization() {
+            const container = document.getElementById('canvas-container');
+            const canvas = document.createElement('canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            container.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+
+            // Draw background
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw message
+            ctx.fillStyle = '#667eea';
+            ctx.font = '20px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('8D Metaverse Visualization', canvas.width / 2, canvas.height / 2 - 30);
+
+            ctx.fillStyle = '#b0b0b0';
+            ctx.font = '14px Arial';
+            ctx.fillText('Three.js library required for full visualization', canvas.width / 2, canvas.height / 2 + 10);
+            ctx.fillText('Data will be displayed in the info panels', canvas.width / 2, canvas.height / 2 + 35);
+
+            // Load and display metaverse data
+            loadMetaverseData();
+        }
+
+        // Load metaverse data from API
+        async function loadMetaverseData() {
+            try {
+                const response = await fetch('/scda/metaverse/all-positions');
+                const data = await response.json();
+
+                scda_positions = data.positions;
+
+                // Update statistics
+                updateStatistics();
+
+                // Create SCDA meshes if Three.js is available
+                if (scene) {
+                    createSCDAMeshes();
+                }
+
+                // Update UI
+                document.getElementById('total-scda').textContent = data.total_scda_count;
+
+            } catch (error) {
+                console.error('Error loading metaverse data:', error);
+                showLoadingMessage(`Error loading data: ${error.message}`);
+            }
+        }
+
+        // Create SCDA meshes in the 3D scene
+        function createSCDAMeshes() {
+            // Remove existing meshes
+            scda_meshes.forEach(mesh => scene.remove(mesh));
+            scda_meshes = [];
+
+            // Create new meshes
+            scda_positions.forEach((position, idx) => {
+                const tier = position.tier;
+                const color = tierColors[tier] || 0x667eea;
+
+                // Create sphere for SCDA
+                const geometry = new THREE.SphereGeometry(2 + Math.log(position.complexity_index + 1), 32, 32);
+                const material = new THREE.MeshPhongMaterial({ color: color });
+                const mesh = new THREE.Mesh(geometry, material);
+
+                // Position based on 8D coordinates (project to 3D)
+                const pos_8d = position.position_8d;
+                mesh.position.set(
+                    (pos_8d[0] - 0.5) * 200 + (pos_8d[4] - 0.5) * 100,
+                    (pos_8d[1] - 0.5) * 200 + (pos_8d[5] - 0.5) * 100,
+                    (pos_8d[2] - 0.5) * 200 + (pos_8d[6] - 0.5) * 100
+                );
+
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                mesh.userData = { scda_identity: position.scda_identity, position: position };
+
+                scene.add(mesh);
+                scda_meshes.push(mesh);
+            });
+        }
+
+        // Update statistics
+        async function updateStatistics() {
+            try {
+                const response = await fetch('/scda/metaverse/tier-distribution');
+                const data = await response.json();
+
+                document.getElementById('tier1-count').textContent = data.tier_distribution[1];
+                document.getElementById('tier2-count').textContent = data.tier_distribution[2];
+                document.getElementById('tier3-count').textContent = data.tier_distribution[3];
+                document.getElementById('tier4-count').textContent = data.tier_distribution[4];
+
+                // Get average complexity
+                const avgResponse = await fetch('/scda/stats/average-complexity');
+                const avgData = await avgResponse.json();
+                document.getElementById('avg-complexity').textContent = avgData.average_complexity.toFixed(2);
+
+            } catch (error) {
+                console.error('Error updating statistics:', error);
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (scene && renderer && camera) {
+                // Auto-rotate
+                if (autoRotate) {
+                    camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), 0.001);
+                }
+
+                renderer.render(scene, camera);
+            }
+        }
+
+        // Mouse click handler
+        function onMouseClick(event) {
+            if (!scene || !camera) return;
+
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scda_meshes);
+
+            if (intersects.length > 0) {
+                selectedSCDA = intersects[0].object.userData;
+                updateSelectedSCDAInfo();
+            }
+        }
+
+        // Update selected SCDA info
+        function updateSelectedSCDAInfo() {
+            if (!selectedSCDA) return;
+
+            const pos = selectedSCDA.position;
+            document.getElementById('selected-scda').textContent = pos.scda_identity;
+            document.getElementById('selected-complexity').textContent = pos.complexity_index.toFixed(2);
+            document.getElementById('selected-tier').textContent = `Tier ${pos.tier}`;
+        }
+
+        // Window resize handler
+        function onWindowResize() {
+            if (!camera || !renderer) return;
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Control functions
+        function rotateView() {
+            if (camera) {
+                camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 4);
+            }
+        }
+
+        function zoomIn() {
+            if (camera) {
+                camera.position.multiplyScalar(0.8);
+            }
+        }
+
+        function zoomOut() {
+            if (camera) {
+                camera.position.multiplyScalar(1.2);
+            }
+        }
+
+        function resetView() {
+            if (camera) {
+                camera.position.set(0, 0, 150);
+            }
+        }
+
+        function toggleAutoRotate() {
+            autoRotate = !autoRotate;
+        }
+
+        function refreshMetaverse() {
+            loadMetaverseData();
+        }
+
+        function showLoadingMessage(message) {
+            const loadingDiv = document.getElementById('loading-message');
+            loadingDiv.querySelector('p').textContent = message;
+            loadingDiv.style.display = 'block';
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            // Try to load Three.js from CDN if not already loaded
+            if (typeof THREE === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+                script.onload = initScene;
+                script.onerror = () => {
+                    console.warn('Three.js failed to load from CDN');
+                    initScene();
+                };
+                document.head.appendChild(script);
+            } else {
+                initScene();
+            }
+        });
+    </script>
+</body>
+</html>

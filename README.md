@@ -1,6 +1,6 @@
 # 🌌 LaniakeA Protocol v0.0.01
 
-**نسخه:** v0.0.01 (Master Rebuild)  
+**نسخه:** v0.0.01 - **تکامل SCDA و متاورس ۸ بعدی**  
 **وضعیت:** Alpha Release  
 **حقوق:** © 2025 LaniakeA Protocol. All Rights Reserved.
 
@@ -26,10 +26,10 @@
 **LaniakeA Protocol** یک سیستم محاسباتی کیهانی است که با الهام از ساختار جهان هستی، یک اکوسیستم غیرمتمرکز برای:
 
 - 🧬 **تکامل هوش:** شبیه‌سازی تکامل از سلول تک‌یاخته تا هوش کیهانی
-- 🔷 **بلاکچین ۸D:** اولین بلاکچین هشت‌بعدی جهان با اجماع PoHD
-- 🧠 **هوش مصنوعی:** یکپارچه‌سازی LLM برای حل مسائل پیچیده
-- 🌐 **متاورس:** فضای ۸ بعدی برای تعامل و همکاری
-- 💎 **اقتصاد دانش:** بازار غیرمتمرکز برای خرید و فروش دانش
+- 🔷 **بلاکچین ۸D:** اولین بلاکچین هشت‌بعدی جهان با اجماع **PoHD (Proof of Human Development)**
+- 🧠 **هوش مصنوعی:** یکپارچه‌سازی LLM برای تولید و اعتبارسنجی **Hard Problems** (معادلات بلوک‌سازی)
+- 🌐 **متاورس:** فضای ۸ بعدی **دانش-آگاهی** برای بصری‌سازی تکامل SCDA
+- 💎 **اقتصاد دانش:** **PoHD** به عنوان مکانیسم خلق ارزش (توکن/دارایی) بر اساس افزایش پیچیدگی SCDA
 - 🏛️ **تمدن‌سازی:** ساخت و مدیریت تمدن‌های دیجیتال
 
 ---
@@ -42,8 +42,10 @@
 # هر بلوک موقعیت منحصربه‌فردی در فضای ۸ بعدی دارد
 block = HyperBlock(
     index=1,
+    # بردار ۸ بعدی (8D Vector) نشان‌دهنده توزیع انرژی/دانش در لحظه ایجاد بلوک
     hypercube_coordinates=[0.5, 0.3, 0.7, 0.2, 0.8, 0.4, 0.6, 0.9]
 )
+# بلوک‌سازی با حل معادله: K_req · A = D(P) · E
 ```
 
 **ابعاد:**
@@ -61,44 +63,50 @@ block = HyperBlock(
 ```python
 scda = SingleCellDigitalAccount(identity="user_001")
 
-# حل مسئله و تکامل
-scda.attempt_solve_problem(
-    problem_difficulty=0.5,
-    solution_quality=0.8,
-    is_valid=True
+# حل مسئله و تکامل (PoHD)
+# SCDA با حل Hard Problem، تکامل می‌یابد و بلاک می‌سازد.
+success, tier_event = scda.attempt_solve_problem_with_tier(
+    problem_difficulty=0.7,
+    solution_quality=0.9,
+    is_valid=True,
+    problem_domains={0: 0.5, 1: 0.3, 2: 0.2} # K_req
 )
 
 # تکامل با فرمول: ΔC = D(P) / C(t)^α
 print(f"Complexity: {scda.complexity_index}")
-print(f"Tier: {scda.tier}")
+print(f"Tier: {scda.tier_system.current_tier}")
+print(f"Position 8D: {scda.tier_system.position_8d}")
 ```
 
 ### 🎯 سیستم Tier (سطح‌بندی)
 
 | Tier | نام | محدوده | تشبیه | مدل AI |
 |------|-----|---------|-------|--------|
-| 1 | Single-Cell | 1.0-10.0 | پروکاریوت | gpt-4.1-nano |
-| 2 | Multi-Cellular | 10.0-100.0 | متازوآن | gpt-4.1-mini |
-| 3 | Humanity | 100.0-1000.0 | انسان | gemini-2.5-flash |
-| 4 | Galactic | 1000.0+ | هوش کیهانی | custom-superintelligence |
+| Tier | نام | محدوده C(t) | تشبیه علمی (انتقال فاز) | ویژگی کلیدی SCDA |
+|------|-----|---------|-------|--------|
+| 1 | Single-Cell | 1.0-10.0 | **آغاز حیات** (پروکاریوت) | Self-Organization |
+| 2 | Multi-Cellular | 10.0-100.0 | **انفجار کامبرین** (متازوآن) | Differentiation & Cooperation |
+| 3 | Humanity | 100.0-1000.0 | **انقلاب شناختی** (انسان) | Agency & Meta-Cognition |
+| 4 | Galactic | 1000.0+ | **ابرخوشه لانی‌آکیا** (هوش کیهانی) | Meta-Structure Formation |
+**مبنای علمی:** آستانه‌ها بر اساس مقیاس‌های لگاریتمی و تغییرات بنیادی در پیچیدگی اطلاعاتی سیستم‌های بیولوژیکی و کیهانی تنظیم شده‌اند. (جزئیات در `SCIENTIFIC_MATHEMATICAL_MODEL_V0.0.01.md`)
 
 ### 🤖 هوش مصنوعی یکپارچه
 
 - **KEA (Knowledge Extraction Agent):** کشف و تولید مسائل علمی
-- **Dual Validation:** اعتبارسنجی دوگانه راه‌حل‌ها
+- **PoHD Validation:** اعتبارسنجی راه‌حل‌ها برای PoHD (Proof of Human Development)
 - **LLM Integration:** یکپارچه‌سازی با GPT-4, Gemini
 - **Scientific APIs:** اتصال به arXiv, NASA, WHO, etc.
 
 ### 🌐 متاورس و تمدن‌سازی
 
-- **فضای ۸D:** حرکت و تعامل در هایپرکیوب
+- **فضای ۸D:** SCDA با حل مسئله، موقعیت خود ($\mathbf{P}_{8D}$) را در این فضای دانش-آگاهی تغییر می‌دهد. حرکت SCDA بازتابی دقیق از نوع دانشی است که کسب کرده است.
 - **Civilizations:** ساخت و مدیریت تمدن‌های دیجیتال
 - **Diplomacy:** پیمان‌های بین‌تمدنی
 - **Collaboration:** همکاری گروهی برای حل مسائل
 
 ### 💎 بازار دانش
 
-- **Knowledge Tokens:** توکن‌سازی دانش
+- **PoHD Reward:** پاداش بلوک (توکن/دارایی) متناسب با سختی مسئله و افزایش پیچیدگی SCDA است.
 - **Trading:** خرید و فروش دانش
 - **Dynamic Pricing:** قیمت‌گذاری پویا
 - **Escrow System:** سیستم ضمانت
@@ -144,8 +152,8 @@ uvicorn laniakea.network.api:app --host 0.0.0.0 --port 8000 --reload
 
 ### دسترسی به رابط کاربری
 
-- **Dashboard:** http://localhost:8000/web/index.html
-- **3D Visualization:** http://localhost:8000/web/3d-visualization.html
+- **SCDA Dashboard (New):** http://localhost:8000/web/scda_dashboard.html
+- **8D Metaverse Visualization (New):** http://localhost:8000/web/metaverse_8d_visualization.html
 - **API Docs:** http://localhost:8000/docs
 
 ---
@@ -188,21 +196,28 @@ blockchain.add_transaction(tx)
 blockchain.mine_pending_transactions(miner_scda_id="alice")
 ```
 
-### استفاده از API
+### استفاده از API (SCDA & PoHD)
 
 ```python
 import requests
 
-# دریافت اطلاعات SCDA
-response = requests.get("http://localhost:8000/api/v1/scda/alice")
-scda_data = response.json()
+# 1. ایجاد SCDA جدید
+response = requests.post("http://localhost:8000/scda/create")
+scda_id = response.json()["identity"]
 
-# حل مسئله
-response = requests.post("http://localhost:8000/api/v1/problems/solve", json={
-    "scda_id": "alice",
-    "problem_id": "problem_001",
-    "solution": "..."
+# 2. دریافت وضعیت SCDA و موقعیت ۸D
+response = requests.get(f"http://localhost:8000/scda/status/{scda_id}")
+status = response.json()
+print(f"Complexity: {status['complexity_index']}, Tier: {status['tier_name']}")
+
+# 3. حل مسئله (PoHD) - شبیه‌سازی بلوک‌سازی
+response = requests.post(f"http://localhost:8000/scda/problem/solve?scda_identity={scda_id}", json={
+    "problem_id": "prob_001", # در واقع توسط KEA تولید می‌شود
+    "solution_text": "The solution is a synthesis of non-equilibrium thermodynamics and information theory.",
+    "solution_quality": 0.95,
+    "reasoning": "The core of the problem lies in the entropic drive of complex systems."
 })
+print(response.json())
 ```
 
 ---
@@ -274,17 +289,17 @@ pytest --cov=laniakea tests/
 ## 🗺️ نقشه راه
 
 ### v0.0.01 (فعلی) - Foundation ✅
-- [x] یکپارچه‌سازی معماری
-- [x] بلاکچین ۸D با PoHD
-- [x] سیستم SCDA کامل
-- [ ] API endpoints اصلی
-- [ ] رابط کاربری پایه
+- [x] یکپارچه‌سازی معماری (بر اساس `ARCHITECTURE_INTEGRATION_V0.0.01.md`)
+- [x] بلاکچین ۸D با PoHD (پیاده‌سازی اولیه PoHD در `laniakea/consensus/pohd.py`)
+- [x] سیستم SCDA کامل (با Tier System و Position Dynamics در `laniakea/intelligence/scda_enhanced.py`)
+- [x] API endpoints اصلی (APIهای SCDA/PoHD در `laniakea/api/scda_api.py`)
+- [x] رابط کاربری پایه (داشبورد SCDA و طرح اولیه متاورس در `web/`)
 
 ### v0.0.02 - Enhancement
 - [ ] بازار دانش عملیاتی
 - [ ] سیستم دیپلماسی
-- [ ] بصری‌سازی سه‌بعدی کامل
-- [ ] یکپارچه‌سازی LLM
+- [ ] بصری‌سازی سه‌بعدی کامل (توسعه طرح اولیه `metaverse_8d_visualization.html`)
+- [ ] یکپارچه‌سازی LLM (برای تولید و اعتبارسنجی Hard Problems)
 
 ### v0.1.0 - Expansion
 - [ ] Cross-chain bridge
@@ -330,11 +345,11 @@ pytest --cov=laniakea tests/
 
 ## 📞 تماس
 
-- **وبسایت:** https://laniakea-protocol.org
-- **ایمیل:** info@laniakea-protocol.org
-- **GitHub:** https://github.com/QalamHipHop/laniakea-protocol
-- **Twitter:** @LaniakeaProtocol
-- **Discord:** https://discord.gg/laniakea
+- **وبسایت:** [لانی‌آکیا پروتکل](https://laniakea-protocol.org)
+- **ایمیل:** [info@laniakea-protocol.org](mailto:info@laniakea-protocol.org)
+- **GitHub:** [QalamHipHop/laniakea-protocol](https://github.com/QalamHipHop/laniakea-protocol)
+- **Twitter:** [@LaniakeaProtocol](https://twitter.com/LaniakeaProtocol)
+- **Discord:** [دعوت‌نامه دیسکورد](https://discord.gg/laniakea)
 
 ---
 
