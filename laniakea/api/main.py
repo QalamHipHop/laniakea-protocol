@@ -335,7 +335,7 @@ def perform_swap(swap_request: SwapRequest):
         return result
     except ValueError as e:
         logger.error(f"Swap failed: {e}")
-        raise HTTPException(status_code=400, detail=str(e)}],path:
+        raise HTTPException(status_code=400, detail=str(e))
 def core_status():
     return {
         "status": "Operational",

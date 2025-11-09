@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class UserProfile:
-    \"\"\"Represents a user's social profile.\"\"\"
+    """Represents a user's social profile."""
     scda_id: str
     username: str
     tier: int
@@ -31,7 +31,7 @@ class UserProfile:
 
 @dataclass
 class SocialConnection:
-    \"\"\"Represents a social connection (follow relationship).\"\"\"
+    """Represents a social connection (follow relationship)."""
     follower_id: str
     following_id: str
     established_at: str
@@ -40,7 +40,7 @@ class SocialConnection:
 
 @dataclass
 class CollaborationSession:
-    \"\"\"Represents a collaborative problem-solving session.\"\"\"
+    """Represents a collaborative problem-solving session."""
     session_id: str
     participants: List[str]
     problem_id: str
@@ -52,13 +52,13 @@ class CollaborationSession:
 
 
 class SocialNetwork:
-    \"\"\"
+    """
     Manages the social network of SCDAs.
     Handles follows, friendships, and collaborative problem-solving.
-    \"\"\"
+    """
     
     def __init__(self):
-        \"\"\"Initialize the Social Network.\"\"\"
+        """Initialize the Social Network."""
         self.user_profiles: Dict[str, UserProfile] = {}
         self.social_connections: List[SocialConnection] = []
         self.collaboration_sessions: Dict[str, CollaborationSession] = {}
@@ -76,7 +76,7 @@ class SocialNetwork:
         knowledge_vector_8d: List[float],
         bio: str = ""
     ) -> UserProfile:
-        \"\"\"Create a new user profile for an SCDA.\"\"\"
+        """Create a new user profile for an SCDA."""
         profile = UserProfile(
             scda_id=scda_id,
             username=username,
@@ -94,9 +94,9 @@ class SocialNetwork:
         return profile
     
     def follow_user(self, follower_id: str, following_id: str) -> Dict[str, Any]:
-        \"\"\"
+        """
         Establish a follow relationship between two users.
-        \"\"\"
+        """
         if follower_id not in self.user_profiles:
             return {"error": f"Follower {follower_id} not found"}
         if following_id not in self.user_profiles:
@@ -123,7 +123,7 @@ class SocialNetwork:
         }
     
     def unfollow_user(self, follower_id: str, following_id: str) -> Dict[str, Any]:
-        \"\"\"Remove a follow relationship.\"\"\"
+        """Remove a follow relationship."""
         self.social_connections = [
             conn for conn in self.social_connections
             if not (conn.follower_id == follower_id and conn.following_id == following_id)
@@ -134,7 +134,7 @@ class SocialNetwork:
         return {"status": "success", "message": "Successfully unfollowed"}
     
     def get_followers(self, user_id: str) -> List[UserProfile]:
-        \"\"\"Get all followers of a user.\"\"\"
+        """Get all followers of a user."""
         follower_ids = [
             conn.follower_id for conn in self.social_connections
             if conn.following_id == user_id
@@ -143,7 +143,7 @@ class SocialNetwork:
         return [self.user_profiles[fid] for fid in follower_ids if fid in self.user_profiles]
     
     def get_following(self, user_id: str) -> List[UserProfile]:
-        \"\"\"Get all users that a user is following.\"\"\"
+        """Get all users that a user is following."""
         following_ids = [
             conn.following_id for conn in self.social_connections
             if conn.follower_id == user_id
@@ -152,18 +152,18 @@ class SocialNetwork:
         return [self.user_profiles[fid] for fid in following_ids if fid in self.user_profiles]
     
     def get_follower_count(self, user_id: str) -> int:
-        \"\"\"Get the number of followers.\"\"\"
+        """Get the number of followers."""
         return len(self.get_followers(user_id))
     
     def get_following_count(self, user_id: str) -> int:
-        \"\"\"Get the number of users being followed.\"\"\"
+        """Get the number of users being followed."""
         return len(self.get_following(user_id))
     
     def compare_knowledge_vectors(self, user_id_1: str, user_id_2: str) -> Dict[str, Any]:
-        \"\"\"
+        """
         Compare the knowledge vectors of two users.
         Returns similarity metrics and differences.
-        \"\"\"
+        """
         if user_id_1 not in self.user_profiles or user_id_2 not in self.user_profiles:
             return {"error": "One or both users not found"}
         
@@ -216,7 +216,7 @@ class SocialNetwork:
         return comparison
     
     def _find_complementary_strengths(self, profile1: UserProfile, profile2: UserProfile) -> Dict[str, Any]:
-        \"\"\"Find areas where the two users complement each other.\"\"\"
+        """Find areas where the two users complement each other."""
         vec1 = np.array(profile1.knowledge_vector_8d)
         vec2 = np.array(profile2.knowledge_vector_8d)
         
@@ -236,9 +236,9 @@ class SocialNetwork:
         participants: List[str],
         problem_id: str
     ) -> Dict[str, Any]:
-        \"\"\"
+        """
         Create a collaboration session for multiple users to solve a problem together.
-        \"\"\"
+        """
         # Verify all participants exist
         for participant_id in participants:
             if participant_id not in self.user_profiles:
@@ -278,7 +278,7 @@ class SocialNetwork:
         session_id: str,
         collective_solution: str
     ) -> Dict[str, Any]:
-        \"\"\"Mark a collaboration session as completed.\"\"\"
+        """Mark a collaboration session as completed."""
         if session_id not in self.collaboration_sessions:
             return {"error": "Collaboration session not found"}
         
@@ -296,11 +296,11 @@ class SocialNetwork:
         }
     
     def get_user_profile(self, user_id: str) -> Optional[UserProfile]:
-        \"\"\"Get a user's profile.\"\"\"
+        """Get a user's profile."""
         return self.user_profiles.get(user_id)
     
     def get_user_social_stats(self, user_id: str) -> Dict[str, Any]:
-        \"\"\"Get social statistics for a user.\"\"\"
+        """Get social statistics for a user."""
         if user_id not in self.user_profiles:
             return {"error": "User not found"}
         
@@ -320,7 +320,7 @@ class SocialNetwork:
         }
     
     def export_social_network(self) -> str:
-        \"\"\"Export the complete social network to JSON.\"\"\"
+        """Export the complete social network to JSON."""
         data = {
             "users": {
                 scda_id: {
