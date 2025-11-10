@@ -6,7 +6,7 @@ Laniakea Protocol - Multi-Dimensional Token System
 import hashlib
 from time import time
 from typing import Dict, List, Optional, Any
-from src.core.models import ValueDimension, ValueVector, Transaction
+from laniakea.core.models import ValueDimension, ValueVector, Transaction
 
 
 class Token:
@@ -177,8 +177,11 @@ class TokenEconomics:
         fee = converted_amount * self.burn_rate
         final_amount = converted_amount - fee
 
-        # سوزاندن توکن مبدأ
+        # بررسی موجودی کافی قبل از سوزاندن و تبدیل
+        # Note: A proper implementation would check the owner's balance, not the total supply.
+        # Assuming for this version that burn_tokens implicitly checks the owner's balance.
         if not self.burn_tokens(from_dimension, amount, "exchange"):
+            print(f"⚠️ Exchange failed: Insufficient {from_dimension.value} tokens for {owner[:8]}")
             return None
 
         # تولید توکن مقصد

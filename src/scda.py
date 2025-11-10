@@ -1,6 +1,7 @@
 import numpy as np
 import uuid
 from typing import Dict, List, Any
+from time import time
 
 class SingleCellDigitalAccount:
     """
@@ -62,8 +63,13 @@ class SingleCellDigitalAccount:
         Updates the Knowledge Vector K(t) upon successful solution.
         For now, a simple addition/update is used.
         """
-        # The quality of the solution determines the weight of the knowledge integration
-        self.knowledge_vector[problem_id] = solution_quality
+        # The quality of the solution determines the weight of the knowledge integration.
+        # A more advanced implementation could average or accumulate weights if the same knowledge is acquired again.
+        if problem_id in self.knowledge_vector:
+            # If knowledge already exists, average the quality to refine it.
+            self.knowledge_vector[problem_id] = (self.knowledge_vector[problem_id] + solution_quality) / 2
+        else:
+            self.knowledge_vector[problem_id] = solution_quality
 
     def attempt_solve_problem(self, problem_difficulty: float, solution_quality: float, is_valid: bool) -> bool:
         """
@@ -81,6 +87,7 @@ class SingleCellDigitalAccount:
         
         if self.energy < 0:
             # SCDA enters a low-energy state or hibernation
+            # A more advanced implementation could trigger a "hibernation" state with different passive update rules.
             print("Warning: Energy depleted. Cannot proceed with problem solving.")
             self.energy = 0.0
             return False
@@ -97,7 +104,8 @@ class SingleCellDigitalAccount:
             self.energy += energy_gained
             
             # C. Knowledge Vector Update
-            problem_id = f"P_{np.random.randint(1000, 9999)}" # Placeholder ID
+            # Using a time-based ID for better uniqueness than a random integer.
+            problem_id = f"P_{int(time() * 1000)}_{np.random.randint(100, 999)}"
             self._update_knowledge_vector(problem_id, solution_quality)
             
             print(f"Success! C(t) increased by {delta_c:.4f}. New C(t): {self.complexity_index:.4f}")
@@ -147,6 +155,7 @@ def validate_solution(scda: SingleCellDigitalAccount, problem: Dict[str, Any], u
     truth_probability = min(1.0, scda.complexity_index / 10.0)
     quantum_check = np.random.rand() < truth_probability
     
+    # Note: The quantum check is highly probabilistic and should be refined in later versions with a proper quantum simulation or oracle.
     # The final validation is the logical AND of the two checks
     return internal_check and quantum_check
 

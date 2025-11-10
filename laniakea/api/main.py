@@ -120,7 +120,14 @@ def new_transaction(tx: Transaction):
     return {"message": f"Transaction will be added to Block {index}"}
 
 @app.post("/blockchain/mine", tags=["Blockchain"])
-def mine_block(authority_address: str = settings.AUTHORITIES[0]):
+def mine_block(authority_address: str = None):
+    # Default to the first authority if none is provided, but check if authorities exist
+    if not settings.AUTHORITIES:
+        logger.error("Cannot mine: No authorities defined in settings.")
+        raise HTTPException(status_code=503, detail="Service Unavailable: No mining authorities configured.")
+    
+    if authority_address is None:
+        authority_address = settings.AUTHORITIES[0]
     if authority_address not in settings.AUTHORITIES:
         logger.warning(f"Unauthorized mine attempt by {authority_address}.")
         raise HTTPException(status_code=403, detail="Not a recognized authority.")
@@ -349,11 +356,4 @@ def perform_swap(swap_request: SwapRequest):
     except ValueError as e:
         logger.error(f"Swap failed: {e}")
         raise HTTPException(status_code=400, detail=str(e))
-def core_status():
-    return {
-        "status": "Operational",
-        "protocol_version": settings.PROJECT_VERSION,
-        "chain_length": len(laniakea_chain.chain),
-        "dao_proposals": len(laniakea_dao.proposals),
-        "quantum_queue": len(laniakea_quantum.job_queue)
-    }
+
