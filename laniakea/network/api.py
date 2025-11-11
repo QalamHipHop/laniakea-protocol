@@ -22,7 +22,8 @@ from laniakea.intelligence.scda_model import SingleCellDigitalAccount # Import S
 
 # Import cross-chain bridge router
 from src.crosschain.cross_chain_bridge import router as cross_chain_router
-# Import smart contract router
+    # Import smart contract router
+from laniakea.network.llm_api_router import router as llm_router
 from laniakea.network.smart_contract_api import router as contract_router
 
 # Request/Response Models
@@ -217,6 +218,7 @@ def create_app(
     # --- Routers ---
     app.include_router(cross_chain_router, prefix="/api/v1/bridge", tags=["Cross-Chain Bridge"])
     app.include_router(contract_router, prefix="/api/v1/contract", tags=["Smart Contracts"])
+    app.include_router(llm_router, prefix="/api/v1", tags=["LLM Services"])
     
     # --- SCDA Management Router ---
     scda_router = APIRouter(prefix="/api/v1/scda", tags=["SCDA Management"])
