@@ -1,0 +1,623 @@
+{
+  "architecture": {
+    "total_modules": 32,
+    "module_dependencies": {
+      "main": [
+        "laniakea.core.config",
+        "laniakea.api.main",
+        "laniakea.utils.logger"
+      ],
+      "test_quick": [
+        "laniakea.core.hypercube_blockchain",
+        "laniakea.intelligence.scda_model",
+        "laniakea"
+      ],
+      "archived_old_patterns.blockchain": [
+        "laniakea.core.hypercube_blockchain"
+      ],
+      "examples.scda_simulation": [
+        "laniakea.intelligence.scda_model"
+      ],
+      "laniakea": [
+        "laniakea.utils.config",
+        "laniakea.utils.logger",
+        "laniakea.core.hypercube_blockchain"
+      ],
+      "laniakea.api.main": [
+        "laniakea.marketplace.nft",
+        "laniakea.blockchain.core",
+        "laniakea.diplomacy.core",
+        "laniakea.governance.dao",
+        "laniakea.achievements.system",
+        "laniakea.knowledge_market.core",
+        "laniakea.utils.logger",
+        "laniakea.quantum.processor",
+        "laniakea.dashboard.metrics",
+        "laniakea.simulation.cosmic",
+        "laniakea.defi.swap",
+        "laniakea.core.config",
+        "laniakea.consensus.poa",
+        "laniakea.crosschain.bridge",
+        "laniakea.ai.model"
+      ],
+      "laniakea.api.scda_api": [
+        "laniakea.consensus.pohd",
+        "laniakea.intelligence.scda_enhanced",
+        "laniakea.governance.metaverse_diplomacy",
+        "laniakea.marketplace.knowledge_market",
+        "laniakea.intelligence.scda_tier_system"
+      ],
+      "laniakea.cli.commands": [
+        "laniakea.utils.config",
+        "laniakea.utils.logger",
+        "laniakea.intelligence.brain",
+        "laniakea.network.p2p_network",
+        "laniakea.network.api",
+        "laniakea.core.hypercube_blockchain"
+      ],
+      "laniakea.consensus.poa": [
+        "laniakea.blockchain.core"
+      ],
+      "laniakea.core.hypercube_blockchain": [
+        "laniakea.utils.config",
+        "laniakea.utils.logger"
+      ],
+      "laniakea.core.token_system": [
+        "laniakea.core.models"
+      ],
+      "laniakea.core.unified_system": [
+        "laniakea.intelligence.digital_dna",
+        "laniakea.intelligence.advanced_scda",
+        "laniakea.evolution.complete_evolution_manager",
+        "laniakea.metaverse.advanced_metaverse"
+      ],
+      "laniakea.crosschain.cross_chain_bridge": [
+        "laniakea.utils.config",
+        "laniakea.utils.logger"
+      ],
+      "laniakea.external_apis.integrations": [
+        "laniakea.utils.config"
+      ],
+      "laniakea.intelligence.advanced_scda": [
+        "laniakea.intelligence.digital_dna"
+      ],
+      "laniakea.intelligence.scda_complete_system": [
+        "laniakea.intelligence.scda_model"
+      ],
+      "laniakea.network.api": [
+        "laniakea.external_apis.integrations",
+        "laniakea.monitoring.metrics",
+        "laniakea.intelligence.scda_model",
+        "laniakea.utils.config",
+        "laniakea.network.llm_api_router",
+        "laniakea.security.auth",
+        "laniakea.network.smart_contract_api",
+        "laniakea.storage.database_setup",
+        "laniakea.storage.database",
+        "laniakea.core.hypercube_blockchain"
+      ],
+      "laniakea.network.smart_contract_api": [
+        "laniakea.core.smart_contract_vm",
+        "laniakea.core.hypercube_blockchain",
+        "laniakea.utils.logger"
+      ],
+      "laniakea.security.auth": [
+        "laniakea.utils.config"
+      ],
+      "laniakea.security.authentication": [
+        "laniakea.storage.database"
+      ],
+      "laniakea.simulation.scda_simulator": [
+        "laniakea.intelligence.digital_dna",
+        "laniakea.intelligence.brain",
+        "laniakea.intelligence.scda_model"
+      ],
+      "laniakea.storage.database_setup": [
+        "laniakea.utils.config"
+      ],
+      "laniakea.utils.logger": [
+        "laniakea.core.config"
+      ],
+      "src.crosschain.cross_chain_bridge": [
+        "laniakea.utils.config",
+        "laniakea.utils.logger"
+      ],
+      "src.intelligence.scda_complete_system": [
+        "laniakea.intelligence.scda_model"
+      ],
+      "src.simulation.scda_simulator": [
+        "laniakea.intelligence.digital_dna",
+        "laniakea.intelligence.brain",
+        "laniakea.intelligence.scda_model"
+      ],
+      "tests.test_ai_modules": [
+        "laniakea.ai.solution_evaluator",
+        "laniakea.ai.problem_discovery_engine"
+      ],
+      "tests.test_api_endpoints": [
+        "laniakea.api.main"
+      ],
+      "tests.test_core_components": [
+        "laniakea.core.hypercube_blockchain"
+      ],
+      "tests.test_mining_system": [
+        "laniakea_protocol.src.blockchain.mining_system"
+      ],
+      "tests.test_scda_core": [
+        "laniakea_protocol.src.scda"
+      ],
+      "tests.test_scda_evolution": [
+        "laniakea.evolution.scda_evolution_manager"
+      ]
+    },
+    "circular_dependencies": [],
+    "circular_count": 0
+  },
+  "code_quality": {
+    "long_functions": [
+      {
+        "file": "code_analyzer.py",
+        "function": "analyze_python_file",
+        "lines": 66,
+        "line": 20
+      },
+      {
+        "file": "deep_architecture_analyzer.py",
+        "function": "analyze_code_quality",
+        "lines": 59,
+        "line": 95
+      },
+      {
+        "file": "deep_architecture_analyzer.py",
+        "function": "generate_report",
+        "lines": 52,
+        "line": 268
+      },
+      {
+        "file": "laniakea/achievements/achievement_system.py",
+        "function": "_register_achievements",
+        "lines": 163,
+        "line": 68
+      },
+      {
+        "file": "laniakea/ai/problem_discovery_engine.py",
+        "function": "_initialize_default_problems",
+        "lines": 79,
+        "line": 83
+      },
+      {
+        "file": "laniakea/ai/problem_discovery_engine.py",
+        "function": "generate_problem_with_llm",
+        "lines": 63,
+        "line": 219
+      },
+      {
+        "file": "laniakea/ai/solution_evaluator.py",
+        "function": "evaluate_solution",
+        "lines": 64,
+        "line": 42
+      },
+      {
+        "file": "laniakea/blockchain/mining_system.py",
+        "function": "mine_block",
+        "lines": 72,
+        "line": 99
+      },
+      {
+        "file": "laniakea/cli/commands.py",
+        "function": "start",
+        "lines": 73,
+        "line": 104
+      },
+      {
+        "file": "laniakea/cli/commands.py",
+        "function": "status",
+        "lines": 53,
+        "line": 184
+      },
+      {
+        "file": "laniakea/cli/commands.py",
+        "function": "init",
+        "lines": 53,
+        "line": 278
+      },
+      {
+        "file": "laniakea/consensus/pohd.py",
+        "function": "create_pohd_proof",
+        "lines": 54,
+        "line": 218
+      },
+      {
+        "file": "laniakea/core/smart_contract_vm.py",
+        "function": "execute_contract",
+        "lines": 65,
+        "line": 79
+      },
+      {
+        "file": "laniakea/core/unified_system.py",
+        "function": "solve_problem",
+        "lines": 74,
+        "line": 92
+      },
+      {
+        "file": "laniakea/core/unified_system.py",
+        "function": "collaborate",
+        "lines": 65,
+        "line": 168
+      },
+      {
+        "file": "laniakea/crosschain/cross_chain_manager.py",
+        "function": "_initialize_chain_configs",
+        "lines": 66,
+        "line": 156
+      },
+      {
+        "file": "laniakea/dashboard/live_dashboard.py",
+        "function": "generate_html",
+        "lines": 70,
+        "line": 58
+      },
+      {
+        "file": "laniakea/evolution/complete_evolution_manager.py",
+        "function": "generate_evolution_report",
+        "lines": 76,
+        "line": 251
+      },
+      {
+        "file": "laniakea/intelligence/achievements_system.py",
+        "function": "_initialize_default_achievements",
+        "lines": 133,
+        "line": 65
+      },
+      {
+        "file": "laniakea/intelligence/advanced_scda.py",
+        "function": "__init__",
+        "lines": 66,
+        "line": 106
+      }
+    ],
+    "too_many_parameters": [
+      {
+        "file": "laniakea/achievements/achievement_system.py",
+        "function": "__init__",
+        "params": 9,
+        "line": 18
+      },
+      {
+        "file": "laniakea/blockchain/mining_system.py",
+        "function": "calculate_8d_position",
+        "params": 9,
+        "line": 34
+      },
+      {
+        "file": "laniakea/crosschain/bridge.py",
+        "function": "__init__",
+        "params": 9,
+        "line": 8
+      },
+      {
+        "file": "laniakea/evolution/complete_evolution_manager.py",
+        "function": "generate_evolution_report",
+        "params": 8,
+        "line": 251
+      },
+      {
+        "file": "laniakea/identity/did_system.py",
+        "function": "issue_credential",
+        "params": 8,
+        "line": 138
+      },
+      {
+        "file": "laniakea/intelligence/knowledge_extractor.py",
+        "function": "__init__",
+        "params": 8,
+        "line": 20
+      },
+      {
+        "file": "laniakea/marketplace/exchange.py",
+        "function": "place_order",
+        "params": 8,
+        "line": 163
+      },
+      {
+        "file": "laniakea/social/social_features.py",
+        "function": "create_user_profile",
+        "params": 8,
+        "line": 69
+      },
+      {
+        "file": "src/achievements/achievement_system.py",
+        "function": "__init__",
+        "params": 9,
+        "line": 18
+      },
+      {
+        "file": "src/governance/dao.py",
+        "function": "create_proposal",
+        "params": 8,
+        "line": 109
+      },
+      {
+        "file": "src/identity/did_system.py",
+        "function": "issue_credential",
+        "params": 8,
+        "line": 138
+      },
+      {
+        "file": "src/intelligence/knowledge_extractor.py",
+        "function": "__init__",
+        "params": 8,
+        "line": 20
+      },
+      {
+        "file": "src/marketplace/exchange.py",
+        "function": "place_order",
+        "params": 8,
+        "line": 163
+      }
+    ],
+    "god_classes": [
+      {
+        "file": "laniakea/evolution/scda_evolution_manager.py",
+        "class": "SCDAEvolutionManager",
+        "methods": 28,
+        "line": 107
+      }
+    ],
+    "long_lines_count": 167,
+    "total_smells": 247
+  },
+  "security": {
+    "issues": [
+      {
+        "file": "locustfile.py",
+        "line": 11,
+        "issue": "احتمال hardcoded password",
+        "pattern": "password\\s*=\\s*[\"\\']"
+      },
+      {
+        "file": "deep_architecture_analyzer.py",
+        "line": 163,
+        "issue": "استفاده از eval() - خطر اجرای کد دلخواه",
+        "pattern": "eval\\("
+      },
+      {
+        "file": "deep_architecture_analyzer.py",
+        "line": 164,
+        "issue": "استفاده از exec() - خطر اجرای کد دلخواه",
+        "pattern": "exec\\("
+      },
+      {
+        "file": "deep_architecture_analyzer.py",
+        "line": 165,
+        "issue": "استفاده از pickle.loads - خطر deserialization",
+        "pattern": "pickle\\.loads"
+      },
+      {
+        "file": "deep_architecture_analyzer.py",
+        "line": 166,
+        "issue": "استفاده از os.system() - خطر command injection",
+        "pattern": "os\\.system\\("
+      },
+      {
+        "file": "laniakea/intelligence/ai_api.py",
+        "line": 147,
+        "issue": "استفاده از os.system() - خطر command injection",
+        "pattern": "os\\.system\\("
+      },
+      {
+        "file": "src/intelligence/ai_api.py",
+        "line": 147,
+        "issue": "استفاده از os.system() - خطر command injection",
+        "pattern": "os\\.system\\("
+      }
+    ],
+    "total_issues": 7
+  },
+  "performance": {
+    "issues": [
+      {
+        "file": "code_analyzer.py",
+        "line": 130,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "deep_architecture_analyzer.py",
+        "line": 102,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "deep_architecture_analyzer.py",
+        "line": 173,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "laniakea/evolution/complete_evolution_manager.py",
+        "line": 425,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "laniakea/intelligence/neural_network_scda.py",
+        "line": 162,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "laniakea/network/p2p_network.py",
+        "line": 148,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "laniakea/quantum/enhanced_quantum_system.py",
+        "line": 253,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "laniakea/quantum/quantum_system.py",
+        "line": 232,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "laniakea/quantum/quantum_system.py",
+        "line": 382,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "laniakea/websocket/notification_service.py",
+        "line": 356,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "laniakea/websocket/realtime_updates.py",
+        "line": 395,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "src/quantum/enhanced_quantum_system.py",
+        "line": 253,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "src/quantum/quantum_system.py",
+        "line": 232,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "src/quantum/quantum_system.py",
+        "line": 382,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "src/websocket/notification_service.py",
+        "line": 356,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      },
+      {
+        "file": "src/websocket/realtime_updates.py",
+        "line": 395,
+        "issue": "حلقه‌های تو در تو (3+ سطح) - احتمال O(n³) یا بدتر",
+        "severity": "high"
+      }
+    ],
+    "total_issues": 16
+  },
+  "error_handling": {
+    "missing_handlers": [
+      {
+        "file": "laniakea/api/main.py",
+        "function": "process_quantum_job",
+        "line": 196
+      },
+      {
+        "file": "laniakea/core/scda_integration.py",
+        "function": "process_solved_problem",
+        "line": 69
+      },
+      {
+        "file": "laniakea/external_apis/api_integrations.py",
+        "function": "get_api_manager",
+        "line": 331
+      },
+      {
+        "file": "laniakea/intelligence/ai_api.py",
+        "function": "get_ai_api",
+        "line": 134
+      },
+      {
+        "file": "laniakea/marketplace/exchange.py",
+        "function": "_execute_trade",
+        "line": 257
+      },
+      {
+        "file": "laniakea/monitoring/metrics.py",
+        "function": "increment_transactions_processed",
+        "line": 76
+      },
+      {
+        "file": "laniakea/quantum/processor.py",
+        "function": "process_next_job",
+        "line": 86
+      },
+      {
+        "file": "laniakea/websocket/notification_service.py",
+        "function": "_register_websocket_handlers",
+        "line": 435
+      },
+      {
+        "file": "laniakea/websocket/realtime_updates.py",
+        "function": "register_event_handler",
+        "line": 216
+      },
+      {
+        "file": "laniakea/websocket/websocket_manager.py",
+        "function": "register_handler",
+        "line": 230
+      },
+      {
+        "file": "src/external_apis/api_integrations.py",
+        "function": "get_api_manager",
+        "line": 331
+      },
+      {
+        "file": "src/governance/dao.py",
+        "function": "_execute_parameter_change",
+        "line": 333
+      },
+      {
+        "file": "src/governance/dao.py",
+        "function": "_execute_treasury_spend",
+        "line": 347
+      },
+      {
+        "file": "src/governance/dao.py",
+        "function": "_execute_protocol_upgrade",
+        "line": 359
+      },
+      {
+        "file": "src/governance/dao.py",
+        "function": "_execute_civilization_policy",
+        "line": 364
+      },
+      {
+        "file": "src/intelligence/ai_api.py",
+        "function": "get_ai_api",
+        "line": 134
+      },
+      {
+        "file": "src/marketplace/exchange.py",
+        "function": "_execute_trade",
+        "line": 257
+      },
+      {
+        "file": "src/websocket/notification_service.py",
+        "function": "_register_websocket_handlers",
+        "line": 435
+      },
+      {
+        "file": "src/websocket/realtime_updates.py",
+        "function": "register_event_handler",
+        "line": 216
+      },
+      {
+        "file": "src/websocket/websocket_manager.py",
+        "function": "register_handler",
+        "line": 230
+      }
+    ],
+    "total_missing": 20
+  }
+}

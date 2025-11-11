@@ -51,7 +51,7 @@ sqlalchemy==2.0.23
 psycopg2-binary==2.9.9
 
 # Caching
-redis==5.0.1
+redis==4.6.0
 
 # HTTP Client
 requests==2.31.0
@@ -62,7 +62,6 @@ sympy
 # Security Enhancements
 python-jose[cryptography]==3.3.0
 fastapi-limiter==0.1.5
-redis==5.0.1 # Already in file, but ensure it's there for fastapi-limiter
 
 # Monitoring
 prometheus_client==0.18.0

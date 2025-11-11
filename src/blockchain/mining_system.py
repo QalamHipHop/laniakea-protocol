@@ -71,45 +71,6 @@ class ScientificMiner:
         np.ndarray
             An 8-dimensional vector representing the block's position.
         """
-        """
-        Calculate the 8D position for a solution block based on various scientific metrics.
-
-        The 8D vector represents the block's location in the SCDA state space.
-
-        Parameters
-        ----------
-        problem_difficulty : float
-            Problem difficulty (0.0 - 1.0).
-        category : str
-            Scientific category of the problem.
-        solution_quality : float
-            Quality of the submitted solution (0.0 - 1.0).
-        validation_confidence : float
-            Confidence score from the validation system (0.0 - 1.0).
-        user_complexity : float
-            Complexity of the user's approach (0.0 - 1.0).
-        time_taken : float
-            Time taken to solve the problem (in seconds).
-        impact_factor : float
-            Estimated scientific impact (0.0 - 1.0).
-        novelty_score : float
-            Score for the novelty of the solution (0.0 - 1.0).
-
-        Returns
-        -------
-        np.ndarray
-            An 8-dimensional vector representing the block's position.
-        """
-        self,
-        problem_difficulty: float,
-        category: str,
-        solution_quality: float,
-        validation_confidence: float,
-        user_complexity: float,
-        time_taken: float,
-        impact_factor: float,
-        novelty_score: float
-    ) -> np.ndarray:
 
         # Encode category to numerical value
         category_encoding = self._encode_category(category)
@@ -271,33 +232,6 @@ class ScientificMiner:
         float
             The amount of Knowledge Tokens to be rewarded.
         """
-        """
-        Calculate Knowledge Token (KT) reward.
-
-        Formula: KT = base × D × Q × V × I × multiplier
-
-        Parameters
-        ----------
-        problem_data : Dict[str, Any]
-            Data related to the problem solved.
-        solution_data : Dict[str, Any]
-            Data related to the user's solution.
-        validation_result : Dict[str, Any]
-            Result from the validation system.
-        position_8d : np.ndarray
-            The calculated 8D position vector.
-
-        Returns
-        -------
-        float
-            The amount of Knowledge Tokens to be rewarded.
-        """
-        self,
-        problem_data: Dict[str, Any],
-        solution_data: Dict[str, Any],
-        validation_result: Dict[str, Any],
-        position_8d: np.ndarray
-    ) -> float:
 
         D = float(problem_data.get('difficulty', 0.5))
         Q = solution_data.get('quality', 0.8)

@@ -139,12 +139,5 @@ def get_ai_api() -> AI_API:
     return _ai_api
 
 
-# نصب کتابخانه openai در صورت نیاز
-try:
-    import openai
-except ImportError:
-    print("Installing openai library...")
-    os.system("pip3 install openai")
-    import openai
-
-from enum import Enum  # برای تعریف LLMProvider
+# Note: openai library should be installed via requirements.txt
+# If missing, install manually: pip install openai

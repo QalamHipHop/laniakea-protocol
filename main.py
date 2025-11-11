@@ -6,8 +6,8 @@ from laniakea.core.config import settings
 
 if __name__ == "__main__":
     from laniakea.utils.logger import logger
-
-logger.info(f"Starting {settings.PROJECT_NAME} v{settings.PROJECT_VERSION} API...")
+    
+    logger.info(f"Starting {settings.PROJECT_NAME} v{settings.PROJECT_VERSION} API...")
     uvicorn.run(
         app, 
         host=settings.API_HOST, 
