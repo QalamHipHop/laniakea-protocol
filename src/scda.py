@@ -18,11 +18,23 @@ class SCDA:
         """
         Initialize the SCDA with 8D state vectors.
 
-        :param initial_k: Initial 4D Knowledge vector (K).
-        :param initial_e: Initial 4D Energy vector (E).
-        :param decay_rate: Rate at which passive energy/knowledge decays.
-        :param learning_rate: Rate at which knowledge is gained during problem-solving.
+        Parameters
+        ----------
+        initial_k : np.ndarray
+            Initial 4D Knowledge vector (K).
+        initial_e : np.ndarray
+            Initial 4D Energy vector (E).
+        decay_rate : float, optional
+            Rate at which passive energy/knowledge decays (default is 0.01).
+        learning_rate : float, optional
+            Rate at which knowledge is gained during problem-solving (default is 0.1).
+
+        Raises
+        ------
+        ValueError
+            If initial vectors are not 4-dimensional.
         """
+
         if initial_k.shape != (DIMENSIONS // 2,) or initial_e.shape != (DIMENSIONS // 2,):
             raise ValueError(f"Initial vectors must be {DIMENSIONS // 2}-dimensional.")
 
@@ -47,13 +59,21 @@ class SCDA:
 
     def energy_management(self, energy_input: np.ndarray) -> None:
         """
-        Manages the energy vector E(t).
+        Manages the energy vector E(t) by applying input and the diminishing returns principle.
 
-        Energy input is added with diminishing returns, and a small cost is applied
-        to maintain the current state.
+        The energy input is a 4D vector representing external energy gain or loss.
 
-        :param energy_input: A 4D vector representing new energy input.
+        Parameters
+        ----------
+        energy_input : np.ndarray
+            A 4D vector representing new energy input.
+
+        Raises
+        ------
+        ValueError
+            If energy input is not 4-dimensional.
         """
+
         if energy_input.shape != (DIMENSIONS // 2,):
             raise ValueError(f"Energy input must be {DIMENSIONS // 2}-dimensional.")
 
@@ -74,9 +94,22 @@ class SCDA:
         The success and knowledge gain are dependent on the current Knowledge (K)
         and the available Energy (E) relative to the problem's difficulty.
 
-        :param problem_difficulty: A 4D vector representing the difficulty of the problem.
-        :return: A tuple (success_status, knowledge_gain_magnitude).
+        Parameters
+        ----------
+        problem_difficulty : np.ndarray
+            A 4D vector representing the difficulty of the problem.
+
+        Returns
+        -------
+        Tuple[bool, float]
+            A tuple (success_status, knowledge_gain_magnitude).
+
+        Raises
+        ------
+        ValueError
+            If problem difficulty is not 4-dimensional.
         """
+
         if problem_difficulty.shape != (DIMENSIONS // 2,):
             raise ValueError(f"Problem difficulty must be {DIMENSIONS // 2}-dimensional.")
 

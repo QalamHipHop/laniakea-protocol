@@ -43,21 +43,74 @@ class ScientificMiner:
         novelty_score: float
     ) -> np.ndarray:
         """
-        Calculate 8D position for a solution block
-        
-        Args:
-            problem_difficulty: Problem difficulty (0.0 - 1.0)
-            category: Scientific category
-            solution_quality: Quality score (0.0 - 1.0)
-            validation_confidence: Validation confidence (0.0 - 1.0)
-            user_complexity: User's complexity index
-            time_taken: Time to solve (seconds)
-            impact_factor: Estimated scientific impact (1.0 - 10.0)
-            novelty_score: Solution novelty (0.0 - 1.0)
-        
-        Returns:
-            8D position vector
+        Calculate the 8D position for a solution block based on various scientific metrics.
+
+        The 8D vector represents the block's location in the SCDA state space.
+
+        Parameters
+        ----------
+        problem_difficulty : float
+            Problem difficulty (0.0 - 1.0).
+        category : str
+            Scientific category of the problem.
+        solution_quality : float
+            Quality of the submitted solution (0.0 - 1.0).
+        validation_confidence : float
+            Confidence score from the validation system (0.0 - 1.0).
+        user_complexity : float
+            Complexity of the user's approach (0.0 - 1.0).
+        time_taken : float
+            Time taken to solve the problem (in seconds).
+        impact_factor : float
+            Estimated scientific impact (0.0 - 1.0).
+        novelty_score : float
+            Score for the novelty of the solution (0.0 - 1.0).
+
+        Returns
+        -------
+        np.ndarray
+            An 8-dimensional vector representing the block's position.
         """
+        """
+        Calculate the 8D position for a solution block based on various scientific metrics.
+
+        The 8D vector represents the block's location in the SCDA state space.
+
+        Parameters
+        ----------
+        problem_difficulty : float
+            Problem difficulty (0.0 - 1.0).
+        category : str
+            Scientific category of the problem.
+        solution_quality : float
+            Quality of the submitted solution (0.0 - 1.0).
+        validation_confidence : float
+            Confidence score from the validation system (0.0 - 1.0).
+        user_complexity : float
+            Complexity of the user's approach (0.0 - 1.0).
+        time_taken : float
+            Time taken to solve the problem (in seconds).
+        impact_factor : float
+            Estimated scientific impact (0.0 - 1.0).
+        novelty_score : float
+            Score for the novelty of the solution (0.0 - 1.0).
+
+        Returns
+        -------
+        np.ndarray
+            An 8-dimensional vector representing the block's position.
+        """
+        self,
+        problem_difficulty: float,
+        category: str,
+        solution_quality: float,
+        validation_confidence: float,
+        user_complexity: float,
+        time_taken: float,
+        impact_factor: float,
+        novelty_score: float
+    ) -> np.ndarray:
+
         # Encode category to numerical value
         category_encoding = self._encode_category(category)
         
@@ -198,10 +251,54 @@ class ScientificMiner:
         position_8d: np.ndarray
     ) -> float:
         """
-        Calculate Knowledge Token (KT) reward
-        
+        Calculate Knowledge Token (KT) reward.
+
         Formula: KT = base × D × Q × V × I × multiplier
+
+        Parameters
+        ----------
+        problem_data : Dict[str, Any]
+            Data related to the problem solved.
+        solution_data : Dict[str, Any]
+            Data related to the user's solution.
+        validation_result : Dict[str, Any]
+            Result from the validation system.
+        position_8d : np.ndarray
+            The calculated 8D position vector.
+
+        Returns
+        -------
+        float
+            The amount of Knowledge Tokens to be rewarded.
         """
+        """
+        Calculate Knowledge Token (KT) reward.
+
+        Formula: KT = base × D × Q × V × I × multiplier
+
+        Parameters
+        ----------
+        problem_data : Dict[str, Any]
+            Data related to the problem solved.
+        solution_data : Dict[str, Any]
+            Data related to the user's solution.
+        validation_result : Dict[str, Any]
+            Result from the validation system.
+        position_8d : np.ndarray
+            The calculated 8D position vector.
+
+        Returns
+        -------
+        float
+            The amount of Knowledge Tokens to be rewarded.
+        """
+        self,
+        problem_data: Dict[str, Any],
+        solution_data: Dict[str, Any],
+        validation_result: Dict[str, Any],
+        position_8d: np.ndarray
+    ) -> float:
+
         D = float(problem_data.get('difficulty', 0.5))
         Q = solution_data.get('quality', 0.8)
         V = validation_result.get('confidence', 0.5)
@@ -271,15 +368,36 @@ class ScientificMiner:
     
     def verify_block(self, block: Dict[str, Any], previous_block: Dict[str, Any]) -> bool:
         """
-        Verify block validity
-        
-        Args:
-            block: Block to verify
-            previous_block: Previous block in chain
-        
-        Returns:
-            True if valid, False otherwise
+        Verify block validity.
+
+        Parameters
+        ----------
+        block : Dict[str, Any]
+            Block to verify.
+        previous_block : Dict[str, Any]
+            Previous block in chain.
+
+        Returns
+        -------
+        bool
+            True if valid, False otherwise.
         """
+        """
+        Verify block validity.
+
+        Parameters
+        ----------
+        block : Dict[str, Any]
+            Block to verify.
+        previous_block : Dict[str, Any]
+            Previous block in chain.
+
+        Returns
+        -------
+        bool
+            True if valid, False otherwise.
+        """
+
         try:
             # 1. Check hash integrity
             recalculated_hash = self._calculate_block_hash(
