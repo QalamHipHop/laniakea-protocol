@@ -55,3 +55,6 @@ redis==5.0.1
 
 # HTTP Client
 requests==2.31.0
+
+# Added for 8D projection logic
+sympy
