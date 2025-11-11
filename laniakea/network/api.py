@@ -87,7 +87,9 @@ def create_app(
     
     # Initialize Governance System
     from src.governance.dao import GovernanceSystem
+    from src.governance.diplomacy_system import get_diplomacy_system
     app.state.governance_system = GovernanceSystem()
+    app.state.diplomacy_system = get_diplomacy_system()
     
     # Start Realtime System
     @app.on_event("startup")
@@ -414,6 +416,70 @@ def create_app(
         return {"status": "success"}
         
     app.include_router(civ_router)
+    
+    # --- Diplomacy Management Router ---
+    diplomacy_router = APIRouter(prefix="/api/v1/diplomacy", tags=["Diplomacy Management"])
+    
+    class SetRelationRequest(BaseModel):
+        scda1_id: str
+        scda2_id: str
+        relation: str
+        
+    class ProposeTreatyRequest(BaseModel):
+        parties: List[str]
+        treaty_type: str
+        duration: float
+        terms: Dict[str, Any] = {}
+        
+    class DissolveTreatyRequest(BaseModel):
+        treaty_id: str
+        reason: str
+        
+    @diplomacy_router.post("/set_relation")
+    async def set_relation_api(request: SetRelationRequest):
+        """Set a diplomatic relation between two SCDAs"""
+        from src.governance.diplomacy_system import RelationType
+        try:
+            relation_type = RelationType(request.relation)
+            app.state.diplomacy_system.set_relation(request.scda1_id, request.scda2_id, relation_type)
+            return {"status": "success", "relation": relation_type.value}
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=f"Invalid relation type: {e}")
+            
+    @diplomacy_router.get("/relation/{scda1_id}/{scda2_id}")
+    async def get_relation_api(scda1_id: str, scda2_id: str):
+        """Get the diplomatic relation between two SCDAs"""
+        relation = app.state.diplomacy_system.get_relation(scda1_id, scda2_id)
+        return {"scda1": scda1_id, "scda2": scda2_id, "relation": relation.value}
+
+    @diplomacy_router.post("/propose_treaty")
+    async def propose_treaty_api(request: ProposeTreatyRequest):
+        """Propose and sign a new diplomatic treaty"""
+        from src.governance.diplomacy_system import TreatyType
+        try:
+            treaty_type = TreatyType(request.treaty_type)
+            treaty = app.state.diplomacy_system.propose_treaty(
+                request.parties, treaty_type, request.duration, request.terms
+            )
+            return {"status": "success", "treaty_id": treaty.treaty_id, "treaty_info": treaty.to_dict()}
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+            
+    @diplomacy_router.post("/dissolve_treaty")
+    async def dissolve_treaty_api(request: DissolveTreatyRequest):
+        """Dissolve an active diplomatic treaty"""
+        success = app.state.diplomacy_system.dissolve_treaty(request.treaty_id, request.reason)
+        if not success:
+            raise HTTPException(status_code=404, detail="Treaty not found or already dissolved")
+        return {"status": "success"}
+
+    @diplomacy_router.get("/summary/{scda_id}")
+    async def get_diplomacy_summary_api(scda_id: str):
+        """Get the diplomatic summary for a single SCDA"""
+        summary = app.state.diplomacy_system.get_scda_diplomacy_summary(scda_id)
+        return summary
+        
+    app.include_router(diplomacy_router)
     
     # --- WebSocket Endpoint for Real-time Collaboration ---
     @app.websocket("/ws/{client_id}/{conn_type}")
