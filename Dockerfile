@@ -24,4 +24,4 @@ EXPOSE 8000
 
 # Command to run the application
 # Assuming the main FastAPI app is in laniakea/network/api.py and the app instance is named 'app'
-CMD ["uvicorn", "laniakea.network.api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

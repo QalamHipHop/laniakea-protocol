@@ -300,3 +300,46 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+
+---
+
+## 🚀 MVP (Minimum Viable Product) Implementation
+
+This section details the newly implemented Minimum Viable Product (MVP) based on the user's blueprint, focusing on the core SCDA logic and a basic FastAPI server.
+
+### Run MVP
+To run the MVP using the `docker-compose.override.yml` file:
+
+```bash
+# This command will use the existing docker-compose.yml and the new docker-compose.override.yml
+# It will build and run the simplified MVP API service.
+docker-compose up --build
+```
+
+### Test MVP Endpoints
+After the service is running on `http://localhost:8000`, you can test the new MVP API endpoints:
+
+1.  **Create an SCDA Agent:**
+    ```bash
+    curl -X POST http://localhost:8000/scda/create -H "Content-Type: application/json" -d '{"position": {"coords": [0,0,0,0,0,0,0,0]}}'
+    ```
+    (Note: The response will contain the `scda_id` needed for the next steps.)
+
+2.  **Get SCDA State (Replace `[scda_id]` with the ID from step 1):**
+    ```bash
+    curl -X GET http://localhost:8000/scda/[scda_id]
+    ```
+
+3.  **Simulate Problem Solving:**
+    ```bash
+    curl -X POST http://localhost:8000/scda/[scda_id]/solve -H "Content-Type: application/json" -d '{"difficulty": 50}'
+    ```
+
+4.  **Simulate Reproduction:**
+    ```bash
+    curl -X POST http://localhost:8000/scda/[scda_id]/reproduce
+    ```
+
+### Visualization
+The 3D visualization can be viewed by opening `web/3d-visualization.html` in a web browser.

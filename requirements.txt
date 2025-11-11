@@ -69,3 +69,7 @@ prometheus_client==0.18.0
 
 # Performance Testing
 locust==2.20.0
+
+# Dependencies from user's MVP plan (to ensure all are present)
+networkx==3.3
+sympy==1.13.2 # Already present, but ensuring version is compatible

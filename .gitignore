@@ -167,3 +167,10 @@ marketplace_data/
 secrets/
 *.secret
 api_keys.txt
+
+# MVP Specific Files (Added by Manus AI)
+src/scda_mvp.py
+main_mvp.py
+tests/test_scda_mvp.py
+src/token_system.py
+src/blockchain/hypercube.py
