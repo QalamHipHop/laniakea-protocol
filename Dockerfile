@@ -1,84 +1,27 @@
-# Laniakea Intelligent Protocol - Dockerfile
-# Self-Developing Blockchain with Internal Developer Intelligence
+# Stage 1: Build the frontend (if needed, assuming a simple static build for now)
+# Since the web directory contains static HTML/JS/CSS, we'll serve it with the backend.
+# If a build step was required (e.g., React/Vue), it would go here.
 
-# Base Image with Python 3.11
+# Stage 2: Build the backend (FastAPI)
 FROM python:3.11-slim
 
-# Set Environment Variables
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app \
-    NODE_ENV=production \
-    DEBIAN_FRONTEND=noninteractive
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV APP_HOME /app
+WORKDIR $APP_HOME
 
-# Set Working Directory
-WORKDIR /app
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install System Dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    wget \
-    git \
-    vim \
-    htop \
-    procps \
-    netcat \
-    openssl \
-    libssl-dev \
-    libffi-dev \
-    libgmp-dev \
-    libmpfr-dev \
-    libmpc-dev \
-    libpq-dev \
-    postgresql-client \
-    redis-tools \
-    && rm -rf /var/lib/apt/lists/*
+# Copy project
+COPY . $APP_HOME
 
-# Upgrade pip and install wheel
-RUN pip install --upgrade pip setuptools wheel
-
-# Copy Requirements Files
-COPY requirements_intelligent.txt /app/
-COPY requirements.txt /app/
-COPY requirements_minimal.txt /app/
-
-# Install Python Dependencies
-RUN pip install -r requirements_intelligent.txt --no-cache-dir
-
-# Copy Application Code
-COPY . /app/
-
-# Create Necessary Directories
-RUN mkdir -p /app/logs /app/data /app/blockchain_data /app/models /app/backups
-
-# Set Permissions
-RUN chmod +x /app/main_intelligent.py
-RUN chmod +x /app/laniakea_intelligent_core.py
-RUN chmod -R 755 /app/logs /app/data /app/blockchain_data /app/models /app/backups
-
-# Create Non-Root User for Security
-RUN groupadd -r laniakea && useradd -r -g laniakea laniakea
-RUN chown -R laniakea:laniakea /app
-USER laniakea
-
-# Health Check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
-
-# Expose Ports
+# Expose the port the FastAPI app will run on
 EXPOSE 8000
 
-# Volume Mounts
-VOLUME ["/app/logs", "/app/data", "/app/blockchain_data", "/app/models", "/app/backups"]
-
-# Default Command
-CMD ["python", "main_intelligent.py", "--host", "0.0.0.0", "--port", "8000"]
-
-# Labels
-LABEL maintainer="Laniakea Intelligence Team" \
-      version="2.0.0" \
-      description="Self-Developing Blockchain with Internal Developer Intelligence" \
-      ai.capability="self-developing" \
-      security.level="maximum" \
-      evolution.capability="true"
+# Command to run the application
+# Assuming the main FastAPI app is in laniakea/network/api.py and the app instance is named 'app'
+CMD ["uvicorn", "laniakea.network.api:app", "--host", "0.0.0.0", "--port", "8000"]

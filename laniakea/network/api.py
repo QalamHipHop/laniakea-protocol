@@ -9,10 +9,13 @@ import logging
 from typing import Dict, Any, Optional
 from datetime import datetime
 import uvicorn
+import time
 import uuid
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Request, status
+from starlette.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from typing import List
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter
@@ -24,7 +27,19 @@ from laniakea.intelligence.scda_model import SingleCellDigitalAccount # Import S
 from src.crosschain.cross_chain_bridge import router as cross_chain_router
     # Import smart contract router
 from laniakea.network.llm_api_router import router as llm_router
+from laniakea.external_apis.integrations import ExternalAPIIntegrator
 from laniakea.network.smart_contract_api import router as contract_router
+
+# Security Imports
+from laniakea.security.auth import get_current_user, User, Token, create_access_token, oauth2_scheme
+from datetime import timedelta
+from redis import asyncio as aioredis
+from fastapi_limiter import FastAPILimiter
+
+# New SQLAlchemy Imports
+from laniakea.storage.database_setup import init_db, get_db, Base 
+from laniakea.storage.database import DatabaseConnection, BlockchainDatabase # Assuming these are still needed for legacy parts
+from laniakea.monitoring.metrics import get_metrics_response, API_REQUESTS_TOTAL, API_REQUEST_LATENCY, REGISTRY # New metrics imports
 
 # Request/Response Models
 class TransactionRequest(BaseModel):
@@ -73,9 +88,42 @@ def create_app(
     
     # Store instances
     app.state.blockchain = blockchain
+    
+    # Initialize Redis for Rate Limiting
+    @app.on_event("startup")
+    async def startup_event_redis():
+        redis_host = Config.get("REDIS_HOST", "redis")
+        redis_port = Config.get("REDIS_PORT", 6379)
+        redis = aioredis.from_url(f"redis://{redis_host}:{redis_port}", encoding="utf-8", decode_responses=True)
+        await FastAPILimiter.init(redis)
+        app.state.logger.info("✅ FastAPILimiter initialized with Redis.")
     app.state.brain = brain
     app.state.config = config or {}
     app.state.logger = logger or logging.getLogger('laniakea.api')
+
+    # Middleware for Prometheus metrics
+    @app.middleware("http")
+    async def metrics_middleware(request: Request, call_next):
+        start_time = time.time()
+        endpoint = request.url.path
+        method = request.method
+        
+        try:
+            response = await call_next(request)
+            status_code = response.status_code
+        except Exception as e:
+            status_code = 500
+            raise e
+        finally:
+            process_time = time.time() - start_time
+            
+            # Record request total
+            API_REQUESTS_TOTAL.labels(endpoint=endpoint, method=method, status=status_code).inc()
+            
+            # Record request latency
+            API_REQUEST_LATENCY.labels(endpoint=endpoint, method=method).observe(process_time)
+            
+        return response
     
     # Initialize WebSocket and Realtime Systems
     app.state.websocket_manager = WebSocketManager()
@@ -84,6 +132,31 @@ def create_app(
     # Placeholder for SCDA Management (Needs proper database integration later)
     # For now, a simple in-memory SCDA store
     app.state.scda_store: Dict[str, SingleCellDigitalAccount] = {}
+
+    # Initialize SQLAlchemy ORM Database
+    from laniakea.utils.config import Config
+    db_url = Config.get("DATABASE_URL")
+    if db_url:
+        try:
+            init_db(db_url)
+            app.state.logger.info("SQLAlchemy ORM initialized successfully.")
+        except Exception as e:
+            app.state.logger.error(f"Failed to initialize SQLAlchemy ORM: {e}")
+    else:
+        app.state.logger.error("DATABASE_URL not found in configuration. SQLAlchemy ORM not initialized.")
+
+    # Initialize Legacy Database (keep for compatibility if other parts rely on it)
+    db_conn = DatabaseConnection(
+        host=Config.get("POSTGRES_HOST", "db"), # Use 'db' as host for Docker Compose
+        port=Config.get("POSTGRES_PORT", 5432),
+        database=Config.get("POSTGRES_DB", "laniakea_db"),
+        user=Config.get("POSTGRES_USER", "laniakea_user"),
+        password=Config.get("POSTGRES_PASSWORD", "laniakea_password")
+    )
+    if db_conn.connect():
+        app.state.blockchain_db = BlockchainDatabase(db_conn)
+    else:
+        app.state.logger.error("Failed to connect to the legacy database.")
     
     # Initialize Governance System
     from src.governance.dao import GovernanceSystem
@@ -91,9 +164,12 @@ def create_app(
     app.state.governance_system = GovernanceSystem()
     app.state.diplomacy_system = get_diplomacy_system()
     
+    # Initialize External API Integrator
+    app.state.external_api_integrator = ExternalAPIIntegrator()
+    
     # Start Realtime System
     @app.on_event("startup")
-    async def startup_event():
+    async def startup_event_laniakea():
         await app.state.realtime_system.start()
         # Create a dummy SCDA for testing
         dummy_scda = SingleCellDigitalAccount(identity="user_123")
@@ -111,8 +187,8 @@ def create_app(
     async def shutdown_event():
         await app.state.realtime_system.stop()
     
-    @app.get("/")
-    async def root():
+    @app.get("/", dependencies=[Depends(get_current_user)]) # Protect root endpoint for demonstration
+    async def root(current_user: User = Depends(get_current_user)):
         """Root endpoint"""
         return {
             "name": "LaniakeA Protocol",
@@ -121,6 +197,11 @@ def create_app(
             "timestamp": datetime.utcnow().isoformat()
         }
     
+    @app.get("/metrics")
+    async def metrics():
+        """Prometheus metrics endpoint"""
+        return Response(content=get_metrics_response(), media_type="text/plain")
+
     @app.get("/health")
     async def health():
         """Health check endpoint"""
@@ -129,8 +210,8 @@ def create_app(
             "timestamp": datetime.utcnow().isoformat()
         }
     
-    @app.get("/api/v1/status", response_model=StatusResponse)
-    async def get_status():
+    @app.get("/api/v1/status", response_model=StatusResponse, dependencies=[Depends(get_current_user)])
+    async def get_status(current_user: User = Depends(get_current_user)):
         """Get blockchain status"""
         try:
             status = app.state.blockchain.get_status()
@@ -144,8 +225,8 @@ def create_app(
             app.state.logger.error(f"Error getting status: {e}")
             raise HTTPException(status_code=500, detail=str(e))
     
-    @app.get("/api/v1/blockchain")
-    async def get_blockchain():
+    @app.get("/api/v1/blockchain", dependencies=[Depends(get_current_user)])
+    async def get_blockchain(current_user: User = Depends(get_current_user)):
         """Get full blockchain"""
         try:
             return app.state.blockchain.to_dict()
@@ -153,8 +234,8 @@ def create_app(
             app.state.logger.error(f"Error getting blockchain: {e}")
             raise HTTPException(status_code=500, detail=str(e))
     
-    @app.post("/api/v1/transaction", response_model=TransactionResponse)
-    async def create_transaction(tx: TransactionRequest):
+    @app.post("/api/v1/transaction", response_model=TransactionResponse, dependencies=[Depends(get_current_user)])
+    async def create_transaction(tx: TransactionRequest, current_user: User = Depends(get_current_user)):
         """Create new transaction"""
         try:
             from laniakea.core.hypercube_blockchain import HyperTransaction
@@ -181,8 +262,8 @@ def create_app(
             app.state.logger.error(f"Error creating transaction: {e}")
             raise HTTPException(status_code=500, detail=str(e))
     
-    @app.post("/api/v1/mine")
-    async def mine_block(miner_address: str = "default-miner"):
+    @app.post("/api/v1/mine", dependencies=[Depends(get_current_user)])
+    async def mine_block(miner_address: str = "default-miner", current_user: User = Depends(get_current_user)):
         """Mine pending transactions"""
         try:
             block = app.state.blockchain.mine_pending_transactions(miner_address)
@@ -204,8 +285,8 @@ def create_app(
             app.state.logger.error(f"Error mining block: {e}")
             raise HTTPException(status_code=500, detail=str(e))
     
-    @app.get("/api/v1/balance/{address}")
-    async def get_balance(address: str):
+    @app.get("/api/v1/balance/{address}", dependencies=[Depends(get_current_user)])
+    async def get_balance(address: str, current_user: User = Depends(get_current_user)):
         """Get address balance"""
         try:
             balance = app.state.blockchain.get_balance(address)
@@ -222,8 +303,50 @@ def create_app(
     app.include_router(contract_router, prefix="/api/v1/contract", tags=["Smart Contracts"])
     app.include_router(llm_router, prefix="/api/v1", tags=["LLM Services"])
     
+    # --- External API Router ---
+    external_api_router = APIRouter(prefix="/api/v1/external", tags=["External APIs"], dependencies=[Depends(get_current_user)])
+    
+    @external_api_router.get("/coingecko/price/{coin_id}")
+    async def get_coin_price(coin_id: str):
+        price = app.state.external_api_integrator.get_token_price(coin_id)
+        if price is None:
+            raise HTTPException(status_code=404, detail=f"Price for {coin_id} not found or API error.")
+        return {"coin_id": coin_id, "price_usd": price}
+
+    @external_api_router.get("/arxiv/search")
+    async def search_arxiv_papers(query: str):
+        results = app.state.external_api_integrator.search_arxiv(query)
+        return {"query": query, "results": results}
+
+    @external_api_router.get("/nasa/apod")
+    async def get_nasa_picture():
+        apod = app.state.external_api_integrator.get_nasa_apod()
+        if apod is None:
+            raise HTTPException(status_code=500, detail="Failed to fetch NASA APOD.")
+        return apod
+        
+    app.include_router(external_api_router)
+    
+    # --- Authentication Endpoint ---
+    @app.post("/token", response_model=Token)
+    async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+        # In a real app, you would verify the user/password against the database
+        # For this example, we'll use a simple mock check
+        if form_data.username != "testuser" or form_data.password != "testpass":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        access_token_expires = timedelta(minutes=Config.get("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
+        access_token = create_access_token(
+            data={"sub": form_data.username}, expires_delta=access_token_expires
+        )
+        return {"access_token": access_token, "token_type": "bearer"}
+
     # --- SCDA Management Router ---
-    scda_router = APIRouter(prefix="/api/v1/scda", tags=["SCDA Management"])
+    scda_router = APIRouter(prefix="/api/v1/scda", tags=["SCDA Management"], dependencies=[Depends(get_current_user)])
     
     class SCDA_ID_Request(BaseModel):
         scda_id: str

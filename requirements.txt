@@ -58,3 +58,14 @@ requests==2.31.0
 
 # Added for 8D projection logic
 sympy
+
+# Security Enhancements
+python-jose[cryptography]==3.3.0
+fastapi-limiter==0.1.5
+redis==5.0.1 # Already in file, but ensure it's there for fastapi-limiter
+
+# Monitoring
+prometheus_client==0.18.0
+
+# Performance Testing
+locust==2.20.0
