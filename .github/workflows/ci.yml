@@ -2,53 +2,54 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop, master ]
+    branches: [main, develop, master]
   pull_request:
-    branches: [ main, develop, master ]
+    branches: [main, develop, master]
   workflow_dispatch:
-
 env:
   PYTHON_VERSION: "3.11"
 
 jobs:
   lint:
     name: Code Linting
-    runs-on: ubuntu-latest
-    
+    runs-on: tenki-standard-medium-4c-8g
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: 'pip'
-    
+
     - name: Install linting dependencies
       run: |
         python -m pip install --upgrade pip
         pip install black flake8 isort mypy bandit
-    
+
+
     - name: Check code formatting with Black
       run: black --check --diff laniakea src
       continue-on-error: true
-    
+
     - name: Check import sorting with isort
       run: isort --check-only --diff laniakea src
       continue-on-error: true
-    
+
     - name: Lint with flake8
       run: |
         # Stop the build if there are Python syntax errors or undefined names
         flake8 laniakea src --count --select=E9,F63,F7,F82 --show-source --statistics
         # Exit-zero treats all errors as warnings
         flake8 laniakea src --count --max-line-length=120 --statistics --exit-zero
-    
+
+
     - name: Security check with Bandit
       run: bandit -r laniakea src -f json -o bandit-report.json || true
       continue-on-error: true
-    
+
     - name: Upload Bandit report
       uses: actions/upload-artifact@v4
       if: always()
@@ -58,34 +59,35 @@ jobs:
 
   test:
     name: Run Tests
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     needs: lint
-    
+
     strategy:
       matrix:
         python-version: ["3.11"]
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest pytest-cov pytest-asyncio pytest-mock
-    
+
+
     - name: Run tests with pytest
       run: |
         pytest tests/ -v --cov=laniakea --cov-report=xml --cov-report=html --cov-report=term-missing || true
       continue-on-error: true
-    
+
     - name: Upload coverage reports
       uses: codecov/codecov-action@v4
       if: always()
@@ -94,7 +96,7 @@ jobs:
         flags: unittests
         name: codecov-umbrella
         fail_ci_if_error: false
-    
+
     - name: Upload coverage HTML
       uses: actions/upload-artifact@v4
       if: always()
@@ -104,26 +106,27 @@ jobs:
 
   code-quality:
     name: Code Quality Analysis
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     needs: lint
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Full history for better analysis
-    
+        fetch-depth: 0 # Full history for better analysis
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: 'pip'
-    
+
     - name: Install analysis tools
       run: |
         python -m pip install --upgrade pip
         pip install radon pylint
-    
+
+
     - name: Calculate code complexity
       run: |
         echo "## Code Complexity Report" > complexity-report.md
@@ -134,7 +137,7 @@ jobs:
         echo "### Maintainability Index" >> complexity-report.md
         radon mi laniakea -s >> complexity-report.md || true
       continue-on-error: true
-    
+
     - name: Upload complexity report
       uses: actions/upload-artifact@v4
       if: always()
@@ -144,28 +147,29 @@ jobs:
 
   build:
     name: Build and Package
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     needs: [lint, test]
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: 'pip'
-    
+
     - name: Install build dependencies
       run: |
         python -m pip install --upgrade pip
         pip install build wheel setuptools
-    
+
+
     - name: Build package
       run: python -m build
       continue-on-error: true
-    
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       if: always()
@@ -175,16 +179,16 @@ jobs:
 
   docker:
     name: Docker Build Test
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     needs: lint
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-    
+
     - name: Build Docker image
       uses: docker/build-push-action@v5
       with:
@@ -197,24 +201,24 @@ jobs:
 
   dependency-check:
     name: Dependency Security Check
-    runs-on: ubuntu-latest
-    
+    runs-on: tenki-standard-medium-4c-8g
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
-    
+
     - name: Install safety
       run: pip install safety
-    
+
     - name: Check dependencies for vulnerabilities
       run: safety check --json --output safety-report.json || true
       continue-on-error: true
-    
+
     - name: Upload safety report
       uses: actions/upload-artifact@v4
       if: always()
@@ -224,10 +228,10 @@ jobs:
 
   summary:
     name: Build Summary
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     needs: [lint, test, code-quality, build, docker, dependency-check]
     if: always()
-    
+
     steps:
     - name: Create summary
       run: |
