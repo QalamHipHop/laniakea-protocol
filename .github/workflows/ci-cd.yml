@@ -2,11 +2,11 @@ name: Laniakea Protocol CI/CD Pipeline v0.1.0
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   release:
-    types: [ published ]
+    types: [published]
 
 env:
   REGISTRY: ghcr.io
@@ -18,7 +18,7 @@ jobs:
   # ===========================================
   code-quality:
     name: Code Quality & Security
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     outputs:
       test-results: ${{ steps.tests.outputs.result }}
       security-scan: ${{ steps.security.outputs.result }}
@@ -109,7 +109,7 @@ jobs:
   # ===========================================
   build-and-test:
     name: Build & Test Docker
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     needs: code-quality
     strategy:
       matrix:
@@ -147,7 +147,7 @@ jobs:
   # ===========================================
   security-scan:
     name: Advanced Security Scanning
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     needs: code-quality
     if: github.event_name == 'push' || github.event_name == 'pull_request'
 
@@ -189,7 +189,7 @@ jobs:
   # ===========================================
   build-and-push:
     name: Build & Push Images
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     needs: [code-quality]
     if: github.event_name == 'push' || github.event_name == 'release'
     outputs:
@@ -256,7 +256,7 @@ jobs:
   # ===========================================
   deploy-production:
     name: Deploy to Production
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     needs: build-and-push
     if: github.ref == 'refs/heads/main'
     environment: production
@@ -280,7 +280,7 @@ jobs:
   # ===========================================
   update-docs:
     name: Update Documentation
-    runs-on: ubuntu-latest
+    runs-on: tenki-standard-medium-4c-8g
     needs: [code-quality, build-and-push]
     if: github.ref == 'refs/heads/main'
 
