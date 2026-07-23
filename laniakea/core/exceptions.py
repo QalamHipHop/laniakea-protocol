@@ -3,6 +3,8 @@ Custom exceptions for Laniakea Protocol
 
 This module defines all custom exceptions used throughout the protocol
 to provide better error handling and debugging capabilities.
+
+All exceptions inherit from LaniakeaException for centralized handling.
 """
 
 class LaniakeaException(Exception):
@@ -11,6 +13,10 @@ class LaniakeaException(Exception):
     
     All custom exceptions should inherit from this class to allow
     for centralized error handling and logging.
+    
+    Attributes:
+        message (str): Human-readable error message
+        details (dict): Additional error context and details
     """
     def __init__(self, message: str, details: dict = None):
         self.message = message
@@ -28,20 +34,24 @@ class BlockchainError(LaniakeaException):
     Blockchain-related errors
     
     Raised when blockchain operations fail, such as:
-    - Invalid block
+    - Invalid block structure or proof
     - Chain validation failure
     - Mining errors
+    - Transaction validation errors
+    
+    Example:
+        raise BlockchainError("Invalid block nonce", {"block_id": 42, "nonce": "abc"})
     """
     pass
 
 
 class InvalidBlockError(BlockchainError):
-    """Raised when a block is invalid"""
+    """Raised when a block is invalid or malformed"""
     pass
 
 
 class ChainValidationError(BlockchainError):
-    """Raised when blockchain validation fails"""
+    """Raised when blockchain validation fails (chain integrity check)"""
     pass
 
 
@@ -55,15 +65,19 @@ class QuantumError(LaniakeaException):
     Quantum computing simulation errors
     
     Raised when quantum operations fail, such as:
-    - Invalid quantum circuit
+    - Invalid quantum circuit structure
     - Qubit limit exceeded
     - Quantum job execution failure
+    - Gate application errors
+    
+    Example:
+        raise QuantumError("Qubit limit exceeded", {"max": 5, "requested": 10})
     """
     pass
 
 
 class InvalidQuantumCircuitError(QuantumError):
-    """Raised when quantum circuit is invalid"""
+    """Raised when quantum circuit is invalid or malformed"""
     pass
 
 
@@ -77,9 +91,13 @@ class CrossChainError(LaniakeaException):
     Cross-chain bridge errors
     
     Raised when cross-chain operations fail, such as:
-    - Unsupported chain
-    - Transfer failure
+    - Unsupported chain specification
+    - Transfer failure or timeout
     - Bridge validation error
+    - Asset mismatch
+    
+    Example:
+        raise CrossChainError("Unsupported target chain", {"chain": "Polygon"})
     """
     pass
 
@@ -99,9 +117,13 @@ class AIError(LaniakeaException):
     AI/LLM related errors
     
     Raised when AI operations fail, such as:
-    - LLM API failure
+    - LLM API connection failure
     - Problem generation error
-    - Validation error
+    - Solution validation error
+    - Model inference failure
+    
+    Example:
+        raise AIError("LLM API timeout", {"endpoint": "openai", "timeout": 30})
     """
     pass
 
@@ -121,9 +143,13 @@ class ValidationError(LaniakeaException):
     Data validation errors
     
     Raised when input validation fails, such as:
-    - Invalid parameters
+    - Invalid parameters or types
     - Missing required fields
     - Type mismatch
+    - Value out of acceptable range
+    
+    Example:
+        raise ValidationError("Amount must be positive", {"amount": -100})
     """
     pass
 
@@ -143,15 +169,19 @@ class SCDAError(LaniakeaException):
     SCDA (Single-Cell Digital Account) errors
     
     Raised when SCDA operations fail, such as:
-    - Insufficient energy
+    - Insufficient energy for operation
     - Invalid state transition
     - Tier progression error
+    - Problem-solving failure
+    
+    Example:
+        raise SCDAError("Insufficient energy", {"required": 100, "available": 50})
     """
     pass
 
 
 class InsufficientEnergyError(SCDAError):
-    """Raised when SCDA has insufficient energy"""
+    """Raised when SCDA has insufficient energy for operation"""
     pass
 
 
@@ -165,9 +195,13 @@ class GovernanceError(LaniakeaException):
     DAO Governance errors
     
     Raised when governance operations fail, such as:
-    - Invalid proposal
-    - Voting error
+    - Invalid proposal structure
+    - Voting error or validation failure
     - Quorum not met
+    - Voting period expired
+    
+    Example:
+        raise GovernanceError("Quorum not met", {"required": 0.51, "current": 0.3})
     """
     pass
 
@@ -193,8 +227,12 @@ class MarketplaceError(LaniakeaException):
     
     Raised when marketplace operations fail, such as:
     - NFT minting error
-    - Trading error
+    - Trading/transaction error
     - Listing error
+    - Price validation failure
+    
+    Example:
+        raise MarketplaceError("NFT not found", {"token_id": "xyz"})
     """
     pass
 
@@ -214,9 +252,13 @@ class DeFiError(LaniakeaException):
     DeFi operations errors
     
     Raised when DeFi operations fail, such as:
-    - Swap error
-    - Liquidity error
-    - Pool error
+    - Swap execution error
+    - Liquidity operation failure
+    - Pool imbalance
+    - Slippage exceeds tolerance
+    
+    Example:
+        raise DeFiError("Insufficient liquidity", {"pool": "LANA/ETH", "amount": 1000})
     """
     pass
 
@@ -235,7 +277,13 @@ class ConfigurationError(LaniakeaException):
     """
     Configuration errors
     
-    Raised when configuration is invalid or missing
+    Raised when configuration is invalid or missing:
+    - Invalid environment variables
+    - Missing required config
+    - Config validation failure
+    
+    Example:
+        raise ConfigurationError("DATABASE_URL not set")
     """
     pass
 
@@ -244,7 +292,13 @@ class DatabaseError(LaniakeaException):
     """
     Database operation errors
     
-    Raised when database operations fail
+    Raised when database operations fail:
+    - Connection failure
+    - Query execution error
+    - Data integrity violation
+    
+    Example:
+        raise DatabaseError("Connection timeout", {"timeout": 30})
     """
     pass
 
@@ -253,7 +307,13 @@ class NetworkError(LaniakeaException):
     """
     Network communication errors
     
-    Raised when network operations fail
+    Raised when network operations fail:
+    - Connection refused/timeout
+    - DNS resolution failure
+    - Protocol error
+    
+    Example:
+        raise NetworkError("Connection timeout", {"host": "example.com", "port": 8000})
     """
     pass
 
@@ -262,7 +322,13 @@ class AuthenticationError(LaniakeaException):
     """
     Authentication and authorization errors
     
-    Raised when authentication or authorization fails
+    Raised when authentication or authorization fails:
+    - Invalid credentials
+    - Token expired
+    - Insufficient permissions
+    
+    Example:
+        raise AuthenticationError("Invalid API key", {"key": "***"})
     """
     pass
 
@@ -271,7 +337,12 @@ class RateLimitError(LaniakeaException):
     """
     Rate limiting errors
     
-    Raised when rate limit is exceeded
+    Raised when rate limit is exceeded:
+    - Too many requests
+    - Request quota exceeded
+    
+    Example:
+        raise RateLimitError("Rate limit exceeded", {"limit": 100, "window": 60})
     """
     pass
 
@@ -324,6 +395,11 @@ def get_error_code(exception: Exception) -> str:
         exception: The exception instance
         
     Returns:
-        Error code string
+        Error code string for API response
+        
+    Example:
+        >>> exc = InvalidBlockError("Bad nonce")
+        >>> get_error_code(exc)
+        'INVALID_BLOCK'
     """
     return ERROR_CODES.get(type(exception), "UNKNOWN_ERROR")
