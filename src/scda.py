@@ -37,11 +37,19 @@ class SCDA:
 
         if initial_k.shape != (DIMENSIONS // 2,) or initial_e.shape != (DIMENSIONS // 2,):
             raise ValueError(f"Initial vectors must be {DIMENSIONS // 2}-dimensional.")
+        
+        # Validate that initial values are non-negative
+        if np.any(initial_k < 0) or np.any(initial_e < 0):
+            raise ValueError("Initial knowledge and energy vectors must be non-negative.")
 
-        self.K = initial_k  # Knowledge vector (4D)
-        self.E = initial_e  # Energy vector (4D)
-        self.decay_rate = decay_rate
-        self.learning_rate = learning_rate
+        self.K = initial_k.astype(np.float64)  # Knowledge vector (4D)
+        self.E = initial_e.astype(np.float64)  # Energy vector (4D)
+        self.decay_rate = float(decay_rate)
+        self.learning_rate = float(learning_rate)
+        
+        # State bounds to prevent overflow
+        self.E_MAX = 1000.0
+        self.K_MAX = 100.0
 
     @property
     def state_vector(self) -> np.ndarray:
@@ -54,8 +62,26 @@ class SCDA:
         This ensures that the marginal gain decreases as the state approaches a maximum capacity.
 
         Formula: max_capacity * (1 - exp(-input_value / max_capacity))
+        
+        Parameters
+        ----------
+        input_value : float
+            The input value to apply diminishing returns to
+        max_capacity : float
+            The maximum capacity (default 1.0)
+            
+        Returns
+        -------
+        float
+            The diminished value
         """
-        return max_capacity * (1 - np.exp(-input_value / max_capacity))
+        try:
+            # Clamp input to prevent overflow
+            clamped_input = np.clip(input_value, 0, 100.0)
+            result = max_capacity * (1 - np.exp(-clamped_input / max_capacity))
+            return float(np.clip(result, 0, max_capacity))
+        except (OverflowError, FloatingPointError):
+            return max_capacity
 
     def energy_management(self, energy_input: np.ndarray) -> None:
         """
@@ -76,12 +102,19 @@ class SCDA:
 
         if energy_input.shape != (DIMENSIONS // 2,):
             raise ValueError(f"Energy input must be {DIMENSIONS // 2}-dimensional.")
+        
+        # Validate energy input is reasonable
+        energy_input = np.clip(energy_input, 0, 100.0)
 
         # 1. Apply diminishing returns to the input energy
-        diminished_input = np.array([self._diminishing_returns(e_in, max_capacity=10.0) for e_in in energy_input])
+        diminished_input = np.array([
+            self._diminishing_returns(e_in, max_capacity=10.0) 
+            for e_in in energy_input
+        ])
 
-        # 2. Update E(t)
+        # 2. Update E(t) with bounds checking
         self.E += diminished_input
+        self.E = np.clip(self.E, 0, self.E_MAX)
 
         # 3. Apply a small maintenance cost (proportional to current state)
         maintenance_cost = self.E * self.decay_rate * 0.1
@@ -112,6 +145,9 @@ class SCDA:
 
         if problem_difficulty.shape != (DIMENSIONS // 2,):
             raise ValueError(f"Problem difficulty must be {DIMENSIONS // 2}-dimensional.")
+        
+        # Validate and clamp problem difficulty
+        problem_difficulty = np.clip(problem_difficulty, 0.1, 10.0)
 
         # Calculate required energy and knowledge
         required_energy = problem_difficulty * 0.5
@@ -119,8 +155,12 @@ class SCDA:
 
         # 1. Check for success (simple probability model)
         # Success probability is proportional to K/required_knowledge and E/required_energy
-        knowledge_ratio = np.mean(self.K / (required_knowledge + 1e-6))
-        energy_ratio = np.mean(self.E / (required_energy + 1e-6))
+        # FIX: Prevent division by near-zero by clamping denominators
+        safe_required_knowledge = np.maximum(required_knowledge, 1e-3)
+        safe_required_energy = np.maximum(required_energy, 1e-3)
+        
+        knowledge_ratio = np.mean(np.clip(self.K / safe_required_knowledge, 0, 10))
+        energy_ratio = np.mean(np.clip(self.E / safe_required_energy, 0, 10))
         success_probability = np.clip(0.5 * (knowledge_ratio + energy_ratio), 0.1, 0.95)
 
         success = np.random.rand() < success_probability
@@ -133,9 +173,13 @@ class SCDA:
 
             # Knowledge gain with diminishing returns
             base_gain = problem_difficulty * self.learning_rate
-            diminished_gain = np.array([self._diminishing_returns(g, max_capacity=5.0) for g in base_gain])
+            diminished_gain = np.array([
+                self._diminishing_returns(g, max_capacity=5.0) 
+                for g in base_gain
+            ])
             self.K += diminished_gain
-            knowledge_gain_magnitude = np.linalg.norm(diminished_gain)
+            self.K = np.clip(self.K, 0, self.K_MAX)  # FIX: Add upper bound
+            knowledge_gain_magnitude = float(np.linalg.norm(diminished_gain))
         else:
             # Higher energy cost for failure, but a small learning gain from the attempt
             cost = required_energy * 1.2
@@ -143,9 +187,13 @@ class SCDA:
 
             # Small, diminished learning gain from failure
             base_gain = problem_difficulty * self.learning_rate * 0.1
-            diminished_gain = np.array([self._diminishing_returns(g, max_capacity=1.0) for g in base_gain])
+            diminished_gain = np.array([
+                self._diminishing_returns(g, max_capacity=1.0) 
+                for g in base_gain
+            ])
             self.K += diminished_gain
-            knowledge_gain_magnitude = np.linalg.norm(diminished_gain)
+            self.K = np.clip(self.K, 0, self.K_MAX)  # FIX: Add upper bound
+            knowledge_gain_magnitude = float(np.linalg.norm(diminished_gain))
 
         return success, knowledge_gain_magnitude
 
@@ -158,11 +206,16 @@ class SCDA:
         2. Energy dissipation (natural loss).
         """
         # 1. Knowledge Decay (Forgetting)
-        # Decay is applied, but the decay rate itself is diminished for higher K values
-        # This models that core knowledge is harder to forget.
-        diminished_decay_factor = np.array([self._diminishing_returns(k, max_capacity=1.0) for k in (1.0 / (self.K + 1e-6))])
-        decay_amount = self.K * self.decay_rate * diminished_decay_factor
+        # FIX: Properly handle diminishing returns for knowledge decay
+        # Core knowledge should decay slower
+        safe_k = np.maximum(self.K, 1e-6)
+        decay_factors = np.array([
+            self._diminishing_returns(1.0 / k, max_capacity=1.0) 
+            for k in safe_k
+        ])
+        decay_amount = self.K * self.decay_rate * decay_factors
         self.K = np.maximum(0, self.K - decay_amount)
+        self.K = np.clip(self.K, 0, self.K_MAX)
 
         # 2. Energy Dissipation
         dissipation_amount = self.E * self.decay_rate
@@ -170,27 +223,3 @@ class SCDA:
 
     def __repr__(self):
         return f"SCDA(K={self.K}, E={self.E})"
-
-# Example usage (for testing purposes, not part of the class)
-if __name__ == '__main__':
-    # Initial state vectors (4D each)
-    initial_k = np.array([0.5, 0.3, 0.7, 0.1])
-    initial_e = np.array([1.0, 0.8, 0.5, 0.2])
-
-    scda_agent = SCDA(initial_k, initial_e)
-    print(f"Initial State: {scda_agent.state_vector}")
-
-    # Energy Management
-    energy_boost = np.array([2.0, 1.5, 0.5, 0.1])
-    scda_agent.energy_management(energy_boost)
-    print(f"After Energy Boost: {scda_agent.state_vector}")
-
-    # Problem Solving
-    problem = np.array([1.0, 1.0, 1.0, 1.0])
-    success, gain = scda_agent.problem_solving(problem)
-    print(f"Problem Solved: {success}, Knowledge Gain: {gain:.4f}")
-    print(f"After Problem Solving: {scda_agent.state_vector}")
-
-    # Passive Update
-    scda_agent.update_passive()
-    print(f"After Passive Update: {scda_agent.state_vector}")
