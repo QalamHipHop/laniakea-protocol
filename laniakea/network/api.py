@@ -19,12 +19,12 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from typing import List
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter
-from src.websocket.websocket_manager import WebSocketManager, ConnectionType
-from src.websocket.realtime_updates import RealtimeUpdateSystem, UpdateEvent, UpdateType
+from laniakea.websocket.websocket_manager import WebSocketManager, ConnectionType
+from laniakea.websocket.realtime_updates import RealtimeUpdateSystem, UpdateEvent, UpdateType
 from laniakea.intelligence.scda_model import SingleCellDigitalAccount # Import SCDA model
 
 # Import cross-chain bridge router
-from src.crosschain.cross_chain_bridge import router as cross_chain_router
+from laniakea.crosschain.cross_chain_bridge import router as cross_chain_router
     # Import smart contract router
 from laniakea.network.llm_api_router import router as llm_router
 from laniakea.external_apis.integrations import ExternalAPIIntegrator
@@ -159,8 +159,8 @@ def create_app(
         app.state.logger.error("Failed to connect to the legacy database.")
     
     # Initialize Governance System
-    from src.governance.dao import GovernanceSystem
-    from src.governance.diplomacy_system import get_diplomacy_system
+    from laniakea.governance.dao import GovernanceSystem
+    from laniakea.governance.metaverse_diplomacy import get_diplomacy_system
     app.state.governance_system = GovernanceSystem()
     app.state.diplomacy_system = get_diplomacy_system()
     
@@ -503,7 +503,7 @@ def create_app(
     @civ_router.post("/proposal")
     async def create_proposal_api(request: Civilization_Proposal_Request):
         """Create a new governance proposal"""
-        from src.governance.dao import ProposalType
+        from laniakea.governance.dao import ProposalType
         try:
             proposal = app.state.governance_system.create_proposal(
                 proposer_id=request.proposer_id,
@@ -561,7 +561,7 @@ def create_app(
     @diplomacy_router.post("/set_relation")
     async def set_relation_api(request: SetRelationRequest):
         """Set a diplomatic relation between two SCDAs"""
-        from src.governance.diplomacy_system import RelationType
+        from laniakea.governance.metaverse_diplomacy import RelationType
         try:
             relation_type = RelationType(request.relation)
             app.state.diplomacy_system.set_relation(request.scda1_id, request.scda2_id, relation_type)
@@ -578,7 +578,7 @@ def create_app(
     @diplomacy_router.post("/propose_treaty")
     async def propose_treaty_api(request: ProposeTreatyRequest):
         """Propose and sign a new diplomatic treaty"""
-        from src.governance.diplomacy_system import TreatyType
+        from laniakea.governance.metaverse_diplomacy import TreatyType
         try:
             treaty_type = TreatyType(request.treaty_type)
             treaty = app.state.diplomacy_system.propose_treaty(

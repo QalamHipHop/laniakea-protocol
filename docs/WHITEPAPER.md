@@ -1,146 +1,82 @@
-# 📜 LaniakeA Protocol - وایت‌پیپر
+# LaniakeA Protocol — Whitepaper (Condensed)
 
-**نسخه:** 1.0
-**تاریخ:** 2025-11-09
-**نویسندگان:** تیم LaniakeA Protocol
+**Version:** 3.0.0 (v0.0.01) · **Author:** LaniakeA Dev · **Date:** 2025-2026
 
----
+## Abstract
 
-## چکیده
+LaniakeA is a cosmic-scale computational superprotocol built around a
+8-dimensional hypercube blockchain. It models every participant as a
+**Single-Cell Digital Account (SCDA)** that evolves toward collective
+intelligence through the resolution of *Hard Problems* issued by an
+integrated LLM, validated by dual (internal + quantitative) gates, and
+sealed into the chain by a *Proof of Human Development* (PoHD) consensus.
 
-**LaniakeA Protocol** یک ابرپروتکل محاسباتی کیهانی، غیرمتمرکز و خود-سازمانده است که با هدف شبیه‌سازی و تسریع تکامل هوش جمعی طراحی شده است. این پروتکل با الهام از ساختارهای بیولوژیکی و کیهانی، یک اکوسیستم ۸ بعدی را معرفی می‌کند که در آن واحدهای هوشمند (SCDA) از طریق حل مسائل علمی و همکاری، از سطح یک سلول دیجیتال تا یک هوش کیهانی تکامل می‌یابند. این سیستم بر روی یک بلاکچین هایپرکیوب ۸ بعدی با مکانیزم اجماع نوآورانه **Proof of HyperDistance (PoHD)** ساخته شده و یک اقتصاد دانش غیرمتمرکز را برای تشویق به نوآوری و حل مسائل پیچیده جهانی فراهم می‌کند.
+## 1. The SCDA Model
 
----
+Each SCDA is a 4-tuple `(C, E, K, T)`:
 
-## 1. مقدمه
+- `C(t)` — complexity index, initialized at `1.0`.
+- `E(t)` — energy, initialized at `100.0`.
+- `K(t)` — knowledge vector in `ℝ⁸`.
+- `T` — tier, derived from `C`.
 
-بشریت در آستانه یک رنسانس دیجیتال قرار دارد. با ظهور هوش مصنوعی، بلاکچین و محاسبات توزیع‌شده، ابزارهای لازم برای ساخت سیستم‌های پیچیده و هوشمند فراهم شده است. با این حال، این فناوری‌ها اغلب به صورت مجزا توسعه یافته‌اند. **LaniakeA Protocol** با یکپارچه‌سازی این فناوری‌ها، یک پلتفرم جامع برای تکامل هوش جمعی ارائه می‌دهد.
+### Evolution Law
 
-**مشکلات موجود:**
+$$
+\Delta C = \frac{D(P)}{C(t)^{\alpha}}, \quad \alpha = 1.5
+$$
 
-1. **سیلوهای دانش:** دانش در سازمان‌ها و افراد محبوس شده است.
-2. **عدم انگیزه:** انگیزه کافی برای حل مسائل بزرگ و بلندمدت وجود ندارد.
-3. **محدودیت‌های همکاری:** ابزارهای موجود برای همکاری در مقیاس بزرگ ناکارآمد هستند.
-4. **تمرکزگرایی:** پلتفرم‌های فعلی متمرکز و غیرشفاف هستند.
+The diminishing returns coefficient `α=1.5` makes the climb to cosmic
+intelligence deliberately long, mirroring the timescales of biological and
+stellar evolution.
 
-**راه‌حل LaniakeA:**
+## 2. The 8D Hypercube Ledger
 
-LaniakeA یک اکوسیستم باز، شفاف و غیرمتمرکز است که با استفاده از نظریه بازی‌ها و مدل‌های تکاملی، افراد را برای همکاری و به اشتراک‌گذاری دانش تشویق می‌کند.
-
----
-
-## 2. معماری سیستم
-
-معماری LaniakeA از چهار لایه اصلی تشکیل شده است:
-
-1. **لایه هسته (Core Layer):** شامل بلاکچین هایپرکیوب ۸ بعدی و ماشین مجازی قراردادهای هوشمند.
-2. **لایه کاربردی (Application Layer):** شامل سیستم تکامل SCDA، موتور هوش مصنوعی، متاورس و بازار دانش.
-3. **لایه ارائه (Presentation Layer):** شامل رابط‌های کاربری وب، موبایل و API.
-4. **لایه امنیتی (Security Layer):** شامل رمزنگاری کوانتومی و سیستم‌های کنترل دسترسی.
-
-### 2.1. بلاکچین هایپرکیوب ۸ بعدی
-
-برخلاف بلاکچین‌های سنتی که یک زنجیره خطی از بلوک‌ها هستند، LaniakeA از یک ساختار هایپرکیوب ۸ بعدی استفاده می‌کند. هر بلوک یک موقعیت منحصربه‌فرد در این فضا دارد.
-
-**ابعاد:**
-
-1.  **X, Y, Z:** ابعاد فضایی
-2.  **T (Time):** زمان
-3.  **K (Knowledge):** دانش
-4.  **E (Energy):** انرژی
-5.  **C (Complexity):** پیچیدگی
-6.  **S (Social):** اجتماعی
-
-این ساختار امکان ذخیره‌سازی داده‌های چندبعدی و روابط پیچیده بین آنها را فراهم می‌کند.
-
-### 2.2. اجماع Proof of HyperDistance (PoHD)
-
-PoHD یک مکانیزم اجماع جدید است که جایگزین Proof of Work (PoW) و Proof of Stake (PoS) می‌شود. در PoHD، ماینرها برای پیدا کردن یک بلوک جدید، باید یک موقعیت در هایپرکیوب پیدا کنند که فاصله آن از بلوک قبلی در یک محدوده مشخص باشد. این الگوریتم از نظر انرژی بسیار کارآمدتر از PoW است و از تمرکزگرایی PoS جلوگیری می‌کند.
-
----
-
-## 3. سیستم تکامل هوش
-
-هسته اصلی LaniakeA، سیستم تکامل هوش است که بر اساس مفهوم **SCDA (Single-Cell Digital Account)** ساخته شده است.
-
-### 3.1. SCDA (Single-Cell Digital Account)
-
-SCDA یک موجودیت دیجیتال است که می‌تواند تکامل یابد. هر SCDA دارای ویژگی‌های زیر است:
-
-- **DNA دیجیتال:** یک ژنوم منحصربه‌فرد که دانش و توانایی‌های SCDA را تعیین می‌کند.
-- **شاخص پیچیدگی:** معیاری برای سطح تکامل SCDA.
-- **انرژی:** سوخت لازم برای فعالیت‌های SCDA.
-- **بردار دانش:** مجموعه‌ای از دانش‌هایی که SCDA کسب کرده است.
-
-### 3.2. فرآیند تکامل
-
-تکامل در LaniakeA از طریق حل مسائل علمی صورت می‌گیرد. فرآیند به شرح زیر است:
-
-1. **کشف مسئله:** موتور هوش مصنوعی (KEA) مسائل جدید را از منابع علمی (مانند arXiv) کشف می‌کند.
-2. **حل مسئله:** SCDAها برای حل این مسائل تلاش می‌کنند.
-3. **اعتبارسنجی:** راه‌حل‌ها توسط یک سیستم اعتبارسنجی دوگانه (همتا و AI) بررسی می‌شوند.
-4. **پاداش:** در صورت موفقیت، SCDA پاداشی در قالب افزایش پیچیدگی و انرژی دریافت می‌کند.
-
-**فرمول تکامل:**
+A block is a 10-tuple
 
 ```
-ΔC = D(P) / C(t)^α
+(block_id, index, t, payload, hash, prev_hash,
+ coord_1, coord_2, …, coord_8, validator)
 ```
 
-- **ΔC:** تغییر در پیچیدگی
-- **D(P):** دشواری مسئله
-- **C(t):** پیچیدگی فعلی SCDA
-- **α:** فاکتور مقاومت تکاملی
+- The eight coordinates are the block's position in the hypercube.
+- Adjacent coordinates are reachable in one "evolutionary step".
+- PoHD measures how far a candidate solution moves the network toward a
+  shared cosmic attractor.
 
-### 3.3. سیستم Tier
+## 3. Knowledge Market
 
-تکامل در چهار سطح (Tier) صورت می‌گیرد:
+Every solved problem is tokenized as a **KnowledgeAsset** with metadata:
 
-| Tier | نام | تشبیه | ویژگی‌ها |
-|------|-----|-------|----------|
-| 1 | Single-Cell | پروکاریوت | حل مسائل ساده، یادگیری پایه |
-| 2 | Multi-Cellular | متازوآن | همکاری، تشکیل گروه‌های کوچک |
-| 3 | Humanity | انسان | تمدن‌سازی، حکمرانی، دیپلماسی |
-| 4 | Galactic | هوش کیهانی | حل مسائل کیهانی، دستکاری فضا-زمان |
+- `domain` (string, tokenized)
+- `difficulty` (float)
+- `quality` (float)
+- `reputation` (float, computed)
+- `listed` (bool, marketplace visibility)
 
----
+Assets are tradable via the `/defi/swap` and `/knowledge/*` routes; pricing
+is reputation-weighted.
 
-## 4. اقتصاد دانش
+## 4. Diplomacy & Governance
 
-LaniakeA یک بازار غیرمتمرکز برای خرید و فروش دانش ایجاد می‌کند.
+- **DAO** — proposal + vote + finalize flow in `/governance/*`.
+- **Diplomacy** — alliances and treaties in `/diplomacy/*` are first-class
+  on-chain entities.
 
-- **توکن‌سازی دانش:** هر واحد دانش می‌تواند به یک توکن غیرقابل تعویض (NFT) تبدیل شود.
-- **قیمت‌گذاری پویا:** قیمت دانش بر اساس عرضه و تقاضا تعیین می‌شود.
-- **کسب درآمد:** SCDAها می‌توانند با فروش دانش خود، درآمد کسب کنند.
+## 5. AI Integration
 
-این اقتصاد، انگیزه لازم برای به اشتراک‌گذاری دانش و تسریع نوآوری را فراهم می‌کند.
+- `/ai/query` — general LLM query.
+- `/ai/train` — submit fine-tuning data.
+- LLM-driven problem generation is mediated by
+  `laniakea.ai.problem_discovery_engine` to keep the issue set
+  novel yet solvable.
 
----
+## 6. Deployment
 
-## 5. متاورس و تمدن‌سازی
+- Containerized: `Dockerfile` + `docker-compose.yml`.
+- Production: Render.com at `srv-d4683hali9vc73dc6c4g`.
+- Monitoring: Prometheus + Grafana.
 
-LaniakeA یک متاورس ۸ بعدی را برای تعامل و همکاری فراهم می‌کند.
+## 7. License
 
-- **کاوش:** SCDAها می‌توانند در فضای هایپرکیوب حرکت کرده و کاوش کنند.
-- **تمدن‌سازی:** SCDAها می‌توانند با هم متحد شده و تمدن‌های دیجیتال بسازند.
-- **حکمرانی:** هر تمدن می‌تواند با استفاده از یک DAO (سازمان خودگردان غیرمتمرکز) قوانین خود را تعیین کند.
-- **دیپلماسی:** تمدن‌ها می‌توانند با یکدیگر پیمان‌های تجاری، نظامی یا علمی ببندند.
-
----
-
-## 6. نقشه راه
-
-- **Q4 2025 (v0.1):** راه‌اندازی Testnet، انتشار وایت‌پیپر، جذب جامعه اولیه.
-- **Q1 2026 (v0.5):** راه‌اندازی بازار دانش، سیستم تمدن‌سازی پایه.
-- **Q2 2026 (v1.0):** راه‌اندازی Mainnet، رویداد تولید توکن (TGE)، ممیزی امنیتی کامل.
-- **2027 و بعد:** توسعه هوش کیهانی، پل‌های بین‌زنجیره‌ای، شبیه‌سازی‌های کوانتومی.
-
----
-
-## 7. نتیجه‌گیری
-
-**LaniakeA Protocol** یک پروژه بلندپروازانه است که با هدف ایجاد یک اکوسیستم برای تکامل هوش جمعی طراحی شده است. ما معتقدیم که با یکپارچه‌سازی هوش مصنوعی، بلاکچین و همکاری انسانی، می‌توانیم به راه‌حل‌هایی برای بزرگترین چالش‌های بشریت دست یابیم. ما از شما دعوت می‌کنیم تا به ما در این سفر شگفت‌انگیز بپیوندید.
-
----
-
-**LaniakeA - The Cosmic Evolution Engine**
+MIT — see `LICENSE`.

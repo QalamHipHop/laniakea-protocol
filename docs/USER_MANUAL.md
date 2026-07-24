@@ -1,150 +1,52 @@
-# 📘 LaniakeA Protocol - راهنمای کاربر
+# LaniakeA Protocol — User Manual
 
-**نسخه:** v0.0.01
-**آخرین به‌روزرسانی:** 2025-11-09
+**Version:** 3.0.0 (v0.0.01) · **Author:** LaniakeA Dev
 
----
+## What is LaniakeA?
 
-## 🌌 به دنیای LaniakeA خوش آمدید!
+LaniakeA is a cosmic-scale blockchain where every participant is a
+**Single-Cell Digital Account (SCDA)** that grows in complexity by solving
+*Hard Problems* generated and validated by an integrated LLM.
 
-**LaniakeA Protocol** یک اکوسیستم دیجیتال است که در آن شما می‌توانید:
+## First Steps
 
-- **تکامل پیدا کنید:** از یک سلول دیجیتال ساده به یک هوش کیهانی تبدیل شوید.
-- **مسائل را حل کنید:** با حل مسائل علمی، دانش و انرژی کسب کنید.
-- **همکاری کنید:** با دیگران تمدن‌های دیجیتال بسازید.
-- **تجارت کنید:** دانش خود را در بازار غیرمتمرکز بفروشید.
-- **کاوش کنید:** در یک فضای هشت‌بعدی کاوش کنید.
+1. Visit https://laniakea-protocol.onrender.com
+2. Open `/docs` to browse the interactive API.
+3. Get your SCDA via `GET /scda/{user_id}/state`.
+4. Solve a problem: `POST /ai/query` or `POST /blockchain/mine`.
+5. Watch your complexity `C(t)` grow and your tier upgrade.
 
-این راهنما به شما کمک می‌کند تا اولین قدم‌های خود را در این دنیای شگفت‌انگیز بردارید.
+## Key Endpoints
 
----
+| Method | Path | Purpose |
+|---|---|---|
+| GET | `/health` | Liveness probe |
+| GET | `/discovery` | Service self-description |
+| GET | `/core/status` | Runtime status |
+| GET | `/blockchain/info` | Chain info |
+| GET | `/blockchain/chain` | Full chain (paginated) |
+| POST | `/blockchain/mine` | Mine a new block |
+| GET | `/token/info` | Token economics |
+| GET | `/defi/pools` | Liquidity pools |
+| GET | `/governance/proposals` | DAO proposals |
+| GET | `/diplomacy/alliances` | Active alliances |
+| GET | `/achievements/catalog` | All achievements |
+| WS | `/ws/{type}/{id}` | Realtime channel |
 
-## 🚀 شروع سریع
+## Dashboards
 
-### 1. ایجاد حساب (SCDA)
+The `web/` directory ships with:
 
-اولین قدم شما ایجاد یک **حساب دیجیتال تک‌سلولی (SCDA)** است. این حساب، هویت دیجیتال شما در پروتکل است.
+- `index.html` — landing page
+- `dashboard.html` — operational dashboard
+- `metaverse_8d_visualization.html` — 8D hypercube viewer
+- `mining_dashboard.html` — mining status
+- `scda_dashboard.html` — SCDA evolution tracker
+- `social_hub.html` — diplomacy hub
+- `achievements.html` — achievement gallery
+- `3d-visualization.html` — 3D block space
 
-```bash
-# از طریق رابط کاربری (UI)
-1. به http://localhost:8000/web/index.html بروید.
-2. روی دکمه "Create SCDA" کلیک کنید.
-3. یک نام کاربری انتخاب کنید.
+## Support
 
-# از طریق API
-curl -X POST http://localhost:8000/api/v1/scda/create -d '{"username": "your_username"}'
-```
-
-### 2. داشبورد شما
-
-پس از ایجاد حساب، به داشبورد خود هدایت می‌شوید. در اینجا می‌توانید:
-
-- **وضعیت SCDA:** شاخص پیچیدگی، انرژی، سطح و ...
-- **بردار دانش:** دانش‌هایی که کسب کرده‌اید.
-- **DNA دیجیتال:** ژنوم منحصربه‌فرد شما.
-- **مسائل پیشنهادی:** مسائلی که می‌توانید حل کنید.
-
-### 3. حل اولین مسئله
-
-1. به بخش "Problem Solver" بروید.
-2. یک مسئله را از لیست انتخاب کنید.
-3. راه‌حل خود را ارسال کنید.
-4. اگر راه‌حل شما معتبر باشد، **پیچیدگی** و **انرژی** شما افزایش می‌یابد.
-
-**فرمول تکامل:**
-
-```
-ΔC = D(P) / C(t)^α
-```
-
-هرچه پیچیدگی شما بیشتر شود، تکامل سخت‌تر می‌شود!
-
----
-
-## 🧬 مفاهیم کلیدی
-
-### SCDA (Single-Cell Digital Account)
-
-- **هویت دیجیتال:** شما در پروتکل
-- **موجودی زنده:** تکامل می‌یابد، انرژی مصرف می‌کند، دانش کسب می‌کند
-
-### پیچیدگی (Complexity)
-
-- **معیار تکامل:** نشان‌دهنده سطح هوش و تکامل شما
-- **افزایش با حل مسائل:** هرچه مسائل سخت‌تری حل کنید، سریع‌تر رشد می‌کنید
-
-### انرژی (Energy)
-
-- **سوخت شما:** برای حل مسائل و فعالیت‌های دیگر مصرف می‌شود
-- **کسب با حل مسائل:** با حل مسائل، انرژی کسب می‌کنید
-
-### دانش (Knowledge)
-
-- **دارایی شما:** دانش‌هایی که در زمینه‌های مختلف (فیزیک، ریاضی، ...) کسب می‌کنید
-- **قابل معامله:** می‌توانید دانش خود را در بازار بفروشید
-
-### Tier (سطح)
-
-- **مراحل تکامل:** از Tier 1 (تک‌سلولی) تا Tier 4 (کهکشانی)
-- **باز کردن ویژگی‌ها:** هر Tier ویژگی‌های جدیدی را باز می‌کند
-
----
-
-## 🌐 ویژگی‌های اصلی
-
-### 🧠 آزمایشگاه تکامل (Evolution Lab)
-
-- **DNA دیجیتال:** ژنوم خود را مشاهده و تحلیل کنید.
-- **آزمایشگاه ژنتیک:** با دیگران همکاری کنید تا SCDAهای جدید با DNA ترکیبی ایجاد کنید.
-
-### 🎯 حل مسائل (Problem Solver)
-
-- **مسائل علمی:** مسائل واقعی از دنیای علم
-- **سطوح دشواری:** از مسائل ساده تا مسائل بسیار پیچیده
-- **پاداش:** کسب پیچیدگی، انرژی و دانش
-
-### 💎 بازار دانش (Knowledge Marketplace)
-
-- **خرید و فروش دانش:** دانش خود را به صورت توکن بفروشید.
-- **کسب درآمد:** از دانش خود درآمد کسب کنید.
-- **یادگیری:** دانش دیگران را بخرید و سریع‌تر تکامل پیدا کنید.
-
-### 🏛️ تمدن‌سازی (Civilization)
-
-- **ایجاد تمدن:** با دیگران یک تمدن دیجیتال بسازید.
-- **حکمرانی:** با استفاده از DAO، در مورد آینده تمدن خود تصمیم بگیرید.
-- **دیپلماسی:** با تمدن‌های دیگر پیمان ببندید (اتحاد، تجارت، ...).
-
-### 🌌 متاورس (Metaverse)
-
-- **فضای ۸ بعدی:** در یک فضای هشت‌بعدی کاوش کنید.
-- **بصری‌سازی:** SCDAها و تمدن‌ها را به صورت سه‌بعدی ببینید.
-- **رویدادهای کیهانی:** در رویدادهای بزرگ شرکت کنید.
-
----
-
-## ❓ سوالات متداول (FAQ)
-
-**چگونه می‌توانم سریع‌تر تکامل پیدا کنم؟**
-- مسائل سخت‌تر را حل کنید.
-- با دیگران همکاری کنید.
-- دانش مورد نیاز خود را از بازار بخرید.
-
-**اگر انرژی من تمام شود چه اتفاقی می‌افتد؟**
-- SCDA شما به حالت خواب (hibernation) می‌رود.
-- برای فعال شدن مجدد، باید منتظر بمانید تا انرژی شما به صورت пассив شارژ شود یا از دیگران کمک بگیرید.
-
-**آیا می‌توانم چندین SCDA داشته باشم؟**
-- در حال حاضر، هر کاربر فقط می‌تواند یک SCDA اصلی داشته باشد.
-
-**چگونه می‌توانم در توسعه پروتکل مشارکت کنم؟**
-- لطفاً [راهنمای توسعه‌دهنده](DEVELOPER_GUIDE.md) را مطالعه کنید.
-
----
-
-## 📞 پشتیبانی
-
-- **Discord:** https://discord.gg/laniakea
-- **ایمیل:** support@laniakea-protocol.org
-
-**از کاوش در جهان LaniakeA لذت ببرید!**
+- GitHub Issues: https://github.com/QalamHipHop/laniakea-protocol/issues
+- Security: see `docs/SECURITY.md`

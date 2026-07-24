@@ -1,15 +1,46 @@
-# API Documentation
+# API Examples
 
-This directory contains comprehensive API documentation for Laniakea Protocol.
+Sample requests and responses for the most-used endpoints of the
+LaniakeA Protocol.
 
-## Files
+The full schema is always available at:
 
-- [API_EXAMPLES.md](./API_EXAMPLES.md) - Detailed API usage examples and code samples
-- [API_Reference.md](./API_Reference.md) - Complete API reference documentation (coming soon)
+- **Live:** https://laniakea-protocol.onrender.com/docs
+- **Local:** http://localhost:8000/docs
 
-## Quick Links
+## Quick Examples
 
-- [Base URL](../README.md#api-documentation)
-- [Authentication](../README.md#authentication)
-- [Rate Limiting](../README.md#rate-limiting)
-- [Error Handling](../README.md#error-handling)
+### Health
+
+```bash
+curl https://laniakea-protocol.onrender.com/health
+```
+
+### Chain Info
+
+```bash
+curl https://laniakea-protocol.onrender.com/blockchain/info
+```
+
+### Token Economics
+
+```bash
+curl https://laniakea-protocol.onrender.com/token/info
+```
+
+### Submit an AI Query
+
+```bash
+curl -X POST https://laniakea-protocol.onrender.com/ai/query \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt": "What is the SCDA evolution law?"}'
+```
+
+### WebSocket
+
+```javascript
+const ws = new WebSocket("wss://laniakea-protocol.onrender.com/ws/public/live");
+ws.onmessage = (e) => console.log(JSON.parse(e.data));
+```
+
+See `docs/ARCHITECTURE.md` for the layered model behind these routes.

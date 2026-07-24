@@ -1,24 +1,37 @@
-# Deployment Documentation
+# Deployment
 
-This directory contains deployment guides and configurations for Laniakea Protocol.
+The LaniakeA Protocol is designed to deploy with a single command on
+Render.com (see `render.yaml`) or via Docker (`Dockerfile` +
+`docker-compose.yml`).
 
-## Files
+## Production
 
-- [DEPLOYMENT_REPORT.md](./DEPLOYMENT_REPORT.md) - Comprehensive deployment guide
-- [Docker_Guide.md](./Docker_Guide.md) - Docker deployment instructions (coming soon)
-- [Kubernetes_Guide.md](./Kubernetes_Guide.md) - Kubernetes deployment guide (coming soon)
-- [Cloud_Deployment.md](./Cloud_Deployment.md) - Cloud platform deployment (coming soon)
+- **Service ID:** `srv-d4683hali9vc73dc6c4g`
+- **URL:** https://laniakea-protocol.onrender.com
+- **Trigger:** push to `main` on GitHub → auto-deploy
 
-## Deployment Options
+## Required environment variables
 
-- [Local Development](../README.md#installation)
-- [Docker Deployment](../README.md#docker-deployment)
-- [Kubernetes Deployment](../README.md#kubernetes-deployment)
-- [Cloud Deployment](../README.md#cloud-integration)
+| Var | Purpose |
+|---|---|
+| `LANIAKEA_WALLET_ENCRYPTION_KEY` | Wallet encryption key (see `docs/SECURITY.md`) |
+| `API_HOST` | Bind host (default `0.0.0.0`) |
+| `API_PORT` / `PORT` | Bind port (Render injects `PORT`) |
+| `MINING_DIFFICULTY` | PoW difficulty |
+| `AUTHORITIES` | Comma-separated validator list |
+| `SUPPORTED_CHAINS` | Comma-separated cross-chain allow-list |
+| `MAX_QUBITS` | Quantum simulator cap |
+| `LOG_LEVEL` | `info` / `debug` / `warning` |
 
-## System Requirements
+See `.env.example` for the full set.
 
-- [Minimum Requirements](../README.md#system-requirements)
-- [Recommended Setup](../README.md#recommended-requirements)
-- [Performance Tuning](../README.md#performance-features)
-</create_file>
+## Local container
+
+```bash
+docker compose up --build
+```
+
+## Reverse proxy
+
+A starter Nginx config lives in `nginx/`. Use it as a template for
+production TLS termination.

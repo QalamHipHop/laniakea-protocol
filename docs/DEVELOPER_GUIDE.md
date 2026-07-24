@@ -1,209 +1,89 @@
-# 📖 LaniakeA Protocol - راهنمای توسعه‌دهنده
+# LaniakeA Protocol — Developer Guide
 
-**نسخه:** v0.0.01
-**آخرین به‌روزرسانی:** 2025-11-09
+**Author:** LaniakeA Dev
 
----
-
-## 🚀 خوش آمدید!
-
-این راهنما به شما کمک می‌کند تا در توسعه **LaniakeA Protocol** مشارکت کنید. ما از مشارکت شما استقبال می‌کنیم!
-
-### فلسفه ما
-
-- **متن‌باز:** ما به قدرت جامعه متن‌باز ایمان داریم.
-- **نوآوری:** ما به دنبال ایده‌های نو و جسورانه هستیم.
-- **همکاری:** ما با هم یک اکوسیستم هوشمند می‌سازیم.
-- **کیفیت:** ما به کد تمیز، تست‌شده و مستند اهمیت می‌دهیم.
-
----
-
-## 🛠️ شروع به کار
-
-### 1. Fork و Clone
+## Local Setup
 
 ```bash
-# Fork the repository on GitHub
-
-# Clone your fork
-git clone https://github.com/YOUR_USERNAME/laniakea-protocol.git
+git clone https://github.com/QalamHipHop/laniakea-protocol.git
 cd laniakea-protocol
-```
-
-### 2. تنظیم محیط توسعه
-
-```bash
-# ایجاد محیط مجازی
-python3 -m venv venv
-source venv/bin/activate
-
-# نصب وابستگی‌های اصلی و توسعه
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
-pip install -r requirements.dev.txt
-
-# نصب pre-commit hooks
-pre-commit install
-```
-
-### 3. تنظیم متغیرهای محیطی
-
-```bash
 cp .env.example .env
-
-# Edit .env and add your API keys (e.g., OpenAI, Gemini)
-# OPENAI_API_KEY="..."
 ```
 
-### 4. اجرای تست‌ها
+## Running
 
 ```bash
-# اجرای تمام تست‌ها
-pytest
-
-# اجرای تست‌ها با coverage
-pytest --cov=laniakea
+# API server
+python main.py
+# or with uvicorn directly
+uvicorn laniakea.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
----
+Open http://localhost:8000/docs for the interactive Swagger UI.
 
-## 🏗️ معماری و ساختار کد
-
-برای درک کامل معماری، لطفاً [سند معماری](ARCHITECTURE.md) را مطالعه کنید.
-
-### ساختار دایرکتوری اصلی
-
-```
-laniakea/
-├── core/          # هسته بلاکچین و سیستم
-├── intelligence/  # سیستم هوش و SCDA
-├── blockchain/    # ماژول‌های بلاکچین پیشرفته
-├── metaverse/     # متاورس و فضای ۸D
-├── marketplace/   # بازار دانش
-├── ai/            # موتور هوش مصنوعی
-├── network/       # شبکه و ارتباطات
-├── security/      # امنیت و رمزنگاری
-├── social/        # ویژگی‌های اجتماعی
-├── storage/       # ذخیره‌سازی داده
-├── analytics/     # تحلیل و گزارش
-├── governance/    # حکمرانی غیرمتمرکز
-├── simulation/    # شبیه‌سازی
-├── utils/         # ابزارهای کمکی
-└── cli/           # رابط خط فرمان
-```
-
-### گردش کار توسعه
-
-1. **ایجاد Issue:** برای هر ویژگی جدید یا باگ، یک Issue در GitHub ایجاد کنید.
-2. **ایجاد Branch:** یک برنچ جدید برای کار خود ایجاد کنید:
-   ```bash
-   git checkout -b feature/your-feature-name
-   # or
-   git checkout -b fix/your-bug-fix
-   ```
-3. **کدنویسی:** تغییرات خود را اعمال کنید.
-4. **نوشتن تست:** برای ویژگی‌های جدید، تست‌های واحد و یکپارچگی بنویسید.
-5. **اجرای تست‌ها:** مطمئن شوید که تمام تست‌ها پاس می‌شوند.
-6. **Commit:** تغییرات خود را با یک پیام واضح commit کنید:
-   ```bash
-   git commit -m "feat: Add amazing new feature"
-   # or
-   git commit -m "fix: Resolve critical bug"
-   ```
-7. **Push:** برنچ خود را به GitHub push کنید:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-8. **Pull Request:** یک Pull Request (PR) به برنچ `main` ایجاد کنید.
-9. **Code Review:** منتظر بازبینی کد توسط تیم اصلی باشید.
-
----
-
-## ✅ استانداردهای کدنویسی
-
-- **PEP 8:** ما از استانداردهای PEP 8 پیروی می‌کنیم.
-- **Type Hinting:** تمام توابع و متغیرها باید Type Hint داشته باشند.
-- **Docstrings:** تمام ماژول‌ها، کلاس‌ها و توابع باید Docstring داشته باشند (Google Style).
-- **تست:** هر ویژگی جدید باید با تست‌های مناسب همراه باشد.
-- **امنیت:** همیشه به امنیت کد خود توجه کنید (SQL Injection, XSS, etc.).
-
-### ابزارهای Linting و Formatting
-
-ما از `black`, `isort`, `flake8` و `mypy` برای حفظ کیفیت کد استفاده می‌کنیم. این ابزارها به صورت خودکار با `pre-commit` اجرا می‌شوند.
-
----
-
-## 🧪 تست
-
-### انواع تست
-
-- **Unit Tests:** `tests/unit/` - تست ماژول‌ها و توابع به صورت مجزا
-- **Integration Tests:** `tests/integration/` - تست تعامل بین ماژول‌ها
-- **E2E Tests:** `tests/e2e/` - تست کامل سیستم از API تا دیتابیس
-- **Performance Tests:** `tests/performance/` - تست عملکرد و مقیاس‌پذیری
-
-### اجرای تست‌ها
+## Running Tests
 
 ```bash
-# اجرای تمام تست‌ها
-pytest
-
-# اجرای یک فایل خاص
-pytest tests/unit/test_scda.py
-
-# اجرای با coverage
-pytest --cov=laniakea
+pytest -q
+# Quick smoke test
+python smoke_test.py
+# Fastest path
+python test_quick.py
 ```
 
----
-
-## 📚 مستندات
-
-- **Docstrings:** مستندات درون کد
-- **Markdown:** مستندات در پوشه `docs/`
-- **API Docs:** مستندات API به صورت خودکار با FastAPI/Swagger ایجاد می‌شود.
-
-### به‌روزرسانی مستندات
-
-اگر یک ویژگی جدید اضافه می‌کنید یا عملکرد موجود را تغییر می‌دهید، لطفاً مستندات مربوطه را نیز به‌روزرسانی کنید.
-
----
-
-## 🤝 مشارکت
-
-ما از هر نوع مشارکتی استقبال می‌کنیم:
-
-- **گزارش باگ:** اگر باگی پیدا کردید، لطفاً یک Issue باز کنید.
-- **پیشنهاد ویژگی:** اگر ایده جدیدی دارید، آن را با ما در میان بگذارید.
-- **Pull Request:** اگر می‌توانید کدی را بهبود ببخشید، یک PR ارسال کنید.
-- **مستندات:** اگر می‌توانید مستندات را بهبود ببخشید، این کار را انجام دهید.
-- **ترجمه:** ما به کمک شما برای ترجمه مستندات به زبان‌های دیگر نیاز داریم.
-
-### راهنمای Commit Message
-
-ما از [Conventional Commits](https://www.conventionalcommits.org/) پیروی می‌کنیم:
-
-- `feat:` برای ویژگی‌های جدید
-- `fix:` برای رفع باگ
-- `docs:` برای تغییرات مستندات
-- `style:` برای تغییرات استایل (formatting, etc.)
-- `refactor:` برای بازنویسی کد
-- `test:` برای افزودن یا بهبود تست‌ها
-- `chore:` برای کارهای متفرقه (build, etc.)
-
-**مثال:**
+## Project Layout
 
 ```
-feat: Add quantum-resistant encryption
-
-This commit adds support for CRYSTALS-Dilithium and CRYSTALS-Kyber
-to provide post-quantum security for transactions and data.
+laniakea/                  # main package
+  api/                     # FastAPI routes
+  core/                    # blockchain, SCDA, wallet
+  blockchain/              # mining, core
+  consensus/               # PoV / PoA / PoHD
+  crosschain/              # bridge
+  defi/                    # swap
+  governance/              # DAO + diplomacy
+  ai/                      # LLM + problem discovery
+  evolution/               # SCDA evolution
+  knowledge/               # knowledge market
+  websocket/               # WebSocket manager
+  storage/                 # database
+  utils/                   # logger, config
+web/                       # static UI (HTML/JS)
+main.py                    # unified entry point
+tests/                     # pytest suite
+docs/                      # documentation
 ```
 
----
+## Coding Conventions
 
-## 📞 تماس
+- Python ≥ 3.11
+- Type hints everywhere
+- `black` + `flake8` + `mypy` (configured in `pyproject.toml`)
+- Heavy optional deps (`openai`, `psycopg2`, `web3`) imported lazily
 
-- **Discord:** https://discord.gg/laniakea
-- **GitHub Issues:** https://github.com/QalamHipHop/laniakea-protocol/issues
+## Adding a New API Endpoint
 
-**با تشکر از شما برای کمک به ساخت آینده هوش جمعی!**
+1. Add the handler in `laniakea/api/main.py` (or a new router under
+   `laniakea/api/`) and register it on the `app` instance.
+2. If it talks to the chain, use the `HypercubeBlockchain` singleton from
+   `laniakea.core.hypercube_blockchain`.
+3. Add a smoke test under `tests/`.
+4. Update `docs/ARCHITECTURE.md` if it introduces a new domain.
+
+## Adding a New Module
+
+1. Create `laniakea/<area>/__init__.py` + your module file.
+2. If it is imported by `laniakea.api.main`, prefer **lazy imports** to
+   keep cold-start fast.
+3. Wire config via `laniakea.core.config` (env-var backed).
+
+## Releasing
+
+- Bump `VERSION`.
+- Update `CHANGELOG.md`.
+- Tag: `git tag v3.x.y && git push --tags`.
+- Render.com auto-deploys on `main` push.
