@@ -88,6 +88,52 @@ class KnowledgeMarketplace:
     def _generate_asset_id(self) -> str:
         """Generates a unique ID for a Knowledge Asset."""
         return f"{KNOWLEDGE_TOKEN_PREFIX}-{uuid.uuid4().hex[:8]}"
+
+    def _resolve_domain_focus(self, knowledge_type: str) -> str:
+        """Map a user-supplied ``knowledge_type`` to a canonical domain.
+
+        Accepts the :class:`KnowledgeType` enum name (``"ALGORITHM"``), its
+        value (``"Algorithm"``), or one of the eight 8D-knowledge domains
+        (``"Physics"``) and returns the canonical value stored on the
+        asset. This keeps the public API forgiving while still validating
+        input.
+        """
+        if not knowledge_type:
+            raise ValueError("knowledge_type must be a non-empty string.")
+
+        raw = str(knowledge_type).strip()
+        upper = raw.upper()
+
+        # 1) Direct enum name match (e.g. "ALGORITHM" -> KnowledgeType.ALGORITHM)
+        if upper in KnowledgeType.__members__:
+            return KnowledgeType[upper].value
+
+        # 2) Case-insensitive value match (e.g. "algorithm" -> "Algorithm")
+        for member in KnowledgeType:
+            if member.value.lower() == raw.lower():
+                return member.value
+
+        # 3) Map from the 8D domain name to the closest KnowledgeType. We keep
+        # the mapping explicit so adding a new domain is a one-line change.
+        domain_aliases = {
+            "physics": KnowledgeType.SCIENTIFIC_DATA,
+            "mathematics": KnowledgeType.SCIENTIFIC_DATA,
+            "biology": KnowledgeType.SCIENTIFIC_DATA,
+            "computer science": KnowledgeType.CODE,
+            "consciousness": KnowledgeType.PHILOSOPHY,
+            "economics": KnowledgeType.FRAMEWORK,
+            "art & creativity": KnowledgeType.ART,
+            "metaphysics": KnowledgeType.PHILOSOPHY,
+        }
+        alias = domain_aliases.get(raw.lower())
+        if alias is not None:
+            return alias.value
+
+        valid = ", ".join(t.name for t in KnowledgeType)
+        raise ValueError(
+            f"Unknown knowledge_type {knowledge_type!r}. "
+            f"Valid options: {valid} or one of the 8 knowledge domains."
+        )
     
     def tokenize_knowledge(
         self,
@@ -109,16 +155,17 @@ class KnowledgeMarketplace:
         # If the caller supplied a knowledge type, validate it and use the
         # canonical value as the domain focus. Otherwise fall back to
         # argmax-based inference on the 8D vector.
+        #
+        # We accept three kinds of input here, all of which are useful in
+        # practice:
+        #   * ``KnowledgeType`` enum name (e.g. "ALGORITHM")
+        #   * ``KnowledgeType`` value (e.g. "Algorithm")
+        #   * raw domain name (e.g. "Physics") mapped to the closest
+        #     ``KnowledgeType`` so that the user-facing 8D knowledge domain
+        #     names and the internal asset categories stay in sync.
         domain_focus: str
         if knowledge_type is not None:
-            try:
-                domain_focus = KnowledgeType[knowledge_type.upper()].value
-            except KeyError:
-                valid = ", ".join(t.name for t in KnowledgeType)
-                raise ValueError(
-                    f"Unknown knowledge_type {knowledge_type!r}. "
-                    f"Valid options: {valid}"
-                )
+            domain_focus = self._resolve_domain_focus(knowledge_type)
         else:
             vector_np = np.array(scda_knowledge_vector)
             dominant_index = int(np.argmax(vector_np))
