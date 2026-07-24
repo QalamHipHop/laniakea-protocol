@@ -14,9 +14,9 @@ import hashlib
 import random  # برای شبیه‌سازی ValueVector
 import re  # برای استخراج JSON از پاسخ LLM
 
-from src.intelligence.ai_api import get_ai_api
-from src.core.models import ValueVector, ValueDimension, Task, ProblemCategory, Solution
-from src.core.hash_modernity import HashModernityEngine  # برای استفاده از منطق مدرنیته
+from laniakea.intelligence.ai_api import get_ai_api
+from laniakea.core.models import ValueVector, ValueDimension, Task, ProblemCategory, Solution
+from laniakea.core.hash_modernity import HashModernityEngine  # برای استفاده از منطق مدرنیته
 
 
 class CodeAnalyzer:

@@ -21,10 +21,12 @@ class ProtocolMetrics:
         self.history: Dict[str, List[Dict[str, Any]]] = {}
 
     def update_metric(self, key: str, value: Any):
-        """Updates a single metric value."""
+        """Updates a single metric value and records the change in history."""
         if key in self.metrics:
             self.metrics[key] = value
             self.metrics["last_update"] = time.time()
+            # Auto-record into history so /dashboard/history/{key} returns data.
+            self.record_history(key, value)
             print(f"Metric updated: {key} = {value}")
         else:
             print(f"Warning: Metric key '{key}' not recognized.")

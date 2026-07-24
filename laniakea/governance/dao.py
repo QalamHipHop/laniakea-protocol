@@ -43,7 +43,42 @@ class DAO:
         self.proposals: Dict[int, Proposal] = {}
         self.next_proposal_id = 1
         self.total_token_supply = total_supply # Total tokens for quorum calculation
-        self.token_holders: Dict[str, int] = {"Genesis_Wallet": total_supply} # Simulated token distribution
+        # Genesis wallet holds the unsold supply, but quorum is computed against
+        # the circulating supply so that community participation actually matters.
+        self.genesis_balance: int = int(total_supply * 0.30)
+        self.token_holders: Dict[str, int] = {
+            "Genesis_Wallet": self.genesis_balance,
+            "Treasury": int(total_supply * 0.10),
+            "Validator_A": int(total_supply * 0.05),
+            "Validator_B": int(total_supply * 0.05),
+            "Validator_C": int(total_supply * 0.05),
+        }
+
+    @property
+    def circulating_supply(self) -> int:
+        """Tokens not held by the genesis/treasury wallets.
+
+        Quorum is calculated against circulating supply so that the
+        community's votes actually count - the genesis wallet alone cannot
+        carry or kill a proposal.
+        """
+        locked = sum(
+            bal for addr, bal in self.token_holders.items()
+            if addr in {"Genesis_Wallet", "Treasury"}
+        )
+        return max(self.total_token_supply - locked, 1)
+
+    def register_voter(self, address: str, balance: int) -> None:
+        """Register or top-up a token holder so their vote actually weighs.
+
+        If the address already has a balance it is incremented; otherwise a
+        new entry is created. The genesis/treasury wallets cannot be
+        modified through this method.
+        """
+        if address in {"Genesis_Wallet", "Treasury"}:
+            raise ValueError("Cannot modify genesis/treasury balances.")
+        balance = max(int(balance), 1)
+        self.token_holders[address] = self.token_holders.get(address, 0) + balance
 
     def create_proposal(self, title: str, description: str, proposer: str) -> Proposal:
         """Creates a new governance proposal."""
@@ -57,7 +92,7 @@ class DAO:
         """Casts a vote on a proposal."""
         if proposal_id not in self.proposals:
             raise ValueError("Proposal not found.")
-        
+
         proposal = self.proposals[proposal_id]
         if proposal.status != "PENDING":
             raise ValueError(f"Voting is closed for this proposal (Status: {proposal.status}).")
@@ -65,32 +100,38 @@ class DAO:
         if voter_address in proposal.voters:
             raise ValueError("Voter has already voted on this proposal.")
 
-        # Simulate token weight (1 token = 1 vote)
-        token_balance = self.token_holders.get(voter_address, 1) # Assume a minimum of 1 vote for any registered user
-        
-        if vote_type.lower() == "for":
+        # Token weight = 1 token = 1 vote. Unknown addresses are auto-registered
+        # with the minimum balance so the protocol is open to new participants.
+        token_balance = self.token_holders.get(voter_address)
+        if token_balance is None:
+            token_balance = 1
+            self.token_holders[voter_address] = token_balance
+
+        vtype = vote_type.lower()
+        if vtype == "for":
             proposal.votes_for += token_balance
-        elif vote_type.lower() == "against":
+        elif vtype == "against":
             proposal.votes_against += token_balance
         else:
             raise ValueError("Invalid vote type. Must be 'for' or 'against'.")
-            
+
         proposal.voters.add(voter_address)
-        print(f"Vote cast by {voter_address} on Proposal {proposal_id}. Type: {vote_type}")
+        print(f"Vote cast by {voter_address} on Proposal {proposal_id}. Type: {vote_type}, Weight: {token_balance}")
 
     def finalize_proposal(self, proposal_id: int):
         """Checks if a proposal meets the quorum and passes."""
         if proposal_id not in self.proposals:
             raise ValueError("Proposal not found.")
-            
+
         proposal = self.proposals[proposal_id]
         if proposal.status != "PENDING":
             print(f"Proposal {proposal_id} already finalized.")
             return
 
-        # Quorum check: Total votes must exceed the required percentage of total supply
-        quorum_reached = proposal.total_votes / self.total_token_supply >= proposal.required_quorum
-        
+        # Quorum check: Total votes must exceed the required percentage of
+        # circulating supply (excludes genesis/treasury wallets).
+        quorum_reached = proposal.total_votes / self.circulating_supply >= proposal.required_quorum
+
         if quorum_reached and proposal.votes_for > proposal.votes_against:
             proposal.status = "PASSED"
             print(f"Proposal {proposal_id} PASSED! Quorum reached and majority 'For'.")
@@ -99,7 +140,7 @@ class DAO:
             print(f"Proposal {proposal_id} FAILED! Quorum reached but majority 'Against' or tie.")
         else:
             proposal.status = "FAILED_QUORUM"
-            print(f"Proposal {proposal_id} FAILED! Quorum not reached.")
+            print(f"Proposal {proposal_id} FAILED! Quorum not reached. Votes: {proposal.total_votes}, Required: {self.circulating_supply * proposal.required_quorum:.0f}")
 
 # Example usage
 if __name__ == '__main__':

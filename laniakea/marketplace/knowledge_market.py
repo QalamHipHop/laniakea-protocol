@@ -93,20 +93,39 @@ class KnowledgeMarketplace:
         self,
         owner_scda_id: str,
         scda_knowledge_vector: List[float],
-        complexity_index: float
+        complexity_index: float,
+        knowledge_type: Optional[str] = None,
     ) -> KnowledgeAsset:
         """
         Tokenizes a portion of an SCDA's knowledge vector into a tradable asset.
-        
+
         For simplicity, we tokenize the entire vector, but the value is derived
-        from the most dominant domain.
+        from the most dominant domain. If ``knowledge_type`` is provided (and
+        matches a valid :class:`KnowledgeType` member), it overrides the
+        auto-detected domain so the caller can explicitly label the asset.
         """
         asset_id = self._generate_asset_id()
-        
-        # Determine the primary domain focus
-        vector_np = np.array(scda_knowledge_vector)
-        dominant_index = np.argmax(vector_np)
-        domain_focus = KNOWLEDGE_DOMAINS[dominant_index]
+
+        # If the caller supplied a knowledge type, validate it and use the
+        # canonical value as the domain focus. Otherwise fall back to
+        # argmax-based inference on the 8D vector.
+        domain_focus: str
+        if knowledge_type is not None:
+            try:
+                domain_focus = KnowledgeType[knowledge_type.upper()].value
+            except KeyError:
+                valid = ", ".join(t.name for t in KnowledgeType)
+                raise ValueError(
+                    f"Unknown knowledge_type {knowledge_type!r}. "
+                    f"Valid options: {valid}"
+                )
+        else:
+            vector_np = np.array(scda_knowledge_vector)
+            dominant_index = int(np.argmax(vector_np))
+            # Clamp to the list bounds to be safe with arbitrary vectors.
+            if dominant_index >= len(KNOWLEDGE_DOMAINS):
+                dominant_index = 0
+            domain_focus = KNOWLEDGE_DOMAINS[dominant_index]
         
         asset = KnowledgeAsset(
             asset_id=asset_id,

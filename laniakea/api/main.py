@@ -556,11 +556,15 @@ def perform_swap(swap_request: SwapRequest) -> Dict[str, Any]:
 def knowledge_market_tokenize(req: KnowledgeTokenizeRequest) -> Dict[str, Any]:
     if laniakea_knowledge_market is None:
         raise HTTPException(status_code=503, detail="Knowledge market subsystem unavailable.")
-    asset = laniakea_knowledge_market.tokenize_knowledge(
-        req.owner_scda_id,
-        req.scda_knowledge_vector,
-        req.complexity_index,
-    )
+    try:
+        asset = laniakea_knowledge_market.tokenize_knowledge(
+            req.owner_scda_id,
+            req.scda_knowledge_vector,
+            req.complexity_index,
+            req.knowledge_type,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
     return {"message": "Knowledge tokenised", "asset": asset.to_dict()}
 
 

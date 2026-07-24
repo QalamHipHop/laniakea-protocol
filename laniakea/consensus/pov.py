@@ -13,7 +13,7 @@ import random
 import hashlib
 from typing import List, Optional, Dict, Any
 from functools import lru_cache
-from src.core.models import Solution, ValueVector
+from laniakea.core.models import Solution, ValueVector
 
 
 class ProofOfValue:

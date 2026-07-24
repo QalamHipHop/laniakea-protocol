@@ -18,7 +18,7 @@ from typing import Dict, List, Any, Optional, Union
 from pathlib import Path
 import aiohttp
 from openai import OpenAI
-from src.core.standards import (
+from laniakea.core.standards import (
     LaniakeaLogger, secure_exception_handler, validate_input,
     sanitize_string, PerformanceMonitor, GLOBAL_SECURITY_CONFIG
 )

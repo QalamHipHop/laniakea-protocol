@@ -6,8 +6,8 @@ Laniakea Protocol - Cognitive Core (Enhanced)
 import os
 import json
 from typing import List, Dict, Any, Optional
-from src.intelligence.ai_api import get_ai_api
-from src.core.models import (
+from laniakea.intelligence.ai_api import get_ai_api
+from laniakea.core.models import (
     KnowledgeBlock,
     Solution,
     Task,

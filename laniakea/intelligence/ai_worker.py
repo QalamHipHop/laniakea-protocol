@@ -8,10 +8,10 @@ import json
 from typing import Dict, Any, Optional
 from time import time
 
-from src.intelligence.ai_api import get_ai_api
-from src.metasystem.cognitive_core import CognitiveCore
-from src.core.models import Task, Solution, ValueVector, ProblemCategory
-from src.external_apis.api_integrations import get_api_manager
+from laniakea.intelligence.ai_api import get_ai_api
+from laniakea.metasystem.cognitive_core import CognitiveCore
+from laniakea.core.models import Task, Solution, ValueVector, ProblemCategory
+from laniakea.external_apis.api_integrations import get_api_manager
 
 # فرض می‌کنیم یک نمونه از CognitiveCore در اینجا برای اجرای وظایف خاص AI استفاده می‌شود
 # در یک محیط واقعی Serverless، این Core به صورت Function-as-a-Service اجرا می‌شود.

@@ -6,7 +6,7 @@ Laniakea Protocol - Cosmic Simulator
 import random
 import math
 from typing import List, Dict, Any, Optional, Tuple
-from src.core.models import CosmicCell, ValueVector
+from laniakea.core.models import CosmicCell, ValueVector
 
 
 class PhysicsEngine:

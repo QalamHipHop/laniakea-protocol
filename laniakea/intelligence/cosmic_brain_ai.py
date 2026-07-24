@@ -42,7 +42,7 @@ from pathlib import Path
 import aiohttp
 from openai import OpenAI
 
-from src.core.standards import LaniakeaLogger, PerformanceMonitor
+from laniakea.core.standards import LaniakeaLogger, PerformanceMonitor
 
 
 class BrainRegion(Enum):

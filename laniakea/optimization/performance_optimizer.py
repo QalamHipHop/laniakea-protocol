@@ -38,7 +38,7 @@ from functools import lru_cache, wraps
 import gc
 import weakref
 
-from src.core.standards import LaniakeaLogger, PerformanceMonitor
+from laniakea.core.standards import LaniakeaLogger, PerformanceMonitor
 
 
 class OptimizationStrategy(Enum):

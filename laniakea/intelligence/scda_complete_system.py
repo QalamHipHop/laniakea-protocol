@@ -13,8 +13,8 @@ from datetime import datetime
 import json
 
 from laniakea.intelligence.scda_model import SingleCellDigitalAccount
-from src.intelligence.knowledge_extractor import KnowledgeExtractorAgent, Problem
-from src.intelligence.dual_validation import DualValidationSystem
+from laniakea.intelligence.knowledge_extractor import KnowledgeExtractorAgent, Problem
+from laniakea.intelligence.dual_validation import DualValidationSystem
 
 logger = logging.getLogger("SCDACompleteSystem")
 

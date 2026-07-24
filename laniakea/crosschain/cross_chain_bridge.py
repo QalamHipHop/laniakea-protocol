@@ -11,7 +11,7 @@ from datetime import datetime
 # Import core components
 from laniakea.utils.logger import get_logger
 from laniakea.utils.config import get_config
-from src.crosschain.cross_chain_manager import (
+from laniakea.crosschain.cross_chain_manager import (
     cross_chain_manager, ChainType, AssetType, BridgeStatus
 )
 

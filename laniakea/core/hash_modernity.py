@@ -8,7 +8,7 @@ import json
 import numpy as np
 from typing import Dict, Any, List, Optional
 from datetime import datetime
-from src.core.models import Task, Solution, ValueVector, ProblemCategory
+from laniakea.core.models import Task, Solution, ValueVector, ProblemCategory
 
 # --- ثابت‌های ریاضی ---
 # برای نرمال‌سازی و وزن‌دهی در محاسبات مدرنیته

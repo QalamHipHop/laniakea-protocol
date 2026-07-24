@@ -9,7 +9,7 @@ from typing import Optional, List, Dict, Any
 import json
 
 # Import the AI_API and get_ai_api function
-from src.intelligence.ai_api import get_ai_api
+from laniakea.intelligence.ai_api import get_ai_api
 
 router = APIRouter(prefix="/llm", tags=["LLM Services"])
 

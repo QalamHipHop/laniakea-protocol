@@ -64,11 +64,15 @@ def list_listed_assets() -> List[Dict[str, Any]]:
 
 @router.post("/tokenize", summary="Tokenize an SCDA's knowledge vector")
 def tokenize_knowledge(req: TokenizeRequest) -> Dict[str, Any]:
-    asset: KnowledgeAsset = _get_market().tokenize_knowledge(
-        req.owner_scda_id,
-        req.scda_knowledge_vector,
-        req.complexity_index,
-    )
+    try:
+        asset: KnowledgeAsset = _get_market().tokenize_knowledge(
+            req.owner_scda_id,
+            req.scda_knowledge_vector,
+            req.complexity_index,
+            req.knowledge_type,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
     return {"message": "Knowledge tokenised", "asset": asset.to_dict()}
 
 
