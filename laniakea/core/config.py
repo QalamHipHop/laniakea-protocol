@@ -44,6 +44,22 @@ class Config:
     
     # --- Simulation Settings ---
     SIMULATION_TIME_STEP: float = float(os.getenv("SIMULATION_TIME_STEP", "1000.0"))
+
+    # --- Economic Settings (token economy) ---
+    TOKEN_INFLATION_RATE: float = float(os.getenv("TOKEN_INFLATION_RATE", "0.02"))
+    TOKEN_BURN_RATE: float = float(os.getenv("TOKEN_BURN_RATE", "0.01"))
+    STAKING_APY: float = float(os.getenv("STAKING_APY", "0.05"))
+    TOKEN_SYMBOL: str = os.getenv("TOKEN_SYMBOL", "LAN")
+    TOKEN_NAME: str = os.getenv("TOKEN_NAME", "Laniakea")
+    TOKEN_DECIMALS: int = int(os.getenv("TOKEN_DECIMALS", "18"))
+
+    # --- Validation for economic settings ---
+    if TOKEN_INFLATION_RATE < 0:
+        TOKEN_INFLATION_RATE = 0.02
+    if TOKEN_BURN_RATE < 0:
+        TOKEN_BURN_RATE = 0.01
+    if STAKING_APY < 0:
+        STAKING_APY = 0.05
     
     # Validate time step is positive and reasonable
     if SIMULATION_TIME_STEP <= 0:

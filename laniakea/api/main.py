@@ -702,13 +702,13 @@ def version() -> Dict[str, Any]:
 def token_info() -> Dict[str, Any]:
     """Return LAN token economic parameters."""
     return {
-        "symbol": "LAN",
-        "name": "Laniakea",
+        "symbol": getattr(settings, "TOKEN_SYMBOL", "LAN"),
+        "name": getattr(settings, "TOKEN_NAME", "Laniakea"),
         "total_supply": getattr(settings, "TOTAL_TOKEN_SUPPLY", None),
         "inflation_rate": getattr(settings, "TOKEN_INFLATION_RATE", None),
         "burn_rate": getattr(settings, "TOKEN_BURN_RATE", None),
         "staking_apy": getattr(settings, "STAKING_APY", None),
-        "decimals": 18,
+        "decimals": getattr(settings, "TOKEN_DECIMALS", 18),
     }
 
 
@@ -813,7 +813,7 @@ def knowledge_market_stats() -> Dict[str, Any]:
     if laniakea_knowledge_market is None:
         raise HTTPException(status_code=503, detail="Knowledge market unavailable")
     assets = laniakea_knowledge_market.assets
-    listed = [a for a in assets.values() if a.listed]
+    listed = [a for a in assets.values() if getattr(a, "is_listed", False)]
     return {
         "total_assets": len(assets),
         "listed_assets": len(listed),
