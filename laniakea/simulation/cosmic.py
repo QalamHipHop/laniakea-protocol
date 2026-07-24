@@ -4,6 +4,8 @@ import time
 import random
 from typing import Dict, Any, List
 
+import numpy as np
+
 class CosmicEntity:
     def __init__(self, name: str, entity_type: str, position: List[float], mass: float):
         self.name = name

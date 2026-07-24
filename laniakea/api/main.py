@@ -187,6 +187,7 @@ class DiplomacyAllianceRequest(BaseModel):
     name: str
     founder_scda_id: str
     members: List[str]
+    initial_knowledge_vectors: Optional[Dict[str, List[float]]] = None
 
 
 class LLMRequest(BaseModel):
@@ -205,6 +206,14 @@ except Exception as exc:  # pragma: no cover - defensive
 
 try:
     from laniakea.api.diplomacy_api import router as diplomacy_router
+    # Share the DiplomacySystem instance with the router so that the state
+    # is consistent across /diplomacy/alliance and /diplomacy/alliances.
+    try:
+        from laniakea.api import diplomacy_api as _diplomacy_api
+        if laniakea_diplomacy is not None:
+            _diplomacy_api.set_shared_diplomacy(laniakea_diplomacy)
+    except Exception as exc:  # pragma: no cover - defensive
+        logger.warning("Could not share DiplomacySystem instance: %s", exc)
     app.include_router(diplomacy_router, tags=["Diplomacy"])
 except Exception as exc:  # pragma: no cover - defensive
     logger.warning("diplomacy_api router not loaded: %s", exc)
@@ -599,7 +608,21 @@ def knowledge_market_asset(asset_id: str) -> Dict[str, Any]:
 def diplomacy_create_alliance(req: DiplomacyAllianceRequest) -> Dict[str, Any]:
     if laniakea_diplomacy is None:
         raise HTTPException(status_code=503, detail="Diplomacy subsystem unavailable.")
-    alliance = laniakea_diplomacy.create_alliance(req.name, req.founder_scda_id, req.members)
+    # Build a default 8D knowledge vector per member if not provided so that
+    # the signature of DiplomacySystem.create_alliance is always satisfied.
+    member_ids = [req.founder_scda_id] + [m for m in req.members if m != req.founder_scda_id]
+    vectors = req.initial_knowledge_vectors or {
+        scda_id: [0.5] * 8 for scda_id in member_ids
+    }
+    # Ensure every member has a vector so the average is well-defined.
+    for scda_id in member_ids:
+        vectors.setdefault(scda_id, [0.5] * 8)
+    alliance = laniakea_diplomacy.create_alliance(
+        req.name,
+        req.founder_scda_id,
+        member_ids,
+        vectors,
+    )
     return {"message": "Alliance created", "alliance": alliance.to_dict()}
 
 

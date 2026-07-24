@@ -1,6 +1,11 @@
 """Metaverse Diplomacy API router.
 
-Thin FastAPI wrapper around :class:`laniakea.governance.metaverse_diplomacy.DiplomacySystem`.
+Thin FastAPI wrapper around :class:`laniakea.governance.metaverse_diplomacy.DiplomacySystem``.
+
+The router shares the same :class:`DiplomacySystem` instance with the
+unified API at ``laniakea.api.main`` so that state created via the
+``/diplomacy/alliance`` endpoint is visible from ``/diplomacy/alliances``
+and vice versa.
 """
 
 from __future__ import annotations
@@ -24,15 +29,27 @@ class AllianceCreateRequest(BaseModel):
     knowledge_vectors: Dict[str, List[float]] = Field(default_factory=dict)
 
 
-# --- Singleton accessor -----------------------------------------------------
-_diplomacy: Optional[DiplomacySystem] = None
+# --- Shared singleton accessor ---------------------------------------------
+# We rely on a process-wide singleton so that the diplomacy state created
+# in the unified API (``/diplomacy/alliance``) is identical to the state
+# served by this router (``/diplomacy/alliances``).
+_shared_diplomacy: Optional[DiplomacySystem] = None
+
+
+def set_shared_diplomacy(instance: DiplomacySystem) -> None:
+    """Register the shared :class:`DiplomacySystem` instance.
+
+    Called by ``laniakea.api.main`` after the subsystem is initialised.
+    """
+    global _shared_diplomacy
+    _shared_diplomacy = instance
 
 
 def _get_diplomacy() -> DiplomacySystem:
-    global _diplomacy
-    if _diplomacy is None:
-        _diplomacy = DiplomacySystem()
-    return _diplomacy
+    global _shared_diplomacy
+    if _shared_diplomacy is None:
+        _shared_diplomacy = DiplomacySystem()
+    return _shared_diplomacy
 
 
 # --- Routes -----------------------------------------------------------------
