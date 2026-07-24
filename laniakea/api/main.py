@@ -66,6 +66,13 @@ except Exception:  # pragma: no cover
     get_knowledge_market = None  # type: ignore[assignment]
     logger.warning("KnowledgeMarket unavailable - knowledge-market endpoints will be disabled")
 
+# SCDA subsystem
+try:
+    from laniakea.intelligence.scda_manager import get_scda_manager
+except Exception:  # pragma: no cover - defensive
+    get_scda_manager = None  # type: ignore[assignment]
+    logger.warning("SCDA manager unavailable - SCDA endpoints will be disabled")
+
 
 # --- App bootstrap ----------------------------------------------------------
 app = FastAPI(
@@ -93,6 +100,7 @@ laniakea_ai = AIModel("LANA_KE_001")
 laniakea_dex = DecentralizedExchange()
 laniakea_diplomacy = DiplomacySystem() if DiplomacySystem is not None else None
 laniakea_knowledge_market = get_knowledge_market() if get_knowledge_market is not None else None
+laniakea_scda_manager = get_scda_manager() if get_scda_manager is not None else None
 
 # Seed the cosmic simulator with two example entities.
 laniakea_simulator.add_entity(
@@ -226,6 +234,15 @@ except Exception as exc:  # pragma: no cover - defensive
     logger.warning("llm_api router not loaded: %s", exc)
     llm_router = None
 
+try:
+    from laniakea.api.scda_api import router as scda_router, set_shared_manager as _set_scda
+    if laniakea_scda_manager is not None:
+        _set_scda(laniakea_scda_manager)
+    app.include_router(scda_router, tags=["SCDA"])
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("scda_api router not loaded: %s", exc)
+    scda_router = None
+
 
 # --- System endpoints -------------------------------------------------------
 @app.get("/", tags=["System"])
@@ -250,6 +267,7 @@ def read_root() -> Dict[str, Any]:
             "defi": True,
             "diplomacy": laniakea_diplomacy is not None,
             "knowledge_market": laniakea_knowledge_market is not None,
+            "scda": laniakea_scda_manager is not None,
         },
     }
 
@@ -650,3 +668,87 @@ def llm_generate(req: LLMRequest) -> Dict[str, Any]:
             "The LaniakeA protocol answer would normally be computed here."
         ),
     }
+
+
+# --- Direct SCDA endpoints (fallback when scda_api router is unavailable) ----
+class ScdaCreateBody(BaseModel):
+    identity: str
+
+
+class ScdaSolveBody(BaseModel):
+    identity: str
+    problem_difficulty: float
+    solution_quality: float
+    is_valid: bool = True
+
+
+class ScdaPassiveBody(BaseModel):
+    identity: str
+
+
+@app.get("/scda/identities", tags=["SCDA"])
+def scda_identities() -> List[str]:
+    if laniakea_scda_manager is None:
+        return []
+    return laniakea_scda_manager.list_identities()
+
+
+@app.get("/scda/states", tags=["SCDA"])
+def scda_states() -> List[Dict[str, Any]]:
+    if laniakea_scda_manager is None:
+        return []
+    return laniakea_scda_manager.all_states()
+
+
+@app.get("/scda/leaderboard", tags=["SCDA"])
+def scda_leaderboard(top_n: int = 10) -> List[Dict[str, Any]]:
+    if laniakea_scda_manager is None:
+        return []
+    top_n = max(1, min(top_n, 100))
+    return laniakea_scda_manager.leaderboard(top_n=top_n)
+
+
+@app.post("/scda/create", tags=["SCDA"])
+def scda_create(body: ScdaCreateBody) -> Dict[str, Any]:
+    if laniakea_scda_manager is None:
+        raise HTTPException(status_code=503, detail="SCDA subsystem unavailable.")
+    laniakea_scda_manager.create(body.identity)
+    return {"message": f"SCDA {body.identity!r} ready", "identity": body.identity}
+
+
+@app.get("/scda/state/{identity}", tags=["SCDA"])
+def scda_state(identity: str) -> Dict[str, Any]:
+    if laniakea_scda_manager is None:
+        raise HTTPException(status_code=503, detail="SCDA subsystem unavailable.")
+    scda = laniakea_scda_manager.get(identity)
+    if scda is None:
+        raise HTTPException(status_code=404, detail=f"SCDA {identity!r} not found")
+    return {
+        "identity": scda.identity,
+        "complexity_index": scda.complexity_index,
+        "genetic_diversity": scda.dna.calculate_genetic_diversity(),
+        "energy": scda.energy,
+        "knowledge_count": len(scda.knowledge_vector),
+        "problem_queue_size": len(scda.problem_queue),
+        "knowledge_vector_8d": laniakea_scda_manager.compute_knowledge_vector(identity),
+    }
+
+
+@app.post("/scda/solve", tags=["SCDA"])
+def scda_solve(body: ScdaSolveBody) -> Dict[str, Any]:
+    if laniakea_scda_manager is None:
+        raise HTTPException(status_code=503, detail="SCDA subsystem unavailable.")
+    if not 0.0 <= body.problem_difficulty <= 1.0:
+        raise HTTPException(status_code=400, detail="problem_difficulty must be in [0, 1]")
+    if not 0.0 <= body.solution_quality <= 1.0:
+        raise HTTPException(status_code=400, detail="solution_quality must be in [0, 1]")
+    return laniakea_scda_manager.attempt_solve(
+        body.identity, body.problem_difficulty, body.solution_quality, body.is_valid,
+    )
+
+
+@app.post("/scda/passive", tags=["SCDA"])
+def scda_passive(body: ScdaPassiveBody) -> Dict[str, Any]:
+    if laniakea_scda_manager is None:
+        raise HTTPException(status_code=503, detail="SCDA subsystem unavailable.")
+    return laniakea_scda_manager.passive_update(body.identity)
