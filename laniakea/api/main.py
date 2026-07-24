@@ -1,38 +1,85 @@
-# laniakea/api/main.py
+"""
+Laniakea Protocol - Unified API
+================================
+
+The unified FastAPI surface that wires together every core subsystem of the
+Laniakea protocol. This module is intentionally defensive: every optional /
+heavy import is wrapped so that a missing dependency (e.g. ``openai``) does
+not take the entire API down.
+"""
+
+from __future__ import annotations
+
+import logging
+from typing import Any, Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import List, Dict, Any
 
-# Import core components
+# --- Core utilities ---------------------------------------------------------
 from laniakea.core.config import settings
 from laniakea.utils.logger import setup_logger
 
-# Import recovered modules
-from laniakea.blockchain.core import Blockchain
-from laniakea.consensus.poa import ProofOfAuthority
-from laniakea.crosschain.bridge import Bridge
-from laniakea.quantum.processor import QuantumProcessor, QuantumCircuit
-from laniakea.governance.dao import DAO
-from laniakea.marketplace.nft import Marketplace
-from laniakea.simulation.cosmic import CosmicSimulator, CosmicEntity
-from laniakea.dashboard.metrics import ProtocolMetrics
-from laniakea.achievements.system import AchievementSystem
-from laniakea.ai.model import AIModel
-from laniakea.diplomacy.core import DiplomacySystem
-from laniakea.knowledge_market.core import KnowledgeMarket
-from laniakea.defi.swap import DecentralizedExchange, LiquidityPool
+# --- Subsystem imports (wrapped so a single broken module cannot kill boot) -
+def _safe_import(module: str, attr: str) -> Any:
+    """Return ``module.attr`` or a stub if the import fails."""
+    try:
+        return getattr(__import__(module, fromlist=[attr]), attr)
+    except Exception as exc:  # pragma: no cover - defensive
+        logger.warning("Optional subsystem unavailable: %s (%s)", module, exc)
+        return None
 
-# --- Initialization ---
+
 logger = setup_logger("laniakea.api")
 
+# --- Core systems -----------------------------------------------------------
+from laniakea.blockchain.core import Blockchain  # noqa: E402
+from laniakea.consensus.poa import ProofOfAuthority  # noqa: E402
+from laniakea.crosschain.bridge import Bridge  # noqa: E402
+from laniakea.quantum.processor import QuantumProcessor, QuantumCircuit  # noqa: E402
+from laniakea.governance.dao import DAO  # noqa: E402
+from laniakea.marketplace.nft import Marketplace  # noqa: E402
+from laniakea.simulation.cosmic import CosmicSimulator, CosmicEntity  # noqa: E402
+from laniakea.dashboard.metrics import ProtocolMetrics  # noqa: E402
+from laniakea.achievements.system import AchievementSystem  # noqa: E402
+from laniakea.ai.model import AIModel  # noqa: E402
+from laniakea.defi.swap import DecentralizedExchange, LiquidityPool  # noqa: E402
+
+# Diplomacy lives in ``governance.metaverse_diplomacy`` (legacy reference was
+# ``laniakea.diplomacy.core`` which never existed in this repo).
+try:  # pragma: no cover - defensive
+    from laniakea.governance.metaverse_diplomacy import DiplomacySystem
+except Exception:  # pragma: no cover
+    DiplomacySystem = None  # type: ignore[assignment]
+    logger.warning("DiplomacySystem unavailable - diplomacy endpoints will be disabled")
+
+# KnowledgeMarket used to live at ``laniakea.knowledge_market.core`` in the
+# MVP plan. The real implementation is in
+# ``laniakea.marketplace.knowledge_market`` so we shim it.
+try:  # pragma: no cover - defensive
+    from laniakea.marketplace.knowledge_market import (
+        KnowledgeMarketplace as KnowledgeMarket,
+        get_marketplace as get_knowledge_market,
+    )
+except Exception:  # pragma: no cover
+    KnowledgeMarket = None  # type: ignore[assignment]
+    get_knowledge_market = None  # type: ignore[assignment]
+    logger.warning("KnowledgeMarket unavailable - knowledge-market endpoints will be disabled")
+
+
+# --- App bootstrap ----------------------------------------------------------
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    description="The unified API for the Laniakea Protocol, integrating all core modules.",
-    version=settings.PROJECT_VERSION
+    description=(
+        "The unified API for the Laniakea Protocol, integrating all core "
+        "modules: blockchain, cross-chain bridge, quantum simulation, "
+        "governance, marketplace, simulation, dashboard, achievements, AI, "
+        "DeFi, diplomacy and knowledge market."
+    ),
+    version=settings.PROJECT_VERSION,
 )
 
-# Global instances of the core systems, initialized from config
+# --- Initialise subsystems --------------------------------------------------
 laniakea_chain = Blockchain()
 laniakea_consensus = ProofOfAuthority(settings.AUTHORITIES)
 laniakea_bridge = Bridge(supported_chains=settings.SUPPORTED_CHAINS)
@@ -44,25 +91,31 @@ laniakea_metrics = ProtocolMetrics()
 laniakea_achievements = AchievementSystem()
 laniakea_ai = AIModel("LANA_KE_001")
 laniakea_dex = DecentralizedExchange()
-laniakea_diplomacy = DiplomacySystem()
-laniakea_knowledge_market = KnowledgeMarket()
+laniakea_diplomacy = DiplomacySystem() if DiplomacySystem is not None else None
+laniakea_knowledge_market = get_knowledge_market() if get_knowledge_market is not None else None
 
-# Initialize simulator with some entities
-import numpy as np
-laniakea_simulator.add_entity(CosmicEntity("Laniakea_Core", "Galaxy", [0.0, 0.0, 0.0], 1.0e42))
-laniakea_simulator.add_entity(CosmicEntity("Milky_Way", "Galaxy", [1.0e22, 0.0, 0.0], 1.5e42))
+# Seed the cosmic simulator with two example entities.
+laniakea_simulator.add_entity(
+    CosmicEntity("Laniakea_Core", "Galaxy", [0.0, 0.0, 0.0], 1.0e42)
+)
+laniakea_simulator.add_entity(
+    CosmicEntity("Milky_Way", "Galaxy", [1.0e22, 0.0, 0.0], 1.5e42)
+)
 
-# Add AI and DeFi endpoints to the logger info
-logger.info("Laniakea Protocol components initialized, including AI, DeFi, Diplomacy, and Knowledge Market.")
+logger.info(
+    "Laniakea Protocol v%s initialised. Diplomacy=%s, KnowledgeMarket=%s",
+    settings.PROJECT_VERSION,
+    laniakea_diplomacy is not None,
+    laniakea_knowledge_market is not None,
+)
 
 
-
-# --- Pydantic Models for API ---
-
+# --- Pydantic models --------------------------------------------------------
 class Transaction(BaseModel):
     sender: str
     recipient: str
     amount: float
+
 
 class BlockResponse(BaseModel):
     index: int
@@ -70,6 +123,7 @@ class BlockResponse(BaseModel):
     transactions: List[Dict[str, Any]]
     proof: Any
     previous_hash: str
+
 
 class BridgeTransfer(BaseModel):
     source_chain: str
@@ -79,243 +133,354 @@ class BridgeTransfer(BaseModel):
     sender: str
     recipient: str
 
+
 class AIQuery(BaseModel):
     prompt: str
+
 
 class SwapRequest(BaseModel):
     token_in: str
     token_out: str
     amount_in: float
 
+
 class QuantumJob(BaseModel):
     num_qubits: int
-    gates: List[Dict[str, Any]] # e.g., [{"type": "H", "target": 0}, {"type": "X", "target": 1}]
+    gates: List[Dict[str, Any]]
 
-# --- API Endpoints ---
-
-# Import and include new routers
-from .knowledge_market_api import router as knowledge_market_router
-from .diplomacy_api import router as diplomacy_router
-from .llm_api import router as llm_router
-
-app.include_router(knowledge_market_router, tags=["Knowledge Market"])
-app.include_router(diplomacy_router, tags=["Diplomacy"])
-app.include_router(llm_router, tags=["LLM Integration"])
-
-@app.get("/", tags=["System"])
-def read_root():
-    logger.info("Root endpoint accessed.")
-    return {"message": f"Welcome to the {settings.PROJECT_NAME} Unified API"}
-
-# --- Blockchain Endpoints ---
-
-@app.get("/blockchain/chain", response_model=List[BlockResponse], tags=["Blockchain"])
-def full_chain():
-    return [block.to_dict() for block in laniakea_chain.chain]
-
-@app.post("/blockchain/transactions/new", tags=["Blockchain"])
-def new_transaction(tx: Transaction):
-    index = laniakea_chain.new_transaction(tx.sender, tx.recipient, tx.amount)
-    logger.info(f"New transaction from {tx.sender} to {tx.recipient} queued for block {index}.")
-    return {"message": f"Transaction will be added to Block {index}"}
-
-@app.post("/blockchain/mine", tags=["Blockchain"])
-def mine_block(authority_address: str = None):
-    # Default to the first authority if none is provided, but check if authorities exist
-    if not settings.AUTHORITIES:
-        logger.error("Cannot mine: No authorities defined in settings.")
-        raise HTTPException(status_code=503, detail="Service Unavailable: No mining authorities configured.")
-    
-    if authority_address is None:
-        authority_address = settings.AUTHORITIES[0]
-    if authority_address not in settings.AUTHORITIES:
-        logger.warning(f"Unauthorized mine attempt by {authority_address}.")
-        raise HTTPException(status_code=403, detail="Not a recognized authority.")
-        
-    new_block = laniakea_consensus.sign_block(laniakea_chain, authority_address)
-    logger.info(f"New block {new_block.index} forged by {authority_address}.")
-    
-    # Update metrics
-    laniakea_metrics.update_metric("latest_block_height", new_block.index)
-    laniakea_metrics.update_metric("total_transactions", laniakea_metrics.metrics["total_transactions"] + len(new_block.transactions))
-    laniakea_achievements.update_user_progress(authority_address, "blockchain.blocks_mined", new_block.index)
-    
-    return {
-        "message": "New Block Forged",
-        "block": new_block.to_dict()
-    }
-
-# --- Cross-Chain Endpoints ---
-
-@app.post("/crosschain/transfer/initiate", tags=["Cross-Chain"])
-def initiate_cross_chain_transfer(transfer: BridgeTransfer):
-    try:
-        tx = laniakea_bridge.initiate_transfer(
-            transfer.source_chain, transfer.target_chain, transfer.asset, 
-            transfer.amount, transfer.sender, transfer.recipient
-        )
-        logger.info(f"Cross-chain transfer initiated: {tx.tx_id}")
-        laniakea_achievements.update_user_progress(transfer.sender, "crosschain.transfers_completed", len(laniakea_bridge.completed_transactions) + 1)
-        return {"message": "Transfer initiated successfully", "tx_id": tx.tx_id}
-    except ValueError as e:
-        logger.error(f"Cross-chain initiation failed: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
-
-@app.post("/crosschain/transfer/complete/{tx_id}", tags=["Cross-Chain"])
-def complete_cross_chain_transfer(tx_id: str):
-    try:
-        tx = laniakea_bridge.complete_transfer(tx_id)
-        logger.info(f"Cross-chain transfer completed: {tx.tx_id}")
-        return {"message": "Transfer completed successfully", "tx": tx.to_dict()}
-    except ValueError as e:
-        logger.error(f"Cross-chain completion failed for {tx_id}: {e}")
-        raise HTTPException(status_code=404, detail=str(e))
-
-# --- Quantum Endpoints ---
-
-@app.post("/quantum/job/submit", tags=["Quantum"])
-def submit_quantum_job(job: QuantumJob):
-    try:
-        qc = laniakea_quantum.create_circuit(job.num_qubits)
-        for gate in job.gates:
-            if gate["type"].lower() == "h":
-                qc.h_gate(gate["target"])
-            elif gate["type"].lower() == "x":
-                qc.x_gate(gate["target"])
-        
-        laniakea_quantum.submit_job(qc)
-        laniakea_metrics.update_metric("quantum_job_queue_size", len(laniakea_quantum.job_queue))
-        laniakea_achievements.update_user_progress("System", "quantum.jobs_submitted", len(laniakea_quantum.job_queue))
-        logger.info(f"Quantum job submitted with {job.num_qubits} qubits.")
-        return {"message": "Quantum job submitted", "queue_size": len(laniakea_quantum.job_queue)}
-    except ValueError as e:
-        logger.error(f"Quantum job submission failed: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
-
-@app.post("/quantum/job/process", tags=["Quantum"])
-def process_quantum_job():
-    result = laniakea_quantum.process_next_job()
-    laniakea_metrics.update_metric("quantum_job_queue_size", len(laniakea_quantum.job_queue))
-    if result is None:
-        logger.info("No pending quantum jobs to process.")
-        return {"message": "No pending quantum jobs"}
-    logger.info(f"Quantum job processed. Result: {result}")
-    return {"message": "Quantum job processed", "result": result}
-
-# --- Governance Endpoints ---
-
-class ProposalCreate(BaseModel):
-    title: str
-    description: str
-    proposer: str
-
-class VoteCast(BaseModel):
-    voter_address: str
-    vote_type: str # "for" or "against"
-
-@app.post("/governance/proposals/new", tags=["Governance"])
-def create_proposal(prop: ProposalCreate):
-    proposal = laniakea_dao.create_proposal(prop.title, prop.description, prop.proposer)
-    logger.info(f"New DAO proposal created by {prop.proposer}: {prop.title}")
-    return {"message": "Proposal created", "proposal_id": proposal.proposal_id}
-
-@app.post("/governance/proposals/{proposal_id}/vote", tags=["Governance"])
-def cast_vote(proposal_id: int, vote: VoteCast):
-    try:
-        laniakea_dao.vote(proposal_id, vote.voter_address, vote.vote_type)
-        laniakea_achievements.update_user_progress(vote.voter_address, "governance.votes_cast", len(laniakea_dao.proposals[proposal_id].voters))
-        logger.info(f"Vote cast by {vote.voter_address} on proposal {proposal_id}.")
-        return {"message": "Vote cast successfully"}
-    except ValueError as e:
-        logger.error(f"Vote failed on proposal {proposal_id}: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
-
-@app.post("/governance/proposals/{proposal_id}/finalize", tags=["Governance"])
-def finalize_proposal(proposal_id: int):
-    try:
-        laniakea_dao.finalize_proposal(proposal_id)
-        logger.info(f"Proposal {proposal_id} finalized with status: {laniakea_dao.proposals[proposal_id].status}")
-        return {"message": f"Proposal {proposal_id} finalized", "status": laniakea_dao.proposals[proposal_id].status}
-    except ValueError as e:
-        logger.error(f"Finalization failed for proposal {proposal_id}: {e}")
-        raise HTTPException(status_code=404, detail=str(e))
-
-# --- Marketplace Endpoints ---
 
 class NFTMint(BaseModel):
     owner: str
     metadata_uri: str
     asset_type: str
 
+
+class ProposalCreate(BaseModel):
+    title: str
+    description: str
+    proposer: str
+
+
+class VoteCast(BaseModel):
+    voter_address: str
+    vote_type: str  # "for" or "against"
+
+
+class KnowledgeTokenizeRequest(BaseModel):
+    owner_scda_id: str
+    scda_knowledge_vector: List[float]
+    complexity_index: float
+    knowledge_type: Optional[str] = "General"
+
+
+class KnowledgeListRequest(BaseModel):
+    asset_id: str
+    price: float
+
+
+class KnowledgeBuyRequest(BaseModel):
+    asset_id: str
+    buyer_scda_id: str
+
+
+class DiplomacyAllianceRequest(BaseModel):
+    name: str
+    founder_scda_id: str
+    members: List[str]
+
+
+class LLMRequest(BaseModel):
+    prompt: str
+    model: Optional[str] = None
+
+
+# --- Optional API routers ---------------------------------------------------
+# Knowledge market router
+try:
+    from laniakea.api.knowledge_market_api import router as knowledge_market_router
+    app.include_router(knowledge_market_router, tags=["Knowledge Market"])
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("knowledge_market_api router not loaded: %s", exc)
+    knowledge_market_router = None
+
+try:
+    from laniakea.api.diplomacy_api import router as diplomacy_router
+    app.include_router(diplomacy_router, tags=["Diplomacy"])
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("diplomacy_api router not loaded: %s", exc)
+    diplomacy_router = None
+
+try:
+    from laniakea.api.llm_api import router as llm_router
+    app.include_router(llm_router, tags=["LLM Integration"])
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("llm_api router not loaded: %s", exc)
+    llm_router = None
+
+
+# --- System endpoints -------------------------------------------------------
+@app.get("/", tags=["System"])
+def read_root() -> Dict[str, Any]:
+    """Root endpoint that returns a welcome message and a feature inventory."""
+    logger.info("Root endpoint accessed.")
+    return {
+        "message": f"Welcome to the {settings.PROJECT_NAME} Unified API",
+        "version": settings.PROJECT_VERSION,
+        "environment": settings.DEPLOYMENT_ENV,
+        "subsystems": {
+            "blockchain": True,
+            "consensus": True,
+            "crosschain": True,
+            "quantum": True,
+            "governance": True,
+            "marketplace": True,
+            "simulation": True,
+            "dashboard": True,
+            "achievements": True,
+            "ai": True,
+            "defi": True,
+            "diplomacy": laniakea_diplomacy is not None,
+            "knowledge_market": laniakea_knowledge_market is not None,
+        },
+    }
+
+
+@app.get("/health", tags=["System"])
+def healthcheck() -> Dict[str, Any]:
+    """Lightweight liveness probe used by Render / Kubernetes."""
+    return {"status": "ok", "version": settings.PROJECT_VERSION}
+
+
+# --- Blockchain endpoints ---------------------------------------------------
+@app.get("/blockchain/chain", response_model=List[BlockResponse], tags=["Blockchain"])
+def full_chain() -> List[Dict[str, Any]]:
+    return [block.to_dict() for block in laniakea_chain.chain]
+
+
+@app.post("/blockchain/transactions/new", tags=["Blockchain"])
+def new_transaction(tx: Transaction) -> Dict[str, Any]:
+    index = laniakea_chain.new_transaction(tx.sender, tx.recipient, tx.amount)
+    logger.info("New transaction from %s to %s queued for block %s", tx.sender, tx.recipient, index)
+    return {"message": f"Transaction will be added to Block {index}"}
+
+
+@app.post("/blockchain/mine", tags=["Blockchain"])
+def mine_block(authority_address: Optional[str] = None) -> Dict[str, Any]:
+    if not settings.AUTHORITIES:
+        logger.error("Cannot mine: No authorities defined in settings.")
+        raise HTTPException(status_code=503, detail="Service Unavailable: No mining authorities configured.")
+
+    if authority_address is None:
+        authority_address = settings.AUTHORITIES[0]
+    if authority_address not in settings.AUTHORITIES:
+        logger.warning("Unauthorized mine attempt by %s.", authority_address)
+        raise HTTPException(status_code=403, detail="Not a recognized authority.")
+
+    new_block = laniakea_consensus.sign_block(laniakea_chain, authority_address)
+    logger.info("New block %s forged by %s.", new_block.index, authority_address)
+
+    laniakea_metrics.update_metric("latest_block_height", new_block.index)
+    laniakea_metrics.update_metric(
+        "total_transactions",
+        laniakea_metrics.metrics["total_transactions"] + len(new_block.transactions),
+    )
+    laniakea_achievements.update_user_progress(
+        authority_address, "blockchain.blocks_mined", new_block.index
+    )
+
+    return {"message": "New Block Forged", "block": new_block.to_dict()}
+
+
+# --- Cross-chain endpoints --------------------------------------------------
+@app.post("/crosschain/transfer/initiate", tags=["Cross-Chain"])
+def initiate_cross_chain_transfer(transfer: BridgeTransfer) -> Dict[str, Any]:
+    try:
+        tx = laniakea_bridge.initiate_transfer(
+            transfer.source_chain,
+            transfer.target_chain,
+            transfer.asset,
+            transfer.amount,
+            transfer.sender,
+            transfer.recipient,
+        )
+        logger.info("Cross-chain transfer initiated: %s", tx.tx_id)
+        laniakea_achievements.update_user_progress(
+            transfer.sender,
+            "crosschain.transfers_completed",
+            len(laniakea_bridge.completed_transactions) + 1,
+        )
+        return {"message": "Transfer initiated successfully", "tx_id": tx.tx_id}
+    except ValueError as exc:
+        logger.error("Cross-chain initiation failed: %s", exc)
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.post("/crosschain/transfer/complete/{tx_id}", tags=["Cross-Chain"])
+def complete_cross_chain_transfer(tx_id: str) -> Dict[str, Any]:
+    try:
+        tx = laniakea_bridge.complete_transfer(tx_id)
+        logger.info("Cross-chain transfer completed: %s", tx.tx_id)
+        return {"message": "Transfer completed successfully", "tx": tx.to_dict()}
+    except ValueError as exc:
+        logger.error("Cross-chain completion failed for %s: %s", tx_id, exc)
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+# --- Quantum endpoints ------------------------------------------------------
+@app.post("/quantum/job/submit", tags=["Quantum"])
+def submit_quantum_job(job: QuantumJob) -> Dict[str, Any]:
+    try:
+        qc = laniakea_quantum.create_circuit(job.num_qubits)
+        for gate in job.gates:
+            gate_type = gate.get("type", "").lower()
+            target = int(gate.get("target", 0))
+            if gate_type == "h":
+                qc.h_gate(target)
+            elif gate_type == "x":
+                qc.x_gate(target)
+            else:
+                raise ValueError(f"Unsupported gate type: {gate_type}")
+
+        laniakea_quantum.submit_job(qc)
+        laniakea_metrics.update_metric("quantum_job_queue_size", len(laniakea_quantum.job_queue))
+        laniakea_achievements.update_user_progress(
+            "System", "quantum.jobs_submitted", len(laniakea_quantum.job_queue)
+        )
+        logger.info("Quantum job submitted with %s qubits.", job.num_qubits)
+        return {"message": "Quantum job submitted", "queue_size": len(laniakea_quantum.job_queue)}
+    except ValueError as exc:
+        logger.error("Quantum job submission failed: %s", exc)
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.post("/quantum/job/process", tags=["Quantum"])
+def process_quantum_job() -> Dict[str, Any]:
+    result = laniakea_quantum.process_next_job()
+    laniakea_metrics.update_metric("quantum_job_queue_size", len(laniakea_quantum.job_queue))
+    if result is None:
+        logger.info("No pending quantum jobs to process.")
+        return {"message": "No pending quantum jobs"}
+    logger.info("Quantum job processed. Result: %s", result)
+    return {"message": "Quantum job processed", "result": result}
+
+
+# --- Governance endpoints ---------------------------------------------------
+@app.post("/governance/proposals/new", tags=["Governance"])
+def create_proposal(prop: ProposalCreate) -> Dict[str, Any]:
+    proposal = laniakea_dao.create_proposal(prop.title, prop.description, prop.proposer)
+    logger.info("New DAO proposal created by %s: %s", prop.proposer, prop.title)
+    return {"message": "Proposal created", "proposal_id": proposal.proposal_id}
+
+
+@app.post("/governance/proposals/{proposal_id}/vote", tags=["Governance"])
+def cast_vote(proposal_id: int, vote: VoteCast) -> Dict[str, Any]:
+    try:
+        laniakea_dao.vote(proposal_id, vote.voter_address, vote.vote_type)
+        progress = laniakea_dao.proposals[proposal_id].voters
+        laniakea_achievements.update_user_progress(
+            vote.voter_address, "governance.votes_cast", len(progress)
+        )
+        logger.info("Vote cast by %s on proposal %s.", vote.voter_address, proposal_id)
+        return {"message": "Vote cast successfully"}
+    except ValueError as exc:
+        logger.error("Vote failed on proposal %s: %s", proposal_id, exc)
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.post("/governance/proposals/{proposal_id}/finalize", tags=["Governance"])
+def finalize_proposal(proposal_id: int) -> Dict[str, Any]:
+    try:
+        laniakea_dao.finalize_proposal(proposal_id)
+        status = laniakea_dao.proposals[proposal_id].status
+        logger.info("Proposal %s finalized with status: %s", proposal_id, status)
+        return {"message": f"Proposal {proposal_id} finalized", "status": status}
+    except ValueError as exc:
+        logger.error("Finalization failed for proposal %s: %s", proposal_id, exc)
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+# --- Marketplace (NFT) endpoints --------------------------------------------
 @app.post("/marketplace/nft/mint", tags=["Marketplace"])
-def mint_nft(nft_data: NFTMint):
+def mint_nft(nft_data: NFTMint) -> Dict[str, Any]:
     nft = laniakea_marketplace.mint_nft(nft_data.owner, nft_data.metadata_uri, nft_data.asset_type)
-    logger.info(f"NFT {nft.token_id} minted for {nft_data.owner}.")
+    logger.info("NFT %s minted for %s.", nft.token_id, nft_data.owner)
     return {"message": "NFT minted successfully", "token_id": nft.token_id}
 
+
 @app.post("/marketplace/nft/{token_id}/list", tags=["Marketplace"])
-def list_nft(token_id: str, price: float):
+def list_nft(token_id: str, price: float) -> Dict[str, Any]:
     try:
         laniakea_marketplace.list_nft(token_id, price)
-        logger.info(f"NFT {token_id} listed for sale at {price} LANA.")
+        logger.info("NFT %s listed for sale at %s LANA.", token_id, price)
         return {"message": f"NFT {token_id} listed for {price}"}
-    except ValueError as e:
-        logger.error(f"NFT listing failed for {token_id}: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
+    except ValueError as exc:
+        logger.error("NFT listing failed for %s: %s", token_id, exc)
+        raise HTTPException(status_code=400, detail=str(exc))
+
 
 @app.post("/marketplace/nft/{token_id}/buy", tags=["Marketplace"])
-def buy_nft(token_id: str, buyer: str):
+def buy_nft(token_id: str, buyer: str) -> Dict[str, Any]:
     try:
         nft = laniakea_marketplace.buy_nft(token_id, buyer)
-        logger.info(f"NFT {token_id} purchased by {buyer}.")
+        logger.info("NFT %s purchased by %s.", token_id, buyer)
         return {"message": f"NFT {token_id} purchased by {buyer}", "new_owner": nft.owner}
-    except ValueError as e:
-        logger.error(f"NFT purchase failed for {token_id}: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
+    except ValueError as exc:
+        logger.error("NFT purchase failed for %s: %s", token_id, exc)
+        raise HTTPException(status_code=400, detail=str(exc))
 
-# --- Simulation Endpoints ---
 
+# --- Simulation endpoints ---------------------------------------------------
 @app.post("/simulation/step", tags=["Simulation"])
-def step_simulation():
+def step_simulation() -> Dict[str, Any]:
     laniakea_simulator.step_simulation()
-    laniakea_achievements.update_user_progress("System", "simulation.steps_run", int(laniakea_simulator.current_time / laniakea_simulator.time_step))
-    logger.info(f"Cosmic simulation stepped. Current time: {laniakea_simulator.current_time}")
-    return {"message": "Simulation advanced one step", "current_time": laniakea_simulator.current_time}
+    laniakea_achievements.update_user_progress(
+        "System",
+        "simulation.steps_run",
+        int(laniakea_simulator.current_time / laniakea_simulator.time_step),
+    )
+    logger.info("Cosmic simulation stepped. Current time: %s", laniakea_simulator.current_time)
+    return {
+        "message": "Simulation advanced one step",
+        "current_time": laniakea_simulator.current_time,
+    }
+
 
 @app.get("/simulation/entities", tags=["Simulation"])
-def get_simulation_entities():
+def get_simulation_entities() -> List[Dict[str, Any]]:
     return [entity.to_dict() for entity in laniakea_simulator.entities]
 
-# --- Dashboard/Metrics Endpoints ---
 
+# --- Dashboard endpoints ----------------------------------------------------
 @app.get("/dashboard/metrics", tags=["Dashboard"])
-def get_metrics():
+def get_metrics() -> Dict[str, Any]:
     return laniakea_metrics.get_all_metrics()
 
+
 @app.get("/dashboard/history/{key}", tags=["Dashboard"])
-def get_metric_history(key: str):
+def get_metric_history(key: str) -> List[Dict[str, Any]]:
     history = laniakea_metrics.get_metric_history(key)
     if not history:
         raise HTTPException(status_code=404, detail="Metric history not found.")
     return history
 
-# --- Achievements Endpoints ---
 
+# --- Achievements endpoints -------------------------------------------------
 @app.get("/achievements/all", tags=["Achievements"])
-def get_all_achievements():
+def get_all_achievements() -> List[Dict[str, Any]]:
     return [ach.to_dict() for ach in laniakea_achievements.achievements.values()]
 
+
 @app.get("/achievements/user/{user_id}", tags=["Achievements"])
-def get_user_achievements(user_id: str):
+def get_user_achievements(user_id: str) -> Dict[str, Any]:
     progress = laniakea_achievements.user_progress.get(user_id, {})
     if not progress:
         raise HTTPException(status_code=404, detail="User not found or no progress recorded.")
     return progress
 
-# --- Core/Utils Endpoints ---
 
+# --- Core / status endpoints ------------------------------------------------
 @app.get("/core/status", tags=["Core"])
-def core_status():
+def core_status() -> Dict[str, Any]:
     return {
         "status": "Operational",
         "protocol_version": settings.PROJECT_VERSION,
@@ -323,37 +488,138 @@ def core_status():
         "dao_proposals": len(laniakea_dao.proposals),
         "quantum_queue": len(laniakea_quantum.job_queue),
         "ai_model_version": laniakea_ai.version,
-        "dex_pools": len(laniakea_dex.pools)
+        "dex_pools": len(laniakea_dex.pools),
     }
 
-# --- AI Endpoints ---
 
+# --- AI endpoints -----------------------------------------------------------
 @app.post("/ai/query", tags=["AI"])
-def query_ai_model(query: AIQuery):
+def query_ai_model(query: AIQuery) -> Dict[str, Any]:
     result = laniakea_ai.query(query.prompt)
-    logger.info(f"AI Model queried. Confidence: {result['confidence']:.2f}")
+    logger.info("AI Model queried. Confidence: %.2f", result["confidence"])
     return result
 
+
 @app.post("/ai/train", tags=["AI"])
-def train_ai_model(data_size: int):
+def train_ai_model(data_size: int) -> Dict[str, Any]:
     laniakea_ai.train(data_size)
-    logger.info(f"AI Model trained with {data_size} data units.")
-    return {"message": "AI Model training simulated successfully", "new_score": laniakea_ai.performance_score}
+    logger.info("AI Model trained with %s data units.", data_size)
+    return {
+        "message": "AI Model training simulated successfully",
+        "new_score": laniakea_ai.performance_score,
+    }
 
-# --- DeFi Endpoints ---
 
+# --- DeFi endpoints ---------------------------------------------------------
 @app.get("/defi/pools", tags=["DeFi"])
-def get_all_pools():
-    return {name: {"reserve_x": pool.reserve_x, "reserve_y": pool.reserve_y, "token_x": pool.token_x, "token_y": pool.token_y} for name, pool in laniakea_dex.pools.items()}
+def get_all_pools() -> Dict[str, Any]:
+    return {
+        name: {
+            "reserve_x": pool.reserve_x,
+            "reserve_y": pool.reserve_y,
+            "token_x": pool.token_x,
+            "token_y": pool.token_y,
+        }
+        for name, pool in laniakea_dex.pools.items()
+    }
+
 
 @app.post("/defi/swap", tags=["DeFi"])
-def perform_swap(swap_request: SwapRequest):
+def perform_swap(swap_request: SwapRequest) -> Dict[str, Any]:
     try:
         pool = laniakea_dex.get_pool(swap_request.token_in, swap_request.token_out)
         result = pool.swap(swap_request.token_in, swap_request.amount_in)
-        logger.info(f"Swap performed: {swap_request.amount_in} {swap_request.token_in} -> {result['amount_out']:.4f} {swap_request.token_out}")
+        logger.info(
+            "Swap performed: %s %s -> %.4f %s",
+            swap_request.amount_in,
+            swap_request.token_in,
+            result["amount_out"],
+            swap_request.token_out,
+        )
         return result
-    except ValueError as e:
-        logger.error(f"Swap failed: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
+    except ValueError as exc:
+        logger.error("Swap failed: %s", exc)
+        raise HTTPException(status_code=400, detail=str(exc))
 
+
+# --- Direct knowledge-market endpoints (in addition to the optional router) -
+@app.post("/knowledge_market/tokenize", tags=["Knowledge Market"])
+def knowledge_market_tokenize(req: KnowledgeTokenizeRequest) -> Dict[str, Any]:
+    if laniakea_knowledge_market is None:
+        raise HTTPException(status_code=503, detail="Knowledge market subsystem unavailable.")
+    asset = laniakea_knowledge_market.tokenize_knowledge(
+        req.owner_scda_id,
+        req.scda_knowledge_vector,
+        req.complexity_index,
+    )
+    return {"message": "Knowledge tokenised", "asset": asset.to_dict()}
+
+
+@app.get("/knowledge_market/listed", tags=["Knowledge Market"])
+def knowledge_market_listed() -> List[Dict[str, Any]]:
+    if laniakea_knowledge_market is None:
+        return []
+    return laniakea_knowledge_market.get_listed_assets()
+
+
+@app.post("/knowledge_market/list", tags=["Knowledge Market"])
+def knowledge_market_list(req: KnowledgeListRequest) -> Dict[str, Any]:
+    if laniakea_knowledge_market is None:
+        raise HTTPException(status_code=503, detail="Knowledge market subsystem unavailable.")
+    try:
+        laniakea_knowledge_market.list_asset(req.asset_id, req.price)
+        return {"message": f"Asset {req.asset_id} listed for {req.price}"}
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.post("/knowledge_market/buy", tags=["Knowledge Market"])
+def knowledge_market_buy(req: KnowledgeBuyRequest) -> Dict[str, Any]:
+    if laniakea_knowledge_market is None:
+        raise HTTPException(status_code=503, detail="Knowledge market subsystem unavailable.")
+    try:
+        tx = laniakea_knowledge_market.buy_asset(req.asset_id, req.buyer_scda_id)
+        return {"message": "Asset purchased", "tx_id": tx.tx_id, "new_owner": req.buyer_scda_id}
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.get("/knowledge_market/asset/{asset_id}", tags=["Knowledge Market"])
+def knowledge_market_asset(asset_id: str) -> Dict[str, Any]:
+    if laniakea_knowledge_market is None:
+        raise HTTPException(status_code=503, detail="Knowledge market subsystem unavailable.")
+    try:
+        return laniakea_knowledge_market.get_asset_details(asset_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+# --- Direct diplomacy endpoints --------------------------------------------
+@app.post("/diplomacy/alliance", tags=["Diplomacy"])
+def diplomacy_create_alliance(req: DiplomacyAllianceRequest) -> Dict[str, Any]:
+    if laniakea_diplomacy is None:
+        raise HTTPException(status_code=503, detail="Diplomacy subsystem unavailable.")
+    alliance = laniakea_diplomacy.create_alliance(req.name, req.founder_scda_id, req.members)
+    return {"message": "Alliance created", "alliance": alliance.to_dict()}
+
+
+@app.get("/diplomacy/alliances", tags=["Diplomacy"])
+def diplomacy_list_alliances() -> List[Dict[str, Any]]:
+    if laniakea_diplomacy is None:
+        return []
+    return [a.to_dict() for a in laniakea_diplomacy.alliances.values()]
+
+
+# --- Direct LLM endpoints (used as a fallback when llm_api router is absent) -
+@app.post("/llm/generate", tags=["LLM Integration"])
+def llm_generate(req: LLMRequest) -> Dict[str, Any]:
+    """Simulated LLM endpoint - returns a deterministic stub when no real
+    model is wired in. Real implementations should override this router."""
+    return {
+        "model": req.model or "laniakea-stub-1.0",
+        "prompt": req.prompt,
+        "completion": (
+            "[stub] No upstream LLM configured for this deployment. "
+            "The LaniakeA protocol answer would normally be computed here."
+        ),
+    }

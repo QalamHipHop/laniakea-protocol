@@ -11,6 +11,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
 import numpy as np
 import uuid
 
@@ -23,6 +24,18 @@ KNOWLEDGE_DOMAINS = [
 ]
 BASE_TOKEN_NAME = "LANA"
 KNOWLEDGE_TOKEN_PREFIX = "K-NFT"
+
+
+class KnowledgeType(Enum):
+    """Enumeration of supported knowledge asset types."""
+    SCIENTIFIC_DATA = "Scientific Data"
+    ALGORITHM = "Algorithm"
+    ART = "Art"
+    PHILOSOPHY = "Philosophy"
+    CODE = "Code"
+    DISCOVERY = "Discovery"
+    FRAMEWORK = "Framework"
+    GENERAL = "General"
 
 # --- Data Structures ---
 
@@ -181,6 +194,20 @@ class KnowledgeMarketplace:
         if asset_id not in self.assets:
             raise ValueError(f"Asset {asset_id} not found.")
         return self.assets[asset_id].to_dict()
+
+
+# --- Singleton accessor (expected by marketplace/__init__.py) ---
+
+_global_marketplace: Optional["KnowledgeMarketplace"] = None
+
+
+def get_marketplace() -> "KnowledgeMarketplace":
+    """Return a process-wide singleton instance of :class:`KnowledgeMarketplace`."""
+    global _global_marketplace
+    if _global_marketplace is None:
+        _global_marketplace = KnowledgeMarketplace()
+    return _global_marketplace
+
 
 # --- Example Usage ---
 if __name__ == "__main__":

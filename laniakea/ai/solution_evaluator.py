@@ -8,7 +8,11 @@ from datetime import datetime
 import json
 import numpy as np
 from enum import Enum
-from openai import OpenAI
+
+try:
+    from openai import OpenAI  # type: ignore
+except ImportError:  # pragma: no cover - optional dependency for production deploy
+    OpenAI = None  # type: ignore[assignment]
 
 from .problem_discovery_engine import ProblemDiscoveryEngine, HardProblem, ProblemAttempt
 
