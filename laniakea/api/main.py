@@ -123,6 +123,50 @@ async def _unhandled_exception_handler(request: Request, exc: Exception) -> JSON
         },
     )
 
+
+# --- Request-counter middleware ---------------------------------------------
+_request_count = {"total": 0, "by_path": {}}
+
+
+@app.middleware("http")
+async def _request_counter_middleware(request: Request, call_next):
+    """Lightweight per-route request counter for /observability endpoints."""
+    _request_count["total"] += 1
+    bucket = _request_count["by_path"]
+    bucket[request.url.path] = bucket.get(request.url.path, 0) + 1
+    response = await call_next(request)
+    return response
+
+
+@app.get("/discovery", tags=["System"])
+def discovery() -> Dict[str, Any]:
+    """Return a machine-readable index of every HTTP route in the API."""
+    out = []
+    for r in app.routes:
+        path = getattr(r, "path", None)
+        if not path:
+            continue
+        methods = getattr(r, "methods", None) or set()
+        out.append({
+            "path": path,
+            "methods": sorted(methods) if methods else [],
+            "tags": getattr(r, "tags", []) or [],
+            "name": getattr(r, "name", None),
+        })
+    return {"count": len(out), "routes": out}
+
+
+@app.get("/observability/requests", tags=["Observability"])
+def request_stats() -> Dict[str, Any]:
+    """Return the in-process request counter (useful for live-traffic checks)."""
+    top = sorted(
+        _request_count["by_path"].items(), key=lambda kv: -kv[1]
+    )[:20]
+    return {
+        "total": _request_count["total"],
+        "top_paths": [{"path": p, "count": c} for p, c in top],
+    }
+
 # --- Initialise subsystems --------------------------------------------------
 laniakea_chain = Blockchain()
 laniakea_consensus = ProofOfAuthority(settings.AUTHORITIES)
@@ -961,6 +1005,25 @@ def scda_leaderboard_path(top_n: int) -> List[Dict[str, Any]]:
         return []
     top_n = max(1, min(top_n, 100))
     return laniakea_scda_manager.leaderboard(top_n=top_n)
+
+
+@app.get("/scda/identities/{identity}/knowledge", tags=["SCDA"])
+def scda_knowledge(identity: str) -> Dict[str, Any]:
+    """Return the SCDA knowledge-vector + DNA gene snapshot."""
+    if laniakea_scda_manager is None:
+        raise HTTPException(status_code=503, detail="SCDA subsystem unavailable.")
+    scda = laniakea_scda_manager.get(identity)
+    if scda is None:
+        raise HTTPException(status_code=404, detail=f"SCDA {identity!r} not found")
+    return {
+        "identity": identity,
+        "knowledge_vector_8d": laniakea_scda_manager.compute_knowledge_vector(identity),
+        "knowledge_count": len(scda.knowledge_vector),
+        "genetic_diversity": scda.dna.calculate_genetic_diversity(),
+        "genes": [g.to_dict() if hasattr(g, "to_dict") else {"name": g.name, "strength": g.strength, "domain": g.domain.value if hasattr(g.domain, "value") else str(g.domain)} for g in scda.dna.genes],
+        "complexity_index": scda.complexity_index,
+        "energy": scda.energy,
+    }
 
 
 @app.get("/scda/summary", tags=["SCDA"])
