@@ -84,6 +84,15 @@ class ScdaManager:
         with self._lock:
             return sum(s.energy for s in self._scdas.values())
 
+    def delete(self, identity: str) -> bool:
+        """Remove a SCDA from the registry. Returns True if removed."""
+        with self._lock:
+            if identity not in self._scdas:
+                return False
+            del self._scdas[identity]
+            self._created_at.pop(identity, None)
+            return True
+
     # -- Domain operations ---------------------------------------------------
     def attempt_solve(
         self,

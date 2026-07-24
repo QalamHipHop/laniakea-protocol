@@ -13,7 +13,10 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional
 
-from fastapi import FastAPI, HTTPException
+import os
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 # --- Core utilities ---------------------------------------------------------
@@ -84,7 +87,41 @@ app = FastAPI(
         "DeFi, diplomacy and knowledge market."
     ),
     version=settings.PROJECT_VERSION,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
 )
+
+# --- CORS middleware -------------------------------------------------------
+_cors_origins_env = os.getenv("CORS_ALLOW_ORIGINS", "*")
+_cors_origins = [o.strip() for o in _cors_origins_env.split(",") if o.strip()] or ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# --- Global exception handler ---------------------------------------------
+@app.exception_handler(Exception)
+async def _unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Convert unhandled exceptions into a uniform JSON error response.
+
+    This prevents FastAPI from returning its default 500 with HTML/empty
+    body and gives the client a stable contract to parse.
+    """
+    logger.exception("Unhandled exception on %s %s: %s", request.method, request.url.path, exc)
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": "Internal server error",
+            "error": exc.__class__.__name__,
+            "message": str(exc),
+            "path": request.url.path,
+        },
+    )
 
 # --- Initialise subsystems --------------------------------------------------
 laniakea_chain = Blockchain()
@@ -244,6 +281,16 @@ except Exception as exc:  # pragma: no cover - defensive
     scda_router = None
 
 
+# --- WebSocket Manager (optional, lazy-loaded) ----------------------------
+_websocket_manager = None
+try:
+    from laniakea.websocket.websocket_manager import WebSocketManager
+    _websocket_manager = WebSocketManager()
+    logger.info("WebSocketManager initialised")
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("WebSocketManager unavailable: %s", exc)
+
+
 # --- System endpoints -------------------------------------------------------
 @app.get("/", tags=["System"])
 def read_root() -> Dict[str, Any]:
@@ -253,6 +300,11 @@ def read_root() -> Dict[str, Any]:
         "message": f"Welcome to the {settings.PROJECT_NAME} Unified API",
         "version": settings.PROJECT_VERSION,
         "environment": settings.DEPLOYMENT_ENV,
+        "docs": "/docs",
+        "redoc": "/redoc",
+        "openapi": "/openapi.json",
+        "health": "/health",
+        "status": "/core/status",
         "subsystems": {
             "blockchain": True,
             "consensus": True,
@@ -272,13 +324,38 @@ def read_root() -> Dict[str, Any]:
     }
 
 
+@app.on_event("startup")
+async def _on_startup() -> None:
+    """Capture service start time so /health can report uptime."""
+    import time as _t
+    app.state.start_time = _t.time()
+    logger.info("Laniakea API startup complete (v%s)", settings.PROJECT_VERSION)
+
+
 @app.get("/health", tags=["System"])
 def healthcheck() -> Dict[str, Any]:
-    """Lightweight liveness probe used by Render / Kubernetes."""
-    return {"status": "ok", "version": settings.PROJECT_VERSION}
+    """Liveness/readiness probe with uptime. Used by Render / Kubernetes."""
+    import time as _t
+    start = getattr(app.state, "start_time", _t.time())
+    return {
+        "status": "ok",
+        "version": settings.PROJECT_VERSION,
+        "uptime_seconds": round(_t.time() - start, 3),
+        "environment": settings.DEPLOYMENT_ENV,
+    }
 
 
 # --- Blockchain endpoints ---------------------------------------------------
+@app.get("/blockchain/info", tags=["Blockchain"])
+def blockchain_info() -> Dict[str, Any]:
+    """Return chain summary (length, latest block hash, pending tx count)."""
+    return {
+        "length": len(laniakea_chain.chain),
+        "latest_hash": laniakea_chain.last_block.hash if hasattr(laniakea_chain, "last_block") else None,
+        "pending_transactions": len(getattr(laniakea_chain, "current_transactions", [])),
+    }
+
+
 @app.get("/blockchain/chain", response_model=List[BlockResponse], tags=["Blockchain"])
 def full_chain() -> List[Dict[str, Any]]:
     return [block.to_dict() for block in laniakea_chain.chain]
@@ -392,6 +469,43 @@ def process_quantum_job() -> Dict[str, Any]:
 
 
 # --- Governance endpoints ---------------------------------------------------
+@app.get("/governance/proposals", tags=["Governance"])
+def list_proposals() -> List[Dict[str, Any]]:
+    """List all DAO proposals (active + finalized)."""
+    out: List[Dict[str, Any]] = []
+    for proposal in laniakea_dao.proposals.values():
+        out.append({
+            "proposal_id": proposal.proposal_id,
+            "title": proposal.title,
+            "description": proposal.description,
+            "proposer": proposal.proposer,
+            "status": proposal.status,
+            "votes_for": getattr(proposal, "votes_for", 0),
+            "votes_against": getattr(proposal, "votes_against", 0),
+            "voter_count": len(getattr(proposal, "voters", [])),
+        })
+    return out
+
+
+@app.get("/governance/proposals/{proposal_id}", tags=["Governance"])
+def get_proposal(proposal_id: int) -> Dict[str, Any]:
+    """Return full details for a single proposal."""
+    proposal = laniakea_dao.proposals.get(proposal_id)
+    if proposal is None:
+        raise HTTPException(status_code=404, detail=f"Proposal {proposal_id} not found")
+    return {
+        "proposal_id": proposal.proposal_id,
+        "title": proposal.title,
+        "description": proposal.description,
+        "proposer": proposal.proposer,
+        "status": proposal.status,
+        "votes_for": getattr(proposal, "votes_for", 0),
+        "votes_against": getattr(proposal, "votes_against", 0),
+        "voters": list(getattr(proposal, "voters", [])),
+        "vote_types": getattr(proposal, "vote_types", {}),
+    }
+
+
 @app.post("/governance/proposals/new", tags=["Governance"])
 def create_proposal(prop: ProposalCreate) -> Dict[str, Any]:
     proposal = laniakea_dao.create_proposal(prop.title, prop.description, prop.proposer)
@@ -506,6 +620,16 @@ def get_user_achievements(user_id: str) -> Dict[str, Any]:
 
 
 # --- Core / status endpoints ------------------------------------------------
+@app.get("/version", tags=["System"])
+def version() -> Dict[str, Any]:
+    """Return protocol & build metadata (also exposed at /)."""
+    return {
+        "protocol_version": settings.PROJECT_VERSION,
+        "project_name": settings.PROJECT_NAME,
+        "environment": settings.DEPLOYMENT_ENV,
+    }
+
+
 @app.get("/core/status", tags=["Core"])
 def core_status() -> Dict[str, Any]:
     return {
@@ -515,7 +639,15 @@ def core_status() -> Dict[str, Any]:
         "dao_proposals": len(laniakea_dao.proposals),
         "quantum_queue": len(laniakea_quantum.job_queue),
         "ai_model_version": laniakea_ai.version,
+        "ai_performance": getattr(laniakea_ai, "performance_score", 0.0),
         "dex_pools": len(laniakea_dex.pools),
+        "scda_identities": len(laniakea_scda_manager.list_identities()) if laniakea_scda_manager else 0,
+        "knowledge_market_listed": (
+            len(laniakea_knowledge_market.assets) if laniakea_knowledge_market else 0
+        ),
+        "diplomacy_alliances": (
+            len(laniakea_diplomacy.alliances) if laniakea_diplomacy else 0
+        ),
     }
 
 
@@ -593,6 +725,23 @@ def knowledge_market_listed() -> List[Dict[str, Any]]:
     return laniakea_knowledge_market.get_listed_assets()
 
 
+@app.get("/knowledge_market/stats", tags=["Knowledge Market"])
+def knowledge_market_stats() -> Dict[str, Any]:
+    """Aggregate stats for the knowledge marketplace."""
+    if laniakea_knowledge_market is None:
+        raise HTTPException(status_code=503, detail="Knowledge market unavailable")
+    assets = laniakea_knowledge_market.assets
+    listed = [a for a in assets.values() if a.listed]
+    return {
+        "total_assets": len(assets),
+        "listed_assets": len(listed),
+        "total_volume": getattr(laniakea_knowledge_market, "total_volume", 0.0),
+        "asset_types": list({
+            getattr(a, "knowledge_type", "General") for a in assets.values()
+        }),
+    }
+
+
 @app.post("/knowledge_market/list", tags=["Knowledge Market"])
 def knowledge_market_list(req: KnowledgeListRequest) -> Dict[str, Any]:
     if laniakea_knowledge_market is None:
@@ -653,6 +802,19 @@ def diplomacy_list_alliances() -> List[Dict[str, Any]]:
     if laniakea_diplomacy is None:
         return []
     return [a.to_dict() for a in laniakea_diplomacy.alliances.values()]
+
+
+@app.get("/diplomacy/stats", tags=["Diplomacy"])
+def diplomacy_stats() -> Dict[str, Any]:
+    """Aggregate stats for the diplomacy subsystem."""
+    if laniakea_diplomacy is None:
+        raise HTTPException(status_code=503, detail="Diplomacy unavailable")
+    alliances = laniakea_diplomacy.alliances
+    return {
+        "total_alliances": len(alliances),
+        "total_members": sum(len(a.members) for a in alliances.values()),
+        "alliance_names": [a.name for a in alliances.values()],
+    }
 
 
 # --- Direct LLM endpoints (used as a fallback when llm_api router is absent) -
@@ -752,3 +914,30 @@ def scda_passive(body: ScdaPassiveBody) -> Dict[str, Any]:
     if laniakea_scda_manager is None:
         raise HTTPException(status_code=503, detail="SCDA subsystem unavailable.")
     return laniakea_scda_manager.passive_update(body.identity)
+
+
+@app.get("/scda/summary", tags=["SCDA"])
+def scda_summary() -> Dict[str, Any]:
+    """Aggregate metrics across all SCDAs (complexity, energy, count)."""
+    if laniakea_scda_manager is None:
+        return {"scda_available": False, "identities": [], "total": 0}
+    states = laniakea_scda_manager.all_states()
+    return {
+        "scda_available": True,
+        "total": len(states),
+        "identities": [s["identity"] for s in states],
+        "total_complexity": laniakea_scda_manager.total_complexity(),
+        "total_energy": laniakea_scda_manager.total_energy(),
+        "states": states,
+    }
+
+
+@app.delete("/scda/{identity}", tags=["SCDA"])
+def scda_delete(identity: str) -> Dict[str, Any]:
+    """Remove a SCDA from the in-memory registry (does not persist)."""
+    if laniakea_scda_manager is None:
+        raise HTTPException(status_code=503, detail="SCDA subsystem unavailable.")
+    removed = laniakea_scda_manager.delete(identity)
+    if not removed:
+        raise HTTPException(status_code=404, detail=f"SCDA {identity!r} not found")
+    return {"message": f"SCDA {identity!r} removed", "identity": identity}
