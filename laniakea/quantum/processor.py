@@ -17,19 +17,23 @@ class QuantumCircuit:
 
     def _apply_gate(self, gate_matrix: np.ndarray, target_qubit: int):
         """Applies a single-qubit gate to the state vector."""
-        if target_qubit >= self.num_qubits:
-            raise ValueError("Target qubit index out of range.")
+        if target_qubit < 0 or target_qubit >= self.num_qubits:
+            raise ValueError(f"Target qubit index {target_qubit} out of range [0, {self.num_qubits}).")
+
+        if self.num_qubits == 0:
+            return
 
         # Identity matrix for non-target qubits
-        identity = np.identity(2)
+        identity = np.identity(2, dtype=complex)
+        gate_matrix = np.asarray(gate_matrix, dtype=complex)
         
         # Build the full tensor product operator
-        op = 1
+        op: np.ndarray = np.array([[1.0]], dtype=complex)
         for i in range(self.num_qubits):
             if i == target_qubit:
-                op = np.kron(op, gate_matrix) if op.ndim > 1 else gate_matrix
+                op = np.kron(op, gate_matrix)
             else:
-                op = np.kron(op, identity) if op.ndim > 1 else identity
+                op = np.kron(op, identity)
         
         # Apply the operator to the state vector
         self.state_vector = op @ self.state_vector
