@@ -1,16 +1,88 @@
 # main.py - Laniakea Protocol Unified Entry Point
 
+import argparse
+import os
+
 import uvicorn
-from laniakea.api.main import app
+
 from laniakea.core.config import settings
 
-if __name__ == "__main__":
-    from laniakea.utils.logger import logger
-    
-    logger.info(f"Starting {settings.PROJECT_NAME} v{settings.PROJECT_VERSION} API...")
-    uvicorn.run(
-        app, 
-        host=settings.API_HOST, 
-        port=settings.API_PORT,
-        log_level="info"
+
+def _parse_args() -> argparse.Namespace:
+    """Parse command-line arguments used by both Render and local dev."""
+    parser = argparse.ArgumentParser(
+        prog="laniakea-protocol",
+        description="Laniakea Protocol unified entry point.",
     )
+    parser.add_argument(
+        "command",
+        nargs="?",
+        default="start",
+        help="Subcommand to run. Currently only 'start' is supported.",
+    )
+    parser.add_argument(
+        "--node-id",
+        default=os.getenv("NODE_ID", "laniakea-node"),
+        help="Identifier for this node (used in logs and metrics).",
+    )
+    parser.add_argument(
+        "--host",
+        default=os.getenv("API_HOST", settings.API_HOST),
+        help="Host/IP to bind the HTTP server to.",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=int(os.getenv("PORT", os.getenv("API_PORT", settings.API_PORT))),
+        help="TCP port to bind the HTTP server to.",
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=int(os.getenv("WEB_CONCURRENCY", "1")),
+        help="Number of uvicorn worker processes.",
+    )
+    parser.add_argument(
+        "--log-level",
+        default=os.getenv("LOG_LEVEL", "info").lower(),
+        help="Uvicorn log level.",
+    )
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = _parse_args()
+
+    if args.command not in {"start", "serve", "run"}:
+        raise SystemExit(
+            f"Unknown command: {args.command!r}. "
+            "Supported commands: start, serve, run."
+        )
+
+    # Import the FastAPI app lazily so that any import error in our codebase
+    # surfaces with a useful traceback before uvicorn swallows it.
+    from laniakea.api.main import app  # noqa: WPS433 (intentional late import)
+    from laniakea.utils.logger import logger
+
+    logger.info(
+        "Starting %s v%s on %s:%d (node=%s, workers=%d, log_level=%s)",
+        settings.PROJECT_NAME,
+        settings.PROJECT_VERSION,
+        args.host,
+        args.port,
+        args.node_id,
+        args.workers,
+        args.log_level,
+    )
+
+    uvicorn.run(
+        app,
+        host=args.host,
+        port=args.port,
+        log_level=args.log_level,
+        workers=args.workers,
+    )
+
+
+if __name__ == "__main__":
+    main()
