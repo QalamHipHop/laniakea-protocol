@@ -1,6 +1,6 @@
 # LaniakeA Protocol - Render Deployment Configuration
 # Optimized for Render Free Tier
-# Version: 3.0.0
+# Version: 3.1.0
 
 services:
   # Main Web Service
@@ -9,40 +9,45 @@ services:
     runtime: python
     plan: free
     region: oregon
+    rootDir: .
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt
     startCommand: python main.py start --node-id laniakea-render --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
-    
+
     envVars:
       # Python Configuration
       - key: PYTHON_VERSION
         value: "3.11"
-      
+
       - key: PYTHONUNBUFFERED
         value: "1"
-      
+
+      # Ensure project root is on PYTHONPATH (Render defaults vary).
+      - key: PYTHONPATH
+        value: ".:laniakea"
+
       # Node Configuration
       - key: NODE_ID
         value: laniakea-render-node
-      
+
       - key: ENVIRONMENT
         value: production
-      
+
       # Security
       - key: JWT_SECRET
         generateValue: true
-      
+
       - key: ENCRYPTION_KEY
         generateValue: true
-      
+
       # Logging
       - key: LOG_LEVEL
         value: INFO
-      
+
       # AI Configuration
       - key: AI_ENABLED
         value: "true"
-      
+
       # Performance
       - key: AUTO_OPTIMIZE
         value: "true"
