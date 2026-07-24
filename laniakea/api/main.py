@@ -396,6 +396,20 @@ def mine_block(authority_address: Optional[str] = None) -> Dict[str, Any]:
 
 
 # --- Cross-chain endpoints --------------------------------------------------
+@app.get("/crosschain/supported", tags=["Cross-Chain"])
+def crosschain_supported() -> Dict[str, Any]:
+    """Return supported cross-chain routes and the bridge instance stats."""
+    try:
+        supported = list(laniakea_bridge.supported_chains or [])
+    except Exception:
+        supported = list(getattr(settings, "SUPPORTED_CHAINS", []))
+    return {
+        "supported_chains": supported,
+        "active_transfers": len(getattr(laniakea_bridge, "pending_transactions", {})),
+        "completed_transfers": len(getattr(laniakea_bridge, "completed_transactions", {})),
+    }
+
+
 @app.post("/crosschain/transfer/initiate", tags=["Cross-Chain"])
 def initiate_cross_chain_transfer(transfer: BridgeTransfer) -> Dict[str, Any]:
     try:
@@ -619,6 +633,16 @@ def get_user_achievements(user_id: str) -> Dict[str, Any]:
     return progress
 
 
+@app.get("/achievements/catalog", tags=["Achievements"])
+def achievements_catalog() -> Dict[str, Any]:
+    """Return all available achievements + total user-progress entries."""
+    return {
+        "total_achievements": len(laniakea_achievements.achievements),
+        "users_tracked": len(laniakea_achievements.user_progress),
+        "achievements": [a.to_dict() for a in laniakea_achievements.achievements.values()],
+    }
+
+
 # --- Core / status endpoints ------------------------------------------------
 @app.get("/version", tags=["System"])
 def version() -> Dict[str, Any]:
@@ -627,6 +651,20 @@ def version() -> Dict[str, Any]:
         "protocol_version": settings.PROJECT_VERSION,
         "project_name": settings.PROJECT_NAME,
         "environment": settings.DEPLOYMENT_ENV,
+    }
+
+
+@app.get("/token/info", tags=["Token"])
+def token_info() -> Dict[str, Any]:
+    """Return LAN token economic parameters."""
+    return {
+        "symbol": "LAN",
+        "name": "Laniakea",
+        "total_supply": getattr(settings, "TOTAL_TOKEN_SUPPLY", None),
+        "inflation_rate": getattr(settings, "TOKEN_INFLATION_RATE", None),
+        "burn_rate": getattr(settings, "TOKEN_BURN_RATE", None),
+        "staking_apy": getattr(settings, "STAKING_APY", None),
+        "decimals": 18,
     }
 
 
@@ -916,6 +954,15 @@ def scda_passive(body: ScdaPassiveBody) -> Dict[str, Any]:
     return laniakea_scda_manager.passive_update(body.identity)
 
 
+@app.get("/scda/leaderboard/{top_n}", tags=["SCDA"])
+def scda_leaderboard_path(top_n: int) -> List[Dict[str, Any]]:
+    """Path-based version of the leaderboard for systems that block query params."""
+    if laniakea_scda_manager is None:
+        return []
+    top_n = max(1, min(top_n, 100))
+    return laniakea_scda_manager.leaderboard(top_n=top_n)
+
+
 @app.get("/scda/summary", tags=["SCDA"])
 def scda_summary() -> Dict[str, Any]:
     """Aggregate metrics across all SCDAs (complexity, energy, count)."""
@@ -941,3 +988,58 @@ def scda_delete(identity: str) -> Dict[str, Any]:
     if not removed:
         raise HTTPException(status_code=404, detail=f"SCDA {identity!r} not found")
     return {"message": f"SCDA {identity!r} removed", "identity": identity}
+
+
+# --- WebSocket endpoints -----------------------------------------------------
+try:
+    from fastapi import WebSocket, WebSocketDisconnect
+    from laniakea.websocket.websocket_manager import ConnectionType
+
+    @app.websocket("/ws/{connection_type}/{connection_id}")
+    async def websocket_endpoint(websocket: WebSocket, connection_type: str, connection_id: str):
+        """Laniakea WebSocket gateway.
+
+        Supported connection types: blockchain, tasks, notifications,
+        marketplace, dashboard, collaboration, chat, space_explorer,
+        governance. The endpoint broadcasts chain/simulation/SCDA updates.
+        """
+        if _websocket_manager is None:
+            await websocket.close(code=1011)
+            return
+        # Map string to enum, default to dashboard
+        try:
+            ctype = ConnectionType(connection_type)
+        except ValueError:
+            ctype = ConnectionType.DASHBOARD
+
+        await _websocket_manager.connect(websocket, connection_id, ctype)
+        try:
+            while True:
+                msg = await websocket.receive_text()
+                # Echo back as acknowledgement + a periodic system update
+                _websocket_manager.connection_stats["messages_received"] += 1
+                await websocket.send_json({
+                    "type": "ack",
+                    "connection_id": connection_id,
+                    "echo": msg,
+                    "server_time": time.time(),
+                })
+        except WebSocketDisconnect:
+            _websocket_manager.disconnect(connection_id)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("WebSocket %s closed: %s", connection_id, exc)
+            _websocket_manager.disconnect(connection_id)
+
+
+    @app.get("/ws/stats", tags=["WebSocket"])
+    def websocket_stats() -> Dict[str, Any]:
+        """Return live WebSocket connection statistics."""
+        if _websocket_manager is None:
+            return {"websocket_available": False}
+        return {
+            "websocket_available": True,
+            "stats": _websocket_manager.connection_stats,
+            "active_connections": len(_websocket_manager.active_connections),
+        }
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("WebSocket routes unavailable: %s", exc)
