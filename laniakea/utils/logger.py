@@ -15,7 +15,7 @@ def setup_logger(name: str = "laniakea", level: str = "INFO") -> logging.Logger:
     log_level = level_map.get(level.lower(), 'INFO')
     
     logger.setLevel(log_level)
-    
+
     # Prevent duplicate handlers if called multiple times
     if not logger.handlers:
         # Create console handler with a higher log level
@@ -31,6 +31,11 @@ def setup_logger(name: str = "laniakea", level: str = "INFO") -> logging.Logger:
         
         # Add the handlers to the logger
         logger.addHandler(ch)
+
+    # Always disable propagation so we do not double-log to the parent
+    # logger (e.g. when both ``laniakea`` and ``laniakea.api`` have their
+    # own handlers, which would cause every message to be emitted twice).
+    logger.propagate = False
         
     return logger
 

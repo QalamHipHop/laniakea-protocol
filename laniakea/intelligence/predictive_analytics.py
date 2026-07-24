@@ -9,7 +9,12 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import json
 
-from openai import OpenAI
+try:
+    from openai import OpenAI  # type: ignore
+    _OPENAI_AVAILABLE = True
+except Exception:  # pragma: no cover - optional dependency
+    OpenAI = None  # type: ignore
+    _OPENAI_AVAILABLE = False
 
 
 class TrendAnalyzer:
@@ -182,10 +187,15 @@ class PredictiveEngine:
     """موتور پیش‌بینی با AI"""
 
     def __init__(self):
-        self.client = OpenAI()
+        # Only instantiate the OpenAI client when the optional dep is
+        # actually present. Otherwise fall back to a deterministic stub so
+        # that the rest of the intelligence package still imports cleanly
+        # on minimal installs.
+        self.client = OpenAI() if _OPENAI_AVAILABLE else None
         self.trend_analyzer = TrendAnalyzer()
         self.pattern_recognizer = PatternRecognizer()
         self.predictions_history = []
+        self._offline = not _OPENAI_AVAILABLE
 
     async def analyze_blockchain_future(
         self, blockchain_data: Dict[str, Any], network_data: Dict[str, Any]
@@ -199,18 +209,22 @@ class PredictiveEngine:
             "timestamp": datetime.now().isoformat(),
         }
 
-        # پیش‌بینی با AI
-        response = self.client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": """You are a blockchain analytics expert specializing in predictive analysis.
+        # پیش‌بینی با AI (با fallback امن در صورت نبود openai)
+        if self._offline or self.client is None:
+            predictions = self._offline_prediction(historical_summary)
+        else:
+            try:
+                response = self.client.chat.completions.create(
+                    model="gpt-4.1-mini",
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": """You are a blockchain analytics expert specializing in predictive analysis.
 Analyze trends and provide actionable insights about the future state of the network.""",
-                },
-                {
-                    "role": "user",
-                    "content": f"""Analyze this blockchain network data and predict future trends:
+                        },
+                        {
+                            "role": "user",
+                            "content": f"""Analyze this blockchain network data and predict future trends:
 
 Current State:
 {json.dumps(historical_summary, indent=2)}
@@ -222,19 +236,22 @@ Provide predictions for:
 4. Value creation opportunities
 
 Format as JSON with keys: growth_prediction, risks, optimizations, opportunities""",
-                },
-            ],
-            temperature=0.7,
-            max_tokens=1500,
-        )
+                        },
+                    ],
+                    temperature=0.7,
+                    max_tokens=1500,
+                )
 
-        ai_analysis = response.choices[0].message.content
+                ai_analysis = response.choices[0].message.content
 
-        # تلاش برای parse کردن JSON
-        try:
-            predictions = json.loads(ai_analysis)
-        except json.JSONDecodeError:
-            predictions = {"raw_analysis": ai_analysis, "parsed": False}
+                # تلاش برای parse کردن JSON
+                try:
+                    predictions = json.loads(ai_analysis)
+                except json.JSONDecodeError:
+                    predictions = {"raw_analysis": ai_analysis, "parsed": False}
+            except Exception as exc:  # pragma: no cover - network failure
+                predictions = self._offline_prediction(historical_summary)
+                predictions["warning"] = f"online prediction failed: {exc}"
 
         # افزودن تحلیل‌های آماری
         predictions["statistical_trends"] = self._calculate_statistical_predictions(
@@ -330,6 +347,32 @@ Based on advanced AI analysis and statistical modeling, here are the key predict
 """
 
         return report
+
+    @staticmethod
+    def _offline_prediction(historical_summary: Dict[str, Any]) -> Dict[str, Any]:
+        """Deterministic fallback used when the OpenAI client is missing."""
+        chain = historical_summary.get("blockchain", {}) or {}
+        network = historical_summary.get("network", {}) or {}
+        return {
+            "growth_prediction": {
+                "trajectory": "stable",
+                "next_7_days_block_growth_estimate": 0,
+                "rationale": "offline stub - configure OPENAI_API_KEY to enable live analytics",
+            },
+            "risks": [
+                "no live AI analytics - relying on deterministic stub",
+            ],
+            "optimizations": [
+                "install openai or wire a custom LLM provider for richer insights",
+            ],
+            "opportunities": [
+                "expose chain length and peer count metrics for richer predictions",
+            ],
+            "raw_snapshot": {
+                "chain_length": len(chain) if isinstance(chain, list) else 0,
+                "network_keys": list(network.keys()),
+            },
+        }
 
 
 # Global instance

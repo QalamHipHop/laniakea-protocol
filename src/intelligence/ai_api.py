@@ -8,15 +8,27 @@ import json
 import asyncio
 from typing import Dict, Any, Optional, List
 from enum import Enum
-from openai import OpenAI, AsyncOpenAI
-from openai.types.chat import ChatCompletionMessageParam
 from datetime import datetime
+
+try:
+    from openai import OpenAI, AsyncOpenAI  # type: ignore
+    from openai.types.chat import ChatCompletionMessageParam  # type: ignore
+    _OPENAI_AVAILABLE = True
+except Exception:  # pragma: no cover - optional dependency
+    OpenAI = None  # type: ignore
+    AsyncOpenAI = None  # type: ignore
+    ChatCompletionMessageParam = Any  # type: ignore
+    _OPENAI_AVAILABLE = False
 
 # تنظیمات OpenAI Client
 # از متغیرهای محیطی که در sandbox تنظیم شده‌اند استفاده می‌شود
 try:
-    client = OpenAI()
-    async_client = AsyncOpenAI()
+    if _OPENAI_AVAILABLE:
+        client = OpenAI()
+        async_client = AsyncOpenAI()
+    else:
+        client = None
+        async_client = None
 except Exception as e:
     print(f"Error initializing OpenAI clients: {e}")
     client = None
