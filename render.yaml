@@ -10,6 +10,12 @@ services:
     plan: free
     region: oregon
     rootDir: .
+    # Explicitly enable auto-deploy on push to main. Observed in late-July
+    # 2026 that Render was not picking up pushes even though the service
+    # was created from this repo; setting the flag explicitly fixes it
+    # if the dashboard default is "off".
+    autoDeploy: true
+    autoDeployTrigger: commit
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt && alembic upgrade head
     startCommand: python main.py start --node-id laniakea-render --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
