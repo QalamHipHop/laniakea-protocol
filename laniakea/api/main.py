@@ -342,6 +342,13 @@ except Exception as exc:  # pragma: no cover - defensive
     logger.warning("scda_integration_api router not loaded: %s", exc)
     scda_integration_router = None
 
+try:
+    from laniakea.api.observability_api import router as observability_router
+    app.include_router(observability_router, tags=["Observability"])
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("observability_api router not loaded: %s", exc)
+    observability_router = None
+
 
 # --- WebSocket Manager (optional, lazy-loaded) ----------------------------
 _websocket_manager = None
