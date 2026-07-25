@@ -373,6 +373,16 @@ except Exception as exc:  # pragma: no cover - defensive
     logger.warning("governance_api router not loaded: %s", exc)
     governance_router = None
 
+# Self-evolution API: HTTP surface over laniakea.intelligence.self_evolution.
+# The engine already exists; this just exposes /evolution/{status,scan,suggest,improve,log}.
+try:
+    from laniakea.api.self_evolution_api import router as self_evolution_router
+    app.include_router(self_evolution_router, tags=["Self-Evolution"])
+    logger.info("Self-Evolution API mounted at /evolution")
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("self_evolution_api router not loaded: %s", exc)
+    self_evolution_router = None
+
 
 # --- WebSocket Manager (optional, lazy-loaded) ----------------------------
 _websocket_manager = None
