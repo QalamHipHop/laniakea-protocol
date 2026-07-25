@@ -357,6 +357,14 @@ except Exception as exc:  # pragma: no cover - defensive
     logger.warning("web3_api router not loaded: %s", exc)
     web3_router = None
 
+# SCDA breeding system
+try:
+    from laniakea.api.breeding_api import router as breeding_router
+    app.include_router(breeding_router)
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("breeding_api router not loaded: %s", exc)
+    breeding_router = None
+
 
 # --- WebSocket Manager (optional, lazy-loaded) ----------------------------
 _websocket_manager = None
