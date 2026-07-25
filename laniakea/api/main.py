@@ -349,6 +349,14 @@ except Exception as exc:  # pragma: no cover - defensive
     logger.warning("observability_api router not loaded: %s", exc)
     observability_router = None
 
+# Web3 wallet integration (SIWE auth + wallet<->SCDA binding)
+try:
+    from laniakea.api.web3_api import router as web3_router
+    app.include_router(web3_router)
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("web3_api router not loaded: %s", exc)
+    web3_router = None
+
 
 # --- WebSocket Manager (optional, lazy-loaded) ----------------------------
 _websocket_manager = None
