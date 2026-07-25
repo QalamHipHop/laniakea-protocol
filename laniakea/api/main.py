@@ -324,6 +324,15 @@ except Exception as exc:  # pragma: no cover - defensive
     logger.warning("scda_api router not loaded: %s", exc)
     scda_router = None
 
+# --- Extended routes (identity, reputation, token, market extras, ...) ----
+try:
+    from laniakea.api.extended_routes import router as extended_router
+    app.include_router(extended_router)
+    logger.info("Extended routes registered (identity, reputation, token, web3, ...)")
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("extended_routes router not loaded: %s", exc)
+    extended_router = None
+
 
 # --- WebSocket Manager (optional, lazy-loaded) ----------------------------
 _websocket_manager = None
