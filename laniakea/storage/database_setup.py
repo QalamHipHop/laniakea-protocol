@@ -39,10 +39,19 @@ def init_db(db_url: str):
             connection.execute(text("SELECT 1"))
         Config.logger.info("✅ SQLAlchemy database connection successful.")
 
-        # Create all tables defined by models inheriting from Base
-        # In a production environment, you would use a migration tool like Alembic
-        Base.metadata.create_all(bind=Engine)
-        Config.logger.info("✅ SQLAlchemy models and tables initialized.")
+        # Schema management:
+        #   - In production (``LANIAKEA_RUN_MIGRATIONS=1``) the schema is
+        #     managed by Alembic (``alembic upgrade head``) so we MUST NOT
+        #     also call ``create_all`` to avoid drift.
+        #   - In dev / test we still allow the legacy auto-create shortcut.
+        if os.getenv("LANIAKEA_RUN_MIGRATIONS") == "1":
+            Config.logger.info(
+                "LANIAKEA_RUN_MIGRATIONS=1 set - schema is managed by Alembic. "
+                "Skipping Base.metadata.create_all."
+            )
+        else:
+            Base.metadata.create_all(bind=Engine)
+            Config.logger.info("✅ SQLAlchemy models and tables initialized.")
 
     except Exception as e:
         Config.logger.error(f"❌ SQLAlchemy database initialization failed: {e}")
