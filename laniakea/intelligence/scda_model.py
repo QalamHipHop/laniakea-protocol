@@ -51,6 +51,38 @@ class SingleCellDigitalAccount:
             "problem_queue_size": len(self.problem_queue)
         }
 
+    def to_snapshot(self) -> Dict[str, Any]:
+        """Serialise the SCDA into a JSON-safe dict for persistence.
+
+        Mirrors the SCDA manager's :func:`all_states` schema so the
+        persistence layer can rehydrate the same shape on the next
+        process start.
+        """
+        return {
+            "identity": self.identity,
+            "complexity_index": self.complexity_index,
+            "energy": self.energy,
+            "genetic_diversity": self.dna.calculate_genetic_diversity(),
+            "knowledge_count": len(self.knowledge_vector),
+            "problem_queue_size": len(self.problem_queue),
+            "knowledge_vector": dict(self.knowledge_vector),
+        }
+
+    def hydrate_from_snapshot(self, payload: Dict[str, Any]) -> None:
+        """Rehydrate an SCDA from a snapshot dict produced by
+        :func:`to_snapshot`. Unknown / extra keys are ignored."""
+        if not isinstance(payload, dict):
+            return
+        if payload.get("identity") and payload["identity"] != self.identity:
+            return
+        if "complexity_index" in payload:
+            self.complexity_index = float(payload["complexity_index"])
+        if "energy" in payload:
+            self.energy = float(payload["energy"])
+        kv = payload.get("knowledge_vector")
+        if isinstance(kv, dict):
+            self.knowledge_vector = {str(k): float(v) for k, v in kv.items()}
+
     def _calculate_complexity_gain(self, problem_difficulty: float) -> float:
         """
         Calculates the gain in Complexity Index (Delta C) using the 

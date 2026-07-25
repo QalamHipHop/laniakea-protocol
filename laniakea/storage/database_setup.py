@@ -3,10 +3,11 @@ LaniakeA Protocol - SQLAlchemy Database Setup
 Initializes the SQLAlchemy engine and session for PostgreSQL.
 """
 
+import logging
 import os
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, declarative_base
-from laniakea.utils.config import Config
+from laniakea.core.config import settings
 
 # Base class for declarative models
 Base = declarative_base()
@@ -14,6 +15,11 @@ Base = declarative_base()
 # Global engine and session factory
 Engine = None
 SessionLocal = None
+
+# Module-level logger — the old ``Config.logger`` attribute never existed
+# and was a latent bug, so we use a real stdlib logger here.
+logger = logging.getLogger("laniakea.storage.database_setup")
+
 
 def init_db(db_url: str):
     """
@@ -37,7 +43,7 @@ def init_db(db_url: str):
         # Test the database connection
         with Engine.connect() as connection:
             connection.execute(text("SELECT 1"))
-        Config.logger.info("✅ SQLAlchemy database connection successful.")
+        logger.info("SQLAlchemy database connection successful url=%s", db_url)
 
         # Schema management:
         #   - In production (``LANIAKEA_RUN_MIGRATIONS=1``) the schema is
@@ -45,16 +51,16 @@ def init_db(db_url: str):
         #     also call ``create_all`` to avoid drift.
         #   - In dev / test we still allow the legacy auto-create shortcut.
         if os.getenv("LANIAKEA_RUN_MIGRATIONS") == "1":
-            Config.logger.info(
+            logger.info(
                 "LANIAKEA_RUN_MIGRATIONS=1 set - schema is managed by Alembic. "
                 "Skipping Base.metadata.create_all."
             )
         else:
             Base.metadata.create_all(bind=Engine)
-            Config.logger.info("✅ SQLAlchemy models and tables initialized.")
+            logger.info("SQLAlchemy models and tables initialized.")
 
     except Exception as e:
-        Config.logger.error(f"❌ SQLAlchemy database initialization failed: {e}")
+        logger.error("SQLAlchemy database initialization failed: %s", e)
         raise
 
 def get_db():

@@ -241,6 +241,65 @@ def reset_diplomacy_system() -> None:
     with _singleton_lock:
         _singleton = None
 
+
+# --- Persistence helpers ---------------------------------------------------
+def _attach_persistence_hooks() -> None:
+    """Add :func:`snapshot` / :func:`restore` to the DiplomacySystem class.
+
+    Kept outside the class body so the patch is easy to find and the
+    original diplomacy module remains self-contained.
+    """
+
+    def snapshot(self) -> Dict[str, Any]:  # noqa: D401
+        """Serialise the system into a JSON-safe dict.
+
+        Used by the persistence layer to rehydrate state across
+        restarts. The schema is intentionally flat: a list of alliance
+        dicts and a list of treaty dicts.
+        """
+        return {
+            "schema": 1,
+            "alliances": {aid: a.to_dict() for aid, a in self.alliances.items()},
+            "treaties": {tid: vars(t) for tid, t in self.treaties.items()},
+        }
+
+    def restore(self, payload: Dict[str, Any]) -> None:
+        """Rehydrate the system from a snapshot dict.
+
+        Unknown fields are ignored, missing fields are left at their
+        dataclass defaults, and any malformed row is skipped silently
+        so a single bad record does not poison the whole restore.
+        """
+        if not isinstance(payload, dict):
+            return
+        try:
+            self.alliances = {
+                aid: Alliance(**data)
+                for aid, data in (payload.get("alliances") or {}).items()
+                if isinstance(data, dict)
+            }
+        except Exception:
+            self.alliances = {}
+        try:
+            self.treaties = {
+                tid: Treaty(**data)
+                for tid, data in (payload.get("treaties") or {}).items()
+                if isinstance(data, dict)
+            }
+        except Exception:
+            self.treaties = {}
+        logger.info(
+            "diplomacy.restored alliances=%d treaties=%d",
+            len(self.alliances),
+            len(self.treaties),
+        )
+
+    DiplomacySystem.snapshot = snapshot  # type: ignore[attr-defined]
+    DiplomacySystem.restore = restore  # type: ignore[attr-defined]
+
+
+_attach_persistence_hooks()
+
 # --- Example Usage ---
 if __name__ == "__main__":
     diplomacy = DiplomacySystem()

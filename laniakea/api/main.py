@@ -395,9 +395,35 @@ def read_root() -> Dict[str, Any]:
 
 @app.on_event("startup")
 async def _on_startup() -> None:
-    """Capture service start time so /health can report uptime."""
+    """Capture service start time and rehydrate persisted subsystem state.
+
+    The rehydration step is fail-soft: if the persistence layer is
+    unavailable (e.g. a misconfigured ``DATABASE_URL``) we still serve
+    traffic with empty in-memory state, so a single broken subsystem
+    cannot take the whole API down.
+    """
     import time as _t
     app.state.start_time = _t.time()
+    try:
+        from laniakea.storage.persistence import (
+            rehydrate_all,
+            get_persistence,
+        )
+
+        # Eagerly build the persistence engine + rehydrate BEFORE the
+        # first request arrives, so ``/persistence/status`` is correct
+        # on the very first call.
+        app.state.persistence = get_persistence()
+        rehydrated = rehydrate_all()
+        app.state.rehydrated = rehydrated
+        logger.info(
+            "Laniakea API startup complete (v=%s, rehydrated=%s)",
+            settings.PROJECT_VERSION,
+            rehydrated,
+        )
+    except Exception as exc:  # pragma: no cover - defensive
+        logger.warning("startup.rehydrate.failed err=%s", exc)
+        app.state.rehydrated = {}
     logger.info("Laniakea API startup complete (v%s)", settings.PROJECT_VERSION)
 
 
@@ -411,6 +437,46 @@ def healthcheck() -> Dict[str, Any]:
         "version": settings.PROJECT_VERSION,
         "uptime_seconds": round(_t.time() - start, 3),
         "environment": settings.DEPLOYMENT_ENV,
+    }
+
+
+@app.get("/persistence/status", tags=["Persistence"])
+def persistence_status() -> Dict[str, Any]:
+    """Return a small summary of the persistence layer.
+
+    Useful for smoke tests and external monitors. The ``rehydrated``
+    field is a per-subsystem boolean that indicates what was loaded
+    on boot.
+    """
+    persistence = getattr(app.state, "persistence", None)
+    rehydrated = getattr(app.state, "rehydrated", {}) or {}
+    listed = persistence.list_persisted() if persistence else {}
+    return {
+        "available": bool(persistence and persistence.available),
+        "subsystems": rehydrated,
+        "persisted_rows": listed,
+    }
+
+
+@app.post("/persistence/snapshot", tags=["Persistence"])
+def persistence_snapshot() -> Dict[str, Any]:
+    """Trigger an on-demand snapshot of every registered subsystem.
+
+    Returns the result of every save so an operator (or smoke test) can
+    confirm the persistence path end-to-end. Slow on cold caches but
+    fast on warm ones.
+    """
+    from laniakea.storage.persistence import persist_all
+
+    results = persist_all()
+    return {
+        name: {
+            "ok": r.ok,
+            "bytes": r.bytes_written,
+            "duration_ms": round(r.duration_ms, 2),
+            "error": r.error,
+        }
+        for name, r in results.items()
     }
 
 

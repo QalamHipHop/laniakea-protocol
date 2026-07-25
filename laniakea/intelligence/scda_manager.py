@@ -76,6 +76,15 @@ class ScdaManager:
         with self._lock:
             return [self._state_for(scda) for scda in self._scdas.values()]
 
+    def all_snapshots(self) -> List[Dict[str, Any]]:
+        """Return :func:`to_snapshot` payloads for every SCDA.
+
+        Used by the persistence layer to rehydrate state across
+        restarts without depending on the heavier 8D-vector derivation.
+        """
+        with self._lock:
+            return [scda.to_snapshot() for scda in self._scdas.values()]
+
     def total_complexity(self) -> float:
         with self._lock:
             return sum(s.complexity_index for s in self._scdas.values())
