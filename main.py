@@ -59,6 +59,13 @@ def main() -> None:
             "Supported commands: start, serve, run."
         )
 
+    # Build identifier — bumped each redeploy so Render auto-deploy always
+    # sees a fresh commit (some hooks ignore VERSION-only changes).
+    # 2026-07-25: force-rebuild after live was stuck on 1.0.0-Unified while
+    # main was at 1.0.1-Sovereign (observability/snapshot empty,
+    # observability/prometheus 404 on live).
+    _BUILD_TAG = 'rebuild-2026-07-25-1315'
+
     # Import the FastAPI app lazily so that any import error in our codebase
     # surfaces with a useful traceback before uvicorn swallows it.
     from laniakea.api.main import app  # noqa: WPS433 (intentional late import)
