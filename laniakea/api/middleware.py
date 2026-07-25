@@ -182,6 +182,48 @@ class DeprecationMiddleware(BaseHTTPMiddleware):
         return response
 
 
+# --- Tracing middleware ---------------------------------------------------
+class TracingMiddleware(BaseHTTPMiddleware):
+    """Wrap every HTTP request in a telemetry span.
+
+    The span name is ``http.<METHOD>.<first_path_segment>`` so the
+    resulting time series is stable across request IDs. Errors are
+    recorded on the tracer but the original exception is re-raised
+    so FastAPI's normal error handling keeps working.
+    """
+
+    def __init__(self, app) -> None:  # type: ignore[no-untyped-def]
+        super().__init__(app)
+        # Lazy import keeps ``laniakea.api.middleware`` importable even
+        # if the telemetry module is partially broken at boot.
+        from laniakea.observability.telemetry import get_tracer
+
+        self._tracer = get_tracer()
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        # Derive a stable span name from the route.
+        seg = (request.url.path or "/").strip("/").split("/", 1)[0] or "root"
+        span_name = f"http.{request.method.lower()}.{seg}"
+        request_id = (
+            getattr(request.state, "request_id", None)
+            if hasattr(request, "state")
+            else None
+        )
+        with self._tracer.span(
+            span_name, subsystem="http", request_id=request_id
+        ) as span:
+            span.attributes.update({
+                "http.method": request.method,
+                "http.path": request.url.path,
+                "http.scheme": request.url.scheme,
+            })
+            response = await call_next(request)
+            span.attributes["http.status_code"] = response.status_code
+            if response.status_code >= 500:
+                self._tracer.error("http", span_name)
+            return response
+
+
 # --- Aggregate registry ----------------------------------------------------
 def install_default_middleware(app) -> None:
     """Install the full Laniakea middleware stack on a FastAPI app.
@@ -192,8 +234,20 @@ def install_default_middleware(app) -> None:
     2. Deprecation notices (outer — flag legacy paths).
     3. Rate limiter (early — reject before expensive work).
     4. Request ID (inner — so business handlers can read ``state.request_id``).
+    5. Tracing (innermost — records every request, even if downstream fails).
     """
     app.add_middleware(RequestIDMiddleware)
     app.add_middleware(RateLimitMiddleware)
     app.add_middleware(DeprecationMiddleware)
     app.add_middleware(SecurityHeadersMiddleware)
+    # Tracing is installed last so it wraps everything else. In Starlette
+    # the LAST ``add_middleware`` is the OUTERMOST, so this is the first
+    # to see the request and the last to see the response — exactly what
+    # we want for latency attribution.
+    try:
+        app.add_middleware(TracingMiddleware)
+    except Exception as exc:  # pragma: no cover - defensive
+        import logging
+        logging.getLogger("laniakea.api.middleware").warning(
+            "TracingMiddleware unavailable: %s", exc
+        )

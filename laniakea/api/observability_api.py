@@ -100,7 +100,19 @@ def observability_snapshot() -> Dict[str, Any]:
         "scda": scda_payload,
         "knowledge_market": market_payload,
         "diplomacy": diplomacy_payload,
+        "telemetry": _telemetry_payload(),
     }
+
+
+# --- Telemetry block -------------------------------------------------------
+def _telemetry_payload() -> Dict[str, Any]:
+    """Return the in-process telemetry block for the snapshot."""
+    from laniakea.observability.telemetry import get_tracer
+
+    tracer = get_tracer()
+    snap = tracer.snapshot()
+    snap["recent_spans"] = tracer.recent_spans(limit=20)
+    return snap
 
 
 @router.get(
@@ -170,7 +182,61 @@ def prometheus_metrics() -> Response:
             "",
         ])
 
+    # Telemetry block: total spans + total errors across every metric.
+    from laniakea.observability.telemetry import get_tracer
+
+    tracer = get_tracer()
+    snap = tracer.snapshot()
+    lines.extend([
+        "# HELP laniakea_spans_total Total telemetry spans observed",
+        "# TYPE laniakea_spans_total counter",
+        f"laniakea_spans_total {snap['spans_total']}",
+        "",
+        "# HELP laniakea_errors_total Total telemetry errors observed",
+        "# TYPE laniakea_errors_total counter",
+        f"laniakea_errors_total {snap['errors_total']}",
+        "",
+    ])
+
     return PlainTextResponse(
         content="\n".join(lines),
         media_type="text/plain; version=0.0.4; charset=utf-8",
     )
+
+
+@router.get(
+    "/spans",
+    summary="Recent in-process telemetry spans",
+    response_model=Dict[str, Any],
+)
+def recent_spans(limit: int = 50) -> Dict[str, Any]:
+    """Return the most recent ``limit`` spans from the in-process ring buffer.
+
+    The default of 50 keeps the payload small; the tracer itself keeps
+    up to :data:`Tracer.MAX_SPANS` so a higher ``limit`` value still
+    works up to that bound.
+    """
+    from laniakea.observability.telemetry import get_tracer
+
+    limit = max(1, min(int(limit or 50), 200))
+    return {
+        "limit": limit,
+        "spans": get_tracer().recent_spans(limit=limit),
+    }
+
+
+@router.get(
+    "/metrics",
+    summary="Per-subsystem counter and latency metrics",
+    response_model=Dict[str, Any],
+)
+def metrics() -> Dict[str, Any]:
+    """Return the aggregate counter / latency / error metrics block.
+
+    Each metric is keyed by ``<subsystem>.<name>`` and includes the
+    latency histogram (p50/p95/p99 + bucket counts) so a single
+    endpoint gives an operator everything needed to spot a hot path.
+    """
+    from laniakea.observability.telemetry import get_tracer
+
+    return get_tracer().snapshot()
