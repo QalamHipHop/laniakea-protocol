@@ -14,9 +14,6 @@ from typing import Optional
 import logging
 from datetime import datetime
 
-# Add parent directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
 from laniakea.utils.logger import setup_logger, get_logger
 from laniakea.utils.config import get_config
 from laniakea.core.hypercube_blockchain import HypercubeBlockchain

@@ -3,10 +3,6 @@ LaniakeA Protocol - Complete SCDA System
 Integrates SCDA, KEA, and Dual Validation
 """
 
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
-
 import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime
