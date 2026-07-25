@@ -4,7 +4,7 @@ Handles token creation, verification, and user authentication.
 """
 
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import List, Optional
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer

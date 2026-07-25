@@ -83,7 +83,28 @@ class Config:
     ai: AIConfig = field(default_factory=AIConfig)
     storage: StorageConfig = field(default_factory=StorageConfig)
     logging: LoggingConfig = field(default_factory=LoggingConfig)
-    
+
+    @classmethod
+    def get(cls, key: str, default: Any = None) -> Any:
+        """Backward-compatible classmethod that reads a value from env vars.
+
+        Used by legacy modules (``network/api.py``, ``external_apis/integrations.py``)
+        that pre-date the unified pydantic-settings config. Prefer
+        :data:`laniakea.core.config.settings` for new code.
+        """
+        import os
+        return os.getenv(key, default)
+
+    @classmethod
+    def set(cls, key: str, value: Any) -> None:
+        """Backward-compatible classmethod that sets an env var.
+
+        Used by legacy modules. Prefer mutating
+        :data:`laniakea.core.config.settings` for new code.
+        """
+        import os
+        os.environ[str(key)] = str(value)
+
     @classmethod
     def from_yaml(cls, config_path: str) -> 'Config':
         """Load configuration from YAML file"""
