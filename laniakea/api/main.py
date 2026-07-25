@@ -856,6 +856,36 @@ def knowledge_market_asset(asset_id: str) -> Dict[str, Any]:
         raise HTTPException(status_code=404, detail=str(exc))
 
 
+@app.get("/knowledge_market/types", tags=["Knowledge Market"])
+def knowledge_market_types() -> Dict[str, Any]:
+    """Return canonical knowledge types + supported scientific domains.
+
+    Two catalogues are exposed:
+
+    * ``types`` – the asset-type enum used by :func:`tokenize` to
+      categorise a knowledge asset (e.g. ``Algorithm``, ``Discovery``).
+    * ``domains`` – the 8 canonical scientific domains used by the
+      8D knowledge vector (Physics, Biology, …) – matches the
+      README / white-paper block-equation section.
+    """
+    try:
+        from laniakea.marketplace.knowledge_market import (
+            KnowledgeType,
+            KNOWLEDGE_DOMAINS,
+        )
+    except Exception as exc:  # pragma: no cover - defensive
+        raise HTTPException(
+            status_code=503,
+            detail=f"Knowledge type catalog unavailable: {exc}",
+        )
+    return {
+        "types": [{"name": t.name, "value": t.value} for t in KnowledgeType],
+        "domains": list(KNOWLEDGE_DOMAINS),
+        "type_count": len(list(KnowledgeType)),
+        "domain_count": len(KNOWLEDGE_DOMAINS),
+    }
+
+
 # --- Direct diplomacy endpoints --------------------------------------------
 @app.post("/diplomacy/alliance", tags=["Diplomacy"])
 def diplomacy_create_alliance(req: DiplomacyAllianceRequest) -> Dict[str, Any]:
