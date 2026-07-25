@@ -103,6 +103,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- Laniakea middleware stack (request-id, security headers, rate-limit) -
+try:
+    from laniakea.api.middleware import install_default_middleware
+    install_default_middleware(app)
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("Laniakea middleware stack unavailable: %s", exc)
+
 
 # --- Global exception handler ---------------------------------------------
 @app.exception_handler(Exception)
