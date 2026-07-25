@@ -9,6 +9,7 @@ collaborative governance.
 """
 
 import logging
+import threading
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -212,6 +213,33 @@ class DiplomacySystem:
             if scda_id in alliance.members:
                 return alliance
         return None
+
+
+# --- Singleton accessor ---------------------------------------------------
+_singleton: Optional[DiplomacySystem] = None
+_singleton_lock = threading.Lock()
+
+
+def get_diplomacy_system() -> DiplomacySystem:
+    """Return the process-wide :class:`DiplomacySystem` singleton.
+
+    A lock is used so that under high-concurrency startup (e.g. the
+    FastAPI lifespan context spinning up multiple workers) we never
+    hand out two distinct instances that would diverge on state.
+    """
+    global _singleton
+    if _singleton is None:
+        with _singleton_lock:
+            if _singleton is None:
+                _singleton = DiplomacySystem()
+    return _singleton
+
+
+def reset_diplomacy_system() -> None:
+    """Reset the singleton — used in tests only."""
+    global _singleton
+    with _singleton_lock:
+        _singleton = None
 
 # --- Example Usage ---
 if __name__ == "__main__":

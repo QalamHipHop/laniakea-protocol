@@ -51,9 +51,13 @@ from laniakea.defi.swap import DecentralizedExchange, LiquidityPool  # noqa: E40
 # Diplomacy lives in ``governance.metaverse_diplomacy`` (legacy reference was
 # ``laniakea.diplomacy.core`` which never existed in this repo).
 try:  # pragma: no cover - defensive
-    from laniakea.governance.metaverse_diplomacy import DiplomacySystem
+    from laniakea.governance.metaverse_diplomacy import (
+        DiplomacySystem,
+        get_diplomacy_system,
+    )
 except Exception:  # pragma: no cover
     DiplomacySystem = None  # type: ignore[assignment]
+    get_diplomacy_system = None  # type: ignore[assignment]
     logger.warning("DiplomacySystem unavailable - diplomacy endpoints will be disabled")
 
 # KnowledgeMarket used to live at ``laniakea.knowledge_market.core`` in the
@@ -186,7 +190,7 @@ laniakea_metrics = ProtocolMetrics()
 laniakea_achievements = AchievementSystem()
 laniakea_ai = AIModel("LANA_KE_001")
 laniakea_dex = DecentralizedExchange()
-laniakea_diplomacy = DiplomacySystem() if DiplomacySystem is not None else None
+laniakea_diplomacy = get_diplomacy_system() if get_diplomacy_system is not None else None
 laniakea_knowledge_market = get_knowledge_market() if get_knowledge_market is not None else None
 laniakea_scda_manager = get_scda_manager() if get_scda_manager is not None else None
 
@@ -330,6 +334,13 @@ try:
 except Exception as exc:  # pragma: no cover - defensive
     logger.warning("scda_api router not loaded: %s", exc)
     scda_router = None
+
+try:
+    from laniakea.api.scda_integration_api import router as scda_integration_router
+    app.include_router(scda_integration_router, tags=["SCDA Integration"])
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("scda_integration_api router not loaded: %s", exc)
+    scda_integration_router = None
 
 
 # --- WebSocket Manager (optional, lazy-loaded) ----------------------------
