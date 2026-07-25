@@ -365,6 +365,14 @@ except Exception as exc:  # pragma: no cover - defensive
     logger.warning("breeding_api router not loaded: %s", exc)
     breeding_router = None
 
+# Governance v2 (proposal lifecycle + delegation + treasury)
+try:
+    from laniakea.api.governance_api import router as governance_router
+    app.include_router(governance_router)
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("governance_api router not loaded: %s", exc)
+    governance_router = None
+
 
 # --- WebSocket Manager (optional, lazy-loaded) ----------------------------
 _websocket_manager = None
