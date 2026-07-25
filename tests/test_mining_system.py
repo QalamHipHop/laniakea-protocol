@@ -1,16 +1,28 @@
-import pytest
+"""
+Unit tests for the Scientific Mining System.
+
+The miner class lives at :mod:`laniakea.blockchain.mining_system` and is
+responsible for connecting the 8D blockchain to user activities by
+mining knowledge tokens (KT) for validated scientific problem
+solutions.
+"""
+
+import hashlib
+
 import numpy as np
-from laniakea_protocol.src.blockchain.mining_system import ScientificMiner
+import pytest
+
+from laniakea.blockchain.mining_system import ScientificMiner
+
 
 def test_miner_initialization():
     miner = ScientificMiner()
     assert miner.difficulty_target == 0.0001
     assert miner.kt_base_reward == 10.0
 
+
 def test_calculate_8d_position():
     miner = ScientificMiner()
-    
-    # Test with typical values
     position = miner.calculate_8d_position(
         problem_difficulty=0.7,
         category="Physics",
@@ -18,59 +30,92 @@ def test_calculate_8d_position():
         validation_confidence=0.95,
         user_complexity=0.8,
         time_taken=120.0,
-        impact_factor=0.6,
-        novelty_score=0.5
+        impact_factor=6.0,
+        novelty_score=0.5,
     )
-    
     assert isinstance(position, np.ndarray)
     assert position.shape == (8,)
-    
-    # The function uses a simple linear mapping, so we can check the range
-    # All inputs are roughly between 0 and 1 (except time_taken)
-    # The output should be normalized to a certain range.
-    # Since the exact normalization is not known from the snippet, we check for non-zero values.
-    assert not np.allclose(position, np.zeros(8))
+    # All 8 coordinates should be finite
+    assert np.all(np.isfinite(position))
+    # The category encoding is non-zero for a known category
+    assert position[1] > 0
 
-def test_calculate_knowledge_tokens():
-    miner = ScientificMiner()
-    
-    # Test with high confidence and quality
-    kt_reward = miner.calculate_knowledge_tokens(
-        validation_confidence=0.9,
-        solution_quality=0.8,
-        problem_difficulty=0.7
-    )
-    
-    # The reward should be greater than the base reward (10.0) if factors are high
-    # Formula is: kt_base_reward * (validation_confidence * solution_quality * problem_difficulty) * factor
-    # Since the exact formula is not known, we test for a reasonable range.
-    # Assuming a simple multiplicative factor: 10.0 * 0.9 * 0.8 * 0.7 = 5.04 (This is less than base, which is unexpected)
-    # Let's assume the formula is: kt_base_reward * (1 + (validation_confidence + solution_quality + problem_difficulty) / 3)
-    # 10.0 * (1 + (0.9 + 0.8 + 0.7) / 3) = 10.0 * (1 + 0.8) = 18.0
-    # Since I don't have the implementation, I will test for a positive value.
-    assert kt_reward > 0
-    
-    # Test with low confidence and quality
-    kt_reward_low = miner.calculate_knowledge_tokens(
-        validation_confidence=0.1,
-        solution_quality=0.1,
-        problem_difficulty=0.1
-    )
-    
-    # Reward should be lower than the high case
-    assert kt_reward_low < kt_reward
 
-def test_validate_solution():
+def test_encode_category_known_and_unknown():
     miner = ScientificMiner()
-    
-    # Test with high confidence
-    is_valid_high = miner.validate_solution(validation_confidence=0.99)
-    assert is_valid_high is True
-    
-    # Test with low confidence (below target 0.0001)
-    is_valid_low = miner.validate_solution(validation_confidence=0.00005)
-    assert is_valid_low is False
-    
-    # Test at the boundary
-    is_valid_boundary = miner.validate_solution(validation_confidence=0.0001)
-    assert is_valid_boundary is True
+    # Known categories should be encoded with the expected values
+    assert miner._encode_category("Physics") == 0.1
+    assert miner._encode_category("Mathematics") == 0.2
+    # Unknown categories fall back to a neutral 0.5
+    assert miner._encode_category("Laniakea Cosmology") == 0.5
+
+
+def test_calculate_kt_reward_monotonic():
+    """Higher confidence/quality/difficulty should produce a higher KT reward."""
+    miner = ScientificMiner()
+    problem = {"difficulty": 0.7, "category": "physics", "id": "p1", "title": "t"}
+    solution = {"quality": 0.8, "user_complexity": 1.0, "time_taken": 60.0}
+    high = miner._calculate_kt_reward(
+        problem,
+        solution,
+        {"confidence": 0.9},
+        np.array([0.7, 0.1, 0.8, 0.9, 0.0, 0.0, 0.5, 0.5]),
+    )
+    low = miner._calculate_kt_reward(
+        problem,
+        solution,
+        {"confidence": 0.1},
+        np.array([0.7, 0.1, 0.8, 0.9, 0.0, 0.0, 0.5, 0.5]),
+    )
+    assert high > 0
+    assert low >= 0
+    assert high > low
+
+
+def test_mine_block_produces_valid_block():
+    miner = ScientificMiner()
+    problem = {"difficulty": 0.7, "category": "Physics", "id": "p-1", "title": "T"}
+    solution = {"quality": 0.9, "user_complexity": 1.0, "time_taken": 120.0, "answer": "42"}
+    validation = {"confidence": 0.95}
+    prev_hash = hashlib.sha256(b"genesis").hexdigest()
+
+    block = miner.mine_block(
+        user_id="alice",
+        problem_data=problem,
+        solution_data=solution,
+        validation_result=validation,
+        previous_block_hash=prev_hash,
+    )
+    assert isinstance(block, dict)
+    assert block["data"]["miner_id"] == "alice"
+    assert block["data"]["problem_id"] == "p-1"
+    assert block["previous_hash"] == prev_hash
+    assert "hash" in block
+    assert isinstance(block["position_8d"], list)
+    assert len(block["position_8d"]) == 8
+    # A high-quality solve should mint positive KT
+    assert block["kt_reward"] > 0
+
+
+def test_verify_block_round_trip():
+    miner = ScientificMiner()
+    problem = {"difficulty": 0.5, "category": "Physics", "id": "p-2", "title": "T"}
+    solution = {"quality": 0.7, "user_complexity": 1.0, "time_taken": 60.0, "answer": "x"}
+    validation = {"confidence": 0.8}
+    prev_hash = hashlib.sha256(b"prev").hexdigest()
+
+    previous_block = {
+        "hash": prev_hash,
+        "previous_hash": "",
+        "data": {
+            "miner_id": "genesis",
+            "problem_id": "0",
+            "solution": "genesis",
+            "validation": {"confidence": 1.0},
+            "timestamp": "1970-01-01T00:00:00",
+        },
+        "position_8d": [0.0] * 8,
+    }
+    block = miner.mine_block("bob", problem, solution, validation, prev_hash)
+    # The freshly-mined block should verify against the genesis block
+    assert miner.verify_block(block, previous_block) is True

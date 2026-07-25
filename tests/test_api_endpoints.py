@@ -1,62 +1,100 @@
-import pytest
-from fastapi.testclient import TestClient
-from laniakea.api.main import app # Assuming laniakea is the package name
+"""
+Smoke tests for the LaniakeA Protocol public API.
 
-# Initialize the TestClient
+These tests are intentionally written against the *current* API surface
+so they fail fast if a router is removed or renamed.  They cover the
+most representative endpoints across subsystems.
+"""
+
+from fastapi.testclient import TestClient
+
+from laniakea.api.main import app
+
 client = TestClient(app)
 
-def test_read_main():
-    """Test the root endpoint for basic connectivity and information."""
+
+def test_root_endpoint():
     response = client.get("/")
     assert response.status_code == 200
-    # The root endpoint should return the project title and version
-    assert "title" in response.json()
-    assert "version" in response.json()
-    assert response.json()["title"] == "Laniakea Protocol API" # Assuming a default title
+    body = response.json()
+    assert "message" in body
+    assert "version" in body
+    assert "subsystems" in body
+    assert isinstance(body["subsystems"], dict)
+
 
 def test_health_check():
-    """Test the health check endpoint."""
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "message": "Laniakea Protocol API is operational"}
+    body = response.json()
+    assert body["status"] == "ok"
+    assert "version" in body
+    assert "uptime_seconds" in body
 
-def test_get_protocol_metrics():
-    """Test the endpoint to retrieve protocol metrics."""
-    response = client.get("/metrics")
+
+def test_version_endpoint():
+    response = client.get("/version")
     assert response.status_code == 200
-    data = response.json()
-    assert "total_users" in data
-    assert "total_transactions" in data
-    assert "current_block_height" in data
-    assert isinstance(data["total_users"], int)
+    body = response.json()
+    assert body["protocol_version"] == "1.0.0-Unified"
+    assert body["project_name"] == "Laniakea Protocol"
 
-def test_post_new_transaction():
-    """Test the endpoint to submit a new transaction."""
-    transaction_data = {
-        "sender": "0xSenderAddress",
-        "recipient": "0xRecipientAddress",
-        "amount": 100.5,
-        "data": {"type": "knowledge_transfer"}
-    }
-    response = client.post("/transaction", json=transaction_data)
+
+def test_discovery_endpoint():
+    response = client.get("/discovery")
     assert response.status_code == 200
-    assert "message" in response.json()
-    assert "transaction_id" in response.json()
+    body = response.json()
+    assert isinstance(body, dict)
 
-def test_get_block_by_height():
-    """Test retrieving a block by its height."""
-    # Assuming block 1 exists
-    response = client.get("/blockchain/block/1")
+
+def test_blockchain_info():
+    response = client.get("/blockchain/info")
     assert response.status_code == 200
-    data = response.json()
-    assert data["index"] == 1
-    assert "transactions" in data
+    body = response.json()
+    # Should expose something about the chain (height, difficulty, etc.)
+    assert isinstance(body, dict)
 
-    # Test non-existent block
-    response_404 = client.get("/blockchain/block/999999")
-    assert response_404.status_code == 404
-    assert "detail" in response_404.json()
 
-# Note: The actual implementation of the API endpoints in laniakea/api/main.py
-# is not fully known, so these tests are based on common API patterns
-# and the imports seen in the snippet. They serve as a good starting point.
+def test_token_info():
+    response = client.get("/token/info")
+    assert response.status_code == 200
+    body = response.json()
+    assert isinstance(body, dict)
+
+
+def test_knowledge_market_types():
+    response = client.get("/knowledge_market/types")
+    assert response.status_code == 200
+    body = response.json()
+    assert "types" in body and isinstance(body["types"], list)
+    assert "domains" in body and isinstance(body["domains"], list)
+    assert body["type_count"] == len(body["types"])
+    assert body["domain_count"] == len(body["domains"])
+
+
+def test_diplomacy_alliances():
+    response = client.get("/diplomacy/alliances")
+    assert response.status_code == 200
+    body = response.json()
+    assert isinstance(body, (list, dict))
+
+
+def test_core_status():
+    response = client.get("/core/status")
+    assert response.status_code == 200
+    body = response.json()
+    assert isinstance(body, dict)
+
+
+def test_dashboard_metrics():
+    response = client.get("/dashboard/metrics")
+    assert response.status_code == 200
+    body = response.json()
+    assert isinstance(body, dict)
+
+
+def test_observability_requests():
+    response = client.get("/observability/requests")
+    assert response.status_code == 200
+    body = response.json()
+    assert isinstance(body, dict)
