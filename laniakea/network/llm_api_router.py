@@ -25,6 +25,7 @@ class LLMGenerateRequest(BaseModel):
     hard_problem_context: Optional[Dict[str, Any]] = Field(None, description="Contextual data for fine-tuning/in-context learning for a 'Hard Problem'.")
 
 class LLMGenerateResponse(BaseModel):
+    model_config = {"protected_namespaces": ()}
     generated_text: str
     model_used: str
     timestamp: str
@@ -37,6 +38,7 @@ class LLMValidateRequest(BaseModel):
     hard_problem_context: Optional[Dict[str, Any]] = Field(None, description="Contextual data for fine-tuning/in-context learning for a 'Hard Problem'.")
 
 class LLMValidateResponse(BaseModel):
+    model_config = {"protected_namespaces": ()}
     is_valid: bool
     score: float = Field(..., description="A numerical score (0.0 to 1.0) representing the confidence of validity.")
     reasoning: str = Field(..., description="Detailed reasoning for the validation decision and score.")

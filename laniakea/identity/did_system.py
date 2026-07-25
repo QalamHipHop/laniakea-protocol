@@ -6,7 +6,7 @@ Laniakea Protocol - Decentralized Identity System
 import hashlib
 import json
 from time import time
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Set, Tuple
 from enum import Enum
 from pydantic import BaseModel, Field
 from cryptography.hazmat.primitives.asymmetric import ec
