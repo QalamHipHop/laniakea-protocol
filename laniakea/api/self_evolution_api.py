@@ -132,6 +132,12 @@ def _read_evolution_log(limit: int = 10) -> List[Dict[str, Any]]:
     The on-disk format is a JSON array of reports; each report may itself
     contain ``suggestions`` and ``applied_improvements``. We flatten the
     newest entries so the API consumer sees a chronological list.
+
+    Robustness: the historical ``evolve()`` writer had a bug where it
+    produced ``[[[[[..`` (multiple open-brackets without separators) and
+    could write a trailing ``]`` past EOF, leaving a parse-broken file.
+    We try ``json.loads`` first, and on failure fall back to
+    :func:`_rescue_evolution_log` which glues the entries back together.
     """
     p = _evolution_log_path()
     if not p.exists():
@@ -140,11 +146,54 @@ def _read_evolution_log(limit: int = 10) -> List[Dict[str, Any]]:
         with p.open("r", encoding="utf-8") as f:
             data = json.load(f)
     except (OSError, json.JSONDecodeError) as exc:
-        logger.warning("Could not read evolution_log.json: %s", exc)
-        return []
+        logger.warning("evolution_log.json malformed (%s); attempting rescue", exc)
+        data = _rescue_evolution_log(p)
     if not isinstance(data, list):
         return []
     return data[-limit:]
+
+
+def _rescue_evolution_log(path: Path) -> List[Dict[str, Any]]:
+    """Best-effort recovery of a malformed ``evolution_log.json``.
+
+    The historical writer produced ``[[[[[..`` by writing ``[\n`` then
+    prepending old content with ``+",\n"`` without first stripping the
+    trailing ``]`` of the old file. We strip any run of leading ``[`` and
+    any run of trailing ``]`` to recover a flat JSON object stream and
+    then extract every top-level object via :mod:`json.JSONDecoder.raw_decode`.
+    """
+    try:
+        raw = path.read_text(encoding="utf-8")
+    except OSError:
+        return []
+    # Strip leading bracket-run
+    start = 0
+    while start < len(raw) and raw[start] in "[ \t\r\n":
+        start += 1
+    # Strip trailing bracket-run
+    end = len(raw)
+    while end > start and raw[end - 1] in "] \t\r\n":
+        end -= 1
+    body = raw[start:end]
+    decoder = json.JSONDecoder()
+    out: List[Dict[str, Any]] = []
+    idx = 0
+    while idx < len(body):
+        # Skip whitespace and commas between objects
+        while idx < len(body) and body[idx] in " \t\r\n,":
+            idx += 1
+        if idx >= len(body):
+            break
+        try:
+            obj, offset = decoder.raw_decode(body, idx)
+        except json.JSONDecodeError:
+            break
+        if isinstance(obj, dict):
+            out.append(obj)
+        idx = offset
+    if out:
+        logger.info("Rescued %d entries from malformed evolution_log.json", len(out))
+    return out
 
 
 def _backup_file(path: Path) -> Path:
