@@ -17,7 +17,14 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional, Union
 from pathlib import Path
 import aiohttp
-from openai import OpenAI
+
+try:
+    from openai import OpenAI
+    _OPENAI_AVAILABLE = True
+except ImportError:  # pragma: no cover - optional dependency
+    OpenAI = None  # type: ignore[assignment]
+    _OPENAI_AVAILABLE = False
+
 from laniakea.core.standards import (
     LaniakeaLogger, secure_exception_handler, validate_input,
     sanitize_string, PerformanceMonitor, GLOBAL_SECURITY_CONFIG
@@ -297,8 +304,12 @@ class AutonomousAI:
 
         # راه‌اندازی LLM client
         try:
-            self.llm_client = OpenAI()
-            print("✅ LLM Client راه‌اندازی شد")
+            if OpenAI is None:
+                self.llm_client = None
+                print("ℹ️ LLM Client غیرفعال است (openai نصب نیست).")
+            else:
+                self.llm_client = OpenAI()
+                print("✅ LLM Client راه‌اندازی شد")
         except Exception as e:
             print(f"⚠️ خطا در راه‌اندازی LLM: {e}")
 

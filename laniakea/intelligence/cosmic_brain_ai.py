@@ -40,7 +40,12 @@ from enum import Enum
 import os
 from pathlib import Path
 import aiohttp
-from openai import OpenAI
+try:
+    from openai import OpenAI
+    _OPENAI_AVAILABLE = True
+except ImportError:  # pragma: no cover - optional dependency
+    OpenAI = None  # type: ignore[assignment]
+    _OPENAI_AVAILABLE = False
 
 from laniakea.core.standards import LaniakeaLogger, PerformanceMonitor
 
@@ -285,8 +290,11 @@ class CosmicBrainAI:
         
         # API connections
         self.openai_client = None
-        if openai_api_key:
+        if openai_api_key and OpenAI is not None:
             self.openai_client = OpenAI(api_key=openai_api_key)
+        elif openai_api_key and OpenAI is None:
+            self.logger = self.logger or logger
+            print("ℹ️ openai package not installed - openai_client disabled.")
         
         # state variables
         self.current_thoughts: List[Thought] = []

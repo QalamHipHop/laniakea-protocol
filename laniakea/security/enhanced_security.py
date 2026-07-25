@@ -21,7 +21,14 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 import json
-import jwt
+
+try:
+    import jwt
+    _JWT_AVAILABLE = True
+except ImportError:  # pragma: no cover - optional dependency
+    jwt = None  # type: ignore[assignment]
+    _JWT_AVAILABLE = False
+
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -232,6 +239,10 @@ class EnhancedSecurityManager:
         try:
             validate_input({"user_id": user_id}, ["user_id"])
             
+            if jwt is None:
+                self.logger.warning("PyJWT not installed - cannot generate JWT token.")
+                return None
+
             payload = {
                 "user_id": user_id,
                 "exp": datetime.utcnow() + timedelta(seconds=expires_in),
@@ -239,7 +250,7 @@ class EnhancedSecurityManager:
                 "iss": "laniakea-protocol",
                 "security_level": self.security_level.value
             }
-            
+
             token = jwt.encode(payload, self.jwt_secret, algorithm=self.jwt_algorithm)
             
             # ذخیره توکن فعال
@@ -260,11 +271,15 @@ class EnhancedSecurityManager:
     def verify_jwt_token(self, token: str) -> Optional[Dict[str, Any]]:
         """تأیید توکن JWT"""
         try:
+            if jwt is None:
+                self.logger.warning("PyJWT not installed - cannot verify JWT token.")
+                return None
+
             # بررسی توکن در لیست فعال‌ها
             if token not in self.active_tokens:
                 self.logger.warning("Token not found in active tokens")
                 return None
-            
+
             # تأیید امضا و انقضا
             payload = jwt.decode(
                 token,

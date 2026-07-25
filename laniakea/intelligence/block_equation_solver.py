@@ -12,7 +12,13 @@ import logging
 import os
 import json
 from typing import Dict, List, Any, Tuple, Optional
-from openai import OpenAI
+
+try:
+    from openai import OpenAI
+    _OPENAI_AVAILABLE = True
+except ImportError:  # pragma: no cover - optional dependency
+    OpenAI = None  # type: ignore[assignment]
+    _OPENAI_AVAILABLE = False
 from pydantic import BaseModel, Field
 import numpy as np
 from datetime import datetime
@@ -24,9 +30,14 @@ logger = logging.getLogger(__name__)
 # --- LLM Setup ---
 # The client is configured to use the pre-configured API key and base URL
 try:
-    client = OpenAI()
-    LLM_MODEL = "gemini-2.5-flash" # Using a fast and capable model
-    logger.info(f"OpenAI client initialized for model: {LLM_MODEL}")
+    if OpenAI is None:
+        client = None
+        LLM_MODEL = "unavailable"
+        logger.warning("OpenAI client not available - the optional 'openai' package is not installed.")
+    else:
+        client = OpenAI()
+        LLM_MODEL = "gemini-2.5-flash" # Using a fast and capable model
+        logger.info(f"OpenAI client initialized for model: {LLM_MODEL}")
 except Exception as e:
     logger.error(f"Failed to initialize OpenAI client: {e}")
     client = None
