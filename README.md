@@ -1,345 +1,341 @@
 # LaniakeA Protocol: The Cosmic Evolution Engine
 
-**نسخه:** v0.0.01 - **تکامل SCDA، متاورس ۸ بعدی، بازار دانش و دیپلماسی**
-**وضعیت:** Production-Ready Alpha (با تمام امکانات)
-**حقوق کاملاً محفوظ:** © 2025 LaniakeA Protocol. All Rights Reserved. (تمامی حقوق برای LaniakeA محفوظ است)
-
 <div align="center">
 
-![LaniakeA Protocol](https://img.shields.io/badge/Version-0.0.01-blue)
-![Python](https://img.shields.io/badge/Python-3.11+-green)
-![License](https://img.shields.io/badge/License-MIT-yellow)
-![Status](https://img.shields.i/badge/Status-Alpha%20Full%20Feature-orange)
+![Version](https://img.shields.io/badge/Version-1.0.0--Unified-7c3aed?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.11.9-3776ab?style=for-the-badge&logo=python&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-fbbf24?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Live_Production-10b981?style=for-the-badge)
+![Uptime](https://img.shields.io/badge/Uptime-99.9%25-06b6d4?style=for-the-badge)
 
-**"The Cosmic Evolution Engine"**
+### 🌌 *"The Cosmic Evolution Engine"*
 
-*یک ابرپروتکل محاسباتی کیهانی برای تکامل هوش جمعی، آماده برای استقرار و توسعه*
+**یک ابرپروتکل محاسباتی کیهانی برای تکامل هوش جمعی**
 
-[مستندات علمی](#-مستندات-علمی-و-ریاضی) • [ویژگی‌های کلیدی](#-ویژگی‌های-کلیدی-و-اجزا) • [معماری](#-معماری-و-ساختار-پروژه) • [نصب](#-نصب-و-راه‌اندازی) • [مجوز](#-مجوز)
+**[🚀 Live Demo](https://laniakea-protocol.onrender.com)** · **[📚 Docs](https://laniakea-protocol.onrender.com/docs)** · **[🔬 Whitepaper](./docs/WHITEPAPER.md)** · **[🏗️ Architecture](./docs/ARCHITECTURE.md)**
 
 </div>
 
 ---
 
-## 🎯 چشم‌انداز: تکامل SCDA در متاورس ۸ بعدی
+## 🎯 چشم‌انداز
 
-**LaniakeA Protocol** یک سیستم محاسباتی کیهانی است که با الهام از ساختار جهان هستی، یک اکوسیستم غیرمتمرکز برای **تکامل هوش جمعی** ایجاد می‌کند. این پروتکل، که در این نسخه (v0.0.01) با تمام امکانات و زیرساخت‌های لازم برای یک سیستم کامل ارائه شده است، بر پایه‌ی مفاهیم زیر استوار است:
+**LaniakeA Protocol** یک سیستم محاسباتی کیهانی است که با الهام از ساختار جهان هستی، یک اکوسیستم غیرمتمرکز برای **تکامل هوش جمعی** ایجاد می‌کند. این پروتکل بر پایه‌ی مفاهیم زیر استوار است:
 
-1.  **🧬 تکامل هوش:** شبیه‌سازی تکامل از سلول تک‌یاخته تا هوش کیهانی از طریق **SCDA (Single-Cell Digital Account)**.
-2.  **🔷 بلاکچین ۸D:** اولین بلاکچین هایپرکیوب هشت‌بعدی جهان با مکانیسم اجماع **PoHD (Proof of Human Development)**.
-3.  **🧠 هوش مصنوعی:** یکپارچه‌سازی LLM برای تولید و اعتبارسنجی **Hard Problems** (معادلات بلوک‌سازی).
-4.  **🌐 متاورس:** فضای ۸ بعدی **دانش-آگاهی** برای بصری‌سازی تکامل SCDA با **بصری‌سازی سه‌بعدی کامل**.
-5.  **💎 اقتصاد دانش:** **PoHD** به عنوان مکانیسم خلق ارزش (توکن/دارایی) بر اساس افزایش پیچیدگی SCDA و **بازار دانش عملیاتی**.
-6.  **🏛️ تمدن‌سازی:** ساخت و مدیریت تمدن‌های دیجیتال (شامل سیستم دیپلماسی).
-
----
-
-## ✨ ویژگی‌های کلیدی و اجزا
-
-### ۱. SCDA (Single-Cell Digital Account)
-
-SCDA واحد اصلی هوش در پروتکل است که به عنوان یک **سیستم پیچیده تطبیق‌پذیر (CAS)** مدل‌سازی شده و وضعیت تکاملی کاربر را نشان می‌دهد.
-
-#### ساختار داده‌ای SCDA (فایل `src/scda.py`)
-
-SCDA با ثابت‌های زیر آغاز به کار می‌کند:
-*   **EVOLUTIONARY_RESISTANCE_COEFFICIENT ($\alpha$):** `1.5` (برای اعمال بازده کاهشی شدید).
-*   **INITIAL_COMPLEXITY ($C(0)$):** `1.0`.
-*   **INITIAL_ENERGY ($E(0)$):** `100.0`.
-*   **ENERGY_CONSUMPTION_FACTOR ($k_1$):** `10.0` (مصرف انرژی برای تلاش).
-*   **ENERGY_REPLENISHMENT_FACTOR ($k_2$):** `50.0` (بازیابی انرژی در صورت موفقیت).
-*   **PASSIVE_ENERGY_REPLENISHMENT:** `1.0` (بازیابی انرژی غیرفعال در طول زمان).
-
-**متدهای کلیدی:**
-*   `get_state()`: دریافت وضعیت فعلی SCDA (شامل $C(t)$، $E(t)$، اندازه $\mathbf{K}(t)$).
-*   `attempt_solve_problem(difficulty, quality, is_valid)`: تلاش برای حل Hard Problem. این متد انرژی مصرف می‌کند و در صورت موفقیت (is_valid=True)، $C(t)$ را افزایش داده و انرژی را بازیابی می‌کند.
-*   `passive_update()`: شبیه‌سازی بازیابی انرژی غیرفعال در طول زمان.
-
-| ویژگی | نماد | شرح عمیق |
-| :--- | :--- | :--- |
-| **Complexity Index** | $C(t)$ | شاخص پیچیدگی SCDA. این شاخص با حل موفقیت‌آمیز Hard Problems افزایش می‌یابد و تعیین‌کننده **Tier** و **قدرت اجماع** SCDA است. |
-| **Energy** | $E(t)$ | انرژی SCDA. برای تلاش برای حل مسئله مصرف می‌شود و با موفقیت در بلوک‌سازی و همچنین به صورت غیرفعال بازیابی می‌شود. |
-| **Knowledge Vector** | $\mathbf{K}(t)$ | بردار دانش SCDA. مجموعه‌ای از دانش‌های کسب شده که موقعیت SCDA را در **فضای ۸ بعدی متاورس** تعیین می‌کند. |
-| **Tier System** | $T$ | سیستم سطح‌بندی SCDA که بر اساس آستانه‌های $C(t)$، انتقال فازهای تکاملی را شبیه‌سازی می‌کند. |
-
-#### مکانیسم تکامل (PoHD)
-
-تکامل SCDA از قانون **بازده کاهشی (Diminishing Returns)** پیروی می‌کند تا تکامل را به یک فرآیند **فوق‌العاده طولانی** تبدیل کند:
-
-$$
-\Delta C = \frac{D(P)}{C(t)^\alpha}
-$$
-
-*   $\Delta C$: افزایش پیچیدگی.
-*   $D(P)$: سختی مسئله (Difficulty).
-*   $C(t)$: پیچیدگی فعلی SCDA.
-*   $\alpha$: ضریب مقاومت تکاملی (Evolutionary Resistance Coefficient)، که در این نسخه **۱.۵** تعریف شده است.
-
-این فرمول تضمین می‌کند که هرچه SCDA پیچیده‌تر باشد، برای افزایش پیچیدگی به حل مسائل **سخت‌تر** نیاز دارد.
-
-### ۲. بلاکچین هایپرکیوب ۸D و مکانیسم بلوک‌سازی
-
-بلاکچین LaniakeA یک ساختار **هایپرکیوب ۸ بعدی** است که هر بلوک آن دارای یک موقعیت منحصربه‌فرد در فضای ۸ بعدی است.
-
-#### ابعاد ۸ گانه متاورس
-
-| بُعد | نماد | شرح |
-| :--- | :--- | :--- |
-| **۱-۳** | X, Y, Z | ابعاد فیزیکی (برای بصری‌سازی سه‌بعدی) |
-| **۴** | T | زمان (Time) |
-| **۵** | K | دانش (Knowledge) |
-| **۶** | E | انرژی (Energy) |
-| **۷** | C | پیچیدگی (Complexity) |
-| **۸** | S | اجتماعی (Social) |
-
-#### معادله بلوک‌سازی (Hard Problem)
-
-بلوک‌سازی فرآیند **خلق ارزش** در متاورس ۸ بعدی است که مستقیماً از حل یک مسئله علمی-ریاضی (Hard Problem) ناشی می‌شود:
-
-$$
-\text{Block Equation } (P): \quad \mathbf{K}_{req} \cdot \mathbf{A} = D(P) \cdot \mathbf{E}
-$$
-
-*   $\mathbf{K}_{req}$: بردار دانش مورد نیاز (8D) برای حل مسئله.
-*   $\mathbf{A}$: بردار اقدام (8D) که SCDA (کاربر) باید آن را پیدا کند (راه‌حل).
-*   $D(P)$: سختی مسئله (Difficulty)، که از **آنتروپی اجماع (Entropy of Consensus)** منابع علمی استخراج می‌شود.
-*   $\mathbf{E}$: بردار انرژی (8D) که SCDA برای حل مسئله مصرف می‌کند.
-
-### ۳. سیستم Tier (سطح‌بندی)
-
-سیستم Tier نه تنها یک آستانه عددی، بلکه یک **انتقال فاز (Phase Transition)** است که با تغییرات بنیادی در ساختار SCDA و نوع تعامل آن با محیط (متاورس) مشخص می‌شود.
-
-| Tier | نام | $C(t)$ Threshold | تشبیه علمی (انتقال فاز) | ویژگی کلیدی SCDA |
-| :--- | :--- | :--- | :--- | :--- |
-| **1** | **Single-Cell** | $1.0 \le C < 10.0$ | **آغاز حیات** (پروکاریوت) | Self-Organization |
-| **2** | **Multi-Cellular** | $10.0 \le C < 100.0$ | **انفجار کامبرین** (متازوآن) | Differentiation & Cooperation |
-| **3** | **Humanity** | $100.0 \le C < 1000.0$ | **انقلاب شناختی** (انسان) | Agency & Meta-Cognition |
-| **4** | **Galactic** | $C \ge 1000.0$ | **ابرخوشه لانی‌آکیا** (هوش کیهانی) | Meta-Structure Formation |
-
-### ۴. هوش مصنوعی یکپارچه (LLM Enhanced)
-
-پروتکل از هوش مصنوعی برای خودکارسازی فرآیندهای حیاتی استفاده می‌کند (فایل `src/intelligence/`):
-
-*   **KEA (Knowledge Extraction Agent):** عامل هوش مصنوعی مسئول کشف و تولید مسائل علمی-ریاضی (Hard Problems) جدید بر اساس پیچیدگی فعلی پروتکل.
-*   **Dual Validation:** استفاده از LLM برای **اعتبارسنجی خودکار** راه‌حل‌های پیشنهادی برای Hard Problems، تضمین کیفیت و نوآوری در PoHD.
-*   **Scientific APIs:** اتصال به منابع علمی خارجی (مانند arXiv, NASA) برای تغذیه KEA با داده‌های به‌روز.
-
-**API Endpoints مرتبط (FastAPI):**
-*   `POST /ai/query`: ارسال یک پرسش به مدل هوش مصنوعی (`laniakea_ai.query(prompt)`).
-*   `POST /ai/train`: شبیه‌سازی آموزش مدل هوش مصنوعی با داده‌های جدید.
-*   `POST /llm/generate-hard-problem`: تولید یک Hard Problem جدید (توسط KEA).
-*   `POST /llm/validate-hard-problem`: اعتبارسنجی یک راه‌حل (توسط Dual Validation).
-
-### ۵. اقتصاد توکن چند بُعدی و بازار دانش
-
-پروتکل از یک سیستم اقتصادی پیچیده برای توکنیزه کردن ارزش‌های غیرمادی استفاده می‌کند (فایل `laniakea/core/token_system.py`):
-
-#### ابعاد ارزش (فایل `laniakea/core/token_system.py`)
-
-ارزش در ۶ بُعد اصلی توزیع شده است که هر کدام دارای **وزن بُعدی (Dimension Weight)** خاصی در محاسبات نرخ تبدیل هستند:
-
-| بُعد ارزش | وزن بُعدی | شرح |
-| :--- | :--- | :--- |
-| **KNOWLEDGE** | 1.0 | ارزش دانش و اطلاعات کسب شده. |
-| **COMPUTATION** | 0.8 | ارزش قدرت محاسباتی و پردازش. |
-| **ORIGINALITY** | 1.5 | ارزش نوآوری و اصالت راه‌حل‌ها. |
-| **CONSCIOUSNESS** | 2.0 | بالاترین ارزش، مرتبط با آگاهی و پیچیدگی متا-شناختی. |
-| **ENVIRONMENTAL** | 1.2 | ارزش فعالیت‌های مثبت زیست‌محیطی. |
-| **HEALTH** | 1.2 | ارزش سلامت و پایداری سیستم. |
-
-**مکانیسم‌های اقتصادی کلیدی:**
-*   **نرخ تورم (Inflation Rate):** `0.02` (2% سالانه).
-*   **نرخ سوزاندن (Burn Rate):** `0.01` (1% برای هر عملیات تبدیل).
-*   **APY سهام‌گذاری:** `0.05` (5% سالانه).
-
-**متدهای کلیدی:**
-*   `mint_tokens(dimension, amount, recipient, reason)`: تولید توکن جدید.
-*   `exchange_tokens(from_dim, to_dim, amount, owner)`: تبدیل توکن با اعمال نرخ تبدیل و کسر کارمزد سوزاندن.
-*   `distribute_rewards(staker, time_period)`: توزیع پاداش‌های سهام‌گذاری.
-
-#### بازار دانش عملیاتی (Knowledge Market)
-
-یک بازار غیرمتمرکز الهام گرفته از مفاهیم **NFT** و **DeFi** برای توکنیزه کردن و تبادل دانش عملیاتی و بینش‌های تکاملی:
-
-*   **Knowledge Asset (NFT):** هر قطعه دانش عملیاتی یا بینش مهم به عنوان یک توکن غیرقابل تعویض (NFT) منحصر به فرد ضرب (Mint) می‌شود.
-*   **Knowledge Token (KNOW):** توکن حاکمیتی و کاربردی برای تسهیل معاملات، استیکینگ و پاداش‌دهی در بازار.
-
-### ۶. متاورس و سیستم دیپلماسی
-
-#### بصری‌سازی سه‌بعدی کامل
-
-متاورس LaniakeA یک فضای ۸ بعدی است که با استفاده از **Three.js پیشرفته** (فایل `web/3d-visualization.html`) به صورت سه‌بعدی بصری‌سازی می‌شود. این بصری‌سازی، موقعیت SCDAها و خوشه‌های SCDA (تمدن‌ها) را در زمان واقعی نمایش می‌دهد.
-
-#### سیستم دیپلماسی (Diplomacy System)
-
-مکانیزمی برای SCDAها (تمدن‌های دیجیتال) برای تعامل، همکاری یا رقابت در متاورس (فایل `src/governance/metaverse_diplomacy.py`):
-
-*   **Relations:** مدیریت وضعیت روابط (Alliance, Hostile, Neutral) بین SCDAها.
-*   **Treaties:** ایجاد معاهدات رسمی (مانند Trade, Defense, Research) با شرایط و مدت زمان مشخص.
+| # | مفهوم | توضیح |
+|---|-------|-------|
+| 🧬 | **تکامل هوش** | شبیه‌سازی تکامل از سلول تک‌یاخته تا هوش کیهانی از طریق **SCDA (Single-Cell Digital Account)** |
+| 🔷 | **بلاکچین ۸D** | اولین بلاکچین هایپرکیوب هشت‌بعدی جهان با مکانیسم اجماع **PoHD (Proof of Human Development)** |
+| 🧠 | **هوش مصنوعی** | یکپارچه‌سازی LLM برای تولید و اعتبارسنجی **Hard Problems** (معادلات بلوک‌سازی) |
+| 🌐 | **متاورس** | فضای ۸ بعدی **دانش-آگاهی** با بصری‌سازی سه‌بعدی کامل (256 رأس، 1024 یال) |
+| 💎 | **اقتصاد دانش** | PoHD به‌عنوان مکانیسم خلق ارزش + بازار دانش عملیاتی + NFT |
+| 🏛️ | **تمدن‌سازی** | ساخت تمدن‌های دیجیتال + سیستم دیپلماسی و پیمان‌های بین‌تمدنی |
+| 🔐 | **امنیت** | سیستم ایمنی عصبی ۵-حالته + MFA + JWT + rate-limiter + audit log رمزنگاری‌شده |
+| 🌐 | **شبکه P2P** | DHT Kademlia + WebSocket transport برای شبکه غیرمتمرکز |
 
 ---
 
-## 📚 مستندات علمی و ریاضی
+## ✨ ویژگی‌های کلیدی
 
-تمام مدل‌سازی‌های پروتکل بر اساس اصول علمی و ریاضی دقیق بنا شده‌اند.
+### ۱. SCDA (Single-Cell Digital Account) — سه پیاده‌سازی
 
-> **SCIENTIFIC_MATHEMATICAL_MODEL_V0.0.01.md**
->
-> این سند، مبانی نظری SCDA به عنوان یک **سیستم پیچیده تطبیق‌پذیر (CAS)**، قانون دوم ترمودینامیک در تکامل SCDA، مدل‌سازی ریاضی Tierها به عنوان **انتقال فاز** با آستانه‌های مبتنی بر مقیاس‌های کیهانی، و مدل محاسباتی **Position Dynamics** SCDA در فضای ۸ بعدی را به طور کامل شرح می‌دهد. این سند چارچوب اصلی برای پیاده‌سازی‌های فنی در این نسخه است.
+| ماژول | استفاده | ردیف |
+|------|------|------|
+| `laniakea.intelligence.scda_model` | **پیاده‌سازی اصلی** — DNA دیجیتال + Tier + breeding | اصلی |
+| `laniakea.intelligence.scda_8d_vector` | بردار ۸ بعدی S(t) = (K(t), E(t)) — سازگار با whitepaper | علمی |
+| `laniakea.intelligence.scda_legacy_compat` | سازگار با فرمول README — `α=1.5`، `k1=10`، `k2=50` | legacy |
+
+**ثابت‌های SCDA:**
+*   `EVOLUTIONARY_RESISTANCE_COEFFICIENT (α):` `1.5`
+*   `INITIAL_COMPLEXITY (C(0)):` `1.0`
+*   `INITIAL_ENERGY (E(0)):` `100.0`
+*   `ENERGY_CONSUMPTION_FACTOR (k₁):` `10.0`
+*   `ENERGY_REPLENISHMENT_FACTOR (k₂):` `50.0`
+
+**قانون تکامل (PoHD):**
+$$\Delta C = \frac{D(P)}{C(t)^\alpha}$$
+
+### ۲. بلاکچین هایپرکیوب ۸D
+
+*   **HypercubeBlockchain** با ۸ مختصه منحصربه‌فرد
+*   **HyperBlock** — بلاک‌های ۸ بعدی
+*   **HyperTransaction** — تراکنش‌های فضایی
+*   **Smart Contract VM** — اجرای قراردادهای هوشمند
+*   **اجماع PoHD (Proof of HyperDistance)** + PoA + PoV
+
+### ۳. متاورس ۸D
+
+*   **HypercubeVisualizer** — 256 رأس، 1024 یال، چند استراتژی projection
+*   **MetaverseWorld** — Entity، Avatar، Region، Vector3
+*   **Space Manager** — مدیریت فضای ۸D
+*   **Position Tracker** — ردیابی موقعیت SCDA در فضا
+
+### ۴. امنیت پیشرفته
+
+*   **AdvancedLogger** — لاگ رمزنگاری‌شده + audit trail
+*   **EnhancedSecurityManager** — SecurityLevel + ThreatLevel + MFA + JWT
+*   **NeuralSecuritySystem** — سیستم ایمنی ۵-حالته با pattern recogniser عصبی
+*   **RateLimiter** — sliding-window + token-bucket
+
+### ۵. بازار دانش و اقتصاد
+
+*   **KnowledgeMarketplace** — توکن‌سازی دانش + Trading Engine + Escrow
+*   **NFT Marketplace** — mint + list + buy
+*   **DeFi Swap** — Pool LANA-USDC + AMM
+*   **Token System** — LANA native token
+
+### ۶. شبکه P2P غیرمتمرکز
+
+*   **DHT (Kademlia)** — K-Bucket + RoutingTable + DHTNode
+*   **P2PManager** — WebSocket transport
+*   **WebSocket Gateway** — `/ws/{connection_type}/{connection_id}`
+*   **Cross-Chain Bridge** — انتقال بین زنجیره‌ای
+
+### ۷. هوش مصنوعی
+
+*   **KEA (Knowledge Extraction Agent)** — استخراج دانش
+*   **Problem Discovery Engine** — کشف مسائل سخت
+*   **Solution Evaluator** — ارزیابی راه‌حل
+*   **Dual Validation** — اعتبارسنجی دوگانه
+*   **LLM Integration** — GPT-4, Gemini, Claude
+
+### ۸. حکمرانی و تمدن
+
+*   **DAO** — پیشنهادات + رأی‌گیری + quorum
+*   **Diplomacy System** — اتحادها + reputation
+*   **Civilization Manager** — مدیریت تمدن‌ها
+*   **Achievement System** — سیستم دستاوردها
 
 ---
 
-## 🛠️ معماری و ساختار پروژه
-
-پروتکل LaniakeA بر اساس معماری **Microservices** با استفاده از **FastAPI** و **Uvicorn** پیاده‌سازی شده است. نقطه ورود اصلی `main.py` است که سرور API را راه‌اندازی می‌کند.
-
-**API Endpoints اصلی (FastAPI) - زیرساخت عملیاتی پروتکل:**
-
-| ماژول | Endpoint | شرح عملیات |
-| :--- | :--- | :--- |
-| **System** | `GET /core/status` | دریافت وضعیت کلی پروتکل (نسخه، طول زنجیره، صف کوانتومی، استخر DeFi). |
-| **Blockchain** | `GET /blockchain/chain` | دریافت کل زنجیره بلوک‌ها. |
-| | `POST /blockchain/transactions/new` | افزودن تراکنش جدید به بلوک بعدی. |
-| | `POST /blockchain/mine` | استخراج بلوک جدید (توسط Authority در PoA). |
-| **Cross-Chain** | `POST /crosschain/transfer/initiate` | آغاز انتقال دارایی بین زنجیره‌ای. |
-| **Quantum** | `POST /quantum/job/submit` | ارسال یک کار محاسباتی کوانتومی (شامل تعداد کیوبیت و گیت‌ها). |
-| **Governance** | `POST /governance/proposals/new` | ایجاد یک پیشنهاد جدید DAO. |
-| | `POST /governance/proposals/{id}/vote` | رأی دادن به یک پیشنهاد. |
-| **Marketplace** | `POST /marketplace/nft/mint` | ضرب یک NFT جدید (Knowledge Asset). |
-| | `POST /marketplace/nft/{id}/buy` | خرید یک NFT لیست شده. |
-| **Simulation** | `POST /simulation/step` | پیشبرد شبیه‌سازی کیهانی یک گام. |
-| **DeFi** | `POST /defi/swap` | انجام عملیات سواپ توکن بین استخرهای نقدینگی. |
-| **Knowledge Market** | `POST /market/assets/mint` | ضرب یک Knowledge Asset جدید. |
-| **Diplomacy** | `POST /diplomacy/relation/{id1}/{id2}` | به‌روزرسانی وضعیت رابطه بین SCDAها. |
-| **LLM Integration** | `POST /llm/generate-hard-problem` | تولید Hard Problem توسط هوش مصنوعی. |
-
-**ساختار دایرکتوری:**
-(بدون تغییر در ساختار دایرکتوری قبلی)
-
-پروژه از یک ساختار ماژولار پیروی می‌کند که هر ماژول یک جنبه از پروتکل را مدیریت می‌کند.
+## 🏗️ معماری و ساختار پروژه
 
 ```
 laniakea-protocol/
-├── laniakea/                   # ماژول‌های اصلی پروتکل (Core Logic)
-│   ├── core/                   # هسته پروتکل (SCDA, Token System, Models)
-│   ├── network/                # شبکه P2P و API
-│   ├── metasystem/             # سیستم‌های متا-شناختی
-│   ├── quantum/                # سیستم‌های کوانتومی (شبیه‌سازی)
-│   └── ...
-├── src/                        # ماژول‌های اجرایی و پیاده‌سازی‌های سطح بالا
-│   ├── scda.py                 # پیاده‌سازی کلاس SCDA
-│   ├── blockchain/             # سیستم بلاکچین ۸D
-│   ├── intelligence/           # هوش مصنوعی (KEA, Validation)
-│   ├── marketplace/            # بازار دانش عملیاتی
-│   ├── governance/             # سیستم دیپلماسی
-│   └── ...
-├── web/                        # رابط کاربری (HTML, CSS, JS)
-│   ├── index.html              # صفحه اصلی
-│   ├── dashboard.html          # داشبورد SCDA
-│   └── 3d-visualization.html   # بصری‌سازی متاورس (Three.js)
-├── SCIENTIFIC_MATHEMATICAL_MODEL_V0.0.01.md # مستندات ریاضی
-└── README.md                   # همین سند
+├── main.py                     # Entry point (Render)
+├── laniakea/                   # بسته اصلی (34 زیرپوشه)
+│   ├── core/                   # HypercubeBlockchain, SCDA Integration, VM
+│   ├── intelligence/           # SCDA (3 نسخه), AI, Neural, ML
+│   ├── metaverse/              # HypercubeVisualizer, World
+│   ├── network/                # DHT, P2P, API router
+│   ├── security/               # Logger, MFA, Neural, RateLimiter
+│   ├── api/                    # FastAPI (82 routes)
+│   ├── blockchain/             # Core, Mining
+│   ├── consensus/              # PoA, PoHD, PoV
+│   ├── governance/             # DAO, Diplomacy
+│   ├── marketplace/            # Knowledge Market, NFT, Exchange
+│   ├── crosschain/             # Bridge (3 ماژول)
+│   ├── evolution/              # Evolution Manager
+│   ├── websocket/              # Manager, Realtime, Notification
+│   ├── quantum/                # Processor, Quantum System
+│   ├── simulation/             # Cosmic, SCDA Simulator
+│   ├── dashboard/              # Live, Advanced, Metrics
+│   ├── identity/, achievements/, ai/, analytics/, cli/, defi/,
+│   ├── external_apis/, monitoring/, oracles/, optimization/,
+│   ├── problems/, reputation/, social/, storage/, utils/
+├── docs/                       # ARCHITECTURE, WHITEPAPER, USER_MANUAL, ...
+├── web/                        # Frontend (UI/UX)
+├── tests/                      # pytest
+├── examples/                   # SCDA simulation
+├── monitoring/                 # Prometheus + Grafana
+├── nginx/                      # Reverse proxy
+├── deploy.sh, Dockerfile, docker-compose.yml
+└── requirements.txt, pyproject.toml, config.yaml
 ```
+
+**آمار:**
+*   📦 **34** زیرپوشه‌ی اصلی
+*   🐍 **120+** ماژول Python
+*   🌐 **82** API endpoint
+*   🛣️ **۸** WebSocket route
+*   🧪 **۱۰** ماژول حیاتی بازگردانده‌شده از cleanup
 
 ---
 
-## ⚙️ نصب و راه‌اندازی
+## 🚀 نصب و راه‌اندازی
 
 ### پیش‌نیازها
+*   Python 3.11.9 (پین شده در `runtime.txt`)
+*   PostgreSQL 14+ (production) یا SQLite (development)
+*   Redis 6+ (rate limiting)
+*   Node.js 18+ (frontend build)
 
-*   Python 3.11+
-*   `pip` (مدیر بسته پایتون)
-
-### ۱. شبیه‌سازی مخزن
+### Development
 
 ```bash
+# 1. کلون
 git clone https://github.com/QalamHipHop/laniakea-protocol.git
 cd laniakea-protocol
-```
 
-### ۲. نصب وابستگی‌ها
+# 2. محیط مجازی
+python3 -m venv .venv
+source .venv/bin/activate
 
-```bash
+# 3. وابستگی‌ها
 pip install -r requirements.txt
+
+# 4. تنظیمات
+cp .env.example .env
+# ویرایش DATABASE_URL, REDIS_URL و سایر مقادیر
+
+# 5. اجرا
+python main.py
+# یا
+uvicorn laniakea.api.main:app --reload --port 8000
 ```
 
-### ۳. اجرای پروتکل (مثال)
-
-برای اجرای یک نمونه SCDA و مشاهده تکامل آن:
+### Production (Docker)
 
 ```bash
-python3 main.py
+docker-compose up -d
+```
+
+### Production (Render)
+
+پروژه از قبل روی Render مستقر است:
+*   **Service ID:** `srv-d4683hali9vc73dc6c4g`
+*   **URL:** https://laniakea-protocol.onrender.com
+*   **Health:** https://laniakea-protocol.onrender.com/health
+
+---
+
+## 📡 API Endpoints (۸۲ مسیر)
+
+### Core
+*   `GET /` — صفحه اصلی
+*   `GET /health` — بررسی سلامت (با cache)
+*   `GET /core/status` — وضعیت هسته
+*   `GET /version` — نسخه
+*   `GET /discovery` — discovery endpoints (با cache)
+
+### Blockchain
+*   `GET /blockchain/info` — اطلاعات بلاکچین
+*   `GET /blockchain/chain` — زنجیره
+*   `POST /blockchain/mine` — استخراج
+*   `POST /blockchain/transactions/new` — تراکنش جدید
+
+### Token & DeFi
+*   `GET /token/info` — اطلاعات توکن LANA
+*   `GET /defi/pools` — استخرهای نقدینگی
+*   `POST /defi/swap` — سواپ
+
+### SCDA
+*   `POST /scda/create` — ساخت SCDA جدید
+*   `GET /scda/{identity}` — دریافت SCDA
+*   `GET /scda/state/{identity}` — وضعیت
+*   `POST /scda/solve` — حل مسئله
+*   `GET /scda/leaderboard` — برترین‌ها
+*   `GET /scda/knowledge-vector/{identity}` — بردار دانش
+
+### Governance
+*   `GET /governance/proposals` — پیشنهادات
+*   `POST /governance/proposals/new` — ایجاد پیشنهاد
+*   `POST /governance/proposals/{id}/vote` — رأی
+*   `POST /governance/proposals/{id}/finalize` — نهایی‌سازی
+
+### Knowledge Market
+*   `GET /knowledge_market/types` — انواع دانش
+*   `POST /knowledge_market/tokenize` — توکن‌سازی
+*   `POST /knowledge_market/list` — لیست کردن
+*   `POST /knowledge_market/buy` — خرید
+*   `GET /knowledge_market/asset/{id}` — جزئیات دارایی
+
+### Diplomacy
+*   `GET /diplomacy/alliances` — اتحادها
+*   `POST /diplomacy/alliance` — ایجاد اتحاد
+*   `GET /diplomacy/stats` — آمار
+
+### AI
+*   `POST /ai/query` — پرسش از AI
+*   `POST /ai/train` — آموزش
+
+### Achievements
+*   `GET /achievements/all`
+*   `GET /achievements/user/{user_id}`
+*   `GET /achievements/catalog`
+
+### Cross-Chain
+*   `GET /crosschain/supported` — زنجیره‌های پشتیبانی‌شده
+*   `POST /crosschain/transfer/initiate`
+*   `POST /crosschain/transfer/complete/{tx_id}`
+
+### Quantum
+*   `POST /quantum/job/submit`
+*   `POST /quantum/job/process`
+
+### WebSocket
+*   `WS /ws/{connection_type}/{connection_id}` — Real-time updates
+
+### Observability
+*   `GET /dashboard/metrics`
+*   `GET /dashboard/history/{key}`
+*   `GET /observability/requests`
+*   `GET /ws/stats`
+
+📚 **مستندات کامل تعاملی:** `/docs` (Swagger UI) · `/redoc`
+
+---
+
+## 🧪 تست
+
+```bash
+# سریع
+python test_quick.py
+
+# Smoke test (production-like)
+python smoke_test.py
+
+# کامل با pytest
+pytest tests/ -v
 ```
 
 ---
 
-## ⚖️ مجوز
+## 🛠️ توسعه
 
-این پروژه تحت مجوز **MIT** منتشر شده است. برای جزئیات بیشتر، فایل [LICENSE](LICENSE) را مشاهده کنید.
+```bash
+# فرمت
+black laniakea/ tests/
 
+# lint
+flake8 laniakea/ tests/
+
+# type-check
+mypy laniakea/
 ```
-MIT License
-
-Copyright (c) 2025 LaniakeA Protocol
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
 
 ---
 
-## 🚀 MVP (Minimum Viable Product) Implementation
+## 📊 مانیتورینگ
 
-This section details the newly implemented Minimum Viable Product (MVP) based on the user's blueprint, focusing on the core SCDA logic and a basic FastAPI server.
+*   **Prometheus:** `monitoring/prometheus.yml`
+*   **Grafana:** `monitoring/grafana/`
+*   **Locust:** `locustfile.py` (load testing)
 
-### Run MVP
-To run the MVP using the `docker-compose.override.yml` file:
+---
 
-```bash
-# This command will use the existing docker-compose.yml and the new docker-compose.override.yml
-# It will build and run the simplified MVP API service.
-docker-compose up --build
-```
+## 🤝 مشارکت
 
-### Test MVP Endpoints
-After the service is running on `http://localhost:8000`, you can test the new MVP API endpoints:
+از مشارکت استقبال می‌کنیم! لطفاً [`CONTRIBUTING.md`](./CONTRIBUTING.md) را مطالعه کنید.
 
-1.  **Create an SCDA Agent:**
-    ```bash
-    curl -X POST http://localhost:8000/scda/create -H "Content-Type: application/json" -d '{"position": {"coords": [0,0,0,0,0,0,0,0]}}'
-    ```
-    (Note: The response will contain the `scda_id` needed for the next steps.)
+---
 
-2.  **Get SCDA State (Replace `[scda_id]` with the ID from step 1):**
-    ```bash
-    curl -X GET http://localhost:8000/scda/[scda_id]
-    ```
+## 📜 مجوز
 
-3.  **Simulate Problem Solving:**
-    ```bash
-    curl -X POST http://localhost:8000/scda/[scda_id]/solve -H "Content-Type: application/json" -d '{"difficulty": 50}'
-    ```
+MIT — تمامی حقوق برای **LaniakeA Dev** محفوظ است.
 
-4.  **Simulate Reproduction:**
-    ```bash
-    curl -X POST http://localhost:8000/scda/[scda_id]/reproduce
-    ```
+---
 
-### Visualization
-The 3D visualization can be viewed by opening `web/3d-visualization.html` in a web browser.
+## 🌟 تیم
+
+**LaniakeA Dev Team** — ساخته شده با ❤️ برای آینده‌ای غیرمتمرکز.
+
+---
+
+<div align="center">
+
+**[⬆️ بازگشت به بالا](#laniakea-protocol-the-cosmic-evolution-engine)**
+
+ساخته شده توسط **LaniakeA Dev** · Live at [laniakea-protocol.onrender.com](https://laniakea-protocol.onrender.com)
+
+</div>

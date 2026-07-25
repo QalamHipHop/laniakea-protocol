@@ -3,7 +3,8 @@ import sys
 import os
 from pathlib import Path
 
-# Add project root to Python path to import src.scda
+# Add project root to Python path so the laniakea package is importable
+# when running this example directly (e.g. `python examples/scda_simulation.py`).
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
