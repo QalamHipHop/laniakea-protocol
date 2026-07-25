@@ -42,9 +42,11 @@ gunicorn==21.2.0
 # Testing & Quality
 pytest==7.4.3
 pytest-asyncio==0.21.1
+pytest-cov==4.1.0
 black==23.12.0
 flake8==6.1.0
 mypy==1.7.1
+httpx<0.28  # pinned for starlette TestClient compatibility
 
 # Database
 sqlalchemy==2.0.23
