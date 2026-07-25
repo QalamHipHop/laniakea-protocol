@@ -1,0 +1,58 @@
+name: Render Deploy Trigger
+
+# This workflow exists because Render's built-in GitHub auto-deploy doesn't
+# always pick up pushes (observed in late-July 2026: main advanced from
+# 1.0.0-Unified to 1.0.2-Sovereign without triggering a rebuild).
+#
+# It calls the Render REST API to kick off a manual deploy on every push to
+# main. The service ID and API key live in repo secrets:
+#   RENDER_API_KEY       - Render account-level API key
+#   RENDER_SERVICE_ID    - "srv-..." id of the Laniakea service
+#
+# If the secrets are missing the workflow is a no-op (so forks don't fail).
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      clear_cache:
+        description: "Clear build cache before deploy"
+        type: boolean
+        default: false
+
+jobs:
+  trigger-render-deploy:
+    name: Trigger Render Deploy
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' }}
+
+    steps:
+      - name: Trigger deploy via Render API
+        if: ${{ secrets.RENDER_API_KEY != '' && secrets.RENDER_SERVICE_ID != '' }}
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          CLEAR_CACHE: ${{ github.event.inputs.clear_cache || 'false' }}
+        run: |
+          set -euo pipefail
+          payload=$(jq -n --argjson cc "$CLEAR_CACHE" '{clearCache: $cc}')
+          echo "Triggering deploy for service $RENDER_SERVICE_ID"
+          http_code=$(curl -sS -o /tmp/render.json -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys")
+          echo "Render responded with HTTP $http_code"
+          cat /tmp/render.json || true
+          if [ "$http_code" != "201" ] && [ "$http_code" != "200" ]; then
+            echo "::warning::Render deploy trigger returned $http_code"
+          fi
+
+      - name: Skip (no Render secrets configured)
+        if: ${{ secrets.RENDER_API_KEY == '' || secrets.RENDER_SERVICE_ID == '' }}
+        run: |
+          echo "RENDER_API_KEY or RENDER_SERVICE_ID secret missing."
+          echo "Add them under Settings -> Secrets and variables -> Actions to"
+          echo "enable automatic Render redeploy on every push to main."

@@ -90,3 +90,26 @@ def test_evolution_log_returns_entries_when_log_exists():
     assert body["path"].endswith("evolution_log.json")
     assert body["count"] >= 1
     assert isinstance(body["entries"], list)
+
+
+def test_evolution_log_rescues_malformed_json(tmp_path, monkeypatch):
+    """The historical writer produced malformed JSON; the API should
+    fall back to the rescue parser instead of returning an empty list.
+    """
+    from laniakea.api import self_evolution_api as sea
+
+    fake_log = tmp_path / "evolution_log.json"
+    # Three top-level objects, wrapped in 5 leading [ and 1 trailing ].
+    obj_a = json.dumps({"version": "0.0.1", "timestamp": "2026-01-01T00:00:00"})
+    obj_b = json.dumps({"version": "0.0.2", "timestamp": "2026-01-02T00:00:00"})
+    obj_c = json.dumps({"version": "0.0.3", "timestamp": "2026-01-03T00:00:00"})
+    # Buggy historical format: leading bracket run, no separators, trailing ]
+    fake_log.write_text("[[[[[" + obj_a + obj_b + obj_c + "]", encoding="utf-8")
+
+    monkeypatch.setattr(sea, "_evolution_log_path", lambda: fake_log)
+    # Also patch _project_root so /improve relative-to check is satisfied
+    monkeypatch.setattr(sea, "_project_root", lambda: tmp_path)
+
+    entries = sea._read_evolution_log(limit=10)
+    assert len(entries) == 3
+    assert [e["version"] for e in entries] == ["0.0.1", "0.0.2", "0.0.3"]
