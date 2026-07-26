@@ -1,46 +1,79 @@
-# API Examples
+# 📡 Laniakea API Reference
 
-Sample requests and responses for the most-used endpoints of the
-LaniakeA Protocol.
+Complete REST API documentation. The OpenAPI 3.0 spec lives in [`openapi.yaml`](./openapi.yaml).
 
-The full schema is always available at:
-
-- **Live:** https://laniakea-protocol.onrender.com/docs
-- **Local:** http://localhost:8000/docs
-
-## Quick Examples
-
-### Health
+## 🚀 Quick Start
 
 ```bash
-curl https://laniakea-protocol.onrender.com/health
+# Base URL
+https://laniakea-protocol.onrender.com
+
+# Local
+http://localhost:8000
 ```
 
-### Chain Info
+## 🔑 Authentication
+
+Most read endpoints are public. Write endpoints require JWT bearer token:
 
 ```bash
-curl https://laniakea-protocol.onrender.com/blockchain/info
+curl -H "Authorization: Bearer $TOKEN" https://laniakea-protocol.onrender.com/api/v1/scda
 ```
 
-### Token Economics
+## 📚 Interactive Docs
 
-```bash
-curl https://laniakea-protocol.onrender.com/token/info
-```
+- **Swagger UI:** `/docs`
+- **ReDoc:** `/redoc`
+- **OpenAPI JSON:** `/openapi.json`
 
-### Submit an AI Query
+## 🔌 WebSocket
 
-```bash
-curl -X POST https://laniakea-protocol.onrender.com/ai/query \
-  -H 'Content-Type: application/json' \
-  -d '{"prompt": "What is the SCDA evolution law?"}'
-```
-
-### WebSocket
+Real-time updates at `wss://laniakea-protocol.onrender.com/ws`.
 
 ```javascript
-const ws = new WebSocket("wss://laniakea-protocol.onrender.com/ws/public/live");
-ws.onmessage = (e) => console.log(JSON.parse(e.data));
+const ws = new WebSocket('wss://laniakea-protocol.onrender.com/ws');
+ws.onmessage = (e) => {
+  const msg = JSON.parse(e.data);
+  // msg.type: 'block' | 'scda' | 'metric' | 'problem' | 'governance'
+  console.log(msg);
+};
 ```
 
-See `docs/ARCHITECTURE.md` for the layered model behind these routes.
+## 📋 Endpoint Groups
+
+| Group | Base | Description |
+|---|---|---|
+| System | `/health`, `/metrics` | Health, Prometheus |
+| SCDA | `/api/v1/scda` | Account CRUD, evolve, breed |
+| Blockchain | `/api/v1/blockchain` | Blocks, transactions |
+| Problems | `/api/v1/problems` | Hard Problems |
+| Governance | `/api/v1/governance` | DAO proposals, voting |
+| Metaverse | `/api/v1/metaverse` | 8D space |
+
+## 🧬 SCDA Lifecycle
+
+```bash
+# 1. Create
+curl -X POST .../api/v1/scda -d '{"owner":"0x..."}'
+
+# 2. Evolve
+curl -X POST .../api/v1/scda/{id}/evolve
+
+# 3. Breed
+curl -X POST .../api/v1/scda/{id}/breed -d '{"partner_id":"..."}'
+
+# 4. List
+curl .../api/v1/scda?tier=T3
+```
+
+## 🔄 Rate Limits
+
+- 100 req/min per IP for public endpoints
+- 1000 req/min for authenticated users
+- WebSocket: 10 messages/sec
+
+## 🌐 SDKs (planned)
+
+- Python: `pip install laniakea-sdk`
+- JavaScript: `npm install @laniakea/sdk`
+- Rust: `cargo add laniakea-sdk`
