@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="cosmic">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Laniakea Protocol — Cosmic Evolution Engine | ابرپروتکل تکامل کیهانی" />
+  <title>🌌 Laniakea Protocol — Cosmic Evolution Engine</title>
+
+  <!-- Tailwind + Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Vazirmatn:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <link rel="stylesheet" href="cosmic.css" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>" />
+</head>
+<body class="cosmic-body">
+
+  <!-- ========== STARFIELD CANVAS ========== -->
+  <canvas id="starfield" class="fixed inset-0 -z-10"></canvas>
+
+  <!-- ========== LOADING SCREEN ========== -->
+  <div id="loader" class="loader-screen">
+    <div class="loader-core">
+      <div class="orbit r1"></div>
+      <div class="orbit r2"></div>
+      <div class="orbit r3"></div>
+      <div class="core-pulse">🌌</div>
+    </div>
+    <p class="loader-text" data-i18n="loading">در حال اتصال به ابرپروتکل کیهانی...</p>
+    <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+  </div>
+
+  <!-- ========== TOP NAV ========== -->
+  <header class="top-nav glass">
+    <div class="nav-inner">
+      <a href="#dashboard" class="brand" data-route="dashboard">
+        <div class="brand-logo">
+          <span class="logo-glyph">⌬</span>
+          <span class="logo-ring"></span>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">Laniakea</div>
+          <div class="brand-sub">Cosmic Evolution Engine</div>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#dashboard" class="nav-link active" data-route="dashboard" data-i18n="nav.dashboard">دشبورد</a>
+        <a href="#evolution" class="nav-link" data-route="evolution" data-i18n="nav.evolution">تکامل</a>
+        <a href="#metaverse" class="nav-link" data-route="metaverse" data-i18n="nav.metaverse">متاورس</a>
+        <a href="#blockchain" class="nav-link" data-route="blockchain" data-i18n="nav.blockchain">بلاکچین ۸D</a>
+        <a href="#governance" class="nav-link" data-route="governance" data-i18n="nav.governance">حاکمیت</a>
+        <a href="#economy" class="nav-link" data-route="economy" data-i18n="nav.economy">اقتصاد</a>
+        <a href="#network" class="nav-link" data-route="network" data-i18n="nav.network">شبکه</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="langToggle" class="icon-btn" title="Switch Language">
+          <span id="langLabel">EN</span>
+        </button>
+        <button id="themeToggle" class="icon-btn" title="Toggle Theme">🌙</button>
+        <button id="connectBtn" class="btn-primary">
+          <span>⚡</span>
+          <span data-i18n="connect">اتصال</span>
+        </button>
+        <button id="menuBtn" class="icon-btn md:hidden">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== MAIN APP ========== -->
+  <main class="app-main" id="appMain">
+
+    <!-- ===== DASHBOARD ===== -->
+    <section class="route active" id="route-dashboard">
+      <!-- HERO -->
+      <div class="hero cosmic-card">
+        <div class="hero-bg">
+          <div class="hero-orb o1"></div>
+          <div class="hero-orb o2"></div>
+          <div class="hero-orb o3"></div>
+        </div>
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="dot live"></span>
+            <span>v1.0.0 · Live</span>
+          </div>
+          <h1 class="hero-title">
+            <span data-i18n="hero.title1">ابرپروتکل تکامل</span>
+            <span class="grad-text" data-i18n="hero.title2">هوش جمعی کیهانی</span>
+          </h1>
+          <p class="hero-sub" data-i18n="hero.sub">
+            یک اکوسیستم غیرمتمرکز که با الهام از ساختار جهان هستی، از سلول تک‌یاخته تا هوش کیهانی را شبیه‌سازی می‌کند.
+          </p>
+          <div class="hero-cta">
+            <button class="btn-primary lg" data-route="evolution">
+              <span>🚀</span><span data-i18n="hero.cta1">آغاز تکامل</span>
+            </button>
+            <button class="btn-ghost lg" data-route="metaverse">
+              <span>🌐</span><span data-i18n="hero.cta2">ورود به متاورس</span>
+            </button>
+          </div>
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-num" data-counter="1247">0</div>
+              <div class="stat-lbl" data-i18n="stats.scda">SCDA فعال</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num" data-counter="8932">0</div>
+              <div class="stat-lbl" data-i18n="stats.blocks">بلاک ۸D</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num" data-counter="99.97">0</div>
+              <div class="stat-lbl">% <span data-i18n="stats.uptime">آپتایم</span></div>
+            </div>
+            <div class="stat">
+              <div class="stat-num" data-counter="4218">0</div>
+              <div class="stat-lbl" data-i18n="stats.peers">همتایان P2P</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI GRID -->
+      <div class="grid-kpi">
+        <div class="kpi-card glass glow-purple">
+          <div class="kpi-icon">🧬</div>
+          <div class="kpi-label" data-i18n="kpi.tier">Tier متوسط</div>
+          <div class="kpi-value" id="kpiTier">--</div>
+          <div class="kpi-trend up">▲ 4.2%</div>
+        </div>
+        <div class="kpi-card glass glow-cyan">
+          <div class="kpi-icon">⚡</div>
+          <div class="kpi-label" data-i18n="kpi.energy">انرژی شبکه</div>
+          <div class="kpi-value" id="kpiEnergy">--</div>
+          <div class="kpi-trend up">▲ 1.8%</div>
+        </div>
+        <div class="kpi-card glass glow-pink">
+          <div class="kpi-icon">🔮</div>
+          <div class="kpi-label" data-i18n="kpi.complexity">پیچیدگی</div>
+          <div class="kpi-value" id="kpiComplexity">--</div>
+          <div class="kpi-trend up">▲ 7.1%</div>
+        </div>
+        <div class="kpi-card glass glow-amber">
+          <div class="kpi-icon">💎</div>
+          <div class="kpi-label" data-i18n="kpi.treasury">خزانه DAO</div>
+          <div class="kpi-value" id="kpiTreasury">--</div>
+          <div class="kpi-trend up">▲ 12.3%</div>
+        </div>
+      </div>
+
+      <!-- CHARTS -->
+      <div class="grid-2">
+        <div class="panel glass">
+          <div class="panel-head">
+            <h3>📈 <span data-i18n="chart.evolution">منحنی تکامل</span></h3>
+            <span class="tag">C(t)</span>
+          </div>
+          <canvas id="chartEvolution" height="220"></canvas>
+        </div>
+        <div class="panel glass">
+          <div class="panel-head">
+            <h3>🕸️ <span data-i18n="chart.network">نقشه شبکه P2P</span></h3>
+            <span class="tag live"><span class="dot live"></span>live</span>
+          </div>
+          <canvas id="chartNetwork" height="220"></canvas>
+        </div>
+      </div>
+
+      <!-- ACTIVITY FEED + CONSOLE -->
+      <div class="grid-2">
+        <div class="panel glass">
+          <div class="panel-head">
+            <h3>⚡ <span data-i18n="feed.title">جریان زنده شبکه</span></h3>
+            <button class="icon-btn" id="pauseFeed">⏸</button>
+          </div>
+          <ul class="feed" id="activityFeed">
+            <li class="feed-item"><span class="t">12:04:21</span><span class="b">🧬</span><span>SCDA #4218 ارتقاء Tier → <b>T4</b></span></li>
+            <li class="feed-item"><span class="t">12:04:18</span><span class="b">🔷</span><span>بلاک <b>#8931</b> تأیید شد (PoHD)</span></li>
+            <li class="feed-item"><span class="t">12:04:12</span><span class="b">🧠</span><span>Hard Problem #204 حل شد</span></li>
+            <li class="feed-item"><span class="t">12:04:05</span><span class="b">🏛️</span><span>پیشنهاد DAO #14 رأی‌گیری شد ✅</span></li>
+          </ul>
+        </div>
+
+        <div class="panel glass console-panel">
+          <div class="panel-head">
+            <h3>🖥️ <span data-i18n="console.title">کنسول فرمان</span></h3>
+            <div class="console-tabs">
+              <button class="tab active" data-cmd="status">status</button>
+              <button class="tab" data-cmd="evolve">evolve</button>
+              <button class="tab" data-cmd="mine">mine</button>
+            </div>
+          </div>
+          <div class="console-out" id="consoleOut">
+            <div class="ln"><span class="prompt">laniakea@v1.0.0 ~ $</span> <span class="cmd">status</span></div>
+            <div class="ln out">▸ شبکه فعال · 4218 گره · بلاک 8931 · SCDA Tier متوسط: T3.2</div>
+            <div class="ln"><span class="prompt">laniakea@v1.0.0 ~ $</span> <span class="cmd">_</span></div>
+          </div>
+          <form class="console-in" id="consoleForm">
+            <span class="prompt">$</span>
+            <input id="consoleInput" autocomplete="off" placeholder="یک فرمان وارد کنید..." />
+            <button class="btn-primary sm" type="submit">Run</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== EVOLUTION ===== -->
+    <section class="route" id="route-evolution">
+      <div class="page-head">
+        <h1>🧬 <span data-i18n="evo.title">موتور تکامل SCDA</span></h1>
+        <p data-i18n="evo.sub">DNA دیجیتال + Breeding + Hard Problems — هر سلول یک شخصیت تکامل‌یافته</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel glass">
+          <h3 class="panel-title">DNA من</h3>
+          <div class="dna-helix" id="dnaHelix"></div>
+          <div class="dna-stats">
+            <div><span data-i18n="dna.tier">Tier</span></div><div><b id="dnaTier">T3</b></div>
+            <div><span data-i18n="dna.gen">نسل</span></div><div><b id="dnaGen">42</b></div>
+            <div><span data-i18n="dna.energy">انرژی</span></div><div><b id="dnaEnergy">87.4</b></div>
+            <div><span data-i18n="dna.complexity">پیچیدگی</span></div><div><b id="dnaComplex">C=12.8</b></div>
+          </div>
+          <button class="btn-primary full" id="evolveBtn">⚡ <span data-i18n="evo.evolve">تکامل بعدی</span></button>
+        </div>
+
+        <div class="panel glass">
+          <h3 class="panel-title">📊 <span data-i18n="evo.dist">توزیع Tier</span></h3>
+          <canvas id="chartTier" height="240"></canvas>
+        </div>
+
+        <div class="panel glass">
+          <h3 class="panel-title">🧪 <span data-i18n="evo.hard">Hard Problems</span></h3>
+          <div class="hp-list" id="hpList">
+            <div class="hp-item"><div class="hp-q">∇²ψ + (8π/c⁴)T = 0</div><div class="hp-d">Hardness: 9.2 · Reward: 480</div></div>
+            <div class="hp-item"><div class="hp-q">P vs NP — SAT reduction</div><div class="hp-d">Hardness: 8.7 · Reward: 420</div></div>
+            <div class="hp-item"><div class="hp-q">Riemann ζ(s) zeros</div><div class="hp-d">Hardness: 8.1 · Reward: 380</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== METAVERSE ===== -->
+    <section class="route" id="route-metaverse">
+      <div class="page-head">
+        <h1>🌐 <span data-i18n="mv.title">متاورس هایپرکیوب ۸D</span></h1>
+        <p data-i18n="mv.sub">256 رأس · 1024 یال · چند نمایش · بُعد هشتم: آگاهی</p>
+      </div>
+      <div class="panel glass mv-panel">
+        <div class="mv-canvas-wrap">
+          <canvas id="mvCanvas" height="460"></canvas>
+          <div class="mv-overlay">
+            <div class="mv-tag">Projection: 3D from 8D · Rotating</div>
+            <div class="mv-controls">
+              <button class="icon-btn" data-rotate="x">↻ X</button>
+              <button class="icon-btn" data-rotate="y">↻ Y</button>
+              <button class="icon-btn" data-rotate="z">↻ Z</button>
+              <button class="icon-btn" data-rotate="reset">⟲ Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== BLOCKCHAIN ===== -->
+    <section class="route" id="route-blockchain">
+      <div class="page-head">
+        <h1>🔷 <span data-i18n="bc.title">بلاکچین هایپرکیوب ۸D</span></h1>
+        <p data-i18n="bc.sub">اجماع PoHD (Proof of Human Development) + PoA + PoV</p>
+      </div>
+      <div class="grid-2">
+        <div class="panel glass">
+          <h3 class="panel-title">⛓️ <span data-i18n="bc.chain">زنجیره زنده</span></h3>
+          <div class="chain" id="chainBlocks">
+            <div class="block active">#8931 <small>PoHD</small></div>
+            <div class="block">#8930 <small>PoHD</small></div>
+            <div class="block">#8929 <small>PoV</small></div>
+            <div class="block">#8928 <small>PoHD</small></div>
+            <div class="block">#8927 <small>PoA</small></div>
+          </div>
+        </div>
+        <div class="panel glass">
+          <h3 class="panel-title">📐 <span data-i18n="bc.cube">بردار ۸ بعدی</span></h3>
+          <div class="vector8" id="vector8"></div>
+          <pre class="mono small" id="vectorStr">S(t) = (K, E) ··· 8D hypercube coords</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GOVERNANCE ===== -->
+    <section class="route" id="route-governance">
+      <div class="page-head">
+        <h1>🏛️ <span data-i18n="gov.title">DAO — حاکمیت غیرمتمرکز</span></h1>
+        <p data-i18n="gov.sub">پیشنهادها · رأی‌گیری · خزانه · تفویض</p>
+      </div>
+      <div class="grid-2">
+        <div class="panel glass">
+          <h3 class="panel-title">📜 <span data-i18n="gov.props">پیشنهادهای فعال</span></h3>
+          <div class="prop"><div class="prop-t">#14 — افزایش پاداش Breeding</div><div class="prop-bar"><div style="width:67%"></div></div><div class="prop-meta">67% · 2 روز مانده</div></div>
+          <div class="prop"><div class="prop-t">#13 — راه‌اندازی زنجیره جانبی</div><div class="prop-bar"><div style="width:42%"></div></div><div class="prop-meta">42% · 5 روز مانده</div></div>
+          <div class="prop"><div class="prop-t">#12 — بهبود اجماع PoHD</div><div class="prop-bar"><div style="width:89%"></div></div><div class="prop-meta">89% · 1 روز مانده</div></div>
+        </div>
+        <div class="panel glass">
+          <h3 class="panel-title">💰 <span data-i18n="gov.treasury">خزانه</span></h3>
+          <canvas id="chartTreasury" height="220"></canvas>
+          <div class="treasury-stats">
+            <div><span>موجودی</span><b>1,284,392 LKC</b></div>
+            <div><span>گردش ۳۰ روز</span><b>+12.4%</b></div>
+            <div><span>تفویض‌ها</span><b>3,892 رأی</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ECONOMY ===== -->
+    <section class="route" id="route-economy">
+      <div class="page-head">
+        <h1>💎 <span data-i18n="eco.title">اقتصاد دانش</span></h1>
+        <p data-i18n="eco.sub">بازار Hard Problems · NFT دانش · Staking</p>
+      </div>
+      <div class="grid-3">
+        <div class="panel glass">
+          <h3 class="panel-title">💱 <span data-i18n="eco.price">قیمت LKC</span></h3>
+          <canvas id="chartPrice" height="200"></canvas>
+        </div>
+        <div class="panel glass">
+          <h3 class="panel-title">🏦 <span data-i18n="eco.stake">استیکینگ</span></h3>
+          <div class="stake-row"><span>APR</span><b>14.8%</b></div>
+          <div class="stake-row"><span>کل استیک</span><b>892,140 LKC</b></div>
+          <div class="stake-row"><span>سهم شما</span><b id="myStake">2,480 LKC</b></div>
+          <button class="btn-primary full">📥 <span data-i18n="eco.deposit">سپرده‌گذاری</span></button>
+        </div>
+        <div class="panel glass">
+          <h3 class="panel-title">🖼️ <span data-i18n="eco.nft">NFT دانش</span></h3>
+          <div class="nft-grid" id="nftGrid">
+            <div class="nft"><div class="nft-art g1">Σ</div><div class="nft-name">Hardness 9.2</div></div>
+            <div class="nft"><div class="nft-art g2">∇</div><div class="nft-name">Tensor #42</div></div>
+            <div class="nft"><div class="nft-art g3">∞</div><div class="nft-name">Topology</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== NETWORK ===== -->
+    <section class="route" id="route-network">
+      <div class="page-head">
+        <h1>🌍 <span data-i18n="net.title">شبکه P2P</span></h1>
+        <p data-i18n="net.sub">Kademlia DHT · WebSocket Transport · K-بازویی ۲۰</p>
+      </div>
+      <div class="grid-2">
+        <div class="panel glass">
+          <h3 class="panel-title">🛰️ <span data-i18n="net.peers">همتایان</span></h3>
+          <canvas id="chartGeo" height="280"></canvas>
+        </div>
+        <div class="panel glass">
+          <h3 class="panel-title">📡 <span data-i18n="net.health">سلامت شبکه</span></h3>
+          <div class="health-row"><span>Latency</span><div class="bar"><div style="width:32%"></div></div><b>32 ms</b></div>
+          <div class="health-row"><span>Throughput</span><div class="bar"><div style="width:78%"></div></div><b>1.4k tx/s</b></div>
+          <div class="health-row"><span>Peers</span><div class="bar"><div style="width:91%"></div></div><b>4218</b></div>
+          <div class="health-row"><span>Sync</span><div class="bar"><div style="width:99%"></div></div><b>99.7%</b></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer glass">
+    <div class="foot-inner">
+      <div>🌌 Laniakea Protocol · v1.0.0-Unified</div>
+      <div class="foot-links">
+        <a href="#">Docs</a><a href="#">Whitepaper</a><a href="#">GitHub</a><a href="#">Discord</a>
+      </div>
+      <div>Made with 💜 for the cosmic web</div>
+    </div>
+  </footer>
+
+  <!-- ========== TOAST ========== -->
+  <div id="toast" class="toast glass"></div>
+
+  <script src="cosmic.js"></script>
+</body>
+</html>
