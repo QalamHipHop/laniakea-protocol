@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>500 — بُعد خالی | Laniakea</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: radial-gradient(ellipse at center, #1a0b3d 0%, #050514 100%);
+      color: #d6d6f5;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    canvas { position: fixed; inset: 0; z-index: 0; }
+    .wrap { position: relative; z-index: 2; text-align: center; max-width: 600px; padding: 20px; }
+    .code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(120px, 20vw, 220px);
+      font-weight: 700;
+      background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 50%, #ec4899 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      line-height: 1;
+      margin-bottom: 20px;
+      animation: glitch 3s ease-in-out infinite;
+    }
+    @keyframes glitch {
+      0%, 100% { transform: translate(0); filter: hue-rotate(0deg); }
+      33% { transform: translate(-2px, 1px); filter: hue-rotate(30deg); }
+      66% { transform: translate(2px, -1px); filter: hue-rotate(-30deg); }
+    }
+    h1 { font-size: 28px; color: #fff; margin-bottom: 12px; }
+    p { font-size: 16px; opacity: 0.7; line-height: 1.6; margin-bottom: 32px; }
+    .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    a {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 10px;
+      text-decoration: none; font-weight: 600; font-size: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #06b6d4);
+      color: white;
+      box-shadow: 0 8px 24px -8px #7c3aed;
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-ghost {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+    .vector { font-family: 'JetBrains Mono', monospace; font-size: 12px; opacity: 0.4; margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+  <div class="wrap">
+    <div class="code">500</div>
+    <h1>خطای کیهانی رخ داده</h1>
+    <p>یک اختلال در ماتریس پیش آمده. تیم تکامل در حال تعمیر است.<br>شاید در یکی از ابعاد موازی باشد.</p>
+    <div class="actions">
+      <a href="/cosmic.html" class="btn-primary">🔄 تلاش مجدد</a>
+      <a href="/landing.html" class="btn-ghost">🌌 صفحه اصلی</a>
+    </div>
+    <div class="vector">S(t) ∉ H⁸ · dim=undefined · ∇ψ=0</div>
+  </div>
+  <script>
+    const c = document.getElementById('bg');
+    const ctx = c.getContext('2d');
+    function resize() { c.width = innerWidth; c.height = innerHeight; }
+    resize(); addEventListener('resize', resize);
+    const stars = Array.from({length: 150}, () => ({
+      x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+      r: Math.random()*1.5, a: Math.random(), s: Math.random()*0.02 + 0.005
+    }));
+    (function draw() {
+      ctx.fillStyle = 'rgba(5,5,20,0.2)';
+      ctx.fillRect(0,0,c.width,c.height);
+      stars.forEach(s => {
+        s.a += s.s; if (s.a > 1 || s.a < 0.1) s.s *= -1;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(180,180,255,${s.a*0.6})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    })();
+  </script>
+</body>
+</html>
