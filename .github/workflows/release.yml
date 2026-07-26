@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Generate changelog
+        id: changelog
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          PREV=$(git tag --sort=-creatordate | sed -n '2p')
+          echo "prev=$PREV" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          if [ -n "$PREV" ]; then
+            NOTES=$(git log --pretty=format:"- %s (%h)" $PREV..$TAG)
+          else
+            NOTES=$(git log --pretty=format:"- %s (%h)" -20)
+          fi
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: |
+            ## 🌌 Laniakea Protocol ${{ steps.changelog.outputs.tag }}
+
+            ${{ steps.changelog.outputs.notes }}
+
+            ### 📦 Installation
+            ```bash
+            pip install -r requirements.txt
+            python main.py
+            ```
+
+            ### 🌐 Web UI
+            - Cosmic Dashboard: `web/cosmic.html`
+            - Landing Page: `web/landing.html`
+            - Mobile PWA: `web/mobile/index.html`
+          draft: false
+          prerelease: false
+
+  deploy:
+    name: Deploy Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          destination_dir: docs

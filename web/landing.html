@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="cosmic">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Laniakea Protocol — ابرپروتکل تکامل کیهانی هوش جمعی" />
+  <meta property="og:title" content="🌌 Laniakea Protocol — Cosmic Evolution Engine" />
+  <meta property="og:description" content="ابرپروتکل محاسباتی کیهانی برای تکامل هوش جمعی" />
+  <title>🌌 Laniakea Protocol — The Cosmic Evolution Engine</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="landing.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>" />
+</head>
+<body>
+  <canvas id="bg3d" class="bg-canvas"></canvas>
+
+  <!-- Nav -->
+  <nav class="lnav">
+    <a href="#" class="lnav-brand">
+      <span class="lbrand-glyph">⌬</span>
+      <span class="lbrand-text">Laniakea</span>
+    </a>
+    <div class="lnav-links">
+      <a href="#features">ویژگی‌ها</a>
+      <a href="#how">چگونه کار می‌کند</a>
+      <a href="#token">توکن</a>
+      <a href="#roadmap">نقشه راه</a>
+    </div>
+    <div class="lnav-cta">
+      <a href="cosmic.html" class="lbtn-ghost">دشبورد</a>
+      <a href="https://github.com/QalamHipHop/laniakea-protocol" class="lbtn-primary">شروع کنید →</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="lhero">
+    <div class="lhero-bg">
+      <div class="lhero-orb o1"></div>
+      <div class="lhero-orb o2"></div>
+      <div class="lhero-orb o3"></div>
+    </div>
+    <div class="lhero-inner">
+      <div class="lhero-badge">
+        <span class="dot live"></span>
+        <span>v1.0.0 · Live on Mainnet</span>
+      </div>
+      <h1 class="lhero-title">
+        <span>ابرپروتکل</span>
+        <span class="grad">تکامل هوش</span>
+        <span>جمعی کیهانی</span>
+      </h1>
+      <p class="lhero-sub">
+        یک اکوسیستم غیرمتمرکز که با الهام از ساختار جهان هستی، از سلول تک‌یاخته تا هوش کیهانی را شبیه‌سازی می‌کند.
+        اولین بلاکچین هایپرکیوب ۸ بعدی جهان با اجماع <b>PoHD</b>.
+      </p>
+      <div class="lhero-cta">
+        <a href="cosmic.html" class="lbtn-primary lg">
+          🚀 ورود به متاورس
+        </a>
+        <a href="#whitepaper" class="lbtn-ghost lg">
+          📄 وایت‌پیپر
+        </a>
+      </div>
+      <div class="lhero-stats">
+        <div><b>4218</b><span>گره فعال</span></div>
+        <div><b>8931</b><span>بلاک ۸D</span></div>
+        <div><b>99.97%</b><span>آپتایم</span></div>
+        <div><b>1.28M</b><span>LKC در گردش</span></div>
+      </div>
+    </div>
+    <div class="lhero-scroll">↓ اسکرول کنید</div>
+  </section>
+
+  <!-- Pillars -->
+  <section class="lpillars" id="features">
+    <div class="lsec-head">
+      <span class="lsec-tag">ستون‌های پروتکل</span>
+      <h2>هشت بُعد، یک جهان</h2>
+    </div>
+    <div class="lpillars-grid">
+      <div class="lpillar" style="--c: #7c3aed">
+        <div class="lpillar-icon">🧬</div>
+        <h3>SCDA</h3>
+        <p>Single-Cell Digital Account — DNA دیجیتال با Tier، نسل و فرمول تکامل ΔC = D(P)/C(t)^α</p>
+      </div>
+      <div class="lpillar" style="--c: #06b6d4">
+        <div class="lpillar-icon">🔷</div>
+        <h3>بلاکچین ۸D</h3>
+        <p>هایپرکیوب ۸ بعدی · ۲۵۶ رأس · اجماع PoHD + PoA + PoV</p>
+      </div>
+      <div class="lpillar" style="--c: #ec4899">
+        <div class="lpillar-icon">🌐</div>
+        <h3>متاورس</h3>
+        <p>فضای ۸D دانش-آگاهی با بصری‌سازی سه‌بعدی real-time</p>
+      </div>
+      <div class="lpillar" style="--c: #f59e0b">
+        <div class="lpillar-icon">🧠</div>
+        <h3>هوش مصنوعی</h3>
+        <p>تولید و اعتبارسنجی Hard Problems با LLM یکپارچه</p>
+      </div>
+      <div class="lpillar" style="--c: #10b981">
+        <div class="lpillar-icon">🏛️</div>
+        <h3>DAO</h3>
+        <p>حاکمیت غیرمتمرکز با چرخه کامل پیشنهاد، رأی و خزانه</p>
+      </div>
+      <div class="lpillar" style="--c: #ef4444">
+        <div class="lpillar-icon">🔐</div>
+        <h3>امنیت ۵-حالته</h3>
+        <p>سیستم ایمنی عصبی + MFA + JWT + rate-limiter + audit رمزنگاری‌شده</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="lhow" id="how">
+    <div class="lsec-head">
+      <span class="lsec-tag">چگونه کار می‌کند</span>
+      <h2>تکامل در ۴ گام</h2>
+    </div>
+    <div class="lsteps">
+      <div class="lstep">
+        <div class="lstep-num">01</div>
+        <h3>ایجاد SCDA</h3>
+        <p>هر کاربر یک سلول دیجیتال با DNA منحصربه‌فرد دریافت می‌کند.</p>
+      </div>
+      <div class="lstep">
+        <div class="lstep-num">02</div>
+        <h3>حل Hard Problems</h3>
+        <p>سلول‌ها با حل معادلات بلوک‌سازی، Complexity و Tier خود را افزایش می‌دهند.</p>
+      </div>
+      <div class="lstep">
+        <div class="lstep-num">03</div>
+        <h3>Breeding</h3>
+        <p>سلول‌ها می‌توانند با یکدیگر ترکیب شده و نسل بعدی را تولید کنند.</p>
+      </div>
+      <div class="lstep">
+        <div class="lstep-num">04</div>
+        <h3>تشکیل تمدن</h3>
+        <p>سلول‌های پیشرفته تمدن‌های دیجیتال با دیپلماسی و پیمان‌های بین‌تمدنی ایجاد می‌کنند.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Token -->
+  <section class="ltoken" id="token">
+    <div class="lsec-head">
+      <span class="lsec-tag">اقتصاد</span>
+      <h2>LKC — سوخت کیهان</h2>
+    </div>
+    <div class="ltoken-grid">
+      <div class="ltoken-card">
+        <div class="ltoken-stat">1.28M</div>
+        <div class="ltoken-lbl">موجودی کل</div>
+      </div>
+      <div class="ltoken-card">
+        <div class="ltoken-stat">14.8%</div>
+        <div class="ltoken-lbl">APR استیکینگ</div>
+      </div>
+      <div class="ltoken-card">
+        <div class="ltoken-stat">3,892</div>
+        <div class="ltoken-lbl">تفویض‌های فعال</div>
+      </div>
+      <div class="ltoken-card">
+        <div class="ltoken-stat">12.4%</div>
+        <div class="ltoken-lbl">رشد ماهانه</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section class="lroadmap" id="roadmap">
+    <div class="lsec-head">
+      <span class="lsec-tag">نقشه راه</span>
+      <h2>از ژن تا کهکشان</h2>
+    </div>
+    <div class="lroadmap-track">
+      <div class="lrm-item done">
+        <div class="lrm-q">Q1 2024</div>
+        <h3>SCDA Core v1</h3>
+        <p>DNA · Tier · Evolution Engine</p>
+      </div>
+      <div class="lrm-item done">
+        <div class="lrm-q">Q2 2024</div>
+        <h3>بلاکچین ۸D</h3>
+        <p>Hypercube + PoHD consensus</p>
+      </div>
+      <div class="lrm-item done">
+        <div class="lrm-q">Q3 2024</div>
+        <h3>متاورس + DAO</h3>
+        <p>8D visualization + governance</p>
+      </div>
+      <div class="lrm-item active">
+        <div class="lrm-q">Q4 2025</div>
+        <h3>Cosmic UI v2</h3>
+        <p>Modern glassmorphism + PWA + Wallet</p>
+      </div>
+      <div class="lrm-item">
+        <div class="lrm-q">Q1 2026</div>
+        <h3>Cross-Chain Bridge</h3>
+        <p>Multi-chain interoperability</p>
+      </div>
+      <div class="lrm-item">
+        <div class="lrm-q">Q2 2026</div>
+        <h3>Quantum Layer</h3>
+        <p>Quantum-resistant cryptography</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="lcta" id="whitepaper">
+    <div class="lcta-inner">
+      <h2>آماده‌اید به کیهان بپیوندید؟</h2>
+      <p>همین الان اولین سلول دیجیتال خود را بسازید و سفر تکامل را آغاز کنید.</p>
+      <div class="lcta-buttons">
+        <a href="cosmic.html" class="lbtn-primary lg">🚀 شروع تکامل</a>
+        <a href="mobile/index.html" class="lbtn-ghost lg">📱 اپ موبایل</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="lfooter">
+    <div class="lfoot-inner">
+      <div class="lfoot-brand">
+        <span class="lbrand-glyph">⌬</span>
+        <span>Laniakea Protocol</span>
+      </div>
+      <div class="lfoot-links">
+        <a href="docs/WHITEPAPER.md">Whitepaper</a>
+        <a href="docs/ARCHITECTURE.md">Architecture</a>
+        <a href="cosmic.html">Dashboard</a>
+        <a href="https://github.com/QalamHipHop/laniakea-protocol">GitHub</a>
+      </div>
+      <div class="lfoot-copy">© 2025 Qalam · Made with 💜 for the cosmic web</div>
+    </div>
+  </footer>
+
+  <script src="landing.js"></script>
+</body>
+</html>
