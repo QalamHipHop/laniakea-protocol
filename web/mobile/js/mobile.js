@@ -232,3 +232,76 @@ setInterval(() => {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
+
+// ============================================================
+// MOBILE v3 — Theme + Haptics (Qalam, 2025)
+// ============================================================
+
+const MTheme = (() => {
+  const KEY = 'laniakea-mob-theme';
+  const valid = ['cosmic', 'dark', 'light'];
+  function get() {
+    const stored = localStorage.getItem(KEY);
+    if (stored && valid.includes(stored)) return stored;
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'cosmic';
+  }
+  function set(t) {
+    if (!valid.includes(t)) t = 'cosmic';
+    document.documentElement.setAttribute('data-theme', t);
+    localStorage.setItem(KEY, t);
+  }
+  function cycle() {
+    const cur = get();
+    const next = valid[(valid.indexOf(cur) + 1) % valid.length];
+    set(next);
+    mToast(`Theme: ${next}`);
+    return next;
+  }
+  function init() {
+    set(get());
+    const btn = document.getElementById('themeCycle');
+    if (btn) btn.onclick = cycle;
+  }
+  return { get, set, cycle, init, valid };
+})();
+
+// Haptic feedback (where supported)
+function haptic(pattern = 10) {
+  if (navigator.vibrate) navigator.vibrate(pattern);
+}
+
+// Ripple effect
+function attachRipple(el) {
+  el.classList.add('m-ripple');
+  el.addEventListener('pointerdown', e => {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--rx', `${e.clientX - r.left}px`);
+    el.style.setProperty('--ry', `${e.clientY - r.top}px`);
+    haptic(8);
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', () => {
+  MTheme.init();
+  // Auto-attach ripple to all .m-card-v3
+  document.querySelectorAll('.m-card-v3, .nav-item, .m-btn').forEach(attachRipple);
+  // Pull-to-refresh hint
+  const shell = document.querySelector('.app-shell');
+  const hint = document.querySelector('.ptr-hint');
+  if (shell && hint) {
+    let startY = 0;
+    shell.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
+    shell.addEventListener('touchmove', e => {
+      const dy = e.touches[0].clientY - startY;
+      if (dy > 80) hint.classList.add('active');
+    }, { passive: true });
+    shell.addEventListener('touchend', () => {
+      hint.classList.remove('active');
+      if (startY) location.reload();
+    });
+  }
+});
+
+// Expose
+window.MobileV3 = { MTheme, haptic, attachRipple };
