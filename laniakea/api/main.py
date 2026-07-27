@@ -460,6 +460,20 @@ except Exception as exc:  # pragma: no cover - defensive
     self_evolution_router = None
 
 
+# --- v6.3.0-Qalam v8 UI compatibility API (purely additive) ---------------
+# Adds every endpoint the unified 8D Cosmic UI (v8) calls but the legacy
+# router set never exposed (/ai/info, /consensus/info, /metaverse/world,
+# /mining/info, /mining/rewards, /reputation/leaderboard, /marketplace/all,
+# /v6/qalam/version-history, /v6/qalam/subsystems, …). See
+# :mod:`laniakea.api.v8_ui_api` for the full list.
+try:
+    from laniakea.api.v8_ui_api import router as v8_ui_router
+    app.include_router(v8_ui_router)
+    logger.info("v8 UI compatibility API mounted (/ai/info, /consensus/info, /metaverse/world, /mining/*, /reputation/*, /v6/qalam/*)")
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("v8_ui_api router not loaded: %s", exc)
+
+
 # --- v6.2.0-Qalam additive API surface -------------------------------------
 # Adds the /v6/* namespace on top of v6.0.1-Mainnet. Every route here is
 # purely additive: nothing in the existing API is renamed, removed, or
@@ -579,6 +593,17 @@ async def _on_startup() -> None:
     app.state.diplomacy = laniakea_diplomacy
     app.state.knowledge_market = laniakea_knowledge_market
     app.state.scda_manager = laniakea_scda_manager
+    # v8 UI compatibility — try to attach optional subsystems if they exist
+    try:
+        from laniakea.metaverse.world import MetaverseWorld as _MW
+        app.state.metaverse_world = _MW()
+    except Exception:  # pragma: no cover - defensive
+        app.state.metaverse_world = None
+    try:
+        from laniakea.ai.problem_discovery_engine import ProblemDiscoveryEngine as _PDE
+        app.state.problem_engine = _PDE()
+    except Exception:  # pragma: no cover - defensive
+        app.state.problem_engine = None
     logger.info("Laniakea API startup complete (v%s)", settings.PROJECT_VERSION)
 
 
@@ -649,6 +674,21 @@ def mine_block(authority_address: Optional[str] = None) -> Dict[str, Any]:
     laniakea_achievements.update_user_progress(
         authority_address, "blockchain.blocks_mined", new_block.index
     )
+
+    # Record the PoHD mining reward so /mining/rewards can return it
+    try:
+        from laniakea.api.v8_ui_api import record_mining_reward
+        # Difficulty scales with the number of pending transactions (1..5)
+        _diff = max(1, min(5, len(getattr(laniakea_chain, "current_transactions", [])) or 1))
+        _reward = 100.0 * _diff * (1.0 + (new_block.index % 7) * 0.05)
+        record_mining_reward(
+            scda_id=authority_address,
+            block_index=new_block.index,
+            reward_kt=_reward,
+            difficulty=_diff,
+        )
+    except Exception as _exc:  # pragma: no cover
+        logger.debug("record_mining_reward failed: %s", _exc)
 
     return {"message": "New Block Forged", "block": new_block.to_dict()}
 
