@@ -93,6 +93,21 @@ class ScdaManager:
             self._created_at.pop(identity, None)
             return True
 
+    def register(self, scda: SingleCellDigitalAccount) -> SingleCellDigitalAccount:
+        """Register an already-constructed SCDA (e.g. bred child) by identity.
+
+        If the identity is already known the existing record is returned
+        unchanged. This is the canonical way to onboard SCDAs that were
+        produced outside the :meth:`create` factory.
+        """
+        with self._lock:
+            existing = self._scdas.get(scda.identity)
+            if existing is not None:
+                return existing
+            self._scdas[scda.identity] = scda
+            self._created_at[scda.identity] = time.time()
+            return scda
+
     # -- Domain operations ---------------------------------------------------
     def attempt_solve(
         self,
@@ -147,8 +162,17 @@ class ScdaManager:
     @staticmethod
     def _state_for(scda: SingleCellDigitalAccount) -> Dict[str, Any]:
         """Augment the model state with a derived 8D knowledge vector."""
+        # get_state() now returns a Pydantic SCDAState (Pydantic v2), so we
+        # need model_dump() to spread it as a dict.
+        base = scda.get_state()
+        if hasattr(base, "model_dump"):
+            base_dict = base.model_dump()
+        elif isinstance(base, dict):
+            base_dict = base
+        else:  # pragma: no cover - defensive
+            base_dict = dict(base)
         return {
-            **scda.get_state(),
+            **base_dict,
             "knowledge_vector_8d": ScdaManager._vector_for(scda),
         }
 

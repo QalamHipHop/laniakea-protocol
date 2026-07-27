@@ -125,3 +125,78 @@ def get_knowledge_vector(identity: str) -> Dict[str, Any]:
         "identity": scda.identity,
         "knowledge_vector_8d": _manager().compute_knowledge_vector(identity),
     }
+
+
+# --- Breeding & Genetic Operations -----------------------------------------
+
+class ScdaBreedRequest(BaseModel):
+    parent1: str = Field(..., min_length=1, max_length=128, description="Identity of parent #1")
+    parent2: str = Field(..., min_length=1, max_length=128, description="Identity of parent #2")
+    child_identity: Optional[str] = Field(
+        default=None, max_length=128,
+        description="Optional explicit child identity (auto-generated if omitted)",
+    )
+
+
+class ScdaPredictRequest(BaseModel):
+    parent1: str = Field(..., min_length=1, max_length=128)
+    parent2: str = Field(..., min_length=1, max_length=128)
+
+
+@router.post("/breed", summary="Breed two parent SCDAs into a new child")
+def breed_scdas(req: ScdaBreedRequest) -> Dict[str, Any]:
+    """Mendelian crossover + post-recombination mutation."""
+    from laniakea.intelligence.scda_model import breed_scdas as _breed  # local import
+    p1 = _manager().get(req.parent1)
+    p2 = _manager().get(req.parent2)
+    if p1 is None:
+        raise HTTPException(status_code=404, detail=f"Parent {req.parent1!r} not found")
+    if p2 is None:
+        raise HTTPException(status_code=404, detail=f"Parent {req.parent2!r} not found")
+    child = _breed(p1, p2)
+    if req.child_identity:
+        child.identity = req.child_identity
+    _manager().register(child)
+    return {
+        "message": "Child SCDA bred and registered",
+        "child_identity": child.identity,
+        "parent1": p1.identity,
+        "parent2": p2.identity,
+        "state": child.get_state().model_dump(),
+    }
+
+
+@router.post("/predict", summary="Predict traits of an offspring of two parents")
+def predict_scdas(req: ScdaPredictRequest) -> Dict[str, Any]:
+    """Non-destructive trait prediction (no child is materialised)."""
+    from laniakea.intelligence.scda_model import predict_child_traits
+    p1 = _manager().get(req.parent1)
+    p2 = _manager().get(req.parent2)
+    if p1 is None:
+        raise HTTPException(status_code=404, detail=f"Parent {req.parent1!r} not found")
+    if p2 is None:
+        raise HTTPException(status_code=404, detail=f"Parent {req.parent2!r} not found")
+    pred = predict_child_traits(p1, p2)
+    return pred.model_dump()
+
+
+@router.get("/lineage/{identity}", summary="Get the genetic lineage (ancestor IDs) of an SCDA")
+def get_lineage(identity: str) -> Dict[str, Any]:
+    scda = _manager().get(identity)
+    if scda is None:
+        raise HTTPException(status_code=404, detail=f"SCDA {identity!r} not found")
+    return {
+        "identity": scda.identity,
+        "generation": scda.dna.generation,
+        "lineage": list(scda.dna.lineage),
+        "recombination_history": list(scda.dna.recombination_history),
+        "genetic_diversity": scda.dna.calculate_genetic_diversity(),
+    }
+
+
+@router.get("/dna/{identity}", summary="Get the full Digital DNA snapshot of an SCDA")
+def get_dna(identity: str) -> Dict[str, Any]:
+    scda = _manager().get(identity)
+    if scda is None:
+        raise HTTPException(status_code=404, detail=f"SCDA {identity!r} not found")
+    return scda.dna.to_snapshot().model_dump()
