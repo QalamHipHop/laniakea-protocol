@@ -521,3 +521,318 @@ function toast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
+
+// ============================================================
+// COSMIC UI v3 — MODERN COMPONENTS (Qalam, 2025)
+// ============================================================
+
+// ---------- THEME MANAGER ----------
+const ThemeManager = (() => {
+  const KEY = 'laniakea-theme';
+  const valid = ['cosmic', 'dark', 'light'];
+
+  function get() {
+    const stored = localStorage.getItem(KEY);
+    if (stored && valid.includes(stored)) return stored;
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'cosmic';
+  }
+  function set(theme) {
+    if (!valid.includes(theme)) theme = 'cosmic';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(KEY, theme);
+    document.dispatchEvent(new CustomEvent('theme:change', { detail: { theme } }));
+  }
+  function cycle() {
+    const cur = get();
+    const next = valid[(valid.indexOf(cur) + 1) % valid.length];
+    set(next);
+    return next;
+  }
+  function init() {
+    set(get());
+    // Listen to system changes when user hasn't set manually
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+      if (!localStorage.getItem(KEY)) set(e.matches ? 'light' : 'cosmic');
+    });
+  }
+  return { get, set, cycle, init, valid };
+})();
+
+// ---------- TOAST SYSTEM ----------
+const Toast = (() => {
+  function ensure() {
+    let host = document.querySelector('.toast-host');
+    if (!host) {
+      host = document.createElement('div');
+      host.className = 'toast-host';
+      document.body.appendChild(host);
+    }
+    return host;
+  }
+  function show(msg, type = 'info', duration = 4000) {
+    const host = ensure();
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    const icons = { success: '✓', error: '✕', warn: '⚠', info: 'ℹ' };
+    el.innerHTML = `<span style="font-size:18px">${icons[type] || 'ℹ'}</span><span>${msg}</span>`;
+    host.appendChild(el);
+    setTimeout(() => {
+      el.classList.add('fadeout');
+      setTimeout(() => el.remove(), 300);
+    }, duration);
+    return el;
+  }
+  return {
+    show,
+    success: (m, d) => show(m, 'success', d),
+    error: (m, d) => show(m, 'error', d),
+    warn: (m, d) => show(m, 'warn', d),
+    info: (m, d) => show(m, 'info', d),
+  };
+})();
+
+// ---------- MODAL ----------
+const Modal = (() => {
+  function open(title, content, opts = {}) {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop';
+    const m = document.createElement('div');
+    m.className = 'modal';
+    m.innerHTML = `
+      <div class="flex items-center justify-between mb-4">
+        <h3 style="font-size:18px;font-weight:600;color:var(--ink-0)">${title}</h3>
+        <button class="icon-btn modal-close">✕</button>
+      </div>
+      <div class="modal-body">${content}</div>
+      ${opts.actions ? `<div class="flex gap-2 mt-6 justify-end">${opts.actions}</div>` : ''}
+    `;
+    backdrop.appendChild(m);
+    document.body.appendChild(backdrop);
+    function close() { backdrop.style.animation = 'fadeIn 0.2s reverse'; setTimeout(() => backdrop.remove(), 200); }
+    m.querySelector('.modal-close').onclick = close;
+    backdrop.onclick = e => { if (e.target === backdrop) close(); };
+    document.addEventListener('keydown', function esc(e) {
+      if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); }
+    });
+    return { close, el: m };
+  }
+  function confirm(msg, onYes, onNo) {
+    const m = open('تأیید', `<p>${msg}</p>`, {
+      actions: `
+        <button class="btn-ghost" data-act="no">انصراف</button>
+        <button class="btn-primary" data-act="yes">تأیید</button>
+      `
+    });
+    m.el.querySelector('[data-act="yes"]').onclick = () => { onYes?.(); m.close(); };
+    m.el.querySelector('[data-act="no"]').onclick = () => { onNo?.(); m.close(); };
+    return m;
+  }
+  return { open, confirm };
+})();
+
+// ---------- API CLIENT ----------
+const API_CLIENT = (() => {
+  const BASE = window.LANIAKEA_API || (location.origin.replace(/\/$/, ''));
+  let token = localStorage.getItem('laniakea-token');
+
+  async function request(path, opts = {}) {
+    const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { ...opts, headers });
+      const ct = res.headers.get('content-type') || '';
+      const data = ct.includes('json') ? await res.json() : await res.text();
+      if (!res.ok) throw Object.assign(new Error(data.detail || res.statusText), { status: res.status, data });
+      return data;
+    } catch (e) {
+      if (e.status !== 401) Toast.error(`API ${e.status || 'ERR'}: ${e.message || path}`);
+      throw e;
+    }
+  }
+  function setToken(t) {
+    token = t;
+    if (t) localStorage.setItem('laniakea-token', t);
+    else localStorage.removeItem('laniakea-token');
+  }
+  return {
+    get: (p) => request(p),
+    post: (p, body) => request(p, { method: 'POST', body: JSON.stringify(body) }),
+    put:  (p, body) => request(p, { method: 'PUT',  body: JSON.stringify(body) }),
+    del:  (p) => request(p, { method: 'DELETE' }),
+    setToken,
+    BASE,
+  };
+})();
+
+// ---------- LIVE CLOCK ----------
+const LiveClock = (() => {
+  function start() {
+    const el = document.getElementById('liveClock');
+    if (!el) return;
+    function tick() {
+      const now = new Date();
+      el.textContent = now.toLocaleTimeString('en-GB', { hour12: false });
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+  return { start };
+})();
+
+// ---------- 3D HYPERCUBE (Three.js) ----------
+const Hypercube3D = (() => {
+  let scene, camera, renderer, cube, animationId;
+
+  function init(container) {
+    if (typeof THREE === 'undefined') return null;
+    const w = container.clientWidth, h = container.clientHeight || 320;
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 1000);
+    camera.position.set(3, 2, 4);
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // 8 vertices of hypercube projected to 3D
+    const verts = [];
+    for (let i = 0; i < 8; i++) {
+      verts.push(new THREE.Vector3(
+        (i & 1) ? 1 : -1, (i & 2) ? 1 : -1, (i & 4) ? 1 : -1
+      ));
+    }
+    const geo = new THREE.BufferGeometry().setFromPoints(verts);
+    const edges = [
+      [0,1],[1,3],[3,2],[2,0],[4,5],[5,7],[7,6],[6,4],
+      [0,4],[1,5],[2,6],[3,7]
+    ];
+    const positions = [];
+    edges.forEach(([a, b]) => {
+      positions.push(verts[a].x, verts[a].y, verts[a].z);
+      positions.push(verts[b].x, verts[b].y, verts[b].z);
+    });
+    const lineGeo = new THREE.BufferGeometry();
+    lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    const mat = new THREE.LineBasicMaterial({ color: 0x7c3aed, transparent: true, opacity: 0.9 });
+    cube = new THREE.LineSegments(lineGeo, mat);
+    scene.add(cube);
+
+    // Inner vertices (pulsing)
+    verts.forEach(v => {
+      const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(0.06, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x06b6d4 })
+      );
+      sphere.position.copy(v);
+      scene.add(sphere);
+    });
+
+    // Soft lights
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    const point = new THREE.PointLight(0xec4899, 1.2, 10);
+    point.position.set(3, 3, 3);
+    scene.add(point);
+
+    function animate() {
+      animationId = requestAnimationFrame(animate);
+      cube.rotation.x += 0.0035;
+      cube.rotation.y += 0.005;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      const nw = container.clientWidth, nh = container.clientHeight || 320;
+      camera.aspect = nw / nh;
+      camera.updateProjectionMatrix();
+      renderer.setSize(nw, nh);
+    });
+    return renderer.domElement;
+  }
+  function destroy() {
+    if (animationId) cancelAnimationFrame(animationId);
+    if (renderer) { renderer.dispose(); renderer.domElement.remove(); }
+  }
+  return { init, destroy };
+})();
+
+// ---------- ROUTER (hash-based, modern) ----------
+const Router = (() => {
+  const routes = new Map();
+  let current = null;
+
+  function on(path, handler) { routes.set(path, handler); }
+  function go(path) {
+    if (location.hash !== `#${path}`) location.hash = path;
+    else dispatch(path);
+  }
+  function dispatch(path) {
+    const handler = routes.get(path) || routes.get('/');
+    if (handler) {
+      if (current && routes.get(current)?.deactivate) routes.get(current).deactivate();
+      current = path;
+      handler(path);
+      document.querySelectorAll('[data-route]').forEach(el => {
+        el.classList.toggle('active', el.dataset.route === path);
+      });
+    }
+  }
+  function start() {
+    window.addEventListener('hashchange', () => dispatch(location.hash.slice(1) || '/'));
+    dispatch(location.hash.slice(1) || '/');
+  }
+  return { on, go, start, current: () => current };
+})();
+
+// ---------- PARTICLE FIELD (canvas-based) ----------
+const ParticleField = (() => {
+  function init(canvas) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w, h, particles;
+    function resize() {
+      w = canvas.width = canvas.clientWidth;
+      h = canvas.height = canvas.clientHeight;
+      particles = Array.from({ length: Math.min(80, Math.floor(w * h / 15000)) }, () => ({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.5 + 0.5,
+      }));
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    function step() {
+      ctx.clearRect(0, 0, w, h);
+      const theme = document.documentElement.getAttribute('data-theme');
+      const isLight = theme === 'light';
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = isLight ? 'rgba(124, 58, 237, 0.4)' : 'rgba(124, 58, 237, 0.6)';
+        ctx.fill();
+      });
+      requestAnimationFrame(step);
+    }
+    step();
+  }
+  return { init };
+})();
+
+// ---------- BOOT ----------
+document.addEventListener('DOMContentLoaded', () => {
+  ThemeManager.init();
+  LiveClock.start();
+  document.addEventListener('theme:change', e => {
+    Toast.info(`Theme: ${e.detail.theme}`);
+  });
+  // Bind theme toggle if exists
+  document.querySelectorAll('[data-action="theme-cycle"]').forEach(btn => {
+    btn.onclick = () => { ThemeManager.cycle(); };
+  });
+});
+
+// Expose to window
+window.Cosmic = { ThemeManager, Toast, Modal, API_CLIENT, LiveClock, Hypercube3D, Router, ParticleField };

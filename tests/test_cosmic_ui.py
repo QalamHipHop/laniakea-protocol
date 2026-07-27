@@ -243,5 +243,87 @@ class TestOpenAPI:
         assert "Block:" in content
 
 
+class TestCosmicV3Components:
+    """Tests for the Cosmic UI v3 component library (Qalam, 2025)."""
+
+    def test_theme_manager_defined(self):
+        js = (WEB_DIR / "cosmic.js").read_text()
+        assert "const ThemeManager" in js
+        assert "get()" in js
+        assert "set(" in js
+        assert "cycle(" in js
+
+    def test_toast_system_defined(self):
+        js = (WEB_DIR / "cosmic.js").read_text()
+        assert "const Toast" in js
+        assert "success:" in js
+        assert "error:" in js
+        assert "warn:" in js
+        assert "info:" in js
+
+    def test_modal_system_defined(self):
+        js = (WEB_DIR / "cosmic.js").read_text()
+        assert "const Modal" in js
+        assert "open(" in js
+        assert "confirm(" in js
+
+    def test_api_client_defined(self):
+        js = (WEB_DIR / "cosmic.js").read_text()
+        assert "const API_CLIENT" in js
+        assert "setToken" in js
+        assert "Bearer" in js
+
+    def test_hypercube_3d_defined(self):
+        js = (WEB_DIR / "cosmic.js").read_text()
+        assert "const Hypercube3D" in js
+        assert "THREE" in js
+        assert "LineSegments" in js
+
+    def test_router_defined(self):
+        js = (WEB_DIR / "cosmic.js").read_text()
+        assert "const Router" in js
+        assert "hashchange" in js
+
+    def test_particle_field_defined(self):
+        js = (WEB_DIR / "cosmic.js").read_text()
+        assert "const ParticleField" in js
+
+    def test_cosmic_namespace_exposed(self):
+        js = (WEB_DIR / "cosmic.js").read_text()
+        assert "window.Cosmic" in js
+
+    def test_reduced_motion_supported(self):
+        css = (WEB_DIR / "cosmic.css").read_text()
+        assert "prefers-reduced-motion" in css
+
+    def test_print_stylesheet(self):
+        css = (WEB_DIR / "cosmic.css").read_text()
+        assert "@media print" in css
+
+    def test_focus_visible_a11y(self):
+        css = (WEB_DIR / "cosmic.css").read_text()
+        assert ":focus-visible" in css
+
+    def test_badge_variants(self):
+        css = (WEB_DIR / "cosmic.css").read_text()
+        for variant in ["violet", "cyan", "pink", "amber", "green", "red", "glass"]:
+            assert f".badge-{variant}" in css
+
+    def test_alert_variants(self):
+        css = (WEB_DIR / "cosmic.css").read_text()
+        for variant in ["info", "success", "warn", "error"]:
+            assert f".alert.{variant}" in css
+
+    def test_animated_mesh_background(self):
+        css = (WEB_DIR / "cosmic.css").read_text()
+        assert ".mesh-bg" in css
+        assert "@keyframes meshMove" in css
+
+    def test_skeleton_loader(self):
+        css = (WEB_DIR / "cosmic.css").read_text()
+        assert ".skeleton" in css
+        assert "@keyframes skel" in css
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
