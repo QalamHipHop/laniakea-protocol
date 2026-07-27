@@ -21,8 +21,14 @@ class DHTNode:
     last_seen: float
 
     def distance_to(self, other_id: str) -> int:
-        """محاسبه فاصله XOR"""
-        return int(self.node_id, 16) ^ int(other_id, 16)
+        """محاسبه فاصله XOR (با محافظت در برابر node_id غیرهگز)"""
+        try:
+            return int(self.node_id, 16) ^ int(other_id, 16)
+        except ValueError:
+            # Hash-based fallback for non-hex node ids (e.g. UUID-style ids)
+            a = int(hashlib.sha256(self.node_id.encode()).hexdigest(), 16)
+            b = int(hashlib.sha256(other_id.encode()).hexdigest(), 16)
+            return a ^ b
 
     def to_dict(self) -> Dict:
         return {
@@ -85,11 +91,16 @@ class RoutingTable:
         self.buckets: List[KBucket] = [KBucket(k) for _ in range(160)]  # 160 bit
 
     def _get_bucket_index(self, other_id: str) -> int:
-        """محاسبه index bucket برای یک node_id"""
-        distance = int(self.node_id, 16) ^ int(other_id, 16)
+        """محاسبه index bucket برای یک node_id (با fallback امن، 0..len-1)"""
+        try:
+            distance = int(self.node_id, 16) ^ int(other_id, 16)
+        except ValueError:
+            a = int(hashlib.sha256(self.node_id.encode()).hexdigest(), 16)
+            b = int(hashlib.sha256(other_id.encode()).hexdigest(), 16)
+            distance = a ^ b
         if distance == 0:
             return 0
-        return distance.bit_length() - 1
+        return min(distance.bit_length() - 1, len(self.buckets) - 1)
 
     def add_node(self, node: DHTNode):
         """افزودن نود به جدول مسیریابی"""
