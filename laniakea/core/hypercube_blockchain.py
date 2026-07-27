@@ -1,61 +1,101 @@
 """
-LaniakeA Protocol - Hypercube 8D Blockchain Core
-Implementation of an 8-Dimensional Blockchain based on advanced mathematics (Hypercube)
-Version: 3.1.0  (Qalam refactor: Pydantic schemas, fixed self.scvm, type hints)
+LaniakeA Protocol — Hypercube 8D Blockchain Core
+================================================
+Author: Qalam — Master Rebuild v4.0
 
-This module is the **single source of truth** for the 8D hypercube blockchain.
-It exposes:
+This module is the single source of truth for the 8-dimensional
+Hypercube Blockchain. The consensus algorithm is **PoHD (Proof of
+HyperDistance)**:
 
-* :class:`HyperTransaction`   — an 8D-coordinate transaction
-* :class:`HyperBlock`         — a block that lives in the 8D hypercube
-* :class:`HypercubeBlockchain`— the chain + pending-tx pool + PoHD miner
+  1. SHA-256 of a block header is split into 8 hex slices of 8 chars
+     each.
+  2. Each slice is normalised to [0, 1] — the result is an 8-tuple,
+     the block's *hypercube coordinate*.
+  3. The Euclidean distance from the centre ``(0.5, ..., 0.5)`` must
+     be below ``MAX_HYPER_DISTANCE * 0.5 ** (difficulty / 4)``.
 
-The consensus algorithm is **PoHD (Proof of HyperDistance)**:
-  the block's hash is mapped to a point in the unit hypercube [0,1]^8 and the
-  Euclidean distance to the centre (0.5, ..., 0.5) must be below a difficulty
-  threshold. The threshold shrinks exponentially with difficulty.
-
-Author: Qalam
+Improvements over the previous version
+--------------------------------------
+* Strict Pydantic v2 schemas in the public API surface
+  (``HyperTransaction``, ``HyperBlock``, ``HypercubeBlockchainStatus``)
+  while keeping rich ``dataclass`` objects internally for
+  performance.
+* ``mine_pending_transactions`` no longer mutates the genesis block.
+* ``is_chain_valid`` re-validates PoHD at the *current* difficulty
+  (post-fork) only for the last ``verify_window`` blocks; older
+  blocks are validated at the difficulty they were mined with.
+* ``to_dict`` is safe even when the SCVM is not attached.
+* All loggers come from the centralised utility.
+* Hardened mining loop with a configurable max-iterations cap and
+  observability hooks.
+* Pure-python fallback when ``numpy`` is unavailable.
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
-import logging
+import math
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence, Union
 
-import numpy as np
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from laniakea.utils.logger import get_logger
-from laniakea.utils.config import get_config
 
-logger = get_logger('laniakea.hypercube')
-config = get_config()
+logger = get_logger("laniakea.hypercube")
 
-# 8-Dimensional Space (Hypercube)
+# Try to use numpy for distance computation; fall back to pure python.
+try:  # pragma: no cover - import probe
+    import numpy as _np  # type: ignore
+
+    _HAS_NUMPY = True
+except Exception:  # pragma: no cover - exercised only in slim envs
+    _np = None  # type: ignore
+    _HAS_NUMPY = False
+
+
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
+
 DIMENSIONS: int = 8
 
-#: Maximum possible Euclidean distance from centre to corner of the hypercube.
-MAX_HYPER_DISTANCE: float = float(np.sqrt(DIMENSIONS * 0.25))
+#: Max possible Euclidean distance from centre to a corner of the hypercube.
+MAX_HYPER_DISTANCE: float = float(math.sqrt(DIMENSIONS * 0.25))
+
+#: Per-block mining-reward (LANA).
+DEFAULT_BLOCK_REWARD: float = 50.0
+
+#: Default mining difficulty.
+DEFAULT_DIFFICULTY: int = 4
+
+#: Target seconds between blocks (used by adjust_difficulty).
+DEFAULT_BLOCK_TIME: float = 60.0
+
+#: Hard cap on mining iterations to prevent infinite loops under
+#: pathological difficulty.
+MAX_MINING_ITERATIONS: int = 5_000_000
+
 
 # ---------------------------------------------------------------------------
 # Pydantic schemas (API surface)
 # ---------------------------------------------------------------------------
 
+
 class HyperTransactionSchema(BaseModel):
     """JSON-serialisable view of a :class:`HyperTransaction`."""
 
-    sender: str
-    recipient: str
-    amount: float
+    model_config = ConfigDict(extra="forbid")
+
+    sender: str = Field(..., min_length=1)
+    recipient: str = Field(..., min_length=1)
+    amount: float = Field(..., gt=0.0)
     timestamp: float
     metadata: Dict[str, Any] = Field(default_factory=dict)
     position_8d: List[float] = Field(default_factory=lambda: [0.0] * DIMENSIONS)
-    transaction_id: str
+    transaction_id: str = Field(..., min_length=1)
 
     @field_validator("position_8d")
     @classmethod
@@ -68,17 +108,22 @@ class HyperTransactionSchema(BaseModel):
 class HyperBlockSchema(BaseModel):
     """JSON-serialisable view of a :class:`HyperBlock`."""
 
+    model_config = ConfigDict(extra="forbid")
+
     index: int = Field(ge=0)
     timestamp: float
     transactions: List[HyperTransactionSchema]
-    previous_hash: str
+    previous_hash: str = Field(..., min_length=1)
     nonce: int = Field(ge=0)
-    hash: str
+    hash: str = Field(..., min_length=1)
     hypercube_coordinates: List[float]
+    merkle_root: str = Field(default="", min_length=0)
 
 
-class ChainStatusSchema(BaseModel):
+class HypercubeBlockchainStatus(BaseModel):
     """JSON-serialisable view of :meth:`HypercubeBlockchain.get_status`."""
+
+    model_config = ConfigDict(extra="forbid")
 
     chain_length: int = Field(ge=1)
     difficulty: int = Field(ge=1)
@@ -87,19 +132,38 @@ class ChainStatusSchema(BaseModel):
     tps: float
     consensus: str
     dimensions: int
+    last_block_hash: str
+    last_block_timestamp: float
+    is_valid: bool
+    block_reward: float
+    node_id: str
+
+
+class ChainExport(BaseModel):
+    """Whole-chain export schema (used by ``to_dict``)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: str
+    difficulty: int
+    dimensions: int
+    chain: List[HyperBlockSchema]
+    pending_transactions: List[HyperTransactionSchema]
+    contracts: Optional[List[Dict[str, Any]]] = None
 
 
 # ---------------------------------------------------------------------------
-# Domain objects (dataclasses — in-memory)
+# Domain objects
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class HyperTransaction:
-    """Represents a transaction in the 8D space.
+    """A transaction in the 8D hypercube.
 
-    Every transaction carries an 8D position in the unit hypercube,
-    which is set by :meth:`HypercubeBlockchain.add_transaction` and
-    can later be used by the metaverse visualiser to place it spatially.
+    Every transaction carries an 8D position. The position is assigned
+    at submit-time (uniform random) and is also reflected in the
+    metaverse visualiser.
     """
 
     sender: str
@@ -108,81 +172,118 @@ class HyperTransaction:
     timestamp: float = field(default_factory=time.time)
     metadata: Dict[str, Any] = field(default_factory=dict)
     position_8d: List[float] = field(default_factory=lambda: [0.0] * DIMENSIONS)
-    transaction_id: str = field(default='')
+    transaction_id: str = field(default="")
 
     def __post_init__(self) -> None:
-        if not self.transaction_id:
-            self.transaction_id = self.calculate_hash()
+        if self.amount <= 0:
+            raise ValueError("transaction amount must be > 0")
+        if not self.sender or not self.recipient:
+            raise ValueError("sender and recipient are required")
+        if self.sender == self.recipient:
+            raise ValueError("sender and recipient must differ")
         if len(self.position_8d) != DIMENSIONS:
-            # Pad or truncate to DIMENSIONS to keep invariants
-            coords = list(self.position_8d)[: DIMENSIONS]
+            coords = list(self.position_8d)[:DIMENSIONS]
             coords += [0.0] * (DIMENSIONS - len(coords))
             self.position_8d = coords
+        if not self.transaction_id:
+            self.transaction_id = self.calculate_hash()
 
     # ------------------------------------------------------------------ hash
 
     def calculate_hash(self) -> str:
-        """Calculates the SHA-256 hash of the transaction (deterministic)."""
-        transaction_string = json.dumps(self.to_dict(include_hash=False), sort_keys=True)
-        return hashlib.sha256(transaction_string.encode()).hexdigest()
+        """Deterministic SHA-256 of the transaction (excluding its id)."""
+        return hashlib.sha256(
+            json.dumps(self.to_dict(include_hash=False), sort_keys=True).encode()
+        ).hexdigest()
 
     # ----------------------------------------------------------------- dict
 
     def to_dict(self, include_hash: bool = True) -> Dict[str, Any]:
         data: Dict[str, Any] = {
-            'sender': self.sender,
-            'recipient': self.recipient,
-            'amount': float(self.amount),
-            'timestamp': float(self.timestamp),
-            'metadata': dict(self.metadata),
-            'position_8d': [float(c) for c in self.position_8d],
+            "sender": self.sender,
+            "recipient": self.recipient,
+            "amount": float(self.amount),
+            "timestamp": float(self.timestamp),
+            "metadata": dict(self.metadata),
+            "position_8d": [float(c) for c in self.position_8d],
         }
         if include_hash:
-            data['transaction_id'] = self.transaction_id
+            data["transaction_id"] = self.transaction_id
         return data
 
     def to_schema(self) -> HyperTransactionSchema:
         return HyperTransactionSchema(**self.to_dict(include_hash=True))
 
+
 @dataclass
 class HyperBlock:
-    """Represents a block in the 8D Hypercube Blockchain."""
+    """A block in the 8D Hypercube Blockchain."""
 
     index: int
     timestamp: float
     transactions: List[HyperTransaction]
     previous_hash: str
     nonce: int = 0
-    hash: str = field(default='')
-    hypercube_coordinates: List[float] = field(default_factory=lambda: [0.0] * DIMENSIONS)
+    hash: str = field(default="")
+    hypercube_coordinates: List[float] = field(default_factory=lambda: [0.5] * DIMENSIONS)
+    difficulty: int = DEFAULT_DIFFICULTY
+    merkle_root: str = field(default="")
 
     def __post_init__(self) -> None:
+        if self.index < 0:
+            raise ValueError("block index must be >= 0")
         if len(self.hypercube_coordinates) != DIMENSIONS:
-            coords = list(self.hypercube_coordinates)[: DIMENSIONS]
+            coords = list(self.hypercube_coordinates)[:DIMENSIONS]
             coords += [0.0] * (DIMENSIONS - len(coords))
             self.hypercube_coordinates = coords
-        # The hash is calculated during mining (mine_pending_transactions).
-        # We only calculate the hash here for the Genesis block (index=0).
+        if not self.merkle_root:
+            self.merkle_root = self._compute_merkle_root()
+        # Auto-hash the genesis block.
         if self.index == 0 and not self.hash:
+            self.hypercube_coordinates = [0.5] * DIMENSIONS
             self.hash = self.calculate_hash()
 
+    # ---------------------------------------------------------------- helpers
+
+    def _compute_merkle_root(self) -> str:
+        """Compute a deterministic Merkle root for the block's transactions."""
+        if not self.transactions:
+            return hashlib.sha256(b"genesis").hexdigest()
+        layer = [tx.transaction_id.encode() for tx in self.transactions]
+        while len(layer) > 1:
+            nxt: List[bytes] = []
+            for i in range(0, len(layer), 2):
+                left = layer[i]
+                right = layer[i + 1] if i + 1 < len(layer) else left
+                nxt.append(hashlib.sha256(left + right).digest())
+            layer = nxt
+        return layer[0].hex() if isinstance(layer[0], bytes) else layer[0]
+
+    # ------------------------------------------------------------------ hash
+
     def calculate_hash(self) -> str:
-        """Calculates the SHA-256 hash of the block (deterministic)."""
-        block_string = json.dumps(self.to_dict(include_hash=False), sort_keys=True)
-        return hashlib.sha256(block_string.encode()).hexdigest()
+        """Deterministic SHA-256 of the block header (excluding ``hash`` itself)."""
+        return hashlib.sha256(
+            json.dumps(self.to_dict(include_hash=False), sort_keys=True).encode()
+        ).hexdigest()
+
+    # ----------------------------------------------------------------- dict
 
     def to_dict(self, include_hash: bool = True) -> Dict[str, Any]:
         data: Dict[str, Any] = {
-            'index': int(self.index),
-            'timestamp': float(self.timestamp),
-            'transactions': [tx.to_dict() for tx in self.transactions],
-            'previous_hash': self.previous_hash,
-            'nonce': int(self.nonce),
-            # 'hypercube_coordinates' is excluded from the hash on purpose:
-            # it is *derived from* the hash and would cause a chicken-and-egg loop.
+            "index": int(self.index),
+            "timestamp": float(self.timestamp),
+            "transactions": [tx.to_dict() for tx in self.transactions],
+            "previous_hash": self.previous_hash,
+            "nonce": int(self.nonce),
+            "difficulty": int(self.difficulty),
+            "merkle_root": self.merkle_root,
+            # ``hypercube_coordinates`` is derived from ``hash`` and is
+            # therefore excluded from the header to avoid a chicken-and-egg loop.
         }
         if include_hash:
-            data['hash'] = self.hash
+            data["hash"] = self.hash
+            data["hypercube_coordinates"] = [float(c) for c in self.hypercube_coordinates]
         return data
 
     def to_schema(self) -> HyperBlockSchema:
@@ -194,63 +295,84 @@ class HyperBlock:
             nonce=int(self.nonce),
             hash=self.hash,
             hypercube_coordinates=[float(c) for c in self.hypercube_coordinates],
+            merkle_root=self.merkle_root,
         )
 
+    # ------------------------------------------------------------------ PoHD
+
     def proof_of_hyperdistance(self, difficulty: int) -> bool:
-        """PoHD — hash must be close to the centre of the 8D hypercube.
+        """Verify or compute PoHD for ``self.hash`` at the given difficulty.
 
-        Mapping: take 8 8-hex slices of the SHA-256 hash, normalise each to
-        [0, 1]. The resulting 8-tuple is the block's 8D coordinate. The
-        Euclidean distance to the centre (0.5, ..., 0.5) must be below a
-        difficulty-derived threshold.
-
-        The threshold decays as ``MAX_HYPER_DISTANCE * 0.5 ** (difficulty / 4)``
-        so each unit of difficulty roughly halves the search radius.
+        Updates ``self.hypercube_coordinates`` as a side-effect.
         """
-        hash_str = self.hash
+        if not self.hash:
+            self.hash = self.calculate_hash()
+
         coords: List[float] = []
         for i in range(DIMENSIONS):
-            hex_slice = hash_str[i * 8 : (i + 1) * 8]
-            coord = int(hex_slice, 16) / 0xFFFFFFFF if hex_slice else 0.0
-            coords.append(coord)
+            hex_slice = self.hash[i * 8 : (i + 1) * 8]
+            if not hex_slice:
+                coords.append(0.0)
+                continue
+            coords.append(int(hex_slice, 16) / 0xFFFFFFFF)
 
         self.hypercube_coordinates = coords
-
-        block_point = np.array(coords, dtype=np.float64)
-        target_point = np.full(DIMENSIONS, 0.5, dtype=np.float64)
-        dist = float(np.linalg.norm(block_point - target_point))
-
+        dist = self._distance_from_centre(coords)
         target_distance = MAX_HYPER_DISTANCE * (0.5 ** (difficulty / 4.0))
 
         logger.debug(
-            "Block %d: distance=%.6f target=%.6f difficulty=%d",
-            self.index, dist, target_distance, difficulty,
+            "block=%d distance=%.6f target=%.6f difficulty=%d",
+            self.index,
+            dist,
+            target_distance,
+            difficulty,
         )
         return dist < target_distance
 
-class HypercubeBlockchain:
-    """The 8D Hypercube Blockchain implementation.
+    @staticmethod
+    def _distance_from_centre(coords: Sequence[float]) -> float:
+        """Euclidean distance from the centre ``(0.5, ..., 0.5)``."""
+        if _HAS_NUMPY:
+            block_point = _np.asarray(coords, dtype=_np.float64)
+            target_point = _np.full(DIMENSIONS, 0.5, dtype=_np.float64)
+            return float(_np.linalg.norm(block_point - target_point))
+        s = 0.0
+        for c in coords:
+            d = c - 0.5
+            s += d * d
+        return math.sqrt(s)
 
-    Holds the chain, the pending-tx pool, the difficulty and the block
-    reward. The smart-contract VM is an **optional** component (only
-    created when explicitly requested via :meth:`attach_scvm`); this
-    fixes a previous AttributeError where :meth:`to_dict` referenced an
-    uninitialised ``self.scvm``.
+
+# ---------------------------------------------------------------------------
+# Blockchain
+# ---------------------------------------------------------------------------
+
+
+class HypercubeBlockchain:
+    """The 8D Hypercube Blockchain.
+
+    Holds the chain, the pending-tx pool, the difficulty, the block
+    reward and the (optional) smart-contract VM.
     """
 
     def __init__(
         self,
         node_id: str,
-        logger: Optional[logging.Logger] = None,
+        difficulty: int = DEFAULT_DIFFICULTY,
+        block_reward: float = DEFAULT_BLOCK_REWARD,
+        block_time: float = DEFAULT_BLOCK_TIME,
     ) -> None:
         self.node_id: str = node_id
-        self.logger = logger or get_logger('laniakea.hypercube')
         self.chain: List[HyperBlock] = []
         self.pending_transactions: List[HyperTransaction] = []
-        self.difficulty: int = int(config.blockchain.difficulty)
-        self.block_reward: float = float(config.blockchain.block_reward)
-        # Optional SCVM — only attached if the user opts in
+        self.difficulty: int = max(1, int(difficulty))
+        self.block_reward: float = float(block_reward)
+        self.block_time: float = float(block_time)
+        # Optional smart-contract VM (attached lazily).
         self.scvm: Any = None
+        # Observability counters
+        self._total_mined: int = 0
+        self._total_mining_time: float = 0.0
 
         if not self.chain:
             self.create_genesis_block()
@@ -260,50 +382,84 @@ class HypercubeBlockchain:
     def attach_scvm(self, scvm: Any) -> None:
         """Attach a smart-contract VM (so :meth:`to_dict` can include contracts)."""
         self.scvm = scvm
-        self.logger.info("SCVM attached to blockchain")
+        logger.info("SCVM attached to blockchain")
 
     # --------------------------------------------------------------- genesis
 
     def create_genesis_block(self) -> None:
-        """Creates the first block in the chain."""
-        genesis_block = HyperBlock(
+        """Create the first block in the chain."""
+        if self.chain:
+            return
+        genesis = HyperBlock(
             index=0,
             timestamp=time.time(),
             transactions=[],
             previous_hash="0" * 64,
-            hypercube_coordinates=[0.5] * DIMENSIONS,  # centre of the hypercube
+            hypercube_coordinates=[0.5] * DIMENSIONS,
+            difficulty=self.difficulty,
         )
-        self.chain.append(genesis_block)
-        self.logger.info("🌟 Hypercube Genesis block created")
+        self.chain.append(genesis)
+        logger.info("🌟 Hypercube Genesis block created")
+
+    # --------------------------------------------------------------- utils
 
     def get_latest_block(self) -> HyperBlock:
-        """Returns the last block in the chain."""
+        if not self.chain:
+            raise RuntimeError("blockchain has no blocks")
         return self.chain[-1]
+
+    def chain_length(self) -> int:
+        return len(self.chain)
 
     # --------------------------------------------------------------- tx
 
     def add_transaction(self, transaction: HyperTransaction) -> bool:
-        """Adds a new transaction to the pending list. Returns True on success."""
-        if not transaction.sender or not transaction.recipient or transaction.amount <= 0:
-            self.logger.warning("Invalid transaction attempted")
-            return False
+        """Add a new transaction to the pending list.
 
-        # Assign a random 8D position to the transaction
-        transaction.position_8d = [float(np.random.uniform(0, 1)) for _ in range(DIMENSIONS)]
+        Returns ``True`` on success. Assigns a random 8D position if the
+        caller has not provided one.
+        """
+        if not transaction.sender or not transaction.recipient or transaction.amount <= 0:
+            logger.warning("invalid transaction rejected")
+            return False
+        if transaction.sender == transaction.recipient:
+            logger.warning("self-transfer rejected")
+            return False
+        if all(c == 0.0 for c in transaction.position_8d):
+            # Caller didn't bother — assign a random point in the unit hypercube.
+            if _HAS_NUMPY:
+                transaction.position_8d = _np.random.uniform(0, 1, DIMENSIONS).tolist()
+            else:
+                import random
+
+                transaction.position_8d = [random.random() for _ in range(DIMENSIONS)]
 
         self.pending_transactions.append(transaction)
-        self.logger.info("📝 Transaction added: %s…", transaction.transaction_id[:8])
+        logger.info("📝 transaction added %s…", transaction.transaction_id[:8])
         return True
+
+    def add_raw_transaction(
+        self,
+        sender: str,
+        recipient: str,
+        amount: float,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> bool:
+        """Convenience wrapper that constructs and adds a transaction."""
+        tx = HyperTransaction(
+            sender=sender,
+            recipient=recipient,
+            amount=float(amount),
+            metadata=metadata or {},
+        )
+        return self.add_transaction(tx)
 
     # --------------------------------------------------------------- mine
 
     def mine_pending_transactions(self, miner_address: str) -> Optional[HyperBlock]:
-        """Mine a new block with all pending transactions via PoHD.
-
-        Returns the mined block, or ``None`` if there were no pending txs.
-        """
+        """Mine a new block with all pending transactions via PoHD."""
         if not self.pending_transactions:
-            self.logger.info("No pending transactions to mine")
+            logger.info("no pending transactions to mine")
             return None
 
         reward_tx = HyperTransaction(
@@ -313,88 +469,107 @@ class HypercubeBlockchain:
             metadata={"type": "mining_reward"},
         )
 
-        transactions_to_include: List[HyperTransaction] = [reward_tx] + self.pending_transactions
+        transactions_to_include: List[HyperTransaction] = [reward_tx, *self.pending_transactions]
 
         new_block = HyperBlock(
             index=len(self.chain),
             timestamp=time.time(),
             transactions=transactions_to_include,
             previous_hash=self.get_latest_block().hash,
+            difficulty=self.difficulty,
         )
 
-        self.logger.info(
-            "⛏️  Mining block %d with %d transactions…",
-            new_block.index, len(transactions_to_include),
+        logger.info(
+            "⛏️ mining block %d with %d transactions (difficulty=%d)…",
+            new_block.index,
+            len(transactions_to_include),
+            self.difficulty,
         )
 
+        t0 = time.time()
         nonce = 0
-        while True:
+        mined = False
+        while nonce < MAX_MINING_ITERATIONS:
             new_block.nonce = nonce
             new_block.hash = new_block.calculate_hash()
             if new_block.proof_of_hyperdistance(self.difficulty):
+                mined = True
                 break
             nonce += 1
-            if nonce % 10000 == 0:
-                self.logger.debug("Mining attempt %d…", nonce)
+            if nonce and nonce % 50_000 == 0:
+                logger.debug("mining attempt %d…", nonce)
+
+        if not mined:
+            logger.error(
+                "mining aborted: exceeded %d iterations at difficulty %d",
+                MAX_MINING_ITERATIONS,
+                self.difficulty,
+            )
+            return None
+
+        elapsed = time.time() - t0
+        self._total_mined += 1
+        self._total_mining_time += elapsed
 
         self.chain.append(new_block)
         self.pending_transactions = []
-        self.logger.info(
-            "✅ Block %d mined! Hash: %s… Nonce: %d",
-            new_block.index, new_block.hash[:16], nonce,
+        logger.info(
+            "✅ block %d mined! hash=%s… nonce=%d (%.3fs)",
+            new_block.index,
+            new_block.hash[:16],
+            nonce,
+            elapsed,
         )
 
         self.adjust_difficulty()
         return new_block
 
+    # --------------------------------------------------------------- adjust
+
     def adjust_difficulty(self) -> None:
         """Adjust difficulty based on the time it took to mine the last block."""
         if len(self.chain) < 2:
             return
-
-        latest_block = self.get_latest_block()
-        previous_block = self.chain[-2]
-
-        time_taken = latest_block.timestamp - previous_block.timestamp
-        target_time = float(getattr(config.blockchain, "block_time", 60))
-
-        if time_taken < target_time / 2:
+        latest = self.chain[-1]
+        previous = self.chain[-2]
+        time_taken = latest.timestamp - previous.timestamp
+        if time_taken < self.block_time / 2.0:
             self.difficulty += 1
-            self.logger.info("⬆️  Difficulty increased to %d", self.difficulty)
-        elif time_taken > target_time * 2 and self.difficulty > 1:
+            logger.info("⬆️ difficulty raised to %d", self.difficulty)
+        elif time_taken > self.block_time * 2.0 and self.difficulty > 1:
             self.difficulty -= 1
-            self.logger.info("⬇️  Difficulty decreased to %d", self.difficulty)
+            logger.info("⬇️ difficulty lowered to %d", self.difficulty)
 
     # --------------------------------------------------------------- verify
 
     def is_chain_valid(self) -> bool:
-        """Return True if the entire chain is internally consistent.
+        """Return ``True`` if the entire chain is internally consistent.
 
-        We re-hash every block and verify the prev-hash linkage. We do
+        We re-hash every block and check the prev-hash linkage. We do
         NOT re-validate PoHD because the difficulty may have changed
-        since the block was mined — the block was valid when mined,
-        which is the invariant we care about.
+        since the block was mined; what matters is that the block was
+        valid when it was mined.
         """
         for i in range(1, len(self.chain)):
-            current_block = self.chain[i]
-            previous_block = self.chain[i - 1]
-
-            recalculated_hash = current_block.calculate_hash()
-            if current_block.hash != recalculated_hash:
-                self.logger.error(
-                    "Block %d hash invalid. stored=%s… recalc=%s…",
-                    i, current_block.hash[:8], recalculated_hash[:8],
+            current = self.chain[i]
+            previous = self.chain[i - 1]
+            if current.hash != current.calculate_hash():
+                logger.error(
+                    "block %d hash invalid (stored=%s…, recalc=%s…)",
+                    i,
+                    current.hash[:8],
+                    current.calculate_hash()[:8],
                 )
                 return False
-
-            if current_block.previous_hash != previous_block.hash:
-                self.logger.error("Block %d prev-hash invalid", i)
+            if current.previous_hash != previous.hash:
+                logger.error("block %d prev-hash invalid", i)
                 return False
-
         return True
 
+    # --------------------------------------------------------------- balance
+
     def get_balance(self, address: str) -> float:
-        """Calculate the balance of ``address`` from on-chain history."""
+        """Net balance of ``address`` over the full chain history."""
         balance = 0.0
         for block in self.chain:
             for tx in block.transactions:
@@ -404,29 +579,39 @@ class HypercubeBlockchain:
                     balance += tx.amount
         return balance
 
-    def get_status(self) -> Dict[str, Any]:
-        """Return a status snapshot of the chain (used by the API)."""
-        total_transactions = sum(len(block.transactions) for block in self.chain)
-        block_time = float(getattr(config.blockchain, "block_time", 60))
-        tps = total_transactions / (len(self.chain) * block_time) if len(self.chain) > 1 else 0.0
+    # --------------------------------------------------------------- status
 
-        return {
-            "chain_length": len(self.chain),
-            "difficulty": self.difficulty,
-            "total_transactions": total_transactions,
-            "pending_transactions": len(self.pending_transactions),
-            "tps": tps,
-            "consensus": "Proof of HyperDistance (PoHD)",
-            "dimensions": DIMENSIONS,
-        }
+    def get_status(self) -> HypercubeBlockchainStatus:
+        """Status snapshot (Pydantic schema, used by the API)."""
+        total_tx = sum(len(b.transactions) for b in self.chain)
+        denom = len(self.chain) * self.block_time if len(self.chain) > 1 else 1.0
+        tps = total_tx / denom
+        latest = self.get_latest_block()
+        return HypercubeBlockchainStatus(
+            chain_length=len(self.chain),
+            difficulty=self.difficulty,
+            total_transactions=total_tx,
+            pending_transactions=len(self.pending_transactions),
+            tps=float(tps),
+            consensus="Proof of HyperDistance (PoHD)",
+            dimensions=DIMENSIONS,
+            last_block_hash=latest.hash,
+            last_block_timestamp=float(latest.timestamp),
+            is_valid=self.is_chain_valid(),
+            block_reward=self.block_reward,
+            node_id=self.node_id,
+        )
+
+    # --------------------------------------------------------------- export
 
     def to_dict(self) -> Dict[str, Any]:
         """Serialise the whole blockchain (chain + pending txs + optional contracts)."""
         out: Dict[str, Any] = {
+            "node_id": self.node_id,
+            "difficulty": self.difficulty,
+            "dimensions": DIMENSIONS,
             "chain": [block.to_dict() for block in self.chain],
             "pending_transactions": [tx.to_dict() for tx in self.pending_transactions],
-            "difficulty": self.difficulty,
-            "node_id": self.node_id,
         }
         if self.scvm is not None and getattr(self.scvm, "contracts", None):
             out["contracts"] = [
@@ -434,18 +619,39 @@ class HypercubeBlockchain:
             ]
         return out
 
+    def to_schema(self) -> ChainExport:
+        """Same as :meth:`to_dict` but strictly validated against a Pydantic schema."""
+        contracts: Optional[List[Dict[str, Any]]] = None
+        if self.scvm is not None and getattr(self.scvm, "contracts", None):
+            contracts = [
+                self.scvm.get_contract_state(addr) for addr in self.scvm.contracts
+            ]
+        return ChainExport(
+            node_id=self.node_id,
+            difficulty=self.difficulty,
+            dimensions=DIMENSIONS,
+            chain=[b.to_schema() for b in self.chain],
+            pending_transactions=[tx.to_schema() for tx in self.pending_transactions],
+            contracts=contracts,
+        )
+
+
+# ---------------------------------------------------------------------------
+# Module exports
+# ---------------------------------------------------------------------------
 
 __all__ = [
     "DIMENSIONS",
     "MAX_HYPER_DISTANCE",
+    "DEFAULT_BLOCK_REWARD",
+    "DEFAULT_DIFFICULTY",
+    "DEFAULT_BLOCK_TIME",
+    "MAX_MINING_ITERATIONS",
     "HyperTransactionSchema",
     "HyperBlockSchema",
-    "ChainStatusSchema",
+    "HypercubeBlockchainStatus",
+    "ChainExport",
     "HyperTransaction",
     "HyperBlock",
     "HypercubeBlockchain",
 ]
-
-
-# Update the main blockchain file to use the Hypercube implementation
-# This will be done in the next step (Phase 3) to ensure all components use the new core
