@@ -107,6 +107,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- SCDA disk persistence (best-effort, opt-in) ---------------------------
+# Loads any existing SCDA snapshot from disk and arms an auto-save hook so
+# SCDAs survive process restarts. Disabled automatically if a custom path
+# is set to /dev/null or the data dir is not writable.
+try:
+    _scda_persist_path = os.getenv("LANIAKEA_SCDA_SNAPSHOT", "")
+    if _scda_persist_path and _scda_persist_path != "/dev/null":
+        from laniakea.intelligence.scda_persistence import install_persistence
+
+        install_persistence(path=_scda_persist_path)
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("SCDA persistence install failed: %s", exc)
+
 # --- Laniakea middleware stack (request-id, security headers, rate-limit) -
 try:
     from laniakea.api.middleware import install_default_middleware
