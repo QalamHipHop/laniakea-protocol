@@ -810,6 +810,85 @@ def train_ai_model(data_size: int) -> Dict[str, Any]:
     }
 
 
+# --- Cosmic overview endpoint ----------------------------------------------
+@app.get("/cosmic/overview", tags=["Cosmic"])
+def cosmic_overview() -> Dict[str, Any]:
+    """Aggregate, real-time snapshot of every live subsystem.
+
+    Returns a single payload that the Cosmic UI dashboard consumes to render
+    the unified hypercube state. Designed to be safe even when an optional
+    subsystem (e.g. diplomacy, knowledge market) is unavailable.
+    """
+    identities = (
+        laniakea_scda_manager.list_identities() if laniakea_scda_manager else []
+    )
+
+    # Total SCDA complexity / energy for the radar chart.
+    total_complexity = 0.0
+    total_energy = 0.0
+    for ident in identities:
+        state = laniakea_scda_manager.get_state(ident) if laniakea_scda_manager else None
+        if state is not None:
+            total_complexity += float(getattr(state, "complexity", 0.0) or 0.0)
+            total_energy += float(getattr(state, "energy", 0.0) or 0.0)
+
+    return {
+        "protocol": {
+            "name": settings.PROJECT_NAME,
+            "version": settings.PROJECT_VERSION,
+            "environment": os.getenv("NODE_ENV", "development"),
+            "status": "Operational",
+        },
+        "blockchain": {
+            "chain_length": len(laniakea_chain.chain),
+            "latest_hash": laniakea_chain.chain[-1].hash if laniakea_chain.chain else None,
+            "difficulty": getattr(laniakea_chain, "difficulty", 4),
+        },
+        "consensus": {
+            "authority": (
+                laniakea_consensus.authority
+                if hasattr(laniakea_consensus, "authority")
+                else "laniakea-authority"
+            ),
+            "validators": len(getattr(laniakea_consensus, "validators", []) or []),
+        },
+        "defi": {
+            "pools": len(laniakea_dex.pools),
+            "pool_names": list(laniakea_dex.pools.keys()),
+        },
+        "governance": {
+            "proposals": len(laniakea_dao.proposals),
+        },
+        "quantum": {
+            "queue": len(laniakea_quantum.job_queue),
+        },
+        "ai": {
+            "version": laniakea_ai.version,
+            "performance": getattr(laniakea_ai, "performance_score", 0.0),
+        },
+        "scda": {
+            "identities": len(identities),
+            "total_complexity": total_complexity,
+            "total_energy": total_energy,
+        },
+        "diplomacy": {
+            "alliances": (
+                len(laniakea_diplomacy.alliances) if laniakea_diplomacy else 0
+            ),
+            "available": laniakea_diplomacy is not None,
+        },
+        "knowledge_market": {
+            "listed": (
+                len(laniakea_knowledge_market.assets) if laniakea_knowledge_market else 0
+            ),
+            "available": laniakea_knowledge_market is not None,
+        },
+        "metaverse": {
+            "entities": len(laniakea_simulator.entities),
+        },
+    }
+
+
 # --- DeFi endpoints ---------------------------------------------------------
 @app.get("/defi/pools", tags=["DeFi"])
 def get_all_pools() -> Dict[str, Any]:
