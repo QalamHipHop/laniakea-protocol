@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCDA Dashboard - Laniakea Protocol v0.0.01</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #b0b0b0;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        input[type="text"] {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: #e0e0e0;
+            font-size: 1em;
+        }
+
+        input[type="text"]::placeholder {
+            color: #808080;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-label {
+            color: #b0b0b0;
+        }
+
+        .stat-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .tier-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .tier-1 {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .tier-2 {
+            background: rgba(33, 150, 243, 0.3);
+            color: #2196f3;
+            border: 1px solid #2196f3;
+        }
+
+        .tier-3 {
+            background: rgba(255, 152, 0, 0.3);
+            color: #ff9800;
+            border: 1px solid #ff9800;
+        }
+
+        .tier-4 {
+            background: rgba(156, 39, 176, 0.3);
+            color: #9c27b0;
+            border: 1px solid #9c27b0;
+        }
+
+        .knowledge-domains {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .domain {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+
+        .domain-name {
+            font-size: 0.9em;
+            color: #b0b0b0;
+            margin-bottom: 5px;
+        }
+
+        .domain-level {
+            font-size: 1.2em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .visualization-3d {
+            width: 100%;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #808080;
+            font-size: 1.1em;
+        }
+
+        .tier-history {
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .history-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 3px solid #667eea;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .history-item-title {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .history-item-detail {
+            color: #b0b0b0;
+            margin: 3px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #b0b0b0;
+        }
+
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+            color: #66bb6a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .knowledge-domains {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #b0b0b0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌌 SCDA Dashboard</h1>
+            <p class="subtitle">Single-Cell Digital Account Evolution in the 8D Metaverse</p>
+            <p class="subtitle">Laniakea Protocol v0.0.01</p>
+        </header>
+
+        <div class="controls">
+            <input type="text" id="scda-identity" placeholder="Enter SCDA Identity (or leave blank to create new)">
+            <button onclick="loadOrCreateSCDA()">Load/Create SCDA</button>
+            <button onclick="refreshDashboard()">Refresh</button>
+        </div>
+
+        <div id="message-container"></div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="switchTab('overview')">Overview</button>
+            <button class="tab-button" onclick="switchTab('metaverse')">Metaverse Position</button>
+            <button class="tab-button" onclick="switchTab('history')">Tier History</button>
+            <button class="tab-button" onclick="switchTab('problem-solver')">Solve Problem</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="grid">
+                <!-- Status Card -->
+                <div class="card">
+                    <div class="card-title">📊 SCDA Status</div>
+                    <div class="stat">
+                        <span class="stat-label">Identity:</span>
+                        <span class="stat-value" id="scda-id">-</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Complexity Index (C):</span>
+                        <span class="stat-value" id="complexity">-</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="complexity-progress" style="width: 10%;"></div>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Energy:</span>
+                        <span class="stat-value" id="energy">-</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="energy-progress" style="width: 50%;"></div>
+                    </div>
+                </div>
+
+                <!-- Tier Information Card -->
+                <div class="card">
+                    <div class="card-title">🎯 Tier Information</div>
+                    <div class="stat">
+                        <span class="stat-label">Current Tier:</span>
+                        <span class="stat-value" id="tier-name">-</span>
+                    </div>
+                    <div id="tier-badge"></div>
+                    <div class="stat" style="margin-top: 15px;">
+                        <span class="stat-label">Tier Transitions:</span>
+                        <span class="stat-value" id="tier-transitions">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Genetic Diversity:</span>
+                        <span class="stat-value" id="genetic-diversity">-</span>
+                    </div>
+                </div>
+
+                <!-- 8D Position Card -->
+                <div class="card">
+                    <div class="card-title">🌐 8D Position</div>
+                    <div id="position-8d-display">
+                        <div class="stat">
+                            <span class="stat-label">Position Vector:</span>
+                        </div>
+                        <div id="position-values" style="font-size: 0.9em; color: #667eea; font-family: monospace; word-break: break-all;">
+                            [-, -, -, -, -, -, -, -]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Knowledge Domains -->
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-title">🧠 Knowledge Domains</div>
+                <div class="knowledge-domains" id="knowledge-domains">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Metaverse Position Tab -->
+        <div id="metaverse" class="tab-content">
+            <div class="card">
+                <div class="card-title">🌌 Metaverse Visualization (3D Projection)</div>
+                <div class="visualization-3d" id="visualization-container">
+                    <div class="loading">
+                        <p>3D Visualization will be rendered here</p>
+                        <p style="font-size: 0.9em; margin-top: 10px; color: #808080;">
+                            (Requires Three.js or Babylon.js integration)
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">📍 Position Details</div>
+                    <div id="position-details">
+                        <div class="loading">Loading position details...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tier History Tab -->
+        <div id="history" class="tab-content">
+            <div class="card">
+                <div class="card-title">📜 Tier Transition History</div>
+                <div class="tier-history" id="tier-history-list">
+                    <div class="loading">No tier transitions yet</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem Solver Tab -->
+        <div id="problem-solver" class="tab-content">
+            <div class="card">
+                <div class="card-title">🧩 Solve a Hard Problem</div>
+                <div style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 10px; color: #b0b0b0;">Problem ID:</label>
+                    <input type="text" id="problem-id" placeholder="Enter problem ID" style="width: 100%; margin-bottom: 15px;">
+
+                    <label style="display: block; margin-bottom: 10px; color: #b0b0b0;">Solution:</label>
+                    <textarea id="solution-text" placeholder="Enter your solution" style="width: 100%; height: 100px; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 5px; color: #e0e0e0; margin-bottom: 15px; font-family: monospace;"></textarea>
+
+                    <label style="display: block; margin-bottom: 10px; color: #b0b0b0;">Reasoning:</label>
+                    <textarea id="reasoning-text" placeholder="Explain your reasoning" style="width: 100%; height: 80px; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 5px; color: #e0e0e0; margin-bottom: 15px; font-family: monospace;"></textarea>
+
+                    <label style="display: block; margin-bottom: 10px; color: #b0b0b0;">Solution Quality (0.0 - 1.0):</label>
+                    <input type="range" id="quality-slider" min="0" max="1" step="0.1" value="0.5" style="width: 100%; margin-bottom: 15px;">
+                    <span id="quality-value" style="color: #667eea;">0.5</span>
+
+                    <button onclick="submitSolution()" style="width: 100%; margin-top: 20px; padding: 12px;">Submit Solution</button>
+                </div>
+            </div>
+
+            <div id="solution-result" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentSCDAIdentity = null;
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Activate corresponding button
+            event.target.classList.add('active');
+        }
+
+        // Update quality slider display
+        document.getElementById('quality-slider').addEventListener('input', (e) => {
+            document.getElementById('quality-value').textContent = e.target.value;
+        });
+
+        // Load or create SCDA
+        async function loadOrCreateSCDA() {
+            const identity = document.getElementById('scda-identity').value || null;
+
+            try {
+                const endpoint = identity ? `/scda/status/${identity}` : '/scda/create';
+                const method = identity ? 'GET' : 'POST';
+
+                const response = await fetch(endpoint, { method });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showMessage(`Error: ${data.detail || 'Failed to load/create SCDA'}`, 'error');
+                    return;
+                }
+
+                currentSCDAIdentity = data.identity || data.initial_state.identity;
+                document.getElementById('scda-identity').value = currentSCDAIdentity;
+
+                showMessage(`SCDA loaded successfully: ${currentSCDAIdentity}`, 'success');
+                refreshDashboard();
+            } catch (error) {
+                showMessage(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Refresh dashboard
+        async function refreshDashboard() {
+            if (!currentSCDAIdentity) {
+                showMessage('Please load or create an SCDA first', 'error');
+                return;
+            }
+
+            try {
+                // Fetch SCDA status
+                const statusResponse = await fetch(`/scda/status/${currentSCDAIdentity}`);
+                const status = await statusResponse.json();
+
+                // Fetch metaverse position
+                const positionResponse = await fetch(`/scda/metaverse-position/${currentSCDAIdentity}`);
+                const position = await positionResponse.json();
+
+                // Fetch tier history
+                const historyResponse = await fetch(`/scda/tier-history/${currentSCDAIdentity}`);
+                const history = await historyResponse.json();
+
+                // Update UI
+                updateDashboard(status, position, history);
+            } catch (error) {
+                showMessage(`Error refreshing dashboard: ${error.message}`, 'error');
+            }
+        }
+
+        // Update dashboard with data
+        function updateDashboard(status, position, history) {
+            // Status
+            document.getElementById('scda-id').textContent = status.identity;
+            document.getElementById('complexity').textContent = status.complexity_index.toFixed(2);
+            document.getElementById('complexity-progress').style.width = Math.min(status.complexity_index / 100 * 100, 100) + '%';
+            document.getElementById('energy').textContent = status.energy.toFixed(2);
+            document.getElementById('energy-progress').style.width = Math.min(status.energy / 200 * 100, 100) + '%';
+
+            // Tier
+            document.getElementById('tier-name').textContent = status.tier_name;
+            const tierBadge = document.getElementById('tier-badge');
+            tierBadge.innerHTML = `<span class="tier-badge tier-${status.tier}">${status.tier_name} (Tier ${status.tier})</span>`;
+            document.getElementById('tier-transitions').textContent = status.tier_transition_count;
+            document.getElementById('genetic-diversity').textContent = (status.genetic_diversity || 0).toFixed(3);
+
+            // Position
+            const positionStr = status.position_8d.map(p => p.toFixed(3)).join(', ');
+            document.getElementById('position-values').textContent = `[${positionStr}]`;
+
+            // Knowledge Domains
+            const domainsContainer = document.getElementById('knowledge-domains');
+            domainsContainer.innerHTML = '';
+            if (position.knowledge_domains) {
+                Object.entries(position.knowledge_domains).forEach(([idx, domain]) => {
+                    const domainDiv = document.createElement('div');
+                    domainDiv.className = 'domain';
+                    domainDiv.innerHTML = `
+                        <div class="domain-name">${domain.domain}</div>
+                        <div class="domain-level">${domain.knowledge_level.toFixed(2)}</div>
+                    `;
+                    domainsContainer.appendChild(domainDiv);
+                });
+            }
+
+            // Tier History
+            const historyList = document.getElementById('tier-history-list');
+            if (history.transitions && history.transitions.length > 0) {
+                historyList.innerHTML = '';
+                history.transitions.forEach((transition, idx) => {
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    item.innerHTML = `
+                        <div class="history-item-title">Transition ${idx + 1}: Tier ${transition.old_tier} → Tier ${transition.new_tier}</div>
+                        <div class="history-item-detail">Complexity: ${transition.complexity_index.toFixed(2)}</div>
+                        <div class="history-item-detail">Energy Boost: ${transition.energy_boost.toFixed(2)}</div>
+                        <div class="history-item-detail">AI Upgrade: ${transition.ai_upgrade_factor.toFixed(2)}x</div>
+                    `;
+                    historyList.appendChild(item);
+                });
+            }
+
+            // Position Details
+            const positionDetails = document.getElementById('position-details');
+            positionDetails.innerHTML = `
+                <div class="stat">
+                    <span class="stat-label">Tier:</span>
+                    <span class="stat-value">${position.tier}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Complexity:</span>
+                    <span class="stat-value">${position.complexity_index.toFixed(2)}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Position (8D):</span>
+                </div>
+                <div style="font-size: 0.85em; color: #b0b0b0; margin-top: 10px;">
+                    ${position.position_8d.map((p, i) => `D${i}: ${p.toFixed(3)}`).join('<br>')}
+                </div>
+            `;
+        }
+
+        // Submit solution
+        async function submitSolution() {
+            if (!currentSCDAIdentity) {
+                showMessage('Please load or create an SCDA first', 'error');
+                return;
+            }
+
+            const problemId = document.getElementById('problem-id').value;
+            const solutionText = document.getElementById('solution-text').value;
+            const reasoning = document.getElementById('reasoning-text').value;
+            const quality = parseFloat(document.getElementById('quality-slider').value);
+
+            if (!problemId || !solutionText || !reasoning) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/scda/problem/solve?scda_identity=${currentSCDAIdentity}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        problem_id: problemId,
+                        solution_text: solutionText,
+                        solution_quality: quality,
+                        reasoning: reasoning
+                    })
+                });
+
+                const result = await response.json();
+
+                const resultDiv = document.getElementById('solution-result');
+                if (result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <strong>✅ Solution Submitted Successfully!</strong>
+                            <p style="margin-top: 10px;">New Complexity: ${result.new_state.complexity_index.toFixed(2)}</p>
+                            ${result.tier_transition ? `
+                                <p style="margin-top: 10px; color: #ffeb3b;">
+                                    🎉 <strong>Tier Transition!</strong> ${result.tier_transition.old_tier} → ${result.tier_transition.new_tier}
+                                </p>
+                            ` : ''}
+                        </div>
+                    `;
+                    refreshDashboard();
+                } else {
+                    resultDiv.innerHTML = `<div class="error"><strong>❌ Error:</strong> ${result.message}</div>`;
+                }
+            } catch (error) {
+                showMessage(`Error submitting solution: ${error.message}`, 'error');
+            }
+        }
+
+        // Show message
+        function showMessage(message, type) {
+            const container = document.getElementById('message-container');
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = message;
+            container.innerHTML = '';
+            container.appendChild(div);
+
+            setTimeout(() => {
+                div.remove();
+            }, 5000);
+        }
+
+        // Auto-load SCDA if ID is in URL
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            const scda_id = params.get('scda_id');
+            if (scda_id) {
+                document.getElementById('scda-identity').value = scda_id;
+                loadOrCreateSCDA();
+            }
+        });
+    </script>
+</body>
+</html>

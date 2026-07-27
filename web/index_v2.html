@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 Laniakea Protocol v0.0.01 - نود داشبورد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --light: #f1f5f9;
+            --border: #1e293b;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1a3e 50%, #16213e 100%);
+            color: #e2e8f0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        header .subtitle {
+            color: #94a3b8;
+            font-size: 1.1em;
+        }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .nav-button {
+            background: rgba(102, 126, 234, 0.1);
+            color: #e2e8f0;
+            border: 1px solid var(--primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        
+        .nav-button:hover {
+            background: rgba(102, 126, 234, 0.2);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .nav-button.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-icon {
+            font-size: 1.5em;
+            color: var(--accent);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: #94a3b8;
+        }
+        
+        .stat-value {
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        /* Tabs */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            background: rgba(15, 23, 42, 0.7);
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        /* Status Indicators */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: rgba(74, 222, 128, 0.2);
+            color: var(--success);
+        }
+        
+        .status-pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--warning);
+        }
+        
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+        
+        /* Loading Animation */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌌 Laniakea Protocol</h1>
+            <p class="subtitle">نسخه 0.0.01 - سیستم حساب دیجیتال تک‌سلولی کیهانی</p>
+        </header>
+        
+        <!-- Navigation -->
+        <nav>
+            <button class="nav-button active" onclick="switchTab('dashboard')">
+                <i class="fas fa-chart-line"></i> داشبورد
+            </button>
+            <button class="nav-button" onclick="switchTab('scda')">
+                <i class="fas fa-dna"></i> SCDA
+            </button>
+            <button class="nav-button" onclick="switchTab('breeding')">
+                <i class="fas fa-flask"></i> آزمایشگاه ژنتیک
+            </button>
+            <button class="nav-button" onclick="switchTab('marketplace')">
+                <i class="fas fa-store"></i> بازار دانش
+            </button>
+            <button class="nav-button" onclick="switchTab('civilization')">
+                <i class="fas fa-city"></i> تمدن‌ها
+            </button>
+            <button class="nav-button" onclick="switchTab('diplomacy')">
+                <i class="fas fa-handshake"></i> دیپلماسی
+            </button>
+            <button class="nav-button" onclick="switchTab('blockchain')">
+                <i class="fas fa-link"></i> بلاک‌چین
+            </button>
+        </nav>
+        
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="content">
+                <div class="card">
+                    <h3><span class="card-icon">📊</span>وضعیت سیستم</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">وضعیت نود:</span>
+                        <span class="stat-value"><span class="spinner"></span> فعال</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">نسخه:</span>
+                        <span class="stat-value">0.0.01</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">حقوق:</span>
+                        <span class="stat-value">© LaniakeA</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3><span class="card-icon">🧬</span>SCDA فعال</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">تعداد کل:</span>
+                        <span class="stat-value" id="totalSCDAs">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">میانگین پیچیدگی:</span>
+                        <span class="stat-value" id="avgComplexity">0.00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">تنوع ژنتیکی:</span>
+                        <span class="stat-value" id="geneticDiversity">0.00</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3><span class="card-icon">⛓️</span>بلاک‌چین</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">طول زنجیره:</span>
+                        <span class="stat-value" id="chainLength">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">تراکنش‌های معلق:</span>
+                        <span class="stat-value" id="pendingTx">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">کل تراکنش‌ها:</span>
+                        <span class="stat-value" id="totalTx">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SCDA Tab -->
+        <div id="scda" class="tab-content">
+            <div class="card">
+                <h3><span class="card-icon">🧬</span>مدیریت SCDA</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>شناسه SCDA:</label>
+                        <input type="text" id="scda_id" placeholder="مثال: user_123">
+                    </div>
+                    <button class="btn btn-primary" onclick="getSCDADetails()">
+                        <i class="fas fa-search"></i> جستجو
+                    </button>
+                </div>
+                <div id="scda_details"></div>
+            </div>
+        </div>
+        
+        <!-- Breeding Lab Tab -->
+        <div id="breeding" class="tab-content">
+            <div class="card">
+                <h3><span class="card-icon">🧪</span>آزمایشگاه ژنتیک</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>والد اول:</label>
+                        <input type="text" id="parent1_id" placeholder="شناسه SCDA">
+                    </div>
+                    <div class="form-group">
+                        <label>والد دوم:</label>
+                        <input type="text" id="parent2_id" placeholder="شناسه SCDA">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="predictChild()">
+                    <i class="fas fa-magic"></i> پیش‌بینی ویژگی‌های فرزند
+                </button>
+                <button class="btn btn-success" onclick="breedSCDAs()">
+                    <i class="fas fa-plus"></i> ایجاد SCDA جدید
+                </button>
+                <div id="breeding_results" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <!-- Knowledge Marketplace Tab -->
+        <div id="marketplace" class="tab-content">
+            <div class="card">
+                <h3><span class="card-icon">🏪</span>بازار دانش</h3>
+                <div class="grid-3">
+                    <div class="form-group">
+                        <label>حوزه دانش:</label>
+                        <select id="knowledge_domain">
+                            <option>ریاضیات</option>
+                            <option>فیزیک</option>
+                            <option>شیمی</option>
+                            <option>زیست‌شناسی</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>حداکثر قیمت:</label>
+                        <input type="number" id="max_price" placeholder="100">
+                    </div>
+                    <button class="btn btn-primary" onclick="searchMarketplace()">
+                        <i class="fas fa-search"></i> جستجو
+                    </button>
+                </div>
+                <div id="marketplace_results" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <!-- Civilization Tab -->
+        <div id="civilization" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <h3><span class="card-icon">🏛️</span>ایجاد تمدن</h3>
+                    <div class="form-group">
+                        <label>نام تمدن:</label>
+                        <input type="text" id="civ_name" placeholder="مثال: امپراتوری لانیاکیا">
+                    </div>
+                    <div class="form-group">
+                        <label>رهبر (SCDA ID):</label>
+                        <input type="text" id="civ_leader" placeholder="user_123">
+                    </div>
+                    <button class="btn btn-primary" onclick="createCivilization()">
+                        <i class="fas fa-plus"></i> ایجاد
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3><span class="card-icon">📋</span>پیوستن به تمدن</h3>
+                    <div class="form-group">
+                        <label>شناسه تمدن:</label>
+                        <input type="text" id="join_civ_id" placeholder="civ_id">
+                    </div>
+                    <div class="form-group">
+                        <label>SCDA ID:</label>
+                        <input type="text" id="join_scda_id" placeholder="user_123">
+                    </div>
+                    <button class="btn btn-primary" onclick="joinCivilization()">
+                        <i class="fas fa-sign-in-alt"></i> پیوستن
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Diplomacy Tab -->
+        <div id="diplomacy" class="tab-content">
+            <div class="card">
+                <h3><span class="card-icon">🤝</span>سیستم دیپلماسی</h3>
+                <p style="color: #94a3b8; margin-bottom: 20px;">مدیریت پیمان‌ها و روابط دیپلماتیک بین تمدن‌ها</p>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>تمدن اول:</label>
+                        <input type="text" id="dip_party_a" placeholder="civ_id_1">
+                    </div>
+                    <div class="form-group">
+                        <label>تمدن دوم:</label>
+                        <input type="text" id="dip_party_b" placeholder="civ_id_2">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>نوع پیمان:</label>
+                    <select id="treaty_type">
+                        <option value="alliance">اتحاد</option>
+                        <option value="trade">تجارت</option>
+                        <option value="non_aggression">عدم تجاوز</option>
+                        <option value="knowledge_sharing">اشتراک دانش</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="proposeTreaty()">
+                    <i class="fas fa-file-contract"></i> پیشنهاد پیمان
+                </button>
+            </div>
+        </div>
+        
+        <!-- Blockchain Tab -->
+        <div id="blockchain" class="tab-content">
+            <div class="card">
+                <h3><span class="card-icon">⛓️</span>بلاک‌چین</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>فرستنده:</label>
+                        <input type="text" id="tx_sender" placeholder="آدرس">
+                    </div>
+                    <div class="form-group">
+                        <label>گیرنده:</label>
+                        <input type="text" id="tx_recipient" placeholder="آدرس">
+                    </div>
+                    <div class="form-group">
+                        <label>مقدار:</label>
+                        <input type="number" id="tx_amount" placeholder="100">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="createTransaction()">
+                    <i class="fas fa-exchange-alt"></i> ایجاد تراکنش
+                </button>
+                <button class="btn btn-success" onclick="mineBlock()">
+                    <i class="fas fa-hammer"></i> استخراج بلاک
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 LaniakeA Protocol | نسخه 0.0.01 | تمام حقوق محفوظ است</p>
+    </footer>
+    
+    <script>
+        // API Base URL
+        const API_BASE = 'http://localhost:8000/api/v1';
+        
+        // Tab Switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.closest('.nav-button').classList.add('active');
+        }
+        
+        // Load Dashboard Data
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_BASE}/status`);
+                const data = await response.json();
+                
+                document.getElementById('chainLength').textContent = data.chain_length || 0;
+                document.getElementById('totalTx').textContent = data.total_transactions || 0;
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+        
+        // SCDA Functions
+        async function getSCDADetails() {
+            const scda_id = document.getElementById('scda_id').value;
+            if (!scda_id) {
+                alert('لطفاً شناسه SCDA را وارد کنید');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/scda/${scda_id}`);
+                const data = await response.json();
+                
+                const html = `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 8px;">
+                        <p><strong>شناسه:</strong> ${data.identity}</p>
+                        <p><strong>شاخص پیچیدگی:</strong> ${data.complexity_index.toFixed(4)}</p>
+                        <p><strong>تنوع ژنتیکی:</strong> ${data.genetic_diversity.toFixed(4)}</p>
+                        <p><strong>ویژگی‌های غالب:</strong></p>
+                        <ul>
+                            ${data.dominant_knowledge_traits.map(trait => `<li>${trait}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                
+                document.getElementById('scda_details').innerHTML = html;
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+        
+        // Breeding Functions
+        async function predictChild() {
+            const parent1_id = document.getElementById('parent1_id').value;
+            const parent2_id = document.getElementById('parent2_id').value;
+            
+            if (!parent1_id || !parent2_id) {
+                alert('لطفاً هر دو والد را وارد کنید');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/scda/predict_child`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({parent1_id, parent2_id})
+                });
+                
+                const data = await response.json();
+                
+                const html = `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(74, 222, 128, 0.1); border-radius: 8px;">
+                        <h4>پیش‌بینی ویژگی‌های فرزند:</h4>
+                        <p><strong>پیچیدگی پیش‌بینی‌شده:</strong> ${data.predicted_complexity?.toFixed(4) || 'N/A'}</p>
+                        <p><strong>تنوع ژنتیکی:</strong> ${data.predicted_diversity?.toFixed(4) || 'N/A'}</p>
+                    </div>
+                `;
+                
+                document.getElementById('breeding_results').innerHTML = html;
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+        
+        async function breedSCDAs() {
+            const parent1_id = document.getElementById('parent1_id').value;
+            const parent2_id = document.getElementById('parent2_id').value;
+            
+            if (!parent1_id || !parent2_id) {
+                alert('لطفاً هر دو والد را وارد کنید');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/scda/breed`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({parent1_id, parent2_id})
+                });
+                
+                const data = await response.json();
+                
+                const html = `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(74, 222, 128, 0.1); border-radius: 8px;">
+                        <h4 style="color: var(--success);">✓ SCDA جدید ایجاد شد!</h4>
+                        <p><strong>شناسه فرزند:</strong> ${data.child_id}</p>
+                        <p><strong>پیچیدگی اولیه:</strong> ${data.initial_complexity}</p>
+                        <p><strong>تنوع ژنتیکی:</strong> ${data.genetic_diversity}</p>
+                    </div>
+                `;
+                
+                document.getElementById('breeding_results').innerHTML = html;
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+        
+        // Marketplace Functions
+        async function searchMarketplace() {
+            const domain = document.getElementById('knowledge_domain').value;
+            const max_price = document.getElementById('max_price').value;
+            
+            try {
+                const response = await fetch(`${API_BASE}/marketplace/search?domain=${domain}&max_price=${max_price}`);
+                const data = await response.json();
+                
+                const html = `
+                    <div style="padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 8px;">
+                        <p>یافت‌شده: ${data.length || 0} توکن دانش</p>
+                    </div>
+                `;
+                
+                document.getElementById('marketplace_results').innerHTML = html;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        
+        // Civilization Functions
+        async function createCivilization() {
+            const name = document.getElementById('civ_name').value;
+            const leader_id = document.getElementById('civ_leader').value;
+            
+            if (!name || !leader_id) {
+                alert('لطفاً تمام فیلدها را پر کنید');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/civilization/create`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({name, leader_id})
+                });
+                
+                const data = await response.json();
+                alert('تمدن با موفقیت ایجاد شد! شناسه: ' + data.civilization_id);
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+        
+        async function joinCivilization() {
+            const scda_id = document.getElementById('join_scda_id').value;
+            const civ_id = document.getElementById('join_civ_id').value;
+            
+            if (!scda_id || !civ_id) {
+                alert('لطفاً تمام فیلدها را پر کنید');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/civilization/join`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({scda_id, civ_id})
+                });
+                
+                const data = await response.json();
+                alert('با موفقیت به تمدن پیوستید!');
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+        
+        // Diplomacy Functions
+        async function proposeTreaty() {
+            const party_a_id = document.getElementById('dip_party_a').value;
+            const party_b_id = document.getElementById('dip_party_b').value;
+            const treaty_type = document.getElementById('treaty_type').value;
+            
+            if (!party_a_id || !party_b_id) {
+                alert('لطفاً هر دو تمدن را وارد کنید');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/diplomacy/propose_treaty`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({party_a_id, party_b_id, treaty_type})
+                });
+                
+                const data = await response.json();
+                alert('پیمان با موفقیت پیشنهاد شد!');
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+        
+        // Blockchain Functions
+        async function createTransaction() {
+            const sender = document.getElementById('tx_sender').value;
+            const recipient = document.getElementById('tx_recipient').value;
+            const amount = parseFloat(document.getElementById('tx_amount').value);
+            
+            if (!sender || !recipient || !amount) {
+                alert('لطفاً تمام فیلدها را پر کنید');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/transaction`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({sender, recipient, amount})
+                });
+                
+                const data = await response.json();
+                alert('تراکنش ایجاد شد! ID: ' + data.transaction_id);
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+        
+        async function mineBlock() {
+            try {
+                const response = await fetch(`${API_BASE}/mine?miner_address=default-miner`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                alert('بلاک با موفقیت استخراج شد! Hash: ' + (data.block_hash || 'N/A'));
+                loadDashboard();
+            } catch (error) {
+                alert('خطا: ' + error.message);
+            }
+        }
+        
+        // Load dashboard on page load
+        window.addEventListener('load', loadDashboard);
+    </script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="cosmic">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LaniakeA Protocol — WebGL 3D Hypercube Visualizer (256 vertices, 1024 edges)" />
+  <title>🌌 Hypercube 3D — LaniakeA Protocol</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Vazirmatn:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="cosmic.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>" />
+  <style>
+    body { background: var(--bg-0); }
+    .stage {
+      position: relative; width: 100%; height: 100vh;
+      overflow: hidden;
+    }
+    #hypercube-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      display: block;
+    }
+    .hud {
+      position: absolute; top: 24px; right: 24px;
+      z-index: 10; display: flex; flex-direction: column; gap: 12px;
+      max-width: 320px;
+    }
+    [dir="rtl"] .hud { right: auto; left: 24px; }
+    .hud-panel {
+      background: var(--glass); backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px;
+    }
+    .hud-title {
+      font-size: 13px; font-weight: 700; color: var(--ink-0);
+      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    }
+    .hud-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 12px; color: var(--ink-2); }
+    .hud-row label { flex: 1; font-weight: 500; }
+    .hud-row input[type=range] {
+      flex: 2; accent-color: var(--brand);
+    }
+    .hud-row .val { font-family: 'JetBrains Mono', monospace; color: var(--ink-0); font-weight: 700; min-width: 50px; text-align: left; }
+    .controls-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 12px; }
+    .ctrl-btn {
+      padding: 8px; font-size: 12px; font-weight: 600;
+      background: var(--glass-2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--ink-1);
+      transition: all var(--t-fast);
+    }
+    .ctrl-btn:hover { background: var(--glass); border-color: var(--border-strong); }
+    .ctrl-btn.primary { background: var(--grad-1); color: white; border-color: transparent; }
+    .stat-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px; border-bottom: 1px solid var(--border); }
+    .stat-row:last-child { border-bottom: 0; }
+    .stat-row span:first-child { color: var(--ink-2); }
+    .stat-row span:last-child { color: var(--ink-0); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+    .legend {
+      position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+      z-index: 10; display: flex; gap: 16px;
+      background: var(--glass); backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: var(--radius-pill);
+      padding: 10px 20px; font-size: 12px; color: var(--ink-1);
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
+
+    .nav-top {
+      position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
+      z-index: 10; display: flex; gap: 8px;
+      background: var(--glass); backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: var(--radius-pill);
+      padding: 8px;
+    }
+    .nav-top a {
+      padding: 8px 16px; border-radius: var(--radius-pill);
+      font-size: 12px; font-weight: 600; color: var(--ink-2);
+      transition: all var(--t-fast);
+    }
+    .nav-top a:hover { background: var(--glass-2); color: var(--ink-0); }
+    .nav-top a.active { background: var(--grad-1); color: white; }
+
+    .loader {
+      position: absolute; inset: 0; display: grid; place-items: center;
+      background: var(--bg-0); z-index: 100;
+      transition: opacity 0.6s, visibility 0.6s;
+    }
+    .loader.hide { opacity: 0; visibility: hidden; }
+    .loader-spinner {
+      width: 60px; height: 60px; border-radius: 50%;
+      border: 2px solid transparent; border-top-color: var(--brand);
+      border-right-color: var(--brand-2);
+      animation: spin 1.2s linear infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="loader" id="loader"><div class="loader-spinner"></div></div>
+
+    <canvas id="hypercube-canvas"></canvas>
+
+    <div class="nav-top">
+      <a href="cosmic.html">← دشبورد</a>
+      <a href="#" class="active">Hypercube 3D</a>
+      <a href="metaverse_8d_visualization.html">8D</a>
+    </div>
+
+    <div class="hud">
+      <div class="hud-panel">
+        <div class="hud-title">⚙️ Projection</div>
+        <div class="hud-row">
+          <label>Rot X</label>
+          <input type="range" id="rotX" min="0" max="6.28" step="0.01" value="0.5" />
+          <span class="val" id="rotX-val">0.50</span>
+        </div>
+        <div class="hud-row">
+          <label>Rot Y</label>
+          <input type="range" id="rotY" min="0" max="6.28" step="0.01" value="0.8" />
+          <span class="val" id="rotY-val">0.80</span>
+        </div>
+        <div class="hud-row">
+          <label>Rot Z</label>
+          <input type="range" id="rotZ" min="0" max="6.28" step="0.01" value="0.3" />
+          <span class="val" id="rotZ-val">0.30</span>
+        </div>
+        <div class="hud-row">
+          <label>Scale</label>
+          <input type="range" id="scale" min="0.3" max="2" step="0.01" value="1" />
+          <span class="val" id="scale-val">1.00</span>
+        </div>
+        <div class="hud-row">
+          <label>Speed</label>
+          <input type="range" id="speed" min="0" max="3" step="0.01" value="1" />
+          <span class="val" id="speed-val">1.00</span>
+        </div>
+        <div class="hud-row">
+          <label>Auto-rotate</label>
+          <input type="checkbox" id="auto" checked style="width:18px;height:18px;accent-color:var(--brand)" />
+        </div>
+        <div class="controls-grid">
+          <button class="ctrl-btn" data-axis="x">X+</button>
+          <button class="ctrl-btn" data-axis="y">Y+</button>
+          <button class="ctrl-btn" data-axis="z">Z+</button>
+          <button class="ctrl-btn primary" data-axis="reset">⟲</button>
+        </div>
+      </div>
+
+      <div class="hud-panel">
+        <div class="hud-title">📊 Stats</div>
+        <div class="stat-row"><span>Vertices</span><span id="s-verts">256</span></div>
+        <div class="stat-row"><span>Edges</span><span id="s-edges">1024</span></div>
+        <div class="stat-row"><span>Dimensions</span><span id="s-dims">8D</span></div>
+        <div class="stat-row"><span>FPS</span><span id="s-fps">--</span></div>
+        <div class="stat-row"><span>Renderer</span><span id="s-rend">WebGL</span></div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#7c3aed;color:#7c3aed"></div> Violet</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#06b6d4;color:#06b6d4"></div> Cyan</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ec4899;color:#ec4899"></div> Pink</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;color:#f59e0b"></div> Amber</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three.js@0.160.0/build/three.min.js"></script>
+  <script>
+    // ============================================================
+    // LaniakeA 8D Hypercube — 256 vertices, 1024 edges
+    // ============================================================
+    (function() {
+      const canvas = document.getElementById('hypercube-canvas');
+      const loader = document.getElementById('loader');
+
+      // ---------- SCENE SETUP ----------
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setClearColor(0x050514, 1);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(8, 6, 12);
+
+      // ---------- 8D VERTICES (binary hypercube = 256 vertices in 8D) ----------
+      // We'll project from 8D -> 3D using a learned-style projection
+      // For a real hypercube, 2^8 = 256 vertices
+      const VERTS_8D = [];
+      for (let i = 0; i < 256; i++) {
+        const v = [];
+        for (let k = 0; k < 8; k++) v.push((i >> k) & 1 ? 1 : -1);
+        VERTS_8D.push(v);
+      }
+
+      // Edges: connect vertices that differ in exactly 1 bit = 8 * 128 = 1024
+      const EDGES = [];
+      for (let i = 0; i < 256; i++) {
+        for (let k = 0; k < 8; k++) {
+          const j = i ^ (1 << k);
+          if (j > i) EDGES.push([i, j]);
+        }
+      }
+
+      // ---------- PROJECT 8D -> 3D ----------
+      // Random fixed projection matrix (reproducible via seed)
+      const seed = 0xC0DE;
+      function rand() { return ((seed = (seed * 16807) % 2147483647) / 2147483647) - 0.5; }
+      const PROJ = [];
+      for (let i = 0; i < 3; i++) for (let j = 0; j < 8; j++) PROJ.push(rand() * 0.7);
+
+      function project8to3(v) {
+        return new THREE.Vector3(
+          v[0] * PROJ[0] + v[1] * PROJ[1] + v[2] * PROJ[2] + v[3] * PROJ[3] + v[4] * PROJ[4] + v[5] * PROJ[5] + v[6] * PROJ[6] + v[7] * PROJ[7],
+          v[0] * PROJ[8] + v[1] * PROJ[9] + v[2] * PROJ[10] + v[3] * PROJ[11] + v[4] * PROJ[12] + v[5] * PROJ[13] + v[6] * PROJ[14] + v[7] * PROJ[15],
+          v[0] * PROJ[16] + v[1] * PROJ[17] + v[2] * PROJ[18] + v[3] * PROJ[19] + v[4] * PROJ[20] + v[5] * PROJ[21] + v[6] * PROJ[22] + v[7] * PROJ[23]
+        );
+      }
+
+      // ---------- BUILD 3D GEOMETRY ----------
+      const positions = [];
+      EDGES.forEach(([a, b]) => {
+        const pa = project8to3(VERTS_8D[a]);
+        const pb = project8to3(VERTS_8D[b]);
+        positions.push(pa.x, pa.y, pa.z, pb.x, pb.y, pb.z);
+      });
+      const edgeGeo = new THREE.BufferGeometry();
+      edgeGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      const edgeMat = new THREE.LineBasicMaterial({ color: 0x7c3aed, transparent: true, opacity: 0.7 });
+      const edges3D = new THREE.LineSegments(edgeGeo, edgeMat);
+      scene.add(edges3D);
+
+      // Vertices as instanced spheres
+      const sphereGeo = new THREE.SphereGeometry(0.05, 8, 8);
+      const colors = [0x7c3aed, 0x06b6d4, 0xec4899, 0xf59e0b];
+      const sphereMeshes = [];
+      for (let i = 0; i < 256; i++) {
+        const color = colors[i % 4];
+        const mat = new THREE.MeshBasicMaterial({ color });
+        const m = new THREE.Mesh(sphereGeo, mat);
+        const p = project8to3(VERTS_8D[i]);
+        m.position.copy(p);
+        m.userData = { basePos: p.clone(), color };
+        scene.add(m);
+        sphereMeshes.push(m);
+      }
+
+      // ---------- LIGHTING (subtle) ----------
+      scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+      const p1 = new THREE.PointLight(0x7c3aed, 1, 30);
+      p1.position.set(8, 8, 8); scene.add(p1);
+      const p2 = new THREE.PointLight(0x06b6d4, 1, 30);
+      p2.position.set(-8, -8, 8); scene.add(p2);
+
+      // ---------- INTERACTION STATE ----------
+      const state = {
+        rotX: 0.5, rotY: 0.8, rotZ: 0.3,
+        targetRotX: 0.5, targetRotY: 0.8, targetRotZ: 0.3,
+        scale: 1, targetScale: 1,
+        speed: 1, autoRotate: true,
+      };
+
+      // ---------- HUD WIRING ----------
+      function bindRange(id, key) {
+        const el = document.getElementById(id);
+        const valEl = document.getElementById(id + '-val');
+        el.addEventListener('input', () => {
+          const v = parseFloat(el.value);
+          state['target' + key.charAt(0).toUpperCase() + key.slice(1)] = v;
+          valEl.textContent = v.toFixed(2);
+        });
+        state['target' + key.charAt(0).toUpperCase() + key.slice(1)] = parseFloat(el.value);
+      }
+      bindRange('rotX', 'rotX');
+      bindRange('rotY', 'rotY');
+      bindRange('rotZ', 'rotZ');
+      bindRange('scale', 'scale');
+      bindRange('speed', 'speed');
+      document.getElementById('auto').addEventListener('change', e => { state.autoRotate = e.target.checked; });
+
+      document.querySelectorAll('.ctrl-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const a = btn.dataset.axis;
+          if (a === 'x') state.targetRotX += Math.PI / 4;
+          else if (a === 'y') state.targetRotY += Math.PI / 4;
+          else if (a === 'z') state.targetRotZ += Math.PI / 4;
+          else { state.targetRotX = 0.5; state.targetRotY = 0.8; state.targetRotZ = 0.3; }
+          ['rotX', 'rotY', 'rotZ'].forEach(k => {
+            const el = document.getElementById(k);
+            const valEl = document.getElementById(k + '-val');
+            el.value = state['target' + k.charAt(0).toUpperCase() + k.slice(1)];
+            valEl.textContent = state['target' + k.charAt(0).toUpperCase() + k.slice(1)].toFixed(2);
+          });
+        });
+      });
+
+      // Mouse drag rotation
+      let isDragging = false, lastX = 0, lastY = 0;
+      canvas.addEventListener('pointerdown', e => { isDragging = true; lastX = e.clientX; lastY = e.clientY; });
+      canvas.addEventListener('pointermove', e => {
+        if (!isDragging) return;
+        state.targetRotY += (e.clientX - lastX) * 0.01;
+        state.targetRotX += (e.clientY - lastY) * 0.01;
+        lastX = e.clientX; lastY = e.clientY;
+      });
+      canvas.addEventListener('pointerup', () => isDragging = false);
+      canvas.addEventListener('pointerleave', () => isDragging = false);
+
+      // ---------- RESIZE ----------
+      function resize() {
+        const w = window.innerWidth, h = window.innerHeight;
+        renderer.setSize(w, h);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      // ---------- ANIMATION LOOP ----------
+      const fpsEl = document.getElementById('s-fps');
+      let lastT = performance.now(), frames = 0, fpsT = lastT;
+      function animate() {
+        const now = performance.now();
+        const dt = (now - lastT) / 1000;
+        lastT = now;
+        frames++;
+        if (now - fpsT > 500) {
+          fpsEl.textContent = Math.round(frames * 1000 / (now - fpsT));
+          frames = 0; fpsT = now;
+        }
+
+        if (state.autoRotate) {
+          state.targetRotY += dt * 0.3 * state.speed;
+          state.targetRotX += dt * 0.15 * state.speed;
+        }
+        // Smooth interpolation
+        state.rotX += (state.targetRotX - state.rotX) * 0.1;
+        state.rotY += (state.targetRotY - state.rotY) * 0.1;
+        state.rotZ += (state.targetRotZ - state.rotZ) * 0.1;
+        state.scale += (state.targetScale - state.scale) * 0.1;
+
+        edges3D.rotation.set(state.rotX, state.rotY, state.rotZ);
+        edges3D.scale.setScalar(state.scale * 4);
+        sphereMeshes.forEach(m => {
+          m.position.copy(m.userData.basePos);
+          m.position.applyEuler(new THREE.Euler(state.rotX, state.rotY, state.rotZ));
+          m.position.multiplyScalar(state.scale * 4);
+        });
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+
+      // ---------- BOOT ----------
+      document.getElementById('s-verts').textContent = VERTS_8D.length;
+      document.getElementById('s-edges').textContent = EDGES.length;
+      document.getElementById('s-rend').textContent = 'WebGL ' + (renderer.capabilities.isWebGL2 ? '2.0' : '1.0');
+
+      setTimeout(() => loader.classList.add('hide'), 300);
+      animate();
+    })();
+  </script>
+</body>
+</html>
