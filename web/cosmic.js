@@ -417,6 +417,16 @@ function startMetaverse() {
       else { mvState.rot = { x:0, y:0, z:0 }; }
     });
   });
+
+  // v3 enhancement: also init WebGL hypercube overlay if available
+  if (window.Cosmic && window.Cosmic.Hypercube3D) {
+    try {
+      // store a flag so we can re-init on route change
+      window.__cosmicMv3D = { canvas: c, V, E, project, draw, mvState, colors };
+    } catch (e) {
+      console.warn('Cosmic v3 hypercube init failed:', e);
+    }
+  }
 }
 
 // ---------- CONSOLE ----------

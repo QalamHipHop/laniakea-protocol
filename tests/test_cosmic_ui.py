@@ -327,3 +327,66 @@ class TestCosmicV3Components:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+class TestHypercube3D:
+    """Tests for the dedicated WebGL 3D Hypercube page (Qalam, 2025)."""
+
+    def test_hypercube_3d_html_exists(self):
+        assert (WEB_DIR / "hypercube_3d.html").exists()
+
+    def test_has_8d_projection_logic(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        assert "VERTS_8D" in html
+        assert "256" in html
+        assert "EDGES" in html
+        assert "1024" in html
+
+    def test_uses_three_js(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        assert "three" in html.lower()
+        assert "WebGLRenderer" in html
+
+    def test_has_projection_matrix(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        assert "PROJ" in html
+        assert "project8to3" in html
+
+    def test_has_hud_controls(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        for ctrl in ["rotX", "rotY", "rotZ", "scale", "speed", "auto"]:
+            assert f'id="{ctrl}"' in html
+
+    def test_has_pointer_drag(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        assert "pointerdown" in html
+        assert "pointermove" in html
+        assert "pointerup" in html
+
+    def test_has_fps_counter(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        assert "fps" in html.lower()
+        assert "s-fps" in html
+
+    def test_has_legend(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        assert "legend" in html.lower()
+        for color in ["Violet", "Cyan", "Pink", "Amber"]:
+            assert color in html
+
+    def test_has_loader(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        assert "loader" in html.lower()
+        assert "loader-spinner" in html
+
+    def test_uses_cosmic_css(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        assert "cosmic.css" in html
+
+    def test_rtl_aware(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        assert 'dir="rtl"' in html
+
+    def test_navigates_back_to_dashboard(self):
+        html = (WEB_DIR / "hypercube_3d.html").read_text()
+        assert "cosmic.html" in html
