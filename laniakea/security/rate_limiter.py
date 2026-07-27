@@ -25,6 +25,10 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 import asyncio
 
+from laniakea.utils.logger import get_logger
+
+logger = get_logger("laniakea.security.rate_limiter")
+
 
 @dataclass
 class RateLimitConfig:
