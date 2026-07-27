@@ -1,0 +1,77 @@
+# LaniakeA Protocol - Production Dependencies
+# Optimized for Render deployment
+# Version: 3.0.0
+
+# Core Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Async & WebSocket
+websockets==12.0
+aiohttp==3.9.1
+aiofiles==23.2.1
+
+# CLI Framework
+click==8.1.7
+rich==13.7.0
+
+# Configuration
+pyyaml==6.0.1
+python-dotenv==1.0.0
+
+# Scientific Computing (lightweight)
+numpy==1.26.2
+scipy==1.11.4
+
+# Cryptography
+cryptography==43.0.3
+pycryptodome==3.19.0
+
+# Utilities
+python-dateutil==2.8.2
+psutil==5.9.6
+
+# CORS
+python-multipart==0.0.6
+
+# Production Server
+gunicorn==21.2.0
+
+# Testing & Quality
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+black==23.12.0
+flake8==6.1.0
+mypy==1.7.1
+httpx<0.28  # pinned for starlette TestClient compatibility
+
+# Database
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+alembic==1.13.1
+
+# Caching
+redis==4.6.0
+
+# HTTP Client
+requests==2.31.0
+
+# Added for 8D projection logic
+sympy
+
+# Security Enhancements
+python-jose[cryptography]==3.3.0
+fastapi-limiter==0.1.5
+
+# Monitoring
+prometheus_client==0.18.0
+
+# Performance Testing
+locust==2.20.0
+
+# Dependencies from user's MVP plan (to ensure all are present)
+networkx==3.3
+sympy==1.13.2 # Already present, but ensuring version is compatible

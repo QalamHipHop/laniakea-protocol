@@ -1,0 +1,123 @@
+# LaniakeA Protocol - Render Deployment Configuration
+# MAINNET CONFIGURATION — production-grade
+# Version: 6.0.0-Mainnet
+
+services:
+  - type: web
+    name: laniakea-protocol
+    runtime: python
+    plan: starter          # upgrade to starter+ for production mainnet
+    region: oregon
+    rootDir: .
+    autoDeploy: true
+    autoDeployTrigger: commit
+    buildCommand: >-
+      set -e &&
+      pip install --upgrade pip &&
+      pip install -r requirements.txt &&
+      if [ "${AUTO_MIGRATE:-1}" = "1" ]; then
+      alembic upgrade head || echo "alembic failed (DB schema may already exist)";
+      else
+      echo "AUTO_MIGRATE=0, skipping build-time alembic";
+      fi
+    startCommand: python main.py start --node-id laniakea-render --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+
+    envVars:
+      # ─── Python / Node ───
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PYTHONPATH
+        value: ".:laniakea"
+      - key: NODE_ID
+        value: laniakea-render-mainnet
+
+      # ─── Network / Environment — MAINNET ───
+      - key: NODE_ENV
+        value: "production"
+      - key: ENVIRONMENT
+        value: "production"
+      - key: DEPLOYMENT_ENV
+        value: "production"
+      - key: NETWORK_MODE
+        value: "mainnet"
+      - key: NETWORK_ID
+        value: "laniakea-mainnet"
+      - key: CHAIN_ID
+        value: "1"
+      - key: IS_AUTHORITY
+        value: "true"
+      - key: DEBUG
+        value: "false"
+      - key: LOG_LEVEL
+        value: "INFO"
+
+      # ─── Security (auto-generated, real values) ───
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
+      - key: SECRET_KEY
+        generateValue: true
+      - key: GRAFANA_PASSWORD
+        generateValue: true
+      - key: LANIAKEA_AUTH_ENABLED
+        value: "true"
+      - key: ENABLE_HTTPS
+        value: "true"
+      - key: CORS_ORIGINS
+        value: "*"
+
+      # ─── Database (SQLite fallback for Free tier, real Postgres for Starter) ───
+      - key: DATABASE_URL
+        value: "sqlite:////tmp/laniakea.db"
+      - key: AUTO_MIGRATE
+        value: "1"
+      - key: LANIAKEA_RUN_MIGRATIONS
+        value: "1"
+
+      # ─── AI ───
+      - key: AI_ENABLED
+        value: "true"
+      - key: COGNITIVE_MODEL
+        value: "gpt-4.1-mini"
+      - key: AUTO_OPTIMIZE
+        value: "true"
+
+      # ─── Simulation ───
+      - key: SIMULATION_ENABLED
+        value: "true"
+      - key: LANIAKEA_SCDA_SNAPSHOT
+        value: "./data/scda_snapshot.json"
+      - key: LANIAKEA_GENESIS_SEED
+        value: "true"
+
+      # ─── Cross-chain MAINNET RPCs ───
+      - key: ETH_RPC_URL
+        value: "https://eth.llamarpc.com"
+      - key: POLYGON_RPC_URL
+        value: "https://polygon-rpc.com"
+      - key: ARB_RPC_URL
+        value: "https://arb1.arbitrum.io/rpc"
+      - key: OP_RPC_URL
+        value: "https://mainnet.optimism.io"
+      - key: BASE_RPC_URL
+        value: "https://mainnet.base.org"
+      - key: BSC_RPC_URL
+        value: "https://bsc-dataseed.binance.org"
+      - key: AVAX_RPC_URL
+        value: "https://api.avax.network/ext/bc/C/rpc"
+      - key: FTM_RPC_URL
+        value: "https://rpc.ftm.tools"
+
+      # ─── Observability ───
+      - key: METRICS_ENABLED
+        value: "true"
+
+  # ─── Postgres (attach manually in Render dashboard, or use external) ───
+  # To attach a real Postgres:
+  # 1. Render Dashboard → New → PostgreSQL
+  # 2. Copy Internal Database URL → set DATABASE_URL
+  # 3. Remove the SQLite fallback above

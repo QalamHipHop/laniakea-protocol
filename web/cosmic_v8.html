@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en" data-theme="cosmic-dark" data-dimension="8d">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5" />
+<meta name="theme-color" content="#03050d" />
+<meta name="color-scheme" content="dark light" />
+<title>LaniakeA · 8D Cosmic Engine · Mainnet v6.3.0-Qalam</title>
+<meta name="description" content="LaniakeA Protocol — The 8-dimensional cosmic evolution engine. SCDA, hypercube blockchain, AI, DeFi, diplomacy, metaverse. Live mainnet." />
+<meta name="author" content="Qalam" />
+<meta name="version" content="6.3.0-Qalam" />
+<meta name="network" content="mainnet" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='50%25'%3E%3Cstop offset='0%25' stop-color='%2300ffd0'/%3E%3Cstop offset='50%25' stop-color='%237c3aed'/%3E%3Cstop offset='100%25' stop-color='%23ff3d8a'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='30' fill='%23030512'/%3E%3Ccircle cx='32' cy='32' r='22' fill='url(%23g)' opacity='.5'/%3E%3Cellipse cx='32' cy='32' rx='26' ry='10' fill='none' stroke='%2300ffd0' stroke-width='1' opacity='.9'/%3E%3Cellipse cx='32' cy='32' rx='26' ry='10' fill='none' stroke='%23ff3d8a' stroke-width='1' opacity='.7' transform='rotate(60 32 32)'/%3E%3Cellipse cx='32' cy='32' rx='26' ry='10' fill='none' stroke='%2300bfff' stroke-width='1' opacity='.7' transform='rotate(120 32 32)'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%2300ffd0'/%3E%3C/svg%3E" />
+
+<!-- Preconnect for performance -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<!-- Cosmic V8 stylesheet -->
+<link rel="stylesheet" href="/web/cosmic_v8.css" />
+
+<!-- Three.js for real WebGL 8D hypercube -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body class="lk-app">
+<noscript>
+  <div class="lk-noscript">
+    <div class="lk-noscript-inner">
+      <h1>🌌 LaniakeA Protocol</h1>
+      <p>The 8D cosmic engine requires JavaScript to render its mainnet interface.</p>
+      <p>Enable JavaScript and reload to enter the LaniakeA universe.</p>
+    </div>
+  </div>
+</noscript>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     8D COSMIC CANVAS BACKGROUND
+     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<canvas id="lk-bg-canvas" class="lk-bg-canvas" aria-hidden="true"></canvas>
+<div class="lk-bg-aurora lk-bg-aurora--a" aria-hidden="true"></div>
+<div class="lk-bg-aurora lk-bg-aurora--b" aria-hidden="true"></div>
+<div class="lk-bg-aurora lk-bg-aurora--c" aria-hidden="true"></div>
+<div class="lk-bg-grid" aria-hidden="true"></div>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     MAINNET STATUS BAR
+     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<header class="lk-netbar" role="status" aria-label="Mainnet status">
+  <div class="lk-netbar__group lk-netbar__group--left">
+    <span class="lk-netbar__pulse" aria-hidden="true"></span>
+    <strong class="lk-netbar__brand">LANIAKEA</strong>
+    <span class="lk-netbar__sep">·</span>
+    <span class="lk-netbar__version" id="lk-nb-version">v6.3.0-Qalam</span>
+    <span class="lk-netbar__sep">·</span>
+    <span class="lk-netbar__net lk-netbar__net--mainnet">MAINNET</span>
+    <span class="lk-netbar__sep">·</span>
+    <span class="lk-netbar__status" id="lk-nb-status">
+      <span class="lk-netbar__dot" data-state="off"></span>
+      <span id="lk-nb-status-text">connecting</span>
+    </span>
+  </div>
+  <div class="lk-netbar__group lk-netbar__group--right">
+    <span class="lk-netbar__metric" title="Block height">
+      <span class="lk-netbar__metric-icon">⬢</span>
+      <span class="lk-netbar__metric-key">block</span>
+      <strong id="lk-nb-block">—</strong>
+    </span>
+    <span class="lk-netbar__metric" title="Active SCDAs">
+      <span class="lk-netbar__metric-icon">✦</span>
+      <span class="lk-netbar__metric-key">scda</span>
+      <strong id="lk-nb-scda">—</strong>
+    </span>
+    <span class="lk-netbar__metric" title="Validators">
+      <span class="lk-netbar__metric-icon">◈</span>
+      <span class="lk-netbar__metric-key">val</span>
+      <strong id="lk-nb-val">—</strong>
+    </span>
+    <span class="lk-netbar__metric" title="TPS">
+      <span class="lk-netbar__metric-icon">⚡</span>
+      <span class="lk-netbar__metric-key">tps</span>
+      <strong id="lk-nb-tps">—</strong>
+    </span>
+    <span class="lk-netbar__metric" title="Uptime">
+      <span class="lk-netbar__metric-icon">◷</span>
+      <span class="lk-netbar__metric-key">up</span>
+      <strong id="lk-nb-up">—</strong>
+    </span>
+  </div>
+</header>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     TOP APP BAR
+     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<nav class="lk-topbar" role="navigation" aria-label="Primary">
+  <button class="lk-topbar__menu" id="lk-btn-menu" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <a class="lk-topbar__brand" href="/" aria-label="LaniakeA home">
+    <span class="lk-topbar__brand-mark" aria-hidden="true">
+      <span class="lk-mark-core"></span>
+      <span class="lk-mark-ring lk-mark-ring--1"></span>
+      <span class="lk-mark-ring lk-mark-ring--2"></span>
+      <span class="lk-mark-ring lk-mark-ring--3"></span>
+    </span>
+    <span class="lk-topbar__brand-text">
+      <span class="lk-topbar__brand-name">LaniakeA</span>
+      <span class="lk-topbar__brand-sub">8D Cosmic Evolution Engine</span>
+    </span>
+  </a>
+
+  <div class="lk-topbar__pills" id="lk-pills">
+    <span class="lk-pill lk-pill--ok" id="lk-pill-net">MAINNET</span>
+    <span class="lk-pill lk-pill--ghost" id="lk-pill-version">v—</span>
+    <span class="lk-pill lk-pill--ghost" id="lk-pill-env">env —</span>
+    <span class="lk-pill lk-pill--ghost" id="lk-pill-routes">— routes</span>
+    <span class="lk-pill lk-pill--off" id="lk-pill-conn" data-state="off">● offline</span>
+  </div>
+
+  <div class="lk-topbar__actions">
+    <button class="lk-btn lk-btn--ghost lk-btn--icon" id="lk-btn-search" title="Search" aria-label="Search">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+    </button>
+    <button class="lk-btn lk-btn--ghost lk-btn--icon" id="lk-btn-theme" title="Toggle theme" aria-label="Toggle theme">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="lk-btn lk-btn--ghost lk-btn--icon" id="lk-btn-feed" title="Toggle live feed" aria-label="Toggle live feed">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+    </button>
+    <button class="lk-btn lk-btn--ghost lk-btn--icon" id="lk-btn-refresh" title="Refresh" aria-label="Refresh">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+    </button>
+    <a class="lk-btn lk-btn--primary" href="/docs" target="_blank" rel="noopener">API docs ↗</a>
+    <button class="lk-btn lk-btn--ghost lk-btn--icon lk-topbar__menu-mobile" id="lk-btn-menu-mobile" aria-label="Open menu">☰</button>
+  </div>
+</nav>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     APP LAYOUT
+     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<div class="lk-layout">
+  <!-- ░░░ SIDEBAR ░░░ -->
+  <aside class="lk-sidebar" id="lk-sidebar" aria-label="Subsystem navigation">
+    <div class="lk-sidebar__inner">
+      <nav class="lk-nav" id="lk-nav">
+        <div class="lk-nav__group">
+          <div class="lk-nav__label">Cosmic</div>
+          <a class="lk-nav__item active" data-tab="overview" href="#overview">
+            <span class="lk-nav__ico">◉</span><span class="lk-nav__txt">Overview</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="hypercube" href="#hypercube">
+            <span class="lk-nav__ico">⬢</span><span class="lk-nav__txt">8D Hypercube</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="metaverse" href="#metaverse">
+            <span class="lk-nav__ico">⌘</span><span class="lk-nav__txt">Metaverse</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="simulation" href="#simulation">
+            <span class="lk-nav__ico">∿</span><span class="lk-nav__txt">Simulation</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+        </div>
+
+        <div class="lk-nav__group">
+          <div class="lk-nav__label">Intelligence</div>
+          <a class="lk-nav__item" data-tab="scda" href="#scda">
+            <span class="lk-nav__ico">✦</span><span class="lk-nav__txt">SCDA Evolution</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="ai" href="#ai">
+            <span class="lk-nav__ico">⌬</span><span class="lk-nav__txt">AI Engine</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="problems" href="#problems">
+            <span class="lk-nav__ico">⚡</span><span class="lk-nav__txt">Hard Problems</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+        </div>
+
+        <div class="lk-nav__group">
+          <div class="lk-nav__label">Network</div>
+          <a class="lk-nav__item" data-tab="blockchain" href="#blockchain">
+            <span class="lk-nav__ico">⛓</span><span class="lk-nav__txt">Blockchain</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="crosschain" href="#crosschain">
+            <span class="lk-nav__ico">⌖</span><span class="lk-nav__txt">Cross-Chain</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="quantum" href="#quantum">
+            <span class="lk-nav__ico">⚛</span><span class="lk-nav__txt">Quantum</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+        </div>
+
+        <div class="lk-nav__group">
+          <div class="lk-nav__label">Economy</div>
+          <a class="lk-nav__item" data-tab="defi" href="#defi">
+            <span class="lk-nav__ico">◈</span><span class="lk-nav__txt">DeFi / DEX</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="marketplace" href="#marketplace">
+            <span class="lk-nav__ico">◇</span><span class="lk-nav__txt">NFT Marketplace</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="knowledge" href="#knowledge">
+            <span class="lk-nav__ico">✎</span><span class="lk-nav__txt">Knowledge Market</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+        </div>
+
+        <div class="lk-nav__group">
+          <div class="lk-nav__label">Society</div>
+          <a class="lk-nav__item" data-tab="governance" href="#governance">
+            <span class="lk-nav__ico">⚖</span><span class="lk-nav__txt">Governance</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="diplomacy" href="#diplomacy">
+            <span class="lk-nav__ico">⚐</span><span class="lk-nav__txt">Diplomacy</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="reputation" href="#reputation">
+            <span class="lk-nav__ico">♛</span><span class="lk-nav__txt">Reputation</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="achievements" href="#achievements">
+            <span class="lk-nav__ico">★</span><span class="lk-nav__txt">Achievements</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="social" href="#social">
+            <span class="lk-nav__ico">✉</span><span class="lk-nav__txt">Social Hub</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+          <a class="lk-nav__item" data-tab="mining" href="#mining">
+            <span class="lk-nav__ico">⛏</span><span class="lk-nav__txt">Mining</span>
+            <span class="lk-nav__dot" data-state="on"></span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="lk-sidebar__foot">
+        <div class="lk-footrow"><span>Author</span><strong>Qalam</strong></div>
+        <div class="lk-footrow"><span>Network</span><strong class="lk-tx-ok">mainnet</strong></div>
+        <div class="lk-footrow"><span>Build</span><strong>v6.2.0</strong></div>
+        <div class="lk-footrow"><span>API</span><a href="/docs" target="_blank" rel="noopener">/docs ↗</a></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="lk-backdrop" id="lk-backdrop" aria-hidden="true"></div>
+
+  <!-- ░░░ MAIN CONTENT ░░░ -->
+  <main class="lk-main" id="lk-main" role="main">
+
+    <!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+         TAB · OVERVIEW
+         ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+    <section class="lk-tab active" id="tab-overview" role="tabpanel" aria-labelledby="lk-nav-overview">
+      <!-- hero -->
+      <div class="lk-hero">
+        <div class="lk-hero__primary lk-card lk-card--big">
+          <div class="lk-card__head">
+            <div>
+              <h1 class="lk-card__title">Live Cosmic Overview</h1>
+              <div class="lk-card__sub" id="lk-ov-sub">Scanning the LaniakeA protocol…</div>
+            </div>
+            <div class="lk-card__actions">
+              <span class="lk-pulse lk-pulse--live" id="lk-ov-live"></span>
+              <span class="lk-card__sub" id="lk-ov-live-text">live</span>
+            </div>
+          </div>
+          <div class="lk-metric-grid" id="lk-metric-grid">
+            <div class="lk-metric lk-metric--lg"><div class="lk-metric__k">Subsystems</div><div class="lk-metric__v" id="m-subsys">—</div><div class="lk-metric__d">of 18 active</div></div>
+            <div class="lk-metric lk-metric--lg"><div class="lk-metric__k">Routes</div><div class="lk-metric__v" id="m-routes">—</div><div class="lk-metric__d">API endpoints</div></div>
+            <div class="lk-metric lk-metric--lg"><div class="lk-metric__k">SCDAs</div><div class="lk-metric__v" id="m-scda">—</div><div class="lk-metric__d">digital identities</div></div>
+            <div class="lk-metric lk-metric--lg"><div class="lk-metric__k">Blocks</div><div class="lk-metric__v" id="m-blocks">—</div><div class="lk-metric__d">chain length</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">Validators</div><div class="lk-metric__v" id="m-validators">—</div><div class="lk-metric__d">consensus</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">Treasury</div><div class="lk-metric__v" id="m-treasury">—</div><div class="lk-metric__d">LANA</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">AI Perf</div><div class="lk-metric__v" id="m-aiperf">—</div><div class="lk-metric__d">cognitive engine</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">DEX Pools</div><div class="lk-metric__v" id="m-dex">—</div><div class="lk-metric__d">active pairs</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">DAO Props</div><div class="lk-metric__v" id="m-dao">—</div><div class="lk-metric__d">active</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">Quantum Q</div><div class="lk-metric__v" id="m-quantum">—</div><div class="lk-metric__d">pending</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">Alliances</div><div class="lk-metric__v" id="m-alliances">—</div><div class="lk-metric__d">diplomacy</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">Knowledge</div><div class="lk-metric__v" id="m-knowledge">—</div><div class="lk-metric__d">listed assets</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">NFTs</div><div class="lk-metric__v" id="m-nft">—</div><div class="lk-metric__d">minted</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">Achievements</div><div class="lk-metric__v" id="m-achv">—</div><div class="lk-metric__d">unlocked</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">Social</div><div class="lk-metric__v" id="m-social">—</div><div class="lk-metric__d">posts</div></div>
+            <div class="lk-metric"><div class="lk-metric__k">Uptime</div><div class="lk-metric__v" id="m-uptime">—</div><div class="lk-metric__d">seconds</div></div>
+          </div>
+        </div>
+
+        <div class="lk-hero__side lk-card lk-card--hypercube">
+          <div class="lk-card__head">
+            <h2 class="lk-card__title">8D Hypercube</h2>
+            <div class="lk-card__sub" id="lk-cube-sub">WebGL · 256 vertices · 1024 edges</div>
+          </div>
+          <div class="lk-cube-wrap">
+            <canvas id="lk-cube-canvas" aria-label="8-dimensional hypercube WebGL projection"></canvas>
+            <div class="lk-cube-overlay" id="lk-cube-overlay">
+              <div class="lk-cube-overlay__row"><span>Dimension</span><strong>8D</strong></div>
+              <div class="lk-cube-overlay__row"><span>Vertices</span><strong>256</strong></div>
+              <div class="lk-cube-overlay__row"><span>Edges</span><strong>1024</strong></div>
+              <div class="lk-cube-overlay__row"><span>FPS</span><strong id="lk-cube-fps">—</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- chain list + subsystems + token -->
+      <div class="lk-grid lk-grid--3">
+        <div class="lk-card">
+          <div class="lk-card__head">
+            <h2 class="lk-card__title">LANA Token</h2>
+            <div class="lk-card__sub">native mainnet asset</div>
+          </div>
+          <div class="lk-kv-list" id="lk-token-list">
+            <div class="lk-kv"><span>Symbol</span><strong id="lk-t-sym">—</strong></div>
+            <div class="lk-kv"><span>Name</span><strong id="lk-t-name">—</strong></div>
+            <div class="lk-kv"><span>Decimals</span><strong id="lk-t-dec">—</strong></div>
+            <div class="lk-kv"><span>Total supply</span><strong id="lk-t-sup">—</strong></div>
+            <div class="lk-kv"><span>Network</span><strong class="lk-tx-ok" id="lk-t-net">mainnet</strong></div>
+            <div class="lk-kv"><span>Chain ID</span><strong id="lk-t-chain">1</strong></div>
+          </div>
+        </div>
+
+        <div class="lk-card">
+          <div class="lk-card__head">
+            <h2 class="lk-card__title">Cross-Chain Bridge</h2>
+            <div class="lk-card__sub">8 networks</div>
+          </div>
+          <div class="lk-chain-grid" id="lk-chain-list">
+            <div class="lk-chain"><span class="lk-chain__dot lk-chain__dot--eth"></span><span class="lk-chain__name">Ethereum</span><span class="lk-chain__status" id="lk-chain-eth">—</span></div>
+            <div class="lk-chain"><span class="lk-chain__dot lk-chain__dot--poly"></span><span class="lk-chain__name">Polygon</span><span class="lk-chain__status" id="lk-chain-poly">—</span></div>
+            <div class="lk-chain"><span class="lk-chain__dot lk-chain__dot--arb"></span><span class="lk-chain__name">Arbitrum</span><span class="lk-chain__status" id="lk-chain-arb">—</span></div>
+            <div class="lk-chain"><span class="lk-chain__dot lk-chain__dot--op"></span><span class="lk-chain__name">Optimism</span><span class="lk-chain__status" id="lk-chain-op">—</span></div>
+            <div class="lk-chain"><span class="lk-chain__dot lk-chain__dot--base"></span><span class="lk-chain__name">Base</span><span class="lk-chain__status" id="lk-chain-base">—</span></div>
+            <div class="lk-chain"><span class="lk-chain__dot lk-chain__dot--bsc"></span><span class="lk-chain__name">BNB Chain</span><span class="lk-chain__status" id="lk-chain-bsc">—</span></div>
+            <div class="lk-chain"><span class="lk-chain__dot lk-chain__dot--avax"></span><span class="lk-chain__name">Avalanche</span><span class="lk-chain__status" id="lk-chain-avax">—</span></div>
+            <div class="lk-chain"><span class="lk-chain__dot lk-chain__dot--ftm"></span><span class="lk-chain__name">Fantom</span><span class="lk-chain__status" id="lk-chain-ftm">—</span></div>
+          </div>
+        </div>
+
+        <div class="lk-card">
+          <div class="lk-card__head">
+            <h2 class="lk-card__title">Subsystems</h2>
+            <div class="lk-card__sub" id="lk-ss-sub">live state</div>
+          </div>
+          <div class="lk-ss-grid" id="lk-ss-grid"></div>
+        </div>
+      </div>
+
+      <!-- quick actions -->
+      <div class="lk-card">
+        <div class="lk-card__head">
+          <div>
+            <h2 class="lk-card__title">Quick Actions</h2>
+            <div class="lk-card__sub">Interact with the LaniakeA protocol in real time</div>
+          </div>
+          <div class="lk-card__actions">
+            <button class="lk-btn lk-btn--ghost lk-btn--sm" id="lk-btn-actions-clear">clear</button>
+          </div>
+        </div>
+        <div class="lk-action-grid">
+          <button class="lk-action" data-action="solve"><span class="lk-action__ico">⚡</span><div><strong>Solve Hard Problem</strong><small>trigger LLM cognitive engine</small></div></button>
+          <button class="lk-action" data-action="evaluate"><span class="lk-action__ico">∫</span><div><strong>Evaluate Expression</strong><small>symbolic math via LLM</small></div></button>
+          <button class="lk-action" data-action="predict"><span class="lk-action__ico">◐</span><div><strong>SCDA Predict</strong><small>evolutionary prediction</small></div></button>
+          <button class="lk-action" data-action="breed"><span class="lk-action__ico">✥</span><div><strong>Breed SCDAs</strong><small>lineage breeding</small></div></button>
+          <button class="lk-action" data-action="quantum"><span class="lk-action__ico">⚛</span><div><strong>Submit Quantum Job</strong><small>quantum processor</small></div></button>
+          <button class="lk-action" data-action="tokenize"><span class="lk-action__ico">◊</span><div><strong>Tokenize Knowledge</strong><small>list knowledge asset</small></div></button>
+          <button class="lk-action" data-action="alliance"><span class="lk-action__ico">⚐</span><div><strong>Form Alliance</strong><small>civilization diplomacy</small></div></button>
+          <button class="lk-action" data-action="propose"><span class="lk-action__ico">⚖</span><div><strong>DAO Proposal</strong><small>governance</small></div></button>
+          <button class="lk-action" data-action="mint"><span class="lk-action__ico">◇</span><div><strong>Mint NFT</strong><small>marketplace</small></div></button>
+          <button class="lk-action" data-action="simulate"><span class="lk-action__ico">∿</span><div><strong>Run Simulation</strong><small>cosmic step</small></div></button>
+        </div>
+        <div class="lk-action-output" id="lk-action-output" hidden>
+          <div class="lk-action-output__head">
+            <strong id="lk-action-out-title">Result</strong>
+            <div class="lk-action-output__meta">
+              <span class="lk-action-output__time" id="lk-action-out-time"></span>
+              <button class="lk-btn lk-btn--ghost lk-btn--sm" id="lk-action-out-close">×</button>
+            </div>
+          </div>
+          <pre class="lk-action-output__body" id="lk-action-out-body"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+         TAB · 8D HYPERCUBE FULLSCREEN
+         ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+    <section class="lk-tab" id="tab-hypercube" role="tabpanel">
+      <div class="lk-card lk-card--fullscreen">
+        <div class="lk-card__head">
+          <div>
+            <h2 class="lk-card__title">8-Dimensional Hypercube · Live Projection</h2>
+            <div class="lk-card__sub">drag to rotate · scroll to zoom · right-click to pan</div>
+          </div>
+          <div class="lk-card__actions lk-card__actions--inline">
+            <span class="lk-card__sub" id="lk-hc-info">8D · 256 vertices · 1024 edges</span>
+          </div>
+        </div>
+        <div class="lk-hc-wrap">
+          <canvas id="lk-hc-full-canvas" aria-label="8D hypercube fullscreen view"></canvas>
+          <div class="lk-hc-controls">
+            <label class="lk-toggle">
+              <input type="checkbox" id="lk-hc-autorotate" checked />
+              <span>Auto rotate</span>
+            </label>
+            <label class="lk-toggle">
+              <input type="checkbox" id="lk-hc-wireframe" />
+              <span>Wireframe</span>
+            </label>
+            <label class="lk-toggle">
+              <input type="checkbox" id="lk-hc-trail" checked />
+              <span>Trail</span>
+            </label>
+            <label class="lk-select">
+              <span>Projection</span>
+              <select id="lk-hc-proj">
+                <option value="perspective" selected>Perspective</option>
+                <option value="orthographic">Orthographic</option>
+                <option value="stereographic">Stereographic</option>
+              </select>
+            </label>
+            <label class="lk-select">
+              <span>Rotation speed</span>
+              <input type="range" id="lk-hc-speed" min="0" max="100" value="40" />
+            </label>
+            <div class="lk-hc-stats">
+              <span>Verts <strong>256</strong></span>
+              <span>Edges <strong>1024</strong></span>
+              <span>Cells <strong>1820</strong></span>
+              <span>FPS <strong id="lk-hc-fps">—</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+         TAB · SCDA
+         ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+    <section class="lk-tab" id="tab-scda" role="tabpanel">
+      <div class="lk-grid lk-grid--2">
+        <div class="lk-card">
+          <div class="lk-card__head">
+            <h2 class="lk-card__title">SCDA Identities</h2>
+            <div class="lk-card__sub" id="lk-scda-sub">— digital organisms</div>
+          </div>
+          <div class="lk-scda-list" id="lk-scda-list"></div>
+        </div>
+        <div class="lk-card">
+          <div class="lk-card__head">
+            <h2 class="lk-card__title">Leaderboard</h2>
+            <div class="lk-card__sub">top SCDAs by fitness</div>
+          </div>
+          <div class="lk-leaderboard" id="lk-scda-leaderboard"></div>
+        </div>
+      </div>
+      <div class="lk-card">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">Evolution Tree</h2>
+          <div class="lk-card__sub">lineage of digital single-cell organisms</div>
+        </div>
+        <div class="lk-tree-wrap">
+          <canvas id="lk-tree-canvas" aria-label="SCDA evolution tree"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+         TAB · BLOCKCHAIN
+         ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+    <section class="lk-tab" id="tab-blockchain" role="tabpanel">
+      <div class="lk-grid lk-grid--3">
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Chain Info</h2></div>
+          <div class="lk-kv-list" id="lk-chain-info"></div>
+        </div>
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Consensus</h2></div>
+          <div class="lk-kv-list" id="lk-consensus-info"></div>
+        </div>
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Mine Block</h2></div>
+          <div class="lk-mine">
+            <p class="lk-mine__desc">Submit a new block to the hypercube chain via PoA + PoHD consensus.</p>
+            <button class="lk-btn lk-btn--primary lk-btn--block" id="lk-btn-mine">⛏ Mine new block</button>
+            <pre class="lk-mine__result" id="lk-mine-result" hidden></pre>
+          </div>
+        </div>
+      </div>
+      <div class="lk-card">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">Recent Blocks</h2>
+          <button class="lk-btn lk-btn--ghost lk-btn--sm" id="lk-btn-reload-blocks">reload</button>
+        </div>
+        <div class="lk-blocks-list" id="lk-blocks-list"></div>
+      </div>
+    </section>
+
+    <!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+         TAB · AI ENGINE
+         ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+    <section class="lk-tab" id="tab-ai" role="tabpanel">
+      <div class="lk-grid lk-grid--2">
+        <div class="lk-card">
+          <div class="lk-card__head">
+            <h2 class="lk-card__title">AI Query</h2>
+            <div class="lk-card__sub">Cognitive engine · <span id="lk-ai-model">—</span></div>
+          </div>
+          <div class="lk-ai-form">
+            <label>
+              <span>Prompt</span>
+              <textarea id="lk-ai-prompt" rows="4" placeholder="Ask the LaniakeA cognitive engine anything…">Explain the SCDA evolution law ΔC = D(P) / C(t)^α in simple terms.</textarea>
+            </label>
+            <label>
+              <span>Max tokens</span>
+              <input type="number" id="lk-ai-tokens" value="512" min="64" max="4096" />
+            </label>
+            <button class="lk-btn lk-btn--primary" id="lk-btn-ai-query">⌬ Run AI query</button>
+            <div class="lk-ai-result" id="lk-ai-result" hidden>
+              <div class="lk-ai-result__head">Response</div>
+              <pre class="lk-ai-result__body" id="lk-ai-result-body"></pre>
+            </div>
+          </div>
+        </div>
+        <div class="lk-card">
+          <div class="lk-card__head">
+            <h2 class="lk-card__title">Hard Problems</h2>
+            <div class="lk-card__sub">Generated block equations</div>
+          </div>
+          <div class="lk-problems" id="lk-problems-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+         Generic Tab Container for the rest
+         ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+    <section class="lk-tab" id="tab-problems" role="tabpanel">
+      <div class="lk-card lk-card--full">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">Hard Problems · Discovery Engine</h2>
+          <div class="lk-card__sub">LLM-generated equations that gate block production</div>
+        </div>
+        <div class="lk-problems" id="lk-problems-list-2"></div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-quantum" role="tabpanel">
+      <div class="lk-grid lk-grid--2">
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Submit Quantum Job</h2></div>
+          <div class="lk-ai-form">
+            <label><span>Circuit</span><input type="text" id="lk-q-circuit" value="bell" /></label>
+            <label><span>Shots</span><input type="number" id="lk-q-shots" value="100" min="1" max="10000" /></label>
+            <button class="lk-btn lk-btn--primary" id="lk-btn-q-submit">⚛ Submit</button>
+            <div class="lk-ai-result" id="lk-q-result" hidden>
+              <div class="lk-ai-result__head">Result</div>
+              <pre class="lk-ai-result__body" id="lk-q-result-body"></pre>
+            </div>
+          </div>
+        </div>
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Quantum Queue</h2></div>
+          <div class="lk-problems" id="lk-q-queue"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-crosschain" role="tabpanel">
+      <div class="lk-grid lk-grid--2">
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Supported Networks</h2></div>
+          <div class="lk-chain-grid lk-chain-grid--full" id="lk-cc-list"></div>
+        </div>
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Initiate Transfer</h2></div>
+          <div class="lk-ai-form">
+            <label><span>From chain</span><input type="text" id="lk-cc-from" value="ethereum" /></label>
+            <label><span>To chain</span><input type="text" id="lk-cc-to" value="polygon" /></label>
+            <label><span>Amount (LANA)</span><input type="number" id="lk-cc-amount" value="100" min="0" step="0.01" /></label>
+            <button class="lk-btn lk-btn--primary" id="lk-btn-cc-init">⌖ Initiate bridge transfer</button>
+            <div class="lk-ai-result" id="lk-cc-result" hidden>
+              <div class="lk-ai-result__head">Transfer</div>
+              <pre class="lk-ai-result__body" id="lk-cc-result-body"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-governance" role="tabpanel">
+      <div class="lk-card lk-card--full">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">DAO · Governance Proposals</h2>
+          <button class="lk-btn lk-btn--ghost lk-btn--sm" id="lk-btn-reload-props">reload</button>
+        </div>
+        <div class="lk-proposals" id="lk-prop-list"></div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-defi" role="tabpanel">
+      <div class="lk-grid lk-grid--2">
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Liquidity Pools</h2></div>
+          <div class="lk-pools" id="lk-pools"></div>
+        </div>
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Swap</h2></div>
+          <div class="lk-ai-form">
+            <label><span>From</span><input type="text" id="lk-swap-from" value="LANA" /></label>
+            <label><span>To</span><input type="text" id="lk-swap-to" value="USDC" /></label>
+            <label><span>Amount</span><input type="number" id="lk-swap-amount" value="10" step="0.01" /></label>
+            <button class="lk-btn lk-btn--primary" id="lk-btn-swap">◈ Swap</button>
+            <div class="lk-ai-result" id="lk-swap-result" hidden>
+              <div class="lk-ai-result__head">Swap result</div>
+              <pre class="lk-ai-result__body" id="lk-swap-result-body"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-marketplace" role="tabpanel">
+      <div class="lk-card lk-card--full">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">NFT Marketplace</h2>
+          <button class="lk-btn lk-btn--ghost lk-btn--sm" id="lk-btn-reload-nft">reload</button>
+        </div>
+        <div class="lk-nfts" id="lk-nft-list"></div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-knowledge" role="tabpanel">
+      <div class="lk-card lk-card--full">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">Knowledge Market</h2>
+          <div class="lk-card__sub">Tokenized knowledge assets</div>
+        </div>
+        <div class="lk-knowledge" id="lk-knowledge-list"></div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-diplomacy" role="tabpanel">
+      <div class="lk-card lk-card--full">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">Diplomacy · Civilizations & Alliances</h2>
+        </div>
+        <div class="lk-diplomacy" id="lk-diplomacy-list"></div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-achievements" role="tabpanel">
+      <div class="lk-card lk-card--full">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">Achievements</h2>
+        </div>
+        <div class="lk-achievements" id="lk-achv-list"></div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-social" role="tabpanel">
+      <div class="lk-card lk-card--full">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">Social Hub</h2>
+        </div>
+        <div class="lk-social" id="lk-social-list"></div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-mining" role="tabpanel">
+      <div class="lk-grid lk-grid--2">
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Mining · PoHD</h2></div>
+          <div class="lk-mining" id="lk-mining-info"></div>
+        </div>
+        <div class="lk-card">
+          <div class="lk-card__head"><h2 class="lk-card__title">Rewards</h2></div>
+          <div class="lk-kv-list" id="lk-mining-rewards"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-reputation" role="tabpanel">
+      <div class="lk-card lk-card--full">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">Reputation System</h2>
+        </div>
+        <div class="lk-reputation" id="lk-rep-list"></div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-metaverse" role="tabpanel">
+      <div class="lk-card lk-card--full">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">Metaverse · 8D Space</h2>
+        </div>
+        <div class="lk-metaverse" id="lk-metaverse-view"></div>
+      </div>
+    </section>
+
+    <section class="lk-tab" id="tab-simulation" role="tabpanel">
+      <div class="lk-card lk-card--full">
+        <div class="lk-card__head">
+          <h2 class="lk-card__title">Cosmic Simulation</h2>
+        </div>
+        <div class="lk-simulation" id="lk-sim-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ░░░ LIVE FEED (collapsible) ░░░ -->
+  <aside class="lk-feed" id="lk-feed" aria-label="Live activity feed">
+    <div class="lk-feed__head">
+      <h3 class="lk-feed__title">📡 Live Activity</h3>
+      <div class="lk-feed__actions">
+        <button class="lk-btn lk-btn--ghost lk-btn--sm" id="lk-btn-feed-clear" title="Clear">clear</button>
+        <button class="lk-btn lk-btn--ghost lk-btn--sm" id="lk-btn-feed-close" title="Close">×</button>
+      </div>
+    </div>
+    <div class="lk-feed__list" id="lk-feed-list"></div>
+    <div class="lk-feed__foot">
+      <span>Polling</span> <strong id="lk-feed-status">off</strong>
+    </div>
+  </aside>
+</div>
+
+<!-- ░░░ TOAST ░░░ -->
+<div class="lk-toast-wrap" id="lk-toast-wrap" aria-live="polite"></div>
+
+<!-- ░░░ MODAL ░░░ -->
+<div class="lk-modal" id="lk-modal" hidden>
+  <div class="lk-modal__backdrop" data-modal-close></div>
+  <div class="lk-modal__panel" role="dialog" aria-modal="true">
+    <div class="lk-modal__head">
+      <h3 id="lk-modal-title">Modal</h3>
+      <button class="lk-btn lk-btn--ghost lk-btn--icon" data-modal-close>×</button>
+    </div>
+    <div class="lk-modal__body" id="lk-modal-body"></div>
+  </div>
+</div>
+
+<!-- Cosmic V8 main script -->
+<script type="module" src="/web/cosmic_v8.js"></script>
+</body>
+</html>

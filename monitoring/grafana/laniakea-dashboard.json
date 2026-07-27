@@ -1,0 +1,71 @@
+{
+  "title": "Laniakea Protocol — Cosmic Dashboard",
+  "uid": "laniakea-cosmic",
+  "tags": ["laniakea", "blockchain", "scda", "cosmos"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-1h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "instance",
+        "type": "query",
+        "datasource": "Prometheus",
+        "query": "label_values(up{job=\"laniakea\"}, instance)",
+        "current": { "text": "All", "value": "$__all" }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1, "type": "stat", "title": "Active SCDAs",
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "laniakea_scda_total", "refId": "A" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "steps": [{ "color": "green", "value": null }] } } }
+    },
+    {
+      "id": 2, "type": "stat", "title": "Block Height",
+      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "laniakea_blockchain_height", "refId": "A" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" } } }
+    },
+    {
+      "id": 3, "type": "stat", "title": "P2P Peers",
+      "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "laniakea_p2p_peers", "refId": "A" }]
+    },
+    {
+      "id": 4, "type": "stat", "title": "TPS",
+      "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "rate(laniakea_tx_total[1m])", "refId": "A" }]
+    },
+    {
+      "id": 5, "type": "timeseries", "title": "Evolution Curve (C(t))",
+      "gridPos": { "x": 0, "y": 4, "w": 12, "h": 8 },
+      "targets": [{ "expr": "laniakea_scda_complexity", "refId": "A", "legendFormat": "Complexity" }],
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } }
+    },
+    {
+      "id": 6, "type": "timeseries", "title": "Network Energy",
+      "gridPos": { "x": 12, "y": 4, "w": 12, "h": 8 },
+      "targets": [{ "expr": "laniakea_network_energy", "refId": "A" }]
+    },
+    {
+      "id": 7, "type": "piechart", "title": "Tier Distribution",
+      "gridPos": { "x": 0, "y": 12, "w": 8, "h": 8 },
+      "targets": [{ "expr": "laniakea_scda_by_tier", "refId": "A" }]
+    },
+    {
+      "id": 8, "type": "timeseries", "title": "Block Production Rate",
+      "gridPos": { "x": 8, "y": 12, "w": 8, "h": 8 },
+      "targets": [{ "expr": "rate(laniakea_blocks_total[5m])", "refId": "A" }]
+    },
+    {
+      "id": 9, "type": "table", "title": "DAO Proposals",
+      "gridPos": { "x": 16, "y": 12, "w": 8, "h": 8 },
+      "targets": [{ "expr": "laniakea_dao_proposals", "refId": "A", "format": "table" }]
+    }
+  ]
+}

@@ -1,0 +1,401 @@
+openapi: 3.0.3
+info:
+  title: Laniakea Protocol API
+  description: |
+    REST API for the Laniakea Cosmic Evolution Engine.
+
+    Features:
+    - SCDA (Single-Cell Digital Account) management
+    - 8D Hypercube Blockchain operations
+    - Hard Problem generation and validation
+    - DAO governance
+    - Metaverse 8D space management
+    - WebSocket real-time updates at `/ws`
+  version: 1.0.0
+  contact:
+    name: Qalam
+    url: https://github.com/QalamHipHop/laniakea-protocol
+  license:
+    name: MIT
+servers:
+  - url: https://laniakea-protocol.onrender.com
+    description: Production
+  - url: http://localhost:8000
+    description: Local development
+
+tags:
+  - name: SCDA
+    description: Single-Cell Digital Account operations
+  - name: Blockchain
+    description: 8D Hypercube blockchain
+  - name: Evolution
+    description: Evolution engine
+  - name: Governance
+    description: DAO governance
+  - name: Problems
+    description: Hard Problems
+  - name: Metaverse
+    description: 8D space
+  - name: System
+    description: System health & metrics
+
+paths:
+  /health:
+    get:
+      tags: [System]
+      summary: Health check
+      responses:
+        '200':
+          description: System is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: healthy }
+                  version: { type: string, example: 1.0.0 }
+                  uptime: { type: number }
+                  peers: { type: integer }
+
+  /metrics:
+    get:
+      tags: [System]
+      summary: Prometheus metrics
+      responses:
+        '200':
+          description: Metrics in Prometheus exposition format
+
+  /api/v1/scda:
+    get:
+      tags: [SCDA]
+      summary: List all SCDAs
+      parameters:
+        - { name: tier, in: query, schema: { type: string, enum: [T1, T2, T3, T4, T5, T6] } }
+        - { name: limit, in: query, schema: { type: integer, default: 50 } }
+        - { name: offset, in: query, schema: { type: integer, default: 0 } }
+      responses:
+        '200':
+          description: List of SCDAs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total: { type: integer }
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/SCDA' }
+
+    post:
+      tags: [SCDA]
+      summary: Create new SCDA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [owner]
+              properties:
+                owner: { type: string }
+                initial_dna: { type: string, description: 'Optional initial DNA sequence' }
+      responses:
+        '201':
+          description: SCDA created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SCDA' }
+
+  /api/v1/scda/{id}:
+    get:
+      tags: [SCDA]
+      summary: Get SCDA by ID
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: SCDA details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SCDA' }
+        '404':
+          description: Not found
+
+  /api/v1/scda/{id}/evolve:
+    post:
+      tags: [Evolution]
+      summary: Trigger evolution step
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Evolution applied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scda: { $ref: '#/components/schemas/SCDA' }
+                  delta_c: { type: number }
+                  new_tier: { type: string }
+
+  /api/v1/scda/{id}/breed:
+    post:
+      tags: [Evolution]
+      summary: Breed with another SCDA
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [partner_id]
+              properties:
+                partner_id: { type: string }
+      responses:
+        '200':
+          description: Offspring created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SCDA' }
+
+  /api/v1/blockchain/blocks:
+    get:
+      tags: [Blockchain]
+      summary: List recent blocks
+      parameters:
+        - { name: limit, in: query, schema: { type: integer, default: 20 } }
+      responses:
+        '200':
+          description: List of blocks
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Block' }
+
+  /api/v1/blockchain/blocks/{height}:
+    get:
+      tags: [Blockchain]
+      summary: Get block by height
+      parameters:
+        - { name: height, in: path, required: true, schema: { type: integer } }
+      responses:
+        '200':
+          description: Block details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Block' }
+
+  /api/v1/blockchain/submit:
+    post:
+      tags: [Blockchain]
+      summary: Submit a transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Transaction' }
+      responses:
+        '201':
+          description: Transaction accepted
+
+  /api/v1/problems:
+    get:
+      tags: [Problems]
+      summary: List hard problems
+      parameters:
+        - { name: status, in: query, schema: { type: string, enum: [open, solved, all] } }
+      responses:
+        '200':
+          description: List of problems
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/HardProblem' }
+
+  /api/v1/problems/{id}/solve:
+    post:
+      tags: [Problems]
+      summary: Submit solution
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [solution, solver_id]
+              properties:
+                solution: { type: string }
+                solver_id: { type: string }
+      responses:
+        '200':
+          description: Solution verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  correct: { type: boolean }
+                  reward: { type: integer }
+
+  /api/v1/governance/proposals:
+    get:
+      tags: [Governance]
+      summary: List DAO proposals
+      responses:
+        '200':
+          description: List of proposals
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Proposal' }
+    post:
+      tags: [Governance]
+      summary: Create new proposal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProposalInput' }
+      responses:
+        '201':
+          description: Proposal created
+
+  /api/v1/governance/proposals/{id}/vote:
+    post:
+      tags: [Governance]
+      summary: Vote on proposal
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [voter, choice]
+              properties:
+                voter: { type: string }
+                choice: { type: string, enum: [yes, no, abstain] }
+                weight: { type: integer }
+
+  /api/v1/metaverse/space:
+    get:
+      tags: [Metaverse]
+      summary: Get 8D space state
+      responses:
+        '200':
+          description: Space state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vertices: { type: integer, example: 256 }
+                  edges: { type: integer, example: 1024 }
+                  dimensions: { type: integer, example: 8 }
+                  entities:
+                    type: array
+                    items: { $ref: '#/components/schemas/Entity' }
+
+components:
+  schemas:
+    SCDA:
+      type: object
+      properties:
+        id: { type: string }
+        owner: { type: string }
+        dna: { type: string }
+        tier: { type: string, enum: [T1, T2, T3, T4, T5, T6] }
+        generation: { type: integer }
+        complexity: { type: number }
+        energy: { type: number }
+        created_at: { type: string, format: date-time }
+        vector_8d:
+          type: array
+          items: { type: number }
+          minItems: 8
+          maxItems: 8
+
+    Block:
+      type: object
+      properties:
+        height: { type: integer }
+        hash: { type: string }
+        previous_hash: { type: string }
+        timestamp: { type: string, format: date-time }
+        consensus: { type: string, enum: [PoHD, PoA, PoV] }
+        transactions:
+          type: array
+          items: { $ref: '#/components/schemas/Transaction' }
+        hypercube_coords:
+          type: array
+          items: { type: number }
+          minItems: 8
+          maxItems: 8
+
+    Transaction:
+      type: object
+      properties:
+        hash: { type: string }
+        from: { type: string }
+        to: { type: string }
+        amount: { type: number }
+        data: { type: object }
+        signature: { type: string }
+
+    HardProblem:
+      type: object
+      properties:
+        id: { type: string }
+        problem: { type: string }
+        hardness: { type: number, minimum: 0, maximum: 10 }
+        reward: { type: integer }
+        status: { type: string, enum: [open, solved, expired] }
+        solver: { type: string, nullable: true }
+
+    Proposal:
+      type: object
+      properties:
+        id: { type: string }
+        title: { type: string }
+        description: { type: string }
+        proposer: { type: string }
+        votes_yes: { type: integer }
+        votes_no: { type: integer }
+        votes_abstain: { type: integer }
+        status: { type: string, enum: [active, passed, rejected, executed] }
+        deadline: { type: string, format: date-time }
+
+    ProposalInput:
+      type: object
+      required: [title, description, proposer]
+      properties:
+        title: { type: string }
+        description: { type: string }
+        proposer: { type: string }
+
+    Entity:
+      type: object
+      properties:
+        id: { type: string }
+        type: { type: string, enum: [avatar, region, object, scda] }
+        position_8d:
+          type: array
+          items: { type: number }
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
