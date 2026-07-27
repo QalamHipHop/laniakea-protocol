@@ -1,56 +1,134 @@
 /* ============================================================
-   🌌 LANIAKEA PROTOCOL — COSMIC UI
-   Cyber-Cosmic · Glassmorphism · Neon · RTL
+   🌌 LANIAKEA PROTOCOL — COSMIC UI v3
+   Cyber-Cosmic · Glassmorphism v2 · Neon · RTL · Modern
+   © 2025 Laniakea Protocol · Qalam
    ============================================================ */
 
-/* ---------- THEME TOKENS ---------- */
-:root {
-  /* cosmic (default) */
+/* ---------- THEME TOKENS — COSMIC (default) ---------- */
+:root,
+[data-theme="cosmic"] {
+  /* Surfaces */
   --bg-0: #050514;
   --bg-1: #0a0a23;
   --bg-2: #11112e;
+  --bg-3: #1a1a3e;
+
+  /* Ink (foreground) */
   --ink-0: #ffffff;
   --ink-1: #d6d6f5;
   --ink-2: #9b9bd0;
   --ink-3: #6e6ea3;
+  --ink-4: #3a3a6a;
 
+  /* Brand palette */
   --brand: #7c3aed;     /* violet */
   --brand-2: #06b6d4;   /* cyan */
   --brand-3: #ec4899;   /* pink */
   --brand-4: #f59e0b;   /* amber */
+  --brand-5: #10b981;   /* emerald */
   --good: #10b981;
   --bad:  #ef4444;
+  --warn: #f59e0b;
 
+  /* Glass / borders */
   --glass: rgba(20, 18, 60, 0.45);
   --glass-2: rgba(255, 255, 255, 0.04);
+  --glass-3: rgba(124, 58, 237, 0.08);
   --border: rgba(255, 255, 255, 0.10);
   --border-strong: rgba(255, 255, 255, 0.18);
+  --border-brand: rgba(124, 58, 237, 0.4);
 
+  /* Gradients */
   --grad-1: linear-gradient(135deg, #7c3aed 0%, #06b6d4 50%, #ec4899 100%);
   --grad-2: linear-gradient(135deg, #06b6d4 0%, #7c3aed 100%);
   --grad-3: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
+  --grad-4: linear-gradient(135deg, #0a0a23 0%, #11112e 50%, #1a1a3e 100%);
+  --grad-cosmic: radial-gradient(ellipse at top, #2a0a4a 0%, #050514 60%);
+  --grad-mesh: conic-gradient(from 180deg at 50% 50%, #7c3aed 0deg, #06b6d4 120deg, #ec4899 240deg, #7c3aed 360deg);
 
-  --shadow-lg: 0 30px 80px -20px rgba(124, 58, 237, 0.45);
+  /* Effects */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
-  --radius: 18px;
-  --radius-sm: 12px;
+  --shadow-lg: 0 30px 80px -20px rgba(124, 58, 237, 0.45);
+  --shadow-glow: 0 0 40px rgba(124, 58, 237, 0.4);
+  --shadow-glow-cyan: 0 0 40px rgba(6, 182, 212, 0.4);
 
+  /* Radii */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 9999px;
+
+  /* Motion */
   --t-fast: 180ms cubic-bezier(.4,0,.2,1);
   --t-med: 360ms cubic-bezier(.4,0,.2,1);
+  --t-slow: 600ms cubic-bezier(.4,0,.2,1);
+  --t-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Z-index scale */
+  --z-base: 1;
+  --z-elevated: 10;
+  --z-overlay: 100;
+  --z-modal: 1000;
+  --z-toast: 10000;
 }
 
+/* ---------- THEME: DARK (slate) ---------- */
+[data-theme="dark"] {
+  --bg-0: #0a0a0f;
+  --bg-1: #13131a;
+  --bg-2: #1c1c26;
+  --bg-3: #262633;
+  --ink-0: #f8fafc;
+  --ink-1: #cbd5e1;
+  --ink-2: #94a3b8;
+  --ink-3: #64748b;
+  --glass: rgba(15, 15, 25, 0.6);
+  --glass-2: rgba(255, 255, 255, 0.03);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --grad-cosmic: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a0f 60%);
+}
+
+/* ---------- THEME: LIGHT ---------- */
 [data-theme="light"] {
   --bg-0: #f5f3ff;
   --bg-1: #ede9fe;
   --bg-2: #ffffff;
+  --bg-3: #faf5ff;
   --ink-0: #1e1b4b;
   --ink-1: #312e81;
   --ink-2: #4c1d95;
   --ink-3: #6b21a8;
+  --ink-4: #a78bfa;
   --glass: rgba(255, 255, 255, 0.7);
   --glass-2: rgba(124, 58, 237, 0.05);
+  --glass-3: rgba(124, 58, 237, 0.1);
   --border: rgba(124, 58, 237, 0.18);
   --border-strong: rgba(124, 58, 237, 0.3);
+  --shadow-md: 0 10px 40px -10px rgba(124, 58, 237, 0.2);
+  --shadow-lg: 0 30px 80px -20px rgba(124, 58, 237, 0.3);
+  --grad-cosmic: radial-gradient(ellipse at top, #ede9fe 0%, #f5f3ff 60%);
+}
+
+/* ---------- THEME: AUTO (respect OS) ---------- */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg-0: #f5f3ff;
+    --bg-1: #ede9fe;
+    --bg-2: #ffffff;
+    --bg-3: #faf5ff;
+    --ink-0: #1e1b4b;
+    --ink-1: #312e81;
+    --ink-2: #4c1d95;
+    --ink-3: #6b21a8;
+    --ink-4: #a78bfa;
+    --glass: rgba(255, 255, 255, 0.7);
+    --border: rgba(124, 58, 237, 0.18);
+    --border-strong: rgba(124, 58, 237, 0.3);
+  }
 }
 
 /* ---------- RESET ---------- */
