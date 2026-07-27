@@ -215,6 +215,41 @@ laniakea_simulator.add_entity(
     CosmicEntity("Milky_Way", "Galaxy", [1.0e22, 0.0, 0.0], 1.5e42)
 )
 
+# --- Genesis SCDA seed (opt-in, non-destructive) ---------------------------
+# If the SCDA registry is empty AND genesis seeding is enabled via the
+# ``LANIAKEA_GENESIS_SEED`` env var, create a small set of named SCDAs so
+# the dashboards have something to render on first boot. This mirrors the
+# cosmic-simulator seeding above and is a no-op when the registry already
+# contains identities (e.g. loaded from a snapshot).
+try:
+    _genesis_enabled = os.getenv("LANIAKEA_GENESIS_SEED", "true").lower() in (
+        "1",
+        "true",
+        "yes",
+        "on",
+    )
+    if (
+        _genesis_enabled
+        and laniakea_scda_manager is not None
+        and not laniakea_scda_manager.list_identities()
+    ):
+        _GENESIS_SCDAS = [
+            "Qalam-Origin",
+            "Cosmos-One",
+            "Nebula-Prime",
+            "Andromeda-Seed",
+            "Aurora-Zero",
+        ]
+        for _ident in _GENESIS_SCDAS:
+            laniakea_scda_manager.create(_ident)
+        logger.info(
+            "Genesis SCDA seed created %d identities: %s",
+            len(_GENESIS_SCDAS),
+            ", ".join(_GENESIS_SCDAS),
+        )
+except Exception as _exc:  # pragma: no cover - defensive
+    logger.warning("Genesis SCDA seed failed: %s", _exc)
+
 logger.info(
     "Laniakea Protocol v%s initialised. Diplomacy=%s, KnowledgeMarket=%s",
     settings.PROJECT_VERSION,
@@ -837,12 +872,20 @@ def cosmic_overview() -> Dict[str, Any]:
     )
 
     # Total SCDA complexity / energy for the radar chart.
+    # The SCDA manager does not expose ``get_state(identity)`` — the canonical
+    # way to read a single SCDA is ``manager.get(identity).get_state()``.
+    # We use the manager-level aggregators when available for efficiency.
     total_complexity = 0.0
     total_energy = 0.0
-    for ident in identities:
-        state = laniakea_scda_manager.get_state(ident) if laniakea_scda_manager else None
-        if state is not None:
-            total_complexity += float(getattr(state, "complexity", 0.0) or 0.0)
+    if laniakea_scda_manager is not None:
+        for ident in identities:
+            scda_obj = laniakea_scda_manager.get(ident)
+            if scda_obj is None:
+                continue
+            state = scda_obj.get_state()
+            total_complexity += float(
+                getattr(state, "complexity_index", 0.0) or 0.0
+            )
             total_energy += float(getattr(state, "energy", 0.0) or 0.0)
 
     return {

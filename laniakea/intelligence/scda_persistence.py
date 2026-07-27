@@ -153,21 +153,34 @@ class ScdaPersistence:
             logger.debug("SCDA snapshot saved (%d entries)", len(payload["scdas"]))
 
     def _snapshot_scda(self, scda: Any) -> Dict[str, Any]:
-        """Read public state off a SCDA without going through Pydantic."""
+        """Read public state off a SCDA without going through Pydantic.
+
+        We deliberately do *not* serialise the full DNA tree — DNA objects
+        carry Pydantic internals and Pydantic v2 + Pydantic v1-style ``repr``
+        can round-trip incorrectly. Instead the DNA is regenerated from the
+        identity on restore (see :meth:`_restore_scda`), which is idempotent
+        and always yields a valid :class:`DigitalDNA` instance.
+        """
         return {
             "identity": scda.identity,
             "complexity_index": float(getattr(scda, "complexity_index", 0.0)),
             "energy": float(getattr(scda, "energy", 0.0)),
             "generation": int(getattr(scda, "generation", 0)),
             "tier": int(getattr(scda, "tier", 0)),
-            "dna": getattr(scda, "dna", None),
             "knowledge_vector": dict(getattr(scda, "knowledge_vector", {}) or {}),
             "problem_queue": list(getattr(scda, "problem_queue", []) or []),
             "stats": dict(getattr(scda, "stats", {}) or {}),
         }
 
     def _restore_scda(self, scda: Any, blob: Dict[str, Any]) -> None:
-        """Apply a snapshot blob onto an existing SCDA instance."""
+        """Apply a snapshot blob onto an existing SCDA instance.
+
+        DNA is intentionally not loaded from the snapshot — the SCDA's
+        :class:`SingleCellDigitalAccount` initialiser already attaches a
+        fresh :class:`DigitalDNA` to the instance, and overwriting it with
+        a serialised blob previously caused ``AttributeError`` because the
+        JSON round-trip turned the Pydantic DNA into a ``str``.
+        """
         if "complexity_index" in blob:
             scda.complexity_index = float(blob["complexity_index"])
         if "energy" in blob:
@@ -176,8 +189,6 @@ class ScdaPersistence:
             scda.generation = int(blob["generation"])
         if "tier" in blob:
             scda.tier = int(blob["tier"])
-        if "dna" in blob and blob["dna"] is not None:
-            scda.dna = blob["dna"]
         if "knowledge_vector" in blob:
             scda.knowledge_vector = dict(blob["knowledge_vector"] or {})
         if "problem_queue" in blob:
