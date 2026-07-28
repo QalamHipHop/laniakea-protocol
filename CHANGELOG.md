@@ -342,3 +342,40 @@
 - Smoke test ``smoke_test_v6.py`` continues to pass on the
   v6.0.1-Mainnet base; no test has been deleted or weakened.
 
+
+---
+
+## [Web v8 Unified Redesign] - 2026-07-28
+
+### 🎨 بازطراحی کامل رابط کاربری Web (Author: Qalam)
+
+#### ✨ افزوده شده
+- **Cosmic v8** — صفحه‌ی اصلی 8D با ۲۲ تب (Cosmic, Intelligence, Network, Economy, Society)
+- **WebGL 8D Hypercube** — ۲۵۶ vertex، ۱۰۲۴ edge، real-time rendering با Three.js
+- **SCDA Evolution Tree** — visual lineage tree با branching
+- **Quick Actions Panel** — ۱۰ اکشن مستقیم روی API
+- **Cosmic v5/v6/v7** — legacy dashboards همگام با v8 design system
+- **Cosmic v4** — به‌روزرسانی به 8D theme
+- **Landing page** — hero page با live stats و لینک به همه‌ی صفحات
+- **SCDA Dashboard** — evolution tree + leaderboard + forge new SCDA
+- **Mining Dashboard** — Mine button + blocks + status
+- **Achievements** — ۱۸ achievement با ۴ سطح rarity
+- **Social Hub** — compose box + posts feed
+- **Metaverse 8D** — 4D/5D/6D/7D/8D switcher با WebGL
+
+#### 🎨 Design System یکپارچه
+- پالت ۸ بعدی: cyan → blue → violet → magenta → amber
+- Sticky netbar + topbar + sidebar با ۵ گروه navigation
+- Aurora animated background + star field + grid overlay
+- Responsive design با ۳ breakpoint (1100px, 640px)
+- **نویسنده: Qalam** در همه‌ی صفحات (meta tags + footer + sidebar)
+
+#### 🔗 لینک‌های متقابل
+هر صفحه به همه‌ی صفحات دیگر + API docs + GitHub لینک می‌دهد.
+Cosmic v8 به عنوان hub مرکزی با sidebar navigation کامل.
+
+#### 📊 وضعیت
+- ۱۳ فایل به‌روزرسانی/اضافه شد
+- ۲۲۹ کیلوبایت حجم کل
+- ۱۷۰+ API endpoint متصل
+- mainnet verified

@@ -1,31 +1,33 @@
 <!doctype html>
-<html lang="en" data-theme="cosmic-dark" data-dimension="4d">
+<html lang="en" data-theme="cosmic-dark" data-dimension="5d">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#03050d" />
-<title>LaniakeA · 4D Cosmic · v6.3.0-Qalam</title>
+<title>LaniakeA · 5D Cosmic · v6.3.0-Qalam</title>
 <meta name="author" content="Qalam" />
 <meta name="version" content="6.3.0-Qalam" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23030512'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23ffb547' opacity='.5'/%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23030512'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23ff3d8a' opacity='.5'/%3E%3C/svg%3E" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/web/cosmic_v8.css" />
 </head>
 <body class="lk-app">
 <canvas id="lk-bg-canvas" class="lk-bg-canvas"></canvas>
-<div class="lk-bg-aurora lk-bg-aurora--a"></div>
+<div class="lk-bg-aurora lk-bg-aurora--a"></div><div class="lk-bg-aurora lk-bg-aurora--b"></div>
 <div class="lk-bg-grid"></div>
 
 <header class="lk-netbar">
   <div class="lk-netbar__group">
     <span class="lk-netbar__pulse"></span>
     <strong class="lk-netbar__brand">LANIAKEA</strong>
+    <span class="lk-netbar__sep">·</span>
     <span class="lk-netbar__version">v6.3.0-Qalam</span>
     <span class="lk-netbar__net lk-netbar__net--mainnet">MAINNET</span>
     <span class="lk-netbar__status"><span class="lk-netbar__dot" data-state="off"></span><span id="lk-nb-status-text">connecting</span></span>
   </div>
   <div class="lk-netbar__group">
     <span class="lk-netbar__metric">⬢ block <strong id="lk-nb-block">—</strong></span>
+    <span class="lk-netbar__metric">✦ scda <strong id="lk-nb-scda">—</strong></span>
   </div>
 </header>
 
@@ -33,10 +35,10 @@
   <button class="lk-topbar__menu" id="lk-btn-menu"><span></span><span></span><span></span></button>
   <a class="lk-topbar__brand" href="/">
     <span class="lk-topbar__brand-mark"><span class="lk-mark-core"></span><span class="lk-mark-ring lk-mark-ring--1"></span></span>
-    <span class="lk-topbar__brand-text"><span class="lk-topbar__brand-name">LaniakeA</span><span class="lk-topbar__brand-sub">4D Cosmic · v4</span></span>
+    <span class="lk-topbar__brand-text"><span class="lk-topbar__brand-name">LaniakeA</span><span class="lk-topbar__brand-sub">5D Cosmic · v5</span></span>
   </a>
   <div class="lk-topbar__pills">
-    <span class="lk-pill lk-pill--ok">v4</span>
+    <span class="lk-pill lk-pill--ok">v5</span>
     <a class="lk-pill lk-pill--ghost" href="/web/cosmic_v8.html">→ v8</a>
   </div>
   <div class="lk-topbar__actions">
@@ -51,12 +53,13 @@
         <div class="lk-nav__group"><div class="lk-nav__label">Cosmic</div>
           <a class="lk-nav__item active" href="#overview"><span class="lk-nav__ico">◉</span><span>Overview</span></a>
           <a class="lk-nav__item" href="#scda"><span class="lk-nav__ico">✦</span><span>SCDA</span></a>
+          <a class="lk-nav__item" href="#ai"><span class="lk-nav__ico">⌬</span><span>AI</span></a>
         </div>
         <div class="lk-nav__group"><div class="lk-nav__label">Pages</div>
           <a class="lk-nav__item" href="/web/cosmic_v8.html">→ v8</a>
           <a class="lk-nav__item" href="/web/cosmic_v7.html">v7</a>
           <a class="lk-nav__item" href="/web/cosmic_v6.html">v6</a>
-          <a class="lk-nav__item" href="/web/cosmic_v5.html">v5</a>
+          <a class="lk-nav__item" href="/web/cosmic_v4.html">v4</a>
           <a class="lk-nav__item" href="/web/landing.html">Landing</a>
           <a class="lk-nav__item" href="/web/scda_dashboard.html">SCDA Dash</a>
           <a class="lk-nav__item" href="/web/mining_dashboard.html">Mining</a>
@@ -77,7 +80,7 @@
     <section class="lk-tab active" id="tab-overview">
       <div class="lk-hero">
         <div class="lk-card lk-card--big">
-          <div class="lk-card__head"><div><h1 class="lk-card__title">Cosmic Overview · v4</h1><div class="lk-card__sub">4D legacy · Author: Qalam</div></div><span class="lk-pulse lk-pulse--live"></span></div>
+          <div class="lk-card__head"><div><h1 class="lk-card__title">Cosmic Overview · v5</h1><div class="lk-card__sub">5D legacy · Author: Qalam</div></div><span class="lk-pulse lk-pulse--live"></span></div>
           <div class="lk-metric-grid">
             <div class="lk-metric lk-metric--lg"><div class="lk-metric__k">Subsystems</div><div class="lk-metric__v" id="m-subsys">—</div></div>
             <div class="lk-metric lk-metric--lg"><div class="lk-metric__k">Routes</div><div class="lk-metric__v" id="m-routes">—</div></div>
@@ -88,15 +91,16 @@
           </div>
         </div>
         <div class="lk-card lk-card--hypercube">
-          <div class="lk-card__head"><h2 class="lk-card__title">4D Tesseract</h2></div>
+          <div class="lk-card__head"><h2 class="lk-card__title">5D Hypercube</h2></div>
           <div class="lk-cube-wrap"><canvas id="lk-cube-canvas"></canvas></div>
         </div>
       </div>
     </section>
     <section class="lk-tab" id="tab-scda"><div class="lk-grid lk-grid--2"><div class="lk-card"><div class="lk-card__head"><h2 class="lk-card__title">SCDA Identities</h2></div><div class="lk-scda-list" id="lk-scda-list"></div></div><div class="lk-card"><div class="lk-card__head"><h2 class="lk-card__title">Leaderboard</h2></div><div class="lk-leaderboard" id="lk-scda-leaderboard"></div></div></div></section>
+    <section class="lk-tab" id="tab-ai"><div class="lk-card"><div class="lk-card__head"><h2 class="lk-card__title">AI Query</h2></div><div class="lk-ai-form"><label><span>Prompt</span><textarea id="lk-ai-prompt" rows="4">Explain SCDA.</textarea></label><button class="lk-btn lk-btn--primary" id="lk-btn-ai-query">⌬ Run</button><div class="lk-ai-result" id="lk-ai-result" hidden><div class="lk-ai-result__head">Response</div><pre class="lk-ai-result__body" id="lk-ai-result-body"></pre></div></div></div></section>
     <footer class="lk-footer">
-      <div class="lk-footer__brand"><span class="lk-mark-core" style="width:10px;height:10px;display:inline-block;border-radius:50%;background:var(--grad-8d)"></span><strong>LANIAKEA · 4D</strong><span>by Qalam</span></div>
-      <div class="lk-footer__links"><a href="/web/cosmic_v8.html">v8</a><a href="/web/cosmic_v7.html">v7</a><a href="/web/cosmic_v6.html">v6</a><a href="/web/cosmic_v5.html">v5</a><a href="/web/landing.html">Landing</a></div>
+      <div class="lk-footer__brand"><span class="lk-mark-core" style="width:10px;height:10px;display:inline-block;border-radius:50%;background:var(--grad-8d)"></span><strong>LANIAKEA · 5D</strong><span>by Qalam</span></div>
+      <div class="lk-footer__links"><a href="/web/cosmic_v8.html">v8</a><a href="/web/cosmic_v7.html">v7</a><a href="/web/cosmic_v6.html">v6</a><a href="/web/cosmic_v4.html">v4</a><a href="/web/landing.html">Landing</a></div>
     </footer>
   </main>
 </div>
@@ -107,9 +111,10 @@ const fmt=n=>typeof n!=='number'?String(n):n>=1e9?(n/1e9).toFixed(2)+'B':n>=1e6?
 $$('.lk-nav__item[href^="#"]').forEach(it=>it.addEventListener('click',e=>{e.preventDefault();$$('.lk-nav__item').forEach(x=>x.classList.remove('active'));it.classList.add('active');$$('.lk-tab').forEach(x=>x.classList.remove('active'));const t=$('#tab-'+it.getAttribute('href').slice(1));if(t)t.classList.add('active');}));
 $('#lk-btn-menu')?.addEventListener('click',()=>{$('#lk-sidebar').classList.toggle('open');$('#lk-backdrop').classList.toggle('open');});
 $('#lk-backdrop')?.addEventListener('click',()=>{$('#lk-sidebar').classList.remove('open');$('#lk-backdrop').classList.remove('open');});
-async function load(){const d=await api('/');if(!d){$('#lk-nb-status-text').textContent='offline';$('.lk-netbar__dot').dataset.state='off';return;}$('#lk-nb-status-text').textContent='live';$('.lk-netbar__dot').dataset.state='on';$('#m-subsys').textContent=d.subsystems?Object.values(d.subsystems).filter(Boolean).length:'—';$('#m-routes').textContent='170+';$('#m-blocks').textContent=d.block_height??d.blocks??'—';$('#m-validators').textContent=d.validators??'—';$('#m-uptime').textContent=d.uptime??'—';$('#lk-nb-block').textContent=d.block_height??'—';const id=await api('/scda/identities');const lb=await api('/scda/leaderboard');if(id){const arr=(Array.isArray(id)?id:id.items||[]).slice(0,30);$('#lk-scda-list').innerHTML=arr.length?arr.map(s=>`<div class="lk-scda"><span class="lk-scda__id">${s.id||s.identity||'—'}</span><span class="lk-scda__fit">${fmt(s.fitness??0)}</span></div>`).join(''):'';$('#m-scda').textContent=arr.length;}if(lb){const arr=(Array.isArray(lb)?lb:lb.items||[]).slice(0,10);$('#lk-scda-leaderboard').innerHTML=arr.map((s,i)=>`<div class="lk-lb-row"><span class="lk-lb-row__rank ${i<3?'lk-lb-row__rank--top':''}">#${i+1}</span><span class="lk-lb-row__id">${s.id||'—'}</span><span class="lk-lb-row__fit">${fmt(s.fitness??0)}</span><span class="lk-lb-row__gen">gen ${s.generation??'—'}</span></div>`).join('');}}
+async function load(){const d=await api('/');if(!d){$('#lk-nb-status-text').textContent='offline';$('.lk-netbar__dot').dataset.state='off';return;}$('#lk-nb-status-text').textContent='live';$('.lk-netbar__dot').dataset.state='on';$('#m-subsys').textContent=d.subsystems?Object.values(d.subsystems).filter(Boolean).length:'—';$('#m-routes').textContent='170+';$('#m-blocks').textContent=d.block_height??d.blocks??'—';$('#m-validators').textContent=d.validators??'—';$('#m-uptime').textContent=d.uptime??'—';$('#lk-nb-block').textContent=d.block_height??'—';const id=await api('/scda/identities');const lb=await api('/scda/leaderboard');if(id){const arr=(Array.isArray(id)?id:id.items||[]).slice(0,30);$('#lk-scda-list').innerHTML=arr.length?arr.map(s=>`<div class="lk-scda"><span class="lk-scda__id">${s.id||s.identity||'—'}</span><span class="lk-scda__fit">${fmt(s.fitness??0)}</span></div>`).join(''):'';$('#m-scda').textContent=arr.length;$('#lk-nb-scda').textContent=arr.length;}if(lb){const arr=(Array.isArray(lb)?lb:lb.items||[]).slice(0,10);$('#lk-scda-leaderboard').innerHTML=arr.map((s,i)=>`<div class="lk-lb-row"><span class="lk-lb-row__rank ${i<3?'lk-lb-row__rank--top':''}">#${i+1}</span><span class="lk-lb-row__id">${s.id||'—'}</span><span class="lk-lb-row__fit">${fmt(s.fitness??0)}</span><span class="lk-lb-row__gen">gen ${s.generation??'—'}</span></div>`).join('');}}
+$('#lk-btn-ai-query')?.addEventListener('click',async()=>{$('#lk-ai-result').hidden=false;$('#lk-ai-result-body').textContent='…';const r=await api('/llm/generate',{method:'POST',body:JSON.stringify({prompt:$('#lk-ai-prompt').value,max_tokens:512})});$('#lk-ai-result-body').textContent=r?.text||r?.output||JSON.stringify(r,null,2);});
 load();setInterval(load,30000);
-(function(){const c=$('#lk-bg-canvas');if(!c)return;const ctx=c.getContext('2d');function r(){c.width=innerWidth;c.height=innerHeight;}r();addEventListener('resize',r);const S=Array.from({length:80},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.2+.2,vx:(Math.random()-.5)*.04,vy:(Math.random()-.5)*.04,a:Math.random()*.7+.3}));(function l(){requestAnimationFrame(l);ctx.clearRect(0,0,c.width,c.height);for(const s of S){s.x+=s.vx;s.y+=s.vy;if(s.x<0)s.x=c.width;if(s.x>c.width)s.x=0;if(s.y<0)s.y=c.height;if(s.y>c.height)s.y=0;ctx.fillStyle=`rgba(255,200,150,${s.a})`;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();}})();})();
+(function(){const c=$('#lk-bg-canvas');if(!c)return;const ctx=c.getContext('2d');function r(){c.width=innerWidth;c.height=innerHeight;}r();addEventListener('resize',r);const S=Array.from({length:100},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.2+.2,vx:(Math.random()-.5)*.04,vy:(Math.random()-.5)*.04,a:Math.random()*.7+.3}));(function l(){requestAnimationFrame(l);ctx.clearRect(0,0,c.width,c.height);for(const s of S){s.x+=s.vx;s.y+=s.vy;if(s.x<0)s.x=c.width;if(s.x>c.width)s.x=0;if(s.y<0)s.y=c.height;if(s.y>c.height)s.y=0;ctx.fillStyle=`rgba(255,180,200,${s.a})`;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();}})();})();
 </script>
 </body>
 </html>
