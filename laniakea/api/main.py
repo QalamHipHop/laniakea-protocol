@@ -473,6 +473,17 @@ try:
 except Exception as exc:  # pragma: no cover - defensive
     logger.warning("v8_ui_api router not loaded: %s", exc)
 
+# --- Cosmic UI v8 extra (Qalam v6.3.0+) -------------------------------------
+# Additive router powering the 8D cosmic dashboard's algorithm lab, SCDA
+# editor, network graph and metaverse state surfaces. All endpoints are
+# strictly additive and live in the runtime in-memory state.
+try:
+    from laniakea.api.cosmic_v8_extra import router as cosmic_v8_extra_router
+    app.include_router(cosmic_v8_extra_router)
+    logger.info("Cosmic v8 extra API mounted (/cosmic/system/overview, /cosmic/network/graph, /cosmic/algorithms/*, /cosmic/scda/*)")
+except Exception as exc:  # pragma: no cover - defensive
+    logger.warning("cosmic_v8_extra router not loaded: %s", exc)
+
 
 # --- v6.2.0-Qalam additive API surface -------------------------------------
 # Adds the /v6/* namespace on top of v6.0.1-Mainnet. Every route here is
