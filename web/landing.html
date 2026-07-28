@@ -1,244 +1,153 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl" data-theme="cosmic">
+<!doctype html>
+<html lang="en" data-theme="cosmic-dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Laniakea Protocol — ابرپروتکل تکامل کیهانی هوش جمعی" />
-  <meta property="og:title" content="🌌 Laniakea Protocol — Cosmic Evolution Engine" />
-  <meta property="og:description" content="ابرپروتکل محاسباتی کیهانی برای تکامل هوش جمعی" />
-  <title>🌌 Laniakea Protocol — The Cosmic Evolution Engine</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="landing.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#03050d" />
+<title>LaniakeA · Landing · v6.3.0-Qalam</title>
+<meta name="description" content="LaniakeA Protocol — 8D cosmic evolution. Author: Qalam." />
+<meta name="author" content="Qalam" />
+<meta name="version" content="6.3.0-Qalam" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23030512'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%237c3aed' opacity='.6'/%3E%3C/svg%3E" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/web/cosmic_v8.css" />
+<style>
+.landing-hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:60px 24px;position:relative}
+.landing-hero h1{font-size:clamp(40px,7vw,90px);font-weight:800;margin:0;background:var(--grad-8d);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.02em;line-height:1}
+.landing-hero .sub{font-size:clamp(14px,1.6vw,18px);color:var(--t-secondary);max-width:680px;margin:24px 0 36px;line-height:1.6}
+.landing-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.landing-section{padding:80px 24px;max-width:1200px;margin:0 auto}
+.landing-section h2{font-size:clamp(28px,3.5vw,42px);font-weight:800;margin:0 0 12px;background:var(--grad-8d);-webkit-background-clip:text;background-clip:text;color:transparent}
+.landing-section .lead{color:var(--t-secondary);max-width:720px;margin-bottom:40px;font-size:16px}
+.landing-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.landing-feat{padding:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);position:relative;overflow:hidden;transition:.2s}
+.landing-feat:hover{transform:translateY(-3px);border-color:var(--border-strong);box-shadow:0 12px 32px -12px rgba(124,58,237,.4)}
+.landing-feat__ico{width:48px;height:48px;border-radius:12px;background:var(--grad-8d);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;color:#fff}
+.landing-feat h3{font-size:16px;margin:0 0 6px;color:var(--t-primary)}
+.landing-feat p{margin:0;color:var(--t-muted);font-size:13.5px;line-height:1.6}
+.landing-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:30px 0}
+.landing-stat{padding:18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);text-align:center}
+.landing-stat__v{font-size:32px;font-weight:800;background:var(--grad-8d);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:'JetBrains Mono',monospace}
+.landing-stat__k{font-size:11px;color:var(--t-muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+.landing-pages{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.landing-page{padding:18px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:var(--r-md);transition:.15s}
+.landing-page:hover{background:var(--surface-3);border-color:var(--border-strong);transform:translateY(-2px)}
+.landing-page__ico{font-size:24px;margin-bottom:8px;display:block}
+.landing-page h4{margin:0 0 4px;font-size:14px;color:var(--t-primary)}
+.landing-page p{margin:0;font-size:12px;color:var(--t-muted)}
+.landing-mark{width:120px;height:120px;margin:0 auto 28px;position:relative;display:flex;align-items:center;justify-content:center}
+.landing-mark .lk-mark-core{width:32px;height:32px}
+.landing-mark .lk-mark-ring{position:absolute;inset:0;border-radius:50%;border:1px solid}
+.landing-mark .lk-mark-ring--1{border-color:rgba(0,255,224,.5);animation:ring 6s linear infinite}
+.landing-mark .lk-mark-ring--2{border-color:rgba(255,61,138,.5);transform:rotate(60deg) scale(.7);animation:ring 8s linear infinite reverse}
+.landing-mark .lk-mark-ring--3{border-color:rgba(255,181,71,.5);transform:rotate(120deg) scale(.4);animation:ring 10s linear infinite}
+.landing-bottom{padding:30px 24px;text-align:center;border-top:1px solid var(--hairline);margin-top:60px}
+</style>
 </head>
-<body>
-  <canvas id="bg3d" class="bg-canvas"></canvas>
+<body class="lk-app">
+<canvas id="lk-bg-canvas" class="lk-bg-canvas"></canvas>
+<div class="lk-bg-aurora lk-bg-aurora--a"></div><div class="lk-bg-aurora lk-bg-aurora--b"></div><div class="lk-bg-aurora lk-bg-aurora--c"></div>
+<div class="lk-bg-grid"></div>
 
-  <!-- Nav -->
-  <nav class="lnav">
-    <a href="#" class="lnav-brand">
-      <span class="lbrand-glyph">⌬</span>
-      <span class="lbrand-text">Laniakea</span>
-    </a>
-    <div class="lnav-links">
-      <a href="#features">ویژگی‌ها</a>
-      <a href="#how">چگونه کار می‌کند</a>
-      <a href="#token">توکن</a>
-      <a href="#roadmap">نقشه راه</a>
-    </div>
-    <div class="lnav-cta">
-      <a href="cosmic.html" class="lbtn-ghost">دشبورد</a>
-      <a href="https://github.com/QalamHipHop/laniakea-protocol" class="lbtn-primary">شروع کنید →</a>
-    </div>
-  </nav>
+<header class="lk-netbar">
+  <div class="lk-netbar__group">
+    <span class="lk-netbar__pulse"></span>
+    <strong class="lk-netbar__brand">LANIAKEA</strong>
+    <span class="lk-netbar__version">v6.3.0-Qalam</span>
+    <span class="lk-netbar__net lk-netbar__net--mainnet">MAINNET</span>
+    <span class="lk-netbar__status"><span class="lk-netbar__dot" data-state="on"></span><span>live</span></span>
+  </div>
+  <div class="lk-netbar__group">
+    <a class="lk-btn lk-btn--ghost lk-btn--sm" href="/web/cosmic_v8.html">v8</a>
+    <a class="lk-btn lk-btn--ghost lk-btn--sm" href="/web/cosmic_v7.html">v7</a>
+    <a class="lk-btn lk-btn--ghost lk-btn--sm" href="/web/cosmic_v6.html">v6</a>
+    <a class="lk-btn lk-btn--ghost lk-btn--sm" href="/web/cosmic_v5.html">v5</a>
+    <a class="lk-btn lk-btn--ghost lk-btn--sm" href="/web/cosmic_v4.html">v4</a>
+    <a class="lk-btn lk-btn--primary lk-btn--sm" href="/docs" target="_blank">API ↗</a>
+  </div>
+</header>
 
-  <!-- Hero -->
-  <section class="lhero">
-    <div class="lhero-bg">
-      <div class="lhero-orb o1"></div>
-      <div class="lhero-orb o2"></div>
-      <div class="lhero-orb o3"></div>
-    </div>
-    <div class="lhero-inner">
-      <div class="lhero-badge">
-        <span class="dot live"></span>
-        <span>v1.0.0 · Live on Mainnet</span>
-      </div>
-      <h1 class="lhero-title">
-        <span>ابرپروتکل</span>
-        <span class="grad">تکامل هوش</span>
-        <span>جمعی کیهانی</span>
-      </h1>
-      <p class="lhero-sub">
-        یک اکوسیستم غیرمتمرکز که با الهام از ساختار جهان هستی، از سلول تک‌یاخته تا هوش کیهانی را شبیه‌سازی می‌کند.
-        اولین بلاکچین هایپرکیوب ۸ بعدی جهان با اجماع <b>PoHD</b>.
-      </p>
-      <div class="lhero-cta">
-        <a href="cosmic.html" class="lbtn-primary lg">
-          🚀 ورود به متاورس
-        </a>
-        <a href="#whitepaper" class="lbtn-ghost lg">
-          📄 وایت‌پیپر
-        </a>
-      </div>
-      <div class="lhero-stats">
-        <div><b>4218</b><span>گره فعال</span></div>
-        <div><b>8931</b><span>بلاک ۸D</span></div>
-        <div><b>99.97%</b><span>آپتایم</span></div>
-        <div><b>1.28M</b><span>LKC در گردش</span></div>
-      </div>
-    </div>
-    <div class="lhero-scroll">↓ اسکرول کنید</div>
-  </section>
+<section class="landing-hero">
+  <div class="landing-mark">
+    <span class="lk-mark-core"></span>
+    <span class="lk-mark-ring lk-mark-ring--1"></span>
+    <span class="lk-mark-ring lk-mark-ring--2"></span>
+    <span class="lk-mark-ring lk-mark-ring--3"></span>
+  </div>
+  <h1>LaniakeA Protocol</h1>
+  <p class="sub">An 8-dimensional cosmic computational organism for universal problem-solving and consciousness expansion. SCDA evolution, hypercube blockchain, AI cognition, DeFi, diplomacy, and the metaverse — all on a single mainnet.</p>
+  <div class="landing-cta">
+    <a class="lk-btn lk-btn--primary" href="/web/cosmic_v8.html">⚛ Enter 8D Engine</a>
+    <a class="lk-btn lk-btn--ghost" href="/docs" target="_blank">📖 API Documentation</a>
+    <a class="lk-btn lk-btn--ghost" href="https://github.com/QalamHipHop/laniakea-protocol" target="_blank">★ GitHub</a>
+  </div>
+</section>
 
-  <!-- Pillars -->
-  <section class="lpillars" id="features">
-    <div class="lsec-head">
-      <span class="lsec-tag">ستون‌های پروتکل</span>
-      <h2>هشت بُعد، یک جهان</h2>
-    </div>
-    <div class="lpillars-grid">
-      <div class="lpillar" style="--c: #7c3aed">
-        <div class="lpillar-icon">🧬</div>
-        <h3>SCDA</h3>
-        <p>Single-Cell Digital Account — DNA دیجیتال با Tier، نسل و فرمول تکامل ΔC = D(P)/C(t)^α</p>
-      </div>
-      <div class="lpillar" style="--c: #06b6d4">
-        <div class="lpillar-icon">🔷</div>
-        <h3>بلاکچین ۸D</h3>
-        <p>هایپرکیوب ۸ بعدی · ۲۵۶ رأس · اجماع PoHD + PoA + PoV</p>
-      </div>
-      <div class="lpillar" style="--c: #ec4899">
-        <div class="lpillar-icon">🌐</div>
-        <h3>متاورس</h3>
-        <p>فضای ۸D دانش-آگاهی با بصری‌سازی سه‌بعدی real-time</p>
-      </div>
-      <div class="lpillar" style="--c: #f59e0b">
-        <div class="lpillar-icon">🧠</div>
-        <h3>هوش مصنوعی</h3>
-        <p>تولید و اعتبارسنجی Hard Problems با LLM یکپارچه</p>
-      </div>
-      <div class="lpillar" style="--c: #10b981">
-        <div class="lpillar-icon">🏛️</div>
-        <h3>DAO</h3>
-        <p>حاکمیت غیرمتمرکز با چرخه کامل پیشنهاد، رأی و خزانه</p>
-      </div>
-      <div class="lpillar" style="--c: #ef4444">
-        <div class="lpillar-icon">🔐</div>
-        <h3>امنیت ۵-حالته</h3>
-        <p>سیستم ایمنی عصبی + MFA + JWT + rate-limiter + audit رمزنگاری‌شده</p>
-      </div>
-    </div>
-  </section>
+<section class="landing-section">
+  <h2>Live Protocol</h2>
+  <p class="lead">Real-time metrics from the LaniakeA mainnet · v6.3.0 by Qalam</p>
+  <div class="landing-stats" id="lk-stats">
+    <div class="landing-stat"><div class="landing-stat__v" id="s-subsys">—</div><div class="landing-stat__k">Subsystems</div></div>
+    <div class="landing-stat"><div class="landing-stat__v" id="s-routes">170+</div><div class="landing-stat__k">API Routes</div></div>
+    <div class="landing-stat"><div class="landing-stat__v" id="s-blocks">—</div><div class="landing-stat__k">Blocks</div></div>
+    <div class="landing-stat"><div class="landing-stat__v" id="s-scda">—</div><div class="landing-stat__k">SCDAs</div></div>
+    <div class="landing-stat"><div class="landing-stat__v" id="s-validators">—</div><div class="landing-stat__k">Validators</div></div>
+    <div class="landing-stat"><div class="landing-stat__v" id="s-uptime">—</div><div class="landing-stat__k">Uptime</div></div>
+  </div>
+</section>
 
-  <!-- How it works -->
-  <section class="lhow" id="how">
-    <div class="lsec-head">
-      <span class="lsec-tag">چگونه کار می‌کند</span>
-      <h2>تکامل در ۴ گام</h2>
-    </div>
-    <div class="lsteps">
-      <div class="lstep">
-        <div class="lstep-num">01</div>
-        <h3>ایجاد SCDA</h3>
-        <p>هر کاربر یک سلول دیجیتال با DNA منحصربه‌فرد دریافت می‌کند.</p>
-      </div>
-      <div class="lstep">
-        <div class="lstep-num">02</div>
-        <h3>حل Hard Problems</h3>
-        <p>سلول‌ها با حل معادلات بلوک‌سازی، Complexity و Tier خود را افزایش می‌دهند.</p>
-      </div>
-      <div class="lstep">
-        <div class="lstep-num">03</div>
-        <h3>Breeding</h3>
-        <p>سلول‌ها می‌توانند با یکدیگر ترکیب شده و نسل بعدی را تولید کنند.</p>
-      </div>
-      <div class="lstep">
-        <div class="lstep-num">04</div>
-        <h3>تشکیل تمدن</h3>
-        <p>سلول‌های پیشرفته تمدن‌های دیجیتال با دیپلماسی و پیمان‌های بین‌تمدنی ایجاد می‌کنند.</p>
-      </div>
-    </div>
-  </section>
+<section class="landing-section">
+  <h2>Eight Dimensions</h2>
+  <p class="lead">Every subsystem operates in 8D, from cosmic evolution to civilizational diplomacy.</p>
+  <div class="landing-features">
+    <a class="landing-feat" href="/web/cosmic_v8.html#hypercube"><div class="landing-feat__ico">⬢</div><h3>8D Hypercube</h3><p>Real WebGL projection of a 256-vertex tesseract rotating through 8-dimensional space.</p></a>
+    <a class="landing-feat" href="/web/cosmic_v8.html#scda"><div class="landing-feat__ico">✦</div><h3>SCDA Evolution</h3><p>Self-evolving digital single-cell organisms that solve hard problems through natural selection.</p></a>
+    <a class="landing-feat" href="/web/cosmic_v8.html#ai"><div class="landing-feat__ico">⌬</div><h3>AI Engine</h3><p>LLM-driven cognitive engine that generates equations and evaluates symbolic mathematics.</p></a>
+    <a class="landing-feat" href="/web/cosmic_v8.html#blockchain"><div class="landing-feat__ico">⛓</div><h3>Hypercube Chain</h3><p>Custom 8D blockchain with PoA + PoHD consensus, multi-validator, native LANA token.</p></a>
+    <a class="landing-feat" href="/web/cosmic_v8.html#defi"><div class="landing-feat__ico">◈</div><h3>DeFi / DEX</h3><p>AMM-style liquidity pools, swap, staking, and treasury management on the mainnet.</p></a>
+    <a class="landing-feat" href="/web/cosmic_v8.html#diplomacy"><div class="landing-feat__ico">⚐</div><h3>Diplomacy</h3><p>Civilizational alliances, reputation systems, and on-chain governance between SCDAs.</p></a>
+    <a class="landing-feat" href="/web/cosmic_v8.html#metaverse"><div class="landing-feat__ico">⌘</div><h3>Metaverse</h3><p>8D spatial multiverse with live 3D visualization of the protocol's own topology.</p></a>
+    <a class="landing-feat" href="/web/cosmic_v8.html#knowledge"><div class="landing-feat__ico">✎</div><h3>Knowledge Market</h3><p>Tokenize, list, and trade knowledge assets as on-chain primitives.</p></a>
+  </div>
+</section>
 
-  <!-- Token -->
-  <section class="ltoken" id="token">
-    <div class="lsec-head">
-      <span class="lsec-tag">اقتصاد</span>
-      <h2>LKC — سوخت کیهان</h2>
-    </div>
-    <div class="ltoken-grid">
-      <div class="ltoken-card">
-        <div class="ltoken-stat">1.28M</div>
-        <div class="ltoken-lbl">موجودی کل</div>
-      </div>
-      <div class="ltoken-card">
-        <div class="ltoken-stat">14.8%</div>
-        <div class="ltoken-lbl">APR استیکینگ</div>
-      </div>
-      <div class="ltoken-card">
-        <div class="ltoken-stat">3,892</div>
-        <div class="ltoken-lbl">تفویض‌های فعال</div>
-      </div>
-      <div class="ltoken-card">
-        <div class="ltoken-stat">12.4%</div>
-        <div class="ltoken-lbl">رشد ماهانه</div>
-      </div>
-    </div>
-  </section>
+<section class="landing-section">
+  <h2>All Pages</h2>
+  <p class="lead">Every dashboard is unified with the same 8D design system.</p>
+  <div class="landing-pages">
+    <a class="landing-page" href="/web/cosmic_v8.html"><span class="landing-page__ico">⬢</span><h4>Cosmic v8</h4><p>The flagship 8D engine · current</p></a>
+    <a class="landing-page" href="/web/cosmic_v7.html"><span class="landing-page__ico">⬡</span><h4>Cosmic v7</h4><p>7D legacy dashboard</p></a>
+    <a class="landing-page" href="/web/cosmic_v6.html"><span class="landing-page__ico">⬢</span><h4>Cosmic v6</h4><p>6D legacy dashboard</p></a>
+    <a class="landing-page" href="/web/cosmic_v5.html"><span class="landing-page__ico">⬣</span><h4>Cosmic v5</h4><p>5D legacy dashboard</p></a>
+    <a class="landing-page" href="/web/cosmic_v4.html"><span class="landing-page__ico">◧</span><h4>Cosmic v4</h4><p>4D legacy dashboard</p></a>
+    <a class="landing-page" href="/web/scda_dashboard.html"><span class="landing-page__ico">✦</span><h4>SCDA Dashboard</h4><p>Detailed SCDA view</p></a>
+    <a class="landing-page" href="/web/mining_dashboard.html"><span class="landing-page__ico">⛏</span><h4>Mining</h4><p>Block mining metrics</p></a>
+    <a class="landing-page" href="/web/achievements.html"><span class="landing-page__ico">★</span><h4>Achievements</h4><p>Unlocked milestones</p></a>
+    <a class="landing-page" href="/web/social_hub.html"><span class="landing-page__ico">✉</span><h4>Social Hub</h4><p>Posts &amp; community</p></a>
+    <a class="landing-page" href="/web/metaverse_8d_visualization.html"><span class="landing-page__ico">⌘</span><h4>Metaverse 8D</h4><p>Full 8D multiverse</p></a>
+  </div>
+</section>
 
-  <!-- Roadmap -->
-  <section class="lroadmap" id="roadmap">
-    <div class="lsec-head">
-      <span class="lsec-tag">نقشه راه</span>
-      <h2>از ژن تا کهکشان</h2>
-    </div>
-    <div class="lroadmap-track">
-      <div class="lrm-item done">
-        <div class="lrm-q">Q1 2024</div>
-        <h3>SCDA Core v1</h3>
-        <p>DNA · Tier · Evolution Engine</p>
-      </div>
-      <div class="lrm-item done">
-        <div class="lrm-q">Q2 2024</div>
-        <h3>بلاکچین ۸D</h3>
-        <p>Hypercube + PoHD consensus</p>
-      </div>
-      <div class="lrm-item done">
-        <div class="lrm-q">Q3 2024</div>
-        <h3>متاورس + DAO</h3>
-        <p>8D visualization + governance</p>
-      </div>
-      <div class="lrm-item active">
-        <div class="lrm-q">Q4 2025</div>
-        <h3>Cosmic UI v2</h3>
-        <p>Modern glassmorphism + PWA + Wallet</p>
-      </div>
-      <div class="lrm-item">
-        <div class="lrm-q">Q1 2026</div>
-        <h3>Cross-Chain Bridge</h3>
-        <p>Multi-chain interoperability</p>
-      </div>
-      <div class="lrm-item">
-        <div class="lrm-q">Q2 2026</div>
-        <h3>Quantum Layer</h3>
-        <p>Quantum-resistant cryptography</p>
-      </div>
-    </div>
-  </section>
+<div class="landing-bottom">
+  <div class="lk-footer__brand" style="justify-content:center">
+    <span class="lk-mark-core" style="width:10px;height:10px;display:inline-block;border-radius:50%;background:var(--grad-8d)"></span>
+    <strong>LANIAKEA</strong> · Author: <strong>Qalam</strong> · v6.3.0-Qalam · mainnet
+  </div>
+</div>
 
-  <!-- CTA -->
-  <section class="lcta" id="whitepaper">
-    <div class="lcta-inner">
-      <h2>آماده‌اید به کیهان بپیوندید؟</h2>
-      <p>همین الان اولین سلول دیجیتال خود را بسازید و سفر تکامل را آغاز کنید.</p>
-      <div class="lcta-buttons">
-        <a href="cosmic.html" class="lbtn-primary lg">🚀 شروع تکامل</a>
-        <a href="mobile/index.html" class="lbtn-ghost lg">📱 اپ موبایل</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="lfooter">
-    <div class="lfoot-inner">
-      <div class="lfoot-brand">
-        <span class="lbrand-glyph">⌬</span>
-        <span>Laniakea Protocol</span>
-      </div>
-      <div class="lfoot-links">
-        <a href="docs/WHITEPAPER.md">Whitepaper</a>
-        <a href="docs/ARCHITECTURE.md">Architecture</a>
-        <a href="cosmic.html">Dashboard</a>
-        <a href="https://github.com/QalamHipHop/laniakea-protocol">GitHub</a>
-      </div>
-      <div class="lfoot-copy">© 2025 Qalam · Made with 💜 for the cosmic web</div>
-    </div>
-  </footer>
-
-  <script src="landing.js"></script>
+<script>
+async function api(p,o={}){try{const r=await fetch(p,{headers:{'Content-Type':'application/json'},...o});return r.ok?await r.json():null;}catch(e){return null;}}
+async function load(){const d=await api('/');if(!d)return;
+  $('#s-subsys').textContent=d.subsystems?Object.values(d.subsystems).filter(Boolean).length:'—';
+  $('#s-blocks').textContent=d.block_height??d.blocks??'—';
+  $('#s-validators').textContent=d.validators??'—';
+  $('#s-uptime').textContent=d.uptime??'—';
+  const id=await api('/scda/identities');
+  if(id){const arr=(Array.isArray(id)?id:id.items||[]);$('#s-scda').textContent=arr.length;}
+}
+load();setInterval(load,30000);
+// stars
+(function(){const c=$('#lk-bg-canvas');if(!c)return;const ctx=c.getContext('2d');function r(){c.width=innerWidth;c.height=innerHeight;}r();addEventListener('resize',r);const S=Array.from({length:160},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.4+.2,vx:(Math.random()-.5)*.04,vy:(Math.random()-.5)*.04,a:Math.random()*.7+.3}));(function l(){requestAnimationFrame(l);ctx.clearRect(0,0,c.width,c.height);for(const s of S){s.x+=s.vx;s.y+=s.vy;if(s.x<0)s.x=c.width;if(s.x>c.width)s.x=0;if(s.y<0)s.y=c.height;if(s.y>c.height)s.y=0;ctx.fillStyle=`rgba(200,220,255,${s.a})`;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();}})();})();
+</script>
 </body>
 </html>

@@ -184,3 +184,8 @@ __pycache__/
 data/
 *.log
 .DS_Store
+
+# Backup of original files before v8 redesign (Qalam)
+web/_orig_*.html
+web/_orig_*.css
+web/_orig_*.js
